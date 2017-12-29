@@ -1,0 +1,462 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-12-29 18:11+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: cindy/settings.py:145
+msgid "Japanese"
+msgstr "Japonais"
+
+#: cindy/settings.py:146
+msgid "English"
+msgstr "Anglais"
+
+#: cindy/settings.py:147
+msgid "Chinese"
+msgstr "Chinois"
+
+#: cindy/settings.py:148
+msgid "French"
+msgstr ""
+
+#: sui_hei/models.py:17
+msgid "Award"
+msgstr "Titre"
+
+#: sui_hei/models.py:25
+msgid "nick_name"
+msgstr "Surnom"
+
+#: sui_hei/models.py:26
+msgid "profile"
+msgstr "Profile"
+
+#: sui_hei/models.py:28
+msgid "experience"
+msgstr ""
+
+#: sui_hei/models.py:29
+msgid "snipe"
+msgstr ""
+
+#: sui_hei/models.py:30
+msgid "sniped"
+msgstr ""
+
+#: sui_hei/models.py:47 sui_hei/models.py:71
+msgid "created"
+msgstr "Heure créé"
+
+#: sui_hei/models.py:50
+#, fuzzy
+#| msgid "Award"
+msgid "User-Award"
+msgstr "Titre"
+
+#: sui_hei/models.py:66
+msgid "title"
+msgstr "Titre"
+
+#: sui_hei/models.py:67
+msgid "yami"
+msgstr "Yami"
+
+#: sui_hei/models.py:68
+msgid "genre"
+msgstr "Genre"
+
+#: sui_hei/models.py:69 sui_hei/models.py:123 sui_hei/models.py:141
+msgid "content"
+msgstr "Contenu"
+
+#: sui_hei/models.py:70
+msgid "kaisetu"
+msgstr "Solution"
+
+#: sui_hei/models.py:72
+msgid "modified"
+msgstr "Heure modifié"
+
+#: sui_hei/models.py:73
+msgid "status"
+msgstr ""
+
+#: sui_hei/models.py:74
+msgid "memo"
+msgstr ""
+
+#: sui_hei/models.py:75
+msgid "score"
+msgstr "Score"
+
+#: sui_hei/models.py:78
+msgid "Soup"
+msgstr "Soup"
+
+#: sui_hei/models.py:85
+msgid "Albatross"
+msgstr "Enigme de situaton"
+
+#: sui_hei/models.py:86
+msgid "20th-Door"
+msgstr "20 questions"
+
+#: sui_hei/models.py:87
+msgid "Little Albat"
+msgstr "Petit énigme de situation"
+
+#: sui_hei/models.py:88
+msgid "Others & Formal"
+msgstr "Autres formes d'énigmes"
+
+#: sui_hei/models.py:92
+msgid "Unsolved"
+msgstr ""
+
+#: sui_hei/models.py:93
+msgid "Solved"
+msgstr ""
+
+#: sui_hei/models.py:94
+msgid "Dazed"
+msgstr ""
+
+#: sui_hei/models.py:95
+msgid "Hidden"
+msgstr ""
+
+#: sui_hei/models.py:96
+msgid "Forced Hidden"
+msgstr ""
+
+#: sui_hei/models.py:104
+msgid "shitumon"
+msgstr "Question"
+
+#: sui_hei/models.py:105
+msgid "kaitou"
+msgstr "Réponse"
+
+#: sui_hei/models.py:106
+msgid "good_ques"
+msgstr "Bonne question"
+
+#: sui_hei/models.py:107
+msgid "true_ques"
+msgstr "Bonne réponse"
+
+#: sui_hei/models.py:108
+msgid "askedtime"
+msgstr "Heure questionné"
+
+#: sui_hei/models.py:109
+msgid "answeredtime"
+msgstr "Heure répondu"
+
+#: sui_hei/models.py:112
+msgid "Question"
+msgstr "Qustion"
+
+#: sui_hei/models.py:122
+msgid "channel"
+msgstr "Chaîne"
+
+#: sui_hei/models.py:129
+msgid "Can add homepage info"
+msgstr "Peut modifié les informations de la page d'acceuil"
+
+#: sui_hei/models.py:130
+msgid "Can grant awards to users"
+msgstr ""
+
+#: sui_hei/models.py:131
+msgid "Lobby"
+msgstr "Lobby"
+
+#: sui_hei/models.py:142
+msgid "spoiler"
+msgstr ""
+
+#: sui_hei/models.py:145
+#, fuzzy
+#| msgid "Comments"
+msgid "Comment"
+msgstr "Commentaires"
+
+#: sui_hei/models.py:154
+msgid "Value"
+msgstr ""
+
+#: sui_hei/models.py:157
+msgid "Star"
+msgstr "Etoile"
+
+#: sui_hei/schema.py:147
+#, fuzzy
+#| msgid "Last login"
+msgid "Please login!"
+msgstr "Dernier connecte"
+
+#: sui_hei/schema.py:186
+msgid "Login incorrect!"
+msgstr ""
+
+#: sui_hei/templates/main.html:9
+msgid "A website for playing situation puzzles"
+msgstr ""
+
+#: sui_hei/templates/main.html:9
+msgid "Chat With Lateral Thinking!"
+msgstr ""
+
+#, fuzzy
+#~| msgid "title"
+#~ msgid "title a"
+#~ msgstr "Titre"
+
+#, fuzzy
+#~| msgid "title"
+#~ msgid "title b"
+#~ msgstr "Titre"
+
+#, fuzzy
+#~| msgid "title"
+#~ msgid "title c"
+#~ msgstr "Titre"
+
+#, fuzzy
+#~| msgid "title"
+#~ msgid "title d"
+#~ msgstr "Titre"
+
+#~ msgid "None"
+#~ msgstr "Rien"
+
+#~ msgid "homepage"
+#~ msgstr "Acceuil"
+
+#~ msgid "mondai"
+#~ msgstr "Problème"
+
+#~ msgid "All Soups"
+#~ msgstr "Tous les soups"
+
+#~ msgid "NewSoup"
+#~ msgstr "Nouvelle soup"
+
+#~ msgid "Profile"
+#~ msgstr "Profile"
+
+#~ msgid "logout"
+#~ msgstr "Déconnecter"
+
+#, fuzzy
+#~| msgid "Welcome, "
+#~ msgid "Welcome, guest."
+#~ msgstr "Bonjour,"
+
+#~ msgid "register"
+#~ msgstr "Identifier"
+
+#~ msgid "login"
+#~ msgstr "Connecter"
+
+#~ msgid "prev"
+#~ msgstr "<-Avant"
+
+#~ msgid "next"
+#~ msgstr "Après->"
+
+#~ msgid "Change channel"
+#~ msgstr "Changer de chaîne"
+
+#~ msgid "edit"
+#~ msgstr "Editer"
+
+#~ msgid "Send"
+#~ msgstr "Envoyer"
+
+#~ msgid "Update"
+#~ msgstr "Mettre à jour"
+
+#~ msgid "Selled Soups"
+#~ msgstr "Soups donnés"
+
+#~ msgid "MyStar"
+#~ msgstr "Mes étoiles"
+
+#~ msgid "Welcome to Cindy, a real-time website for lateral thinking games!"
+#~ msgstr ""
+#~ "Bienvenue chez [Cindy], un site qu'on peut jouer des énigmes à situation!"
+
+#~ msgid ""
+#~ "You can register to cindy free and enjoy its contents in one more step!"
+#~ msgstr "Vous pouvez jouer en un pas!"
+
+#, fuzzy
+#~| msgid "Welcome, "
+#~ msgid "Welcome to Cindy"
+#~ msgstr "Bonjour,"
+
+#~ msgid "Comments"
+#~ msgstr "Commentaires"
+
+#~ msgid "Information"
+#~ msgstr "Information"
+
+#~ msgid "Add Info"
+#~ msgstr "Ajouter des informations"
+
+#~ msgid "Title"
+#~ msgstr "Titre"
+
+#~ msgid "Giver"
+#~ msgstr "Personne donnée"
+
+#~ msgid "Content"
+#~ msgstr "Contenu"
+
+#~ msgid "Preview"
+#~ msgstr "Aperçu"
+
+#~ msgid "True Answer"
+#~ msgstr "La vraie réponse"
+
+#~ msgid "Confirm"
+#~ msgstr "Confirmation"
+
+#~ msgid "Commit Change"
+#~ msgstr "Executer le changement"
+
+#~ msgid "Put Responds"
+#~ msgstr "Répondre à toutes les questions posées"
+
+#, fuzzy
+#~| msgid "Comments"
+#~ msgid "Add Comments"
+#~ msgstr "Commentaires"
+
+#~ msgid "Hello guest! I need to know who you are before you ask a question!"
+#~ msgstr "Bonjour cher client! Vous avez besoin de vous connecter!"
+
+#~ msgid "Put True Answer"
+#~ msgstr "Donner la vraie réponse"
+
+#~ msgid "Put Question"
+#~ msgstr "Poser une question"
+
+#, fuzzy
+#~| msgid "Comments"
+#~ msgid "latest comments"
+#~ msgstr "Commentaires"
+
+#~ msgid "Genre"
+#~ msgstr "Genre"
+
+#~ msgid "Yami"
+#~ msgstr "Yami"
+
+#~ msgid "uncheck as yami"
+#~ msgstr "Ne pas admettre comme yami"
+
+#~ msgid "check as yami"
+#~ msgstr "Admettre comme yami"
+
+#, fuzzy
+#~| msgid "uncheck as yami"
+#~ msgid "uncheck as hidden"
+#~ msgstr "Ne pas admettre comme yami"
+
+#, fuzzy
+#~| msgid "check as yami"
+#~ msgid "check as hidden"
+#~ msgstr "Admettre comme yami"
+
+#~ msgid "Name"
+#~ msgstr "Nom"
+
+#~ msgid "Created time"
+#~ msgstr "Heure crée"
+
+#, fuzzy
+#~| msgid "Question"
+#~ msgid "Question count"
+#~ msgstr "Qustion"
+
+#, fuzzy
+#~| msgid "True Answer"
+#~ msgid "True Answer count"
+#~ msgstr "La vraie réponse"
+
+#, fuzzy
+#~| msgid "Comments"
+#~ msgid "Comment count"
+#~ msgstr "Commentaires"
+
+#~ msgid "Change password"
+#~ msgstr "Changer de mot de passe"
+
+#, fuzzy
+#~| msgid "Content"
+#~ msgid "Continue?"
+#~ msgstr "Contenu"
+
+#~ msgid "Give time"
+#~ msgstr "Heure donnée"
+
+#~ msgid "[edit]"
+#~ msgstr "[Editer]"
+
+#~ msgid "uncheck as good-question"
+#~ msgstr "Ne pas admettre comme une bonne question"
+
+#~ msgid "check as good-question"
+#~ msgstr "Admettre comme une bonne question"
+
+#~ msgid "uncheck as true-answer"
+#~ msgstr "Ne pas admettre comme une bonne réponse"
+
+#~ msgid "check as true-answer"
+#~ msgstr "Admettre comme une bonne réponse"
+
+#~ msgid "waiting to be answered"
+#~ msgstr "Attendez la réponse"
+
+#~ msgid "Show Comments"
+#~ msgstr "Voir les commentaires"
+
+#~ msgid "Latest"
+#~ msgstr "Nouveauté"
+
+#~ msgid "seikai"
+#~ msgstr "Réponse correcte"
+
+#~ msgid "Site Navigations"
+#~ msgstr "Navigation"
+
+#~ msgid "a replica for"
+#~ msgstr "Reproduction de"
+
+#~ msgid "suiheinet"
+#~ msgstr "suiheinet"
+
+#~ msgid "constructed by kamisugi."
+#~ msgstr "Crée par Kamisugi"
+
+#~ msgid "This HomePage is still under construction ...⏳"
+#~ msgstr "Ce siteweb est en cours de construction..."

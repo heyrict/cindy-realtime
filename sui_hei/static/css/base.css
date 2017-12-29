@@ -1,0 +1,78 @@
+body {
+  background: #fff9f0;
+  line-height: normal;
+  padding-top: 50px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  padding-bottom: 5px;
+}
+.indexHero {
+  background: #f2cd8f;
+}
+.show-grid {
+  margin-bottom: 15px;
+}
+.status_label {
+  width: 100%;
+  text-align: center;
+  border-radius: 10px;
+}
+.status_solved {
+  border: 1px solid #859900;
+  color: #859900;
+}
+.status_unsolved {
+  border: 1px solid #cb4b16;
+  color: #cb4b16;
+}
+.status_dazed {
+  border: 1px solid #259185;
+  color: #259185;
+}
+.status_hidden {
+  border: 1px solid gray;
+  color: gray;
+}
+.process_label {
+  text-align: center;
+  width: 100%;
+  min-width: 30px;
+  padding: 1px;
+  border-radius: 10px;
+}
+.unanswered {
+  background: #b58900;
+  font-weight: bold;
+  color: #eee8d5;
+}
+.answered {
+  background: #85d514;
+  font-weight: bold;
+  color: #eee8d5;
+}
+.title_label {
+  font-size: 18px;
+}
+.title_label a {
+  color: #333;
+}
+.mondai_score {
+  border: 2px solid #bcc045;
+  border-radius: 20px;
+  font-family: Courier;
+  margin-left: 10px;
+  font-weight: bolder;
+  color: #bcc045;
+  padding: 4px;
+}
+
+#leftbar {
+  position: absolute;
+  left: 0;
+  top: 50px;
+}

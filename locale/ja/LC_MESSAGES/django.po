@@ -1,0 +1,502 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# heyrict <xiezh0831@yahoo.co.jp>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-12-29 18:11+0900\n"
+"PO-Revision-Date: 2017-09-27 20:05+0800\n"
+"Last-Translator: heyrict <xiezh0831@yahoo.co.jp>\n"
+"Language: ja\n"
+"MIME-Version: 0.27\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: cindy/settings.py:145
+msgid "Japanese"
+msgstr "日本語"
+
+#: cindy/settings.py:146
+msgid "English"
+msgstr "英語"
+
+#: cindy/settings.py:147
+msgid "Chinese"
+msgstr "中国語"
+
+#: cindy/settings.py:148
+msgid "French"
+msgstr "フランス語"
+
+#: sui_hei/models.py:17
+msgid "Award"
+msgstr "称号"
+
+#: sui_hei/models.py:25
+msgid "nick_name"
+msgstr "ニックネーム"
+
+#: sui_hei/models.py:26
+msgid "profile"
+msgstr "プロフィール"
+
+#: sui_hei/models.py:28
+msgid "experience"
+msgstr "経験値"
+
+#: sui_hei/models.py:29
+msgid "snipe"
+msgstr ""
+
+#: sui_hei/models.py:30
+msgid "sniped"
+msgstr ""
+
+#: sui_hei/models.py:47 sui_hei/models.py:71
+msgid "created"
+msgstr "作った時間"
+
+#: sui_hei/models.py:50
+msgid "User-Award"
+msgstr "ユーザー称号"
+
+#: sui_hei/models.py:66
+msgid "title"
+msgstr "タイトル"
+
+#: sui_hei/models.py:67
+msgid "yami"
+msgstr "闇スープ"
+
+#: sui_hei/models.py:68
+msgid "genre"
+msgstr "ジャンル"
+
+#: sui_hei/models.py:69 sui_hei/models.py:123 sui_hei/models.py:141
+msgid "content"
+msgstr "コンテンツ"
+
+#: sui_hei/models.py:70
+msgid "kaisetu"
+msgstr "解説"
+
+#: sui_hei/models.py:72
+msgid "modified"
+msgstr "最後変更時間"
+
+#: sui_hei/models.py:73
+msgid "status"
+msgstr "ステータス"
+
+#: sui_hei/models.py:74
+msgid "memo"
+msgstr "メモ"
+
+#: sui_hei/models.py:75
+msgid "score"
+msgstr "スコア"
+
+#: sui_hei/models.py:78
+msgid "Soup"
+msgstr "問題"
+
+#: sui_hei/models.py:85
+msgid "Albatross"
+msgstr "ウミガメのスープ"
+
+#: sui_hei/models.py:86
+msgid "20th-Door"
+msgstr "２０の扉"
+
+#: sui_hei/models.py:87
+msgid "Little Albat"
+msgstr "亀夫君"
+
+#: sui_hei/models.py:88
+msgid "Others & Formal"
+msgstr "新・形式"
+
+#: sui_hei/models.py:92
+msgid "Unsolved"
+msgstr "未解決"
+
+#: sui_hei/models.py:93
+msgid "Solved"
+msgstr "解決済み"
+
+#: sui_hei/models.py:94
+msgid "Dazed"
+msgstr "迷宮入り"
+
+#: sui_hei/models.py:95
+msgid "Hidden"
+msgstr "非公開"
+
+#: sui_hei/models.py:96
+msgid "Forced Hidden"
+msgstr "強制非公開"
+
+#: sui_hei/models.py:104
+msgid "shitumon"
+msgstr "質問"
+
+#: sui_hei/models.py:105
+msgid "kaitou"
+msgstr "回答"
+
+#: sui_hei/models.py:106
+msgid "good_ques"
+msgstr "良い質問"
+
+#: sui_hei/models.py:107
+msgid "true_ques"
+msgstr "正解"
+
+#: sui_hei/models.py:108
+msgid "askedtime"
+msgstr "質問時間"
+
+#: sui_hei/models.py:109
+msgid "answeredtime"
+msgstr "回答時間"
+
+#: sui_hei/models.py:112
+msgid "Question"
+msgstr "質問"
+
+#: sui_hei/models.py:122
+msgid "channel"
+msgstr "チャンネル"
+
+#: sui_hei/models.py:129
+msgid "Can add homepage info"
+msgstr "ホームページインフォメーションを編集できる"
+
+#: sui_hei/models.py:130
+msgid "Can grant awards to users"
+msgstr "称号付与権"
+
+#: sui_hei/models.py:131
+msgid "Lobby"
+msgstr "ロビー"
+
+#: sui_hei/models.py:142
+msgid "spoiler"
+msgstr "ネタバレ"
+
+#: sui_hei/models.py:145
+msgid "Comment"
+msgstr "評価・コメント"
+
+#: sui_hei/models.py:154
+msgid "Value"
+msgstr ""
+
+#: sui_hei/models.py:157
+msgid "Star"
+msgstr "スター"
+
+#: sui_hei/schema.py:147
+#, fuzzy
+#| msgid "Last login"
+msgid "Please login!"
+msgstr "最後のログイン時間"
+
+#: sui_hei/schema.py:186
+msgid "Login incorrect!"
+msgstr ""
+
+#: sui_hei/templates/main.html:9
+msgid "A website for playing situation puzzles"
+msgstr "ウミガメのスープ出題サイト"
+
+#: sui_hei/templates/main.html:9
+msgid "Chat With Lateral Thinking!"
+msgstr "ラテラルシンキングでチャットしよう！"
+
+#, fuzzy
+#~| msgid "title"
+#~ msgid "title a"
+#~ msgstr "タイトル"
+
+#, fuzzy
+#~| msgid "title"
+#~ msgid "title b"
+#~ msgstr "タイトル"
+
+#, fuzzy
+#~| msgid "title"
+#~ msgid "title c"
+#~ msgstr "タイトル"
+
+#, fuzzy
+#~| msgid "title"
+#~ msgid "title d"
+#~ msgstr "タイトル"
+
+#~ msgid "None"
+#~ msgstr "なし"
+
+#~ msgid "homepage"
+#~ msgstr "ホームページ"
+
+#~ msgid "mondai"
+#~ msgstr "問題"
+
+#~ msgid "All Soups"
+#~ msgstr "すべての問題"
+
+#~ msgid "NewSoup"
+#~ msgstr "出題"
+
+#~ msgid "User List"
+#~ msgstr "ユーザー一覧"
+
+#~ msgid "Profile"
+#~ msgstr "プロフィール"
+
+#~ msgid "logout"
+#~ msgstr "ログアウト"
+
+#~ msgid "Welcome, guest."
+#~ msgstr "こんにちは、ゲストさん"
+
+#~ msgid "register"
+#~ msgstr "登録"
+
+#~ msgid "login"
+#~ msgstr "ログイン"
+
+#~ msgid "prev"
+#~ msgstr "<-前"
+
+#~ msgid "next"
+#~ msgstr "次->"
+
+#~ msgid "Change channel"
+#~ msgstr "チャンネル変更"
+
+#~ msgid "edit"
+#~ msgstr "編集"
+
+#~ msgid "Send"
+#~ msgstr "発言"
+
+#~ msgid "Update"
+#~ msgstr "更新"
+
+#~ msgid "Selled Soups"
+#~ msgstr "出題した問題"
+
+#~ msgid "MyStar"
+#~ msgstr "スター"
+
+#~ msgid "Welcome to Cindy, a real-time website for lateral thinking games!"
+#~ msgstr "Cindy - リアルタイムで水平思考ゲームを遊ぶサイトへようこそ！"
+
+#~ msgid ""
+#~ "You can register to cindy free and enjoy its contents in one more step!"
+#~ msgstr "一歩だけで、あなたは無料で「Cindy」にサインイン出来ます！"
+
+#~ msgid "Welcome to Cindy"
+#~ msgstr "「Cindy」へようこそ"
+
+#~ msgid "Comments"
+#~ msgstr "評価・コメント"
+
+#~ msgid "Information"
+#~ msgstr "インフォメーション"
+
+#~ msgid "Add Info"
+#~ msgstr "インフォメーションを追加する"
+
+#~ msgid "Title"
+#~ msgstr "タイトル"
+
+#~ msgid "Search"
+#~ msgstr "検索"
+
+#~ msgid "Giver"
+#~ msgstr "出題者"
+
+#~ msgid "Content"
+#~ msgstr "コンテンツ"
+
+#~ msgid "Reset"
+#~ msgstr "リセット"
+
+#~ msgid "Preview"
+#~ msgstr "プレビュー"
+
+#~ msgid "True Answer"
+#~ msgstr "解説"
+
+#~ msgid "Confirm"
+#~ msgstr "確認"
+
+#~ msgid "Commit Change"
+#~ msgstr "変更実行"
+
+#~ msgid "Put Responds"
+#~ msgstr "すべての質問を回答する"
+
+#~ msgid "Comment here to introduce this Question to others!"
+#~ msgstr "評価・コメントでこの問題を他人に紹介しましょう！"
+
+#~ msgid "Add Comments"
+#~ msgstr "評価・コメントをする"
+
+#~ msgid "Hello guest! I need to know who you are before you ask a question!"
+#~ msgstr "こんにちは、ゲストさん。発言する前にログインしてくださいね^^。"
+
+#~ msgid "Memo"
+#~ msgstr "メモ"
+
+#~ msgid "Put True Answer"
+#~ msgstr "解説を出す"
+
+#~ msgid "Put Question"
+#~ msgstr "質問する"
+
+#~ msgid "latest comments"
+#~ msgstr "最新の評価・コメント"
+
+#~ msgid "mysoup"
+#~ msgstr "出題した問題"
+
+#~ msgid "mystar"
+#~ msgstr "スター"
+
+#~ msgid "All Users"
+#~ msgstr "すべてのユーザー"
+
+#~ msgid "You are not permitted to do this!"
+#~ msgstr "あなたはこの操作を行うパーミッションを持っていない。"
+
+#~ msgid "Genre"
+#~ msgstr "ジャンル"
+
+#~ msgid "Yami"
+#~ msgstr "闇スープ"
+
+#~ msgid "You are not permitted to delete others star!"
+#~ msgstr "あなたはスターを削除するパーミッションを持っていない。"
+
+#~ msgid "uncheck as yami"
+#~ msgstr "闇スープにしない"
+
+#~ msgid "check as yami"
+#~ msgstr "闇スープにする"
+
+#~ msgid "uncheck as hidden"
+#~ msgstr "非公開にしない"
+
+#~ msgid "check as hidden"
+#~ msgstr "非公開にする"
+
+#~ msgid "Name"
+#~ msgstr "名前"
+
+#~ msgid "Created time"
+#~ msgstr "作成時間"
+
+#~ msgid "Mondai count"
+#~ msgstr "問題数"
+
+#~ msgid "Question count"
+#~ msgstr "質問数"
+
+#~ msgid "Good Question count"
+#~ msgstr "良い質問数"
+
+#~ msgid "True Answer count"
+#~ msgstr "正解数"
+
+#~ msgid "Comment count"
+#~ msgstr "評価・コメント数"
+
+#~ msgid "change"
+#~ msgstr "更新"
+
+#~ msgid "Change password"
+#~ msgstr "パスワードを変更する"
+
+#~ msgid "You cannot revert change if you put the true answer!"
+#~ msgstr "正解を出すと二度と問題を編集出来ません"
+
+#~ msgid "Continue?"
+#~ msgstr "続けますか？"
+
+#~ msgid "Thank you for your voting!"
+#~ msgstr "投票ありがとうございました！"
+
+#~ msgid "Give time"
+#~ msgstr "出題時間"
+
+#~ msgid "[edit]"
+#~ msgstr "[編集]"
+
+#~ msgid "uncheck as good-question"
+#~ msgstr "良い質問にしない"
+
+#~ msgid "check as good-question"
+#~ msgstr "良い質問にする"
+
+#~ msgid "uncheck as true-answer"
+#~ msgstr "正解にしない"
+
+#~ msgid "check as true-answer"
+#~ msgstr "正解にする"
+
+#~ msgid "waiting to be answered"
+#~ msgstr "回答はまだです"
+
+#~ msgid "Show Comments"
+#~ msgstr "評価・コメントを見る"
+
+#~ msgid "Latest"
+#~ msgstr "最新"
+
+#~ msgid "You cannot revert change if you delete the star!"
+#~ msgstr "スターを削除すると戻せません。"
+
+#~ msgid "seikai"
+#~ msgstr "正解あり"
+
+#~ msgid "Site Navigations"
+#~ msgstr "ナビゲーション"
+
+#~ msgid "a replica for"
+#~ msgstr "レプリカサイトオブ："
+
+#~ msgid "suiheinet"
+#~ msgstr "ウミガメスープ"
+
+#~ msgid "constructed by kamisugi."
+#~ msgstr "制作者：上杉"
+
+#~ msgid "This HomePage is still under construction ...⏳"
+#~ msgstr "このホームページは建設中です...⏳"
+
+#~ msgid "nickname"
+#~ msgstr "ニックネーム"
+
+#~ msgid ""
+#~ "`{}` is already registered by another user.\n"
+#~ "Try another one!"
+#~ msgstr ""
+#~ "`{}` はすでに他のユーザーに使用されました。\n"
+#~ "他を試してみてくださいね"
+
+#~ msgid "user_id"
+#~ msgstr "ユーザーID"
+
+#~ msgid "mondai_id"
+#~ msgstr "問題ID"
+
+#~ msgid "Lobby Chat"
+#~ msgstr "ロビーチャット"

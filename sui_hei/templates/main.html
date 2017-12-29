@@ -1,0 +1,41 @@
+{% load i18n static webpack_loader %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title id="page_title">
+      Cindy - {% block pageTitle %} {% trans 'A website for playing situation puzzles' %}: {% trans 'Chat With Lateral Thinking!' %} {% endblock %}
+  </title>
+  {% csrf_token %}
+  <link rel="stylesheet" href="{% static 'js/node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'js/node_modules/bootstrap/dist/css/bootstrap-theme.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'js/node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css' %}">
+  <style type="text/css">
+    {% block style %} 
+    {% endblock %} 
+  </style>
+  {% block style_include %}{% endblock %}
+  {% get_current_language as LANGUAGE_CODE %}
+  <script type="text/javascript">
+      window.django = {
+        {% if request.user.is_authenticated %}
+        user_id: {{ request.user.id }},
+        user_nickname: "{{ request.user.nickname }}",
+        {% endif %}
+        LANGUAGE_CODE: "{{ LANGUAGE_CODE }}",
+      };
+  </script>
+  <script type="text/javascript" src="{% url 'jsi18n' %}"></script>
+  {% render_bundle 'manifest' %}
+  {% render_bundle 'vendor' %}
+  {% render_bundle 'index' %}
+</head>
+
+<body>
+  <div id="root"></div>
+</body>
+
+</html>

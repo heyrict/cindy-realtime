@@ -1,0 +1,6 @@
+[client]
+database = cindy
+user = cindy
+password = sui_hei
+host = localhost
+default-character-set = utf8

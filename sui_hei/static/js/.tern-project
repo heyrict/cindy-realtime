@@ -1,0 +1,12 @@
+{
+    "libs": [
+        "browser",
+        "jquery",
+        "react",
+        "react-dom",
+        "relay-runtime",
+        "react-relay",
+        "moment",
+        "bootbox"
+    ]
+}
