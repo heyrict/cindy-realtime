@@ -10,7 +10,6 @@ import { MondaiAddBody } from "./components/MondaiAdd.jsx";
 import { MondaiShowBody } from "./components/MondaiShow.jsx";
 import { TopNavbar } from "./components/Navbar.jsx";
 
-//import socketMiddleware from "./redux/socketMiddleware";
 import common from "./common";
 
 const App = () => (

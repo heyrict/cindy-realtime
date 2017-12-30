@@ -17,7 +17,7 @@ urlpatterns = [
     # GraphQL
     path("graphql", GraphQLView.as_view(graphiql=True)),
     # rest
-    re_path("^(mondai|profile)", views.simple, name="simple"),
+    re_path("^(mondai|profile|test)", views.simple, name="simple"),
     path("", views.simple, name="index"),
 ]
 # yapf: enable

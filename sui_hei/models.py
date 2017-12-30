@@ -28,6 +28,7 @@ class User(AbstractUser):
     experience = models.IntegerField(_('experience'), default=0)
     snipe = models.IntegerField(_('snipe'), default=0)
     sniped = models.IntegerField(_('sniped'), default=0)
+    online = models.BooleanField(_('online'), default=False)
 
     REQUIRED_FIELDS = ['nickname']
 
