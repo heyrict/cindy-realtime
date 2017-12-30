@@ -131,6 +131,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+STATIC_ROOT = os.path.join(BASE_DIR, "collected_static")
+
 
 # Don't append `_id` to foreign keys
 FK_AUTO_ID = ''
@@ -159,14 +164,14 @@ APPEND_SLASH = False
 WEBPACK_LOADER = {
     "DEFAULT": {
         "BUNDLE_DIR_NAME": "dist/",
-        "STATS_FILE": os.path.join(BASE_DIR, "sui_hei/static/js/dist/webpack-stats.json")
+        "STATS_FILE": os.path.join(BASE_DIR, "static/js/dist/webpack-stats.json")
     }
 } # yapf: disable
 
 # Graphene Settings
 GRAPHENE = {
     'SCHEMA': 'schema.schema',
-    'SCHEMA_OUTPUT': 'sui_hei/static/js/schema.json'
+    'SCHEMA_OUTPUT': 'static/js/schema.json'
 }
 
 # Channels
