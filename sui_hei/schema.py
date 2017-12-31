@@ -216,14 +216,14 @@ class Query(object):
     all_stars = DjangoFilterConnectionField(
         StarNode, orderBy=graphene.List(of_type=graphene.String))
 
-    user = relay.Node.Field(UserNode, id=graphene.Int())
-    award = relay.Node.Field(AwardNode, id=graphene.Int())
-    useraward = relay.Node.Field(UserAwardNode, id=graphene.Int())
-    mondai = relay.Node.Field(MondaiNode, id=graphene.Int())
-    shitumon = relay.Node.Field(ShitumonNode, id=graphene.Int())
-    lobby = relay.Node.Field(LobbyNode, id=graphene.Int())
-    comment = relay.Node.Field(CommentNode, id=graphene.Int())
-    star = relay.Node.Field(StarNode, id=graphene.Int())
+    user = relay.Node.Field(UserNode)
+    award = relay.Node.Field(AwardNode)
+    useraward = relay.Node.Field(UserAwardNode)
+    mondai = relay.Node.Field(MondaiNode)
+    shitumon = relay.Node.Field(ShitumonNode)
+    lobby = relay.Node.Field(LobbyNode)
+    comment = relay.Node.Field(CommentNode)
+    star = relay.Node.Field(StarNode)
 
     # {{{2 resolves
     # {{{3 resolve all
@@ -293,49 +293,49 @@ class Query(object):
 
     # {{{3 resolve single
     def resolve_user(self, info, **kwargs):
-        user_id = kwargs.get("id")
+        user_id = kwargs.get("rowid")
         if user_id is not None:
             return User.objects.get(pk=user_id)
         return None
 
     def resolve_award(self, info, **kwargs):
-        award_id = kwargs.get("id")
+        award_id = kwargs.get("rowid")
         if award_id is not None:
             return Award.objects.get(pk=award_id)
         return None
 
     def resolve_useraward(self, info, **kwargs):
-        useraward_id = kwargs.get("id")
+        useraward_id = kwargs.get("rowid")
         if useraward_id is not None:
             return UserAward.objects.get(pk=useraward_id)
         return None
 
     def resolve_mondai(self, info, **kwargs):
-        mondai_id = kwargs.get("id")
+        mondai_id = kwargs.get("rowid")
         if mondai_id is not None:
             return Mondai.objects.get(pk=mondai_id)
         return None
 
     def resolve_shitumon(self, info, **kwargs):
-        shitumon_id = kwargs.get("id")
+        shitumon_id = kwargs.get("rowid")
         if shitumon_id is not None:
             return Lobby.objects.get(pk=shitumon_id)
         return None
 
     def resolve_lobby(self, info, **kwargs):
-        lobby_id = kwargs.get("id")
+        lobby_id = kwargs.get("rowid")
         if lobby_id is not None:
             return Lobby.objects.get(pk=lobby_id)
         return None
 
     def resolve_comment(self, info, **kwargs):
-        comment_id = kwargs.get("id")
+        comment_id = kwargs.get("rowid")
         if comment_id is not None:
             return Comment.objects.get(pk=comment_id)
         return None
 
     def resolve_star(self, info, **kwargs):
-        star_id = kwargs.get("id")
+        star_id = kwargs.get("rowid")
         if star_id is not None:
             return Star.objects.get(pk=star_id)
         return None

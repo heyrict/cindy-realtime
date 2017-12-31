@@ -11,13 +11,16 @@ import {
 import { commitMutation } from "react-relay";
 import bootbox from "bootbox";
 
+import { connect } from "react-redux";
+import { addSoup } from "../redux/actions";
+
 import { FieldGroup, PreviewEditor } from "./components.jsx";
 import common from "../common";
 import { environment } from "../Environment";
 
 // {{{1 Elements
-// {{{2 class MondaiAddForm
-export class MondaiAddForm extends React.Component {
+// {{{2 class MondaiAddFormAtom
+export class MondaiAddFormAtom extends React.Component {
   // {{{ constructor
   constructor(props) {
     super(props);
@@ -127,8 +130,10 @@ export class MondaiAddForm extends React.Component {
             ))
           );
         } else if (response) {
-          const mondaiId = response.createMondai.mondai.rowid;
+          const mondaiId = response.createMondai.mondai.rowid,
+            nodeId = response.createMondai.mondai.id;
           this.props.history.push(`/mondai/show/${mondaiId}`);
+          this.props.onNewSoupAdded(nodeId)
         }
       },
       onError: err => console.error(err)
@@ -137,12 +142,20 @@ export class MondaiAddForm extends React.Component {
   // }}}
 }
 
+// {{{2 const MondaiAddForm
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  onNewSoupAdded: soupId => dispatch(addSoup(soupId))
+});
+
+const MondaiAddForm = connect(null, mapDispatchToProps)(MondaiAddFormAtom);
+
 // {{{1 Fragments
 // {{{2 mutation MondaiAddMutation
 export const MondaiAddMutation = graphql`
   mutation MondaiAddMutation($input: CreateMondaiInput!) {
     createMondai(input: $input) {
       mondai {
+        id
         rowid
       }
     }

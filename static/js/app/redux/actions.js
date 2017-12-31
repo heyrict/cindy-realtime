@@ -1,5 +1,13 @@
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 
+const WS_CONNECT = "WS_CONNECT";
+const WS_DISCONNECT = "WS_DISCONNECT";
+
+export const WS = {
+  WS_CONNECT: WS_CONNECT,
+  WS_DISCONNECT: WS_DISCONNECT
+};
+
 const SOUP_CONNECT = "SOUP_CONNECT";
 const SOUP_DISCONNECT = "SOUP_DISCONNECT";
 const VIEWER_CONNECT = "VIEWER_CONNECT";
@@ -13,7 +21,7 @@ export const INTERNAL_ACTIONS = {
   VIEWER_CONNECT: VIEWER_CONNECT,
   VIEWER_DISCONNECT: VIEWER_DISCONNECT,
   ADD_SOUP: ADD_SOUP,
-  UPDATE_SOUP: UPDATE_SOUP,
+  UPDATE_SOUP: UPDATE_SOUP
 };
 
 const UPDATE_ONLINE_VIEWER_COUNT = "UPDATE_ONLINE_VIEWER_COUNT";
@@ -33,52 +41,56 @@ export const EXTERNAL_ACTIONS = {
 };
 
 export const connectStream = stream => {
-  switch(stream) {
+  switch (stream) {
     case "viewer":
       return {
         type: VIEWER_CONNECT,
         stream: stream
-      }
+      };
     case "soupList":
       return {
         type: SOUP_CONNECT,
         stream: stream
-      }
+      };
     default:
       return {
         type: "SKELETON"
-      }
+      };
   }
-}
+};
 
 export const disconnectStream = stream => {
-  switch(stream) {
+  switch (stream) {
     case "viewer":
       return {
         type: VIEWER_DISCONNECT,
         stream: stream
-      }
+      };
     case "soupList":
       return {
         type: SOUP_DISCONNECT,
         stream: stream
-      }
+      };
     default:
       return {
         type: "SKELETON"
-      }
+      };
   }
-}
+};
 
 export const setCurrentUser = user => ({
   type: SET_CURRENT_USER,
   currentUser: user
 });
 
-export const addSoup = () => ({
-  type: ADD_SOUP
+export const addSoup = (soupId) => ({
+  type: ADD_SOUP,
+  stream: "soupList",
+  soupId
 });
 
-export const updateSoup = () => ({
-  type: UPDATE_SOUP
+export const updateSoup = (soupId) => ({
+  type: UPDATE_SOUP,
+  stream: "soupList",
+  soupId
 });

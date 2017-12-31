@@ -17,7 +17,10 @@ const initialState = {
 const {
   UPDATE_ONLINE_VIEWER_COUNT,
   ADD_ONLINE_USER,
-  REMOVE_ONLINE_USER
+  REMOVE_ONLINE_USER,
+  INIT_SOUP_LIST,
+  PREPEND_SOUP_LIST,
+  UPDATE_SOUP_LIST
 } = EXTERNAL_ACTIONS;
 
 function cindyApp(state = initialState, action) {
@@ -36,6 +39,18 @@ function cindyApp(state = initialState, action) {
       return {
         ...state,
         soupList: action.soupList
+      };
+    case PREPEND_SOUP_LIST:
+      return {
+        ...state,
+        soupList: {
+          allMondais: {
+            edges: Array.concat(
+              [{ node: action.soupNode.mondai }],
+              state.soupList.allMondais.edges
+            )
+          }
+        }
       };
 
     default:

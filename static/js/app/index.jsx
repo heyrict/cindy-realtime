@@ -51,17 +51,6 @@ $(document).ready(function() {
     document.getElementById("root")
   );
 
-  $("form").each(function(index) {
-    can_submit[index] = true;
-    $(this).on("submit", function() {
-      if (!can_submit[index]) {
-        return false;
-      }
-      can_submit[index] = false;
-      return true;
-    });
-  });
-
   // Replace /countdown()/
   common.StartCountdown();
 });
