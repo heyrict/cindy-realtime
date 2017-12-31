@@ -6,7 +6,12 @@ const initialState = {
     userId: window.django.user_id,
     nickname: window.django.user_nickname
   },
-  onlineViewerCount: 0
+  onlineViewerCount: 0,
+  soupList: {
+    allMondais: {
+      edges: []
+    }
+  }
 };
 
 const {
@@ -26,6 +31,11 @@ function cindyApp(state = initialState, action) {
       return {
         ...state,
         onlineViewerCount: action.onlineViewerCount
+      };
+    case EXTERNAL_ACTIONS.INIT_SOUP_LIST:
+      return {
+        ...state,
+        soupList: action.soupList
       };
 
     default:

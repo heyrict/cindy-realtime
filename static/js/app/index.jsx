@@ -6,7 +6,7 @@ import { createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
 import cindyApp from "./redux/reducers";
 import { rootSaga } from "./redux/sagas";
-import { INTERNAL_ACTIONS } from "./redux/actions";
+import { connectStream } from "./redux/actions";
 
 import App from "./App.jsx";
 import common from "./common";
@@ -30,7 +30,7 @@ const sagaMiddleware = createSagaMiddleware({
   }
 });
 
-let store = createStore(
+export var store = createStore(
   cindyApp,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   applyMiddleware(sagaMiddleware)
@@ -41,6 +41,9 @@ export const dispatch = action => store.dispatch(action);
 sagaMiddleware.run(rootSaga);
 
 $(document).ready(function() {
+  dispatch({ type: "WS_CONNECT" });
+  dispatch(connectStream("viewer"));
+
   ReactDOM.render(
     <Provider store={store}>
       <App />
@@ -58,8 +61,6 @@ $(document).ready(function() {
       return true;
     });
   });
-
-  dispatch({ type: INTERNAL_ACTIONS.CONNECT });
 
   // Replace /countdown()/
   common.StartCountdown();

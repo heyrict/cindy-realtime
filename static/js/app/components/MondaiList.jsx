@@ -1,6 +1,17 @@
+/* MondaiList
+ * ==========
+ * exports MondaiListBody for React Router to render a page.
+ *
+ * Use Redux to subscribe the `unsolved` soups (with updates),
+ * Use Relay to paginate the `solved` soups.
+ *
+ * TODO: Find a better solution if subscriptions got implemented in
+ *       graphene. [See](https://github.com/graphql-python/graphene/pull/500)
+ */
 // {{{1 Imports
 import React from "react";
 import { Grid, ProgressBar, PageHeader, Button } from "react-bootstrap";
+import { connect } from "react-redux";
 import "jquery";
 
 import {
@@ -9,6 +20,7 @@ import {
   MondaiScoreLabel,
   MondaiStatusLable,
   MondaiTitleLabel,
+  MondaiGiverLabel,
   ComponentsFragmentUserLabel
 } from "./components.jsx";
 import {
@@ -17,6 +29,7 @@ import {
   createFragmentContainer,
   createPaginationContainer
 } from "react-relay";
+import { connectStream, disconnectStream } from "../redux/actions";
 import { environment } from "../Environment";
 import common from "../common";
 
@@ -33,6 +46,8 @@ export function MondaiListItem(props) {
     starCount++;
   });
 
+  const UserLabelCls = props.relay ? ComponentsFragmentUserLabel : MondaiGiverLabel
+
   return (
     <div className="row show-grid">
       <div className="col-xs-4 col-sm-2 col-md-2 col-lg-1 text-center">
@@ -45,7 +60,7 @@ export function MondaiListItem(props) {
         />
       </div>
       <div className="visible-xs-block col-xs-6 text-right">
-        <ComponentsFragmentUserLabel user={node.user} />
+        <UserLabelCls user={node.user} />
         <MondaiCreatedLabel time={node.created} />
       </div>
       <span className="visible-xs-block clearfix" />
@@ -58,13 +73,52 @@ export function MondaiListItem(props) {
         <MondaiScoreLabel starCount={starCount} starSum={starSum} />
       </div>
       <div className="hidden-xs col-sm-12 text-right">
-        <ComponentsFragmentUserLabel user={node.user} />
+        <UserLabelCls user={node.user} />
         <MondaiCreatedLabel time={node.created} />
       </div>
       <span className="clearfix" />
     </div>
   );
 }
+
+// {{{2 class MondaiListUnsolvedListAtom
+class MondaiListUnsolvedListAtom extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    this.props.initSoupList();
+  }
+
+  render() {
+    return (
+      <div>
+        {this.props.list.allMondais.edges.map(edge => (
+          <MondaiListItem node={edge.node} key={edge.node.id} />
+        ))}
+      </div>
+    );
+  }
+
+  componentWillUnmount() {
+    this.props.destroySoupList();
+  }
+}
+
+const mapUnsolvedListStateToProps = state => ({
+  list: state.soupList
+});
+
+const mapUnsolvedListDepatchToProps = (dispatch, ownProps) => ({
+  initSoupList: () => dispatch(connectStream("soupList")),
+  destroySoupList: () => dispatch(disconnectStream("soupList"))
+});
+
+const MondaiListUnsolvedList = connect(
+  mapUnsolvedListStateToProps,
+  mapUnsolvedListDepatchToProps
+)(MondaiListUnsolvedListAtom);
 
 // {{{2 class MondaiListList
 class MondaiListList extends React.Component {
@@ -79,7 +133,9 @@ class MondaiListList extends React.Component {
           <MondaiListFragmentItem node={edge.node} key={edge.node.__id} />
         ))}
         {this.props.relay.hasMore() ? (
-          <Button onClick={this._loadMore} block={true} bsStyle="info">Load More ...</Button>
+          <Button onClick={this._loadMore} block={true} bsStyle="info">
+            Load More ...
+          </Button>
         ) : (
           ""
         )}
@@ -242,13 +298,7 @@ export class MondaiListBody extends React.Component {
     return (
       <Grid>
         <PageHeader>{gettext("All Soups")}</PageHeader>
-        <MondaiListQueryRenderer
-          variables={{
-            orderBy: ["-modified", "-id"],
-            status: 0,
-            status__gt: null
-          }}
-        />
+        <MondaiListUnsolvedList />
         <hr />
         <MondaiListQueryRenderer
           variables={{
