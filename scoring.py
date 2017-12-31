@@ -29,8 +29,8 @@ def update_user_exp(recent=None):
     else:
         users = User.objects.all()
     for user in users:
-        _put_ques = user.shitumon_set
-        put_soups = user.mondai_set.count()
+        _put_ques = user.question_set
+        put_soups = user.puzzle_set.count()
         put_goodques = _put_ques.filter(good=True).count()
         put_trueques = _put_ques.filter(true=True).count()
         put_comments = Comment.objects.filter(user_id=user).count()
@@ -43,7 +43,7 @@ def update_user_exp(recent=None):
 
 
 def update_all_soup_score():
-    soups = Mondai.objects.all()
+    soups = Puzzle.objects.all()
 
     for soup in soups:
         update_soup_score(soup)

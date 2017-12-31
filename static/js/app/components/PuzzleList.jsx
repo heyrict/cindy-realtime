@@ -1,9 +1,9 @@
-/* MondaiList
+/* PuzzleList
  * ==========
- * exports MondaiListBody for React Router to render a page.
+ * exports PuzzleListBody for React Router to render a page.
  *
- * Use Redux to subscribe the `unsolved` soups (with updates),
- * Use Relay to paginate the `solved` soups.
+ * Use Redux to subscribe the `unsolved` puzzles (with updates),
+ * Use Relay to paginate the `solved` puzzles.
  *
  * TODO: Find a better solution if subscriptions got implemented in
  *       graphene. [See](https://github.com/graphql-python/graphene/pull/500)
@@ -15,12 +15,12 @@ import { connect } from "react-redux";
 import "jquery";
 
 import {
-  MondaiCreatedLabel,
-  MondaiProcessLabel,
-  MondaiScoreLabel,
-  MondaiStatusLable,
-  MondaiTitleLabel,
-  MondaiGiverLabel,
+  PuzzleCreatedLabel,
+  PuzzleProcessLabel,
+  PuzzleScoreLabel,
+  PuzzleStatusLable,
+  PuzzleTitleLabel,
+  PuzzleGiverLabel,
   ComponentsFragmentUserLabel
 } from "./components.jsx";
 import {
@@ -34,8 +34,8 @@ import { environment } from "../Environment";
 import common from "../common";
 
 // {{{1 Elements
-// {{{2 function MondaiListItem
-export function MondaiListItem(props) {
+// {{{2 function PuzzleListItem
+export function PuzzleListItem(props) {
   const node = props.node;
 
   var starCount = 0,
@@ -46,82 +46,82 @@ export function MondaiListItem(props) {
     starCount++;
   });
 
-  const UserLabelCls = props.relay ? ComponentsFragmentUserLabel : MondaiGiverLabel
+  const UserLabelCls = props.relay ? ComponentsFragmentUserLabel : PuzzleGiverLabel
 
   return (
     <div className="row show-grid">
       <div className="col-xs-4 col-sm-2 col-md-2 col-lg-1 text-center">
-        <MondaiStatusLable status={node.status} />
+        <PuzzleStatusLable status={node.status} />
       </div>
       <div className="col-xs-2 col-sm-1 col-md-1 col-lg-1 text-center">
-        <MondaiProcessLabel
+        <PuzzleProcessLabel
           qCount={node.quesCount}
           uaCount={node.uaquesCount}
         />
       </div>
       <div className="visible-xs-block col-xs-6 text-right">
         <UserLabelCls user={node.user} />
-        <MondaiCreatedLabel time={node.created} />
+        <PuzzleCreatedLabel time={node.created} />
       </div>
       <span className="visible-xs-block clearfix" />
       <div className="col-xs-12 col-sm-9 col-md-9 col-lg-10">
-        <MondaiTitleLabel
-          mondaiId={node.rowid}
+        <PuzzleTitleLabel
+          puzzleId={node.rowid}
           genre={node.genre}
           title={node.title}
         />
-        <MondaiScoreLabel starCount={starCount} starSum={starSum} />
+        <PuzzleScoreLabel starCount={starCount} starSum={starSum} />
       </div>
       <div className="hidden-xs col-sm-12 text-right">
         <UserLabelCls user={node.user} />
-        <MondaiCreatedLabel time={node.created} />
+        <PuzzleCreatedLabel time={node.created} />
       </div>
       <span className="clearfix" />
     </div>
   );
 }
 
-// {{{2 class MondaiListUnsolvedListAtom
-class MondaiListUnsolvedListAtom extends React.Component {
+// {{{2 class PuzzleListUnsolvedListAtom
+class PuzzleListUnsolvedListAtom extends React.Component {
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    this.props.initSoupList();
+    this.props.initPuzzleList();
   }
 
   render() {
     return (
       <div>
-        {this.props.list.allMondais.edges.map(edge => (
-          <MondaiListItem node={edge.node} key={edge.node.id} />
+        {this.props.list.allPuzzles.edges.map(edge => (
+          <PuzzleListItem node={edge.node} key={edge.node.id} />
         ))}
       </div>
     );
   }
 
   componentWillUnmount() {
-    this.props.destroySoupList();
+    this.props.destroyPuzzleList();
   }
 }
 
 const mapUnsolvedListStateToProps = state => ({
-  list: state.soupList
+  list: state.puzzleList
 });
 
 const mapUnsolvedListDepatchToProps = (dispatch, ownProps) => ({
-  initSoupList: () => dispatch(connectStream("soupList")),
-  destroySoupList: () => dispatch(disconnectStream("soupList"))
+  initPuzzleList: () => dispatch(connectStream("puzzleList")),
+  destroyPuzzleList: () => dispatch(disconnectStream("puzzleList"))
 });
 
-const MondaiListUnsolvedList = connect(
+const PuzzleListUnsolvedList = connect(
   mapUnsolvedListStateToProps,
   mapUnsolvedListDepatchToProps
-)(MondaiListUnsolvedListAtom);
+)(PuzzleListUnsolvedListAtom);
 
-// {{{2 class MondaiListList
-class MondaiListList extends React.Component {
+// {{{2 class PuzzleListList
+class PuzzleListList extends React.Component {
   constructor(props) {
     super(props);
     this._loadMore = this._loadMore.bind(this);
@@ -129,8 +129,8 @@ class MondaiListList extends React.Component {
   render() {
     return (
       <div>
-        {this.props.list.allMondais.edges.map(edge => (
-          <MondaiListFragmentItem node={edge.node} key={edge.node.__id} />
+        {this.props.list.allPuzzles.edges.map(edge => (
+          <PuzzleListFragmentItem node={edge.node} key={edge.node.__id} />
         ))}
         {this.props.relay.hasMore() ? (
           <Button onClick={this._loadMore} block={true} bsStyle="info">
@@ -155,10 +155,10 @@ class MondaiListList extends React.Component {
 }
 
 // {{{1 Containers
-// {{{2 const MondaiListFragmentItem
-export const MondaiListFragmentItem = createFragmentContainer(MondaiListItem, {
+// {{{2 const PuzzleListFragmentItem
+export const PuzzleListFragmentItem = createFragmentContainer(PuzzleListItem, {
   node: graphql`
-    fragment MondaiList_node on MondaiNode {
+    fragment PuzzleList_node on PuzzleNode {
       id
       rowid
       genre
@@ -180,12 +180,12 @@ export const MondaiListFragmentItem = createFragmentContainer(MondaiListItem, {
     }
   `
 });
-// {{{2 const MondaiListFragmentList
-export const MondaiListFragmentList = createPaginationContainer(
-  MondaiListList,
+// {{{2 const PuzzleListFragmentList
+export const PuzzleListFragmentList = createPaginationContainer(
+  PuzzleListList,
   {
     list: graphql`
-      fragment MondaiList_list on Query
+      fragment PuzzleList_list on Query
         @argumentDefinitions(
           count: { type: Int, defaultValue: 3 }
           cursor: { type: String }
@@ -193,17 +193,17 @@ export const MondaiListFragmentList = createPaginationContainer(
           status: { type: Float, defaultValue: null }
           status__gt: { type: Float, defaultValue: null }
         ) {
-        allMondais(
+        allPuzzles(
           first: $count
           after: $cursor
           orderBy: $orderBy
           status: $status
           status_Gt: $status__gt
-        ) @connection(key: "MondaiNode_allMondais") {
+        ) @connection(key: "PuzzleNode_allPuzzles") {
           edges {
             node {
               id
-              ...MondaiList_node
+              ...PuzzleList_node
             }
           }
         }
@@ -213,7 +213,7 @@ export const MondaiListFragmentList = createPaginationContainer(
   {
     direction: "forward",
     getConnectionFromProps(props) {
-      return props.list && props.list.allMondais;
+      return props.list && props.list.allPuzzles;
     },
     getFragmentVariables(prevVars, totalCount) {
       return {
@@ -231,14 +231,14 @@ export const MondaiListFragmentList = createPaginationContainer(
       };
     },
     query: graphql`
-      query MondaiListInitQuery(
+      query PuzzleListInitQuery(
         $count: Int
         $cursor: String
         $orderBy: [String]
         $status: Float
         $status__gt: Float
       ) {
-        ...MondaiList_list
+        ...PuzzleList_list
           @arguments(
             count: $count
             cursor: $cursor
@@ -251,16 +251,16 @@ export const MondaiListFragmentList = createPaginationContainer(
   }
 );
 
-// {{{2 query MondaiListQuery
-const mondaiListBodyQuery = graphql`
-  query MondaiListInitQuery(
+// {{{2 query PuzzleListQuery
+const puzzleListBodyQuery = graphql`
+  query PuzzleListInitQuery(
     $count: Int
     $cursor: String
     $orderBy: [String]
     $status: Float
     $status__gt: Float
   ) {
-    ...MondaiList_list
+    ...PuzzleList_list
       @arguments(
         count: $count
         cursor: $cursor
@@ -272,19 +272,19 @@ const mondaiListBodyQuery = graphql`
 `;
 
 // {{{1 Body
-// {{{2 function MondaiListQueryRenderer
-function MondaiListQueryRenderer(props) {
+// {{{2 function PuzzleListQueryRenderer
+function PuzzleListQueryRenderer(props) {
   return (
     <QueryRenderer
       environment={environment}
-      component={MondaiListFragmentList}
-      query={mondaiListBodyQuery}
+      component={PuzzleListFragmentList}
+      query={puzzleListBodyQuery}
       variables={props.variables}
       render={({ error, props }) => {
         if (error) {
           return <div>{error.message}</div>;
         } else if (props) {
-          return <MondaiListFragmentList list={props} />;
+          return <PuzzleListFragmentList list={props} />;
         }
         return <ProgressBar now={100} label={"Loading..."} striped active />;
       }}
@@ -292,15 +292,15 @@ function MondaiListQueryRenderer(props) {
   );
 }
 
-// {{{2 class MondaiListBody
-export class MondaiListBody extends React.Component {
+// {{{2 class PuzzleListBody
+export class PuzzleListBody extends React.Component {
   render() {
     return (
       <Grid>
-        <PageHeader>{gettext("All Soups")}</PageHeader>
-        <MondaiListUnsolvedList />
+        <PageHeader>{gettext("All Puzzles")}</PageHeader>
+        <PuzzleListUnsolvedList />
         <hr />
-        <MondaiListQueryRenderer
+        <PuzzleListQueryRenderer
           variables={{
             orderBy: ["-modified", "-id"],
             count: 3,

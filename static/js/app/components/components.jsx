@@ -23,8 +23,8 @@ export function StatusLabel(props) {
   return <div className={baseClass}>{props.content}</div>;
 }
 
-// {{{1 class MondaiStatusLable
-export class MondaiStatusLable extends React.Component {
+// {{{1 class PuzzleStatusLable
+export class PuzzleStatusLable extends React.Component {
   render() {
     const status = this.props.status;
     const status_class = common.status_class_dict[status];
@@ -46,8 +46,8 @@ export function ProcessLabel(props) {
   return <div className={baseClass}>{props.content}</div>;
 }
 
-// {{{1 class MondaiProcessLabel
-export class MondaiProcessLabel extends React.Component {
+// {{{1 class PuzzleProcessLabel
+export class PuzzleProcessLabel extends React.Component {
   render() {
     const qCount = this.props.qCount;
     const uaCount = this.props.uaCount;
@@ -60,14 +60,14 @@ export class MondaiProcessLabel extends React.Component {
   }
 }
 
-// {{{1 class MondaiTitleLabel
-export class MondaiTitleLabel extends React.Component {
+// {{{1 class PuzzleTitleLabel
+export class PuzzleTitleLabel extends React.Component {
   render() {
     const translatedGenre = common.genre_code_dict[this.props.genre];
     return (
       <span className="title_label">
         <span className="glyphicon glyphicon-chevron-right visible-xs-inline" />
-        <Link to={common.urls.mondai_show(this.props.mondaiId)}>
+        <Link to={"/puzzle/show/" + this.props.puzzleId}>
           {`[${translatedGenre}] ${this.props.title}`}
         </Link>
       </span>
@@ -75,15 +75,15 @@ export class MondaiTitleLabel extends React.Component {
   }
 }
 
-// {{{1 class MondaiScoreLabel
-export class MondaiScoreLabel extends React.Component {
+// {{{1 class PuzzleScoreLabel
+export class PuzzleScoreLabel extends React.Component {
   render() {
     var scale_one = num => Math.floor(num * 10) / 10;
     const starCount = this.props.starCount,
       starSum = this.props.starSum;
     if (starCount > 0) {
       return (
-        <span className="mondai_score">
+        <span className="puzzle_score">
           {"✯" + starSum + "(" + starCount + ")"}
         </span>
       );
@@ -92,21 +92,21 @@ export class MondaiScoreLabel extends React.Component {
     }
   }
 }
-// {{{1 class MondaiGiverLabel
-export class MondaiGiverLabel extends React.Component {
+// {{{1 class PuzzleGiverLabel
+export class PuzzleGiverLabel extends React.Component {
   render() {
     const user = this.props.user;
     return (
       <span>
-        <Link to={common.urls.profile(user.rowid)}>{user.nickname}</Link>
+        <Link to={"/profile/" + user.rowid}>{user.nickname}</Link>
         <UserAwardPopover userAward={user.currentAward} />
       </span>
     );
   }
 }
 
-// {{{1 class MondaiCreatedLabel
-export class MondaiCreatedLabel extends React.Component {
+// {{{1 class PuzzleCreatedLabel
+export class PuzzleCreatedLabel extends React.Component {
   render() {
     const time = this.props.time;
     return (
@@ -291,7 +291,7 @@ export class ModalContainer extends React.Component {
   // }}}
 }
 // {{{1 const ComponentsFragmentUserLabel
-export const ComponentsFragmentUserLabel = createFragmentContainer(MondaiGiverLabel, {
+export const ComponentsFragmentUserLabel = createFragmentContainer(PuzzleGiverLabel, {
   user: graphql`
     fragment components_user on UserNode {
       rowid

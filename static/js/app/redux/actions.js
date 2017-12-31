@@ -8,36 +8,36 @@ export const WS = {
   WS_DISCONNECT: WS_DISCONNECT
 };
 
-const SOUP_CONNECT = "SOUP_CONNECT";
-const SOUP_DISCONNECT = "SOUP_DISCONNECT";
+const PUZZLE_CONNECT = "PUZZLE_CONNECT";
+const PUZZLE_DISCONNECT = "PUZZLE_DISCONNECT";
 const VIEWER_CONNECT = "VIEWER_CONNECT";
 const VIEWER_DISCONNECT = "VIEWER_DISCONNECT";
-const ADD_SOUP = "ADD_SOUP";
-const UPDATE_SOUP = "UPDATE_SOUP";
+const ADD_PUZZLE = "ADD_PUZZLE";
+const UPDATE_PUZZLE = "UPDATE_PUZZLE";
 
 export const INTERNAL_ACTIONS = {
-  SOUP_CONNECT: SOUP_CONNECT,
-  SOUP_DISCONNECT: SOUP_DISCONNECT,
+  PUZZLE_CONNECT: PUZZLE_CONNECT,
+  PUZZLE_DISCONNECT: PUZZLE_DISCONNECT,
   VIEWER_CONNECT: VIEWER_CONNECT,
   VIEWER_DISCONNECT: VIEWER_DISCONNECT,
-  ADD_SOUP: ADD_SOUP,
-  UPDATE_SOUP: UPDATE_SOUP
+  ADD_PUZZLE: ADD_PUZZLE,
+  UPDATE_PUZZLE: UPDATE_PUZZLE
 };
 
 const UPDATE_ONLINE_VIEWER_COUNT = "UPDATE_ONLINE_VIEWER_COUNT";
 const ADD_ONLINE_USER = "ADD_ONLINE_USER";
 const REMOVE_ONLINE_USER = "REMOVE_ONLINE_USER";
-const PREPEND_SOUP_LIST = "PREPEND_SOUP_LIST";
-const UPDATE_SOUP_LIST = "UPDATE_SOUP_LIST";
-const INIT_SOUP_LIST = "INIT_SOUP_LIST";
+const PREPEND_PUZZLE_LIST = "PREPEND_PUZZLE_LIST";
+const UPDATE_PUZZLE_LIST = "UPDATE_PUZZLE_LIST";
+const INIT_PUZZLE_LIST = "INIT_PUZZLE_LIST";
 
 export const EXTERNAL_ACTIONS = {
   UPDATE_ONLINE_VIEWER_COUNT: UPDATE_ONLINE_VIEWER_COUNT,
   ADD_ONLINE_USER: ADD_ONLINE_USER,
   REMOVE_ONLINE_USER: REMOVE_ONLINE_USER,
-  INIT_SOUP_LIST: INIT_SOUP_LIST,
-  PREPEND_SOUP_LIST: PREPEND_SOUP_LIST,
-  UPDATE_SOUP_LIST: UPDATE_SOUP_LIST
+  INIT_PUZZLE_LIST: INIT_PUZZLE_LIST,
+  PREPEND_PUZZLE_LIST: PREPEND_PUZZLE_LIST,
+  UPDATE_PUZZLE_LIST: UPDATE_PUZZLE_LIST
 };
 
 export const connectStream = stream => {
@@ -47,9 +47,9 @@ export const connectStream = stream => {
         type: VIEWER_CONNECT,
         stream: stream
       };
-    case "soupList":
+    case "puzzleList":
       return {
-        type: SOUP_CONNECT,
+        type: PUZZLE_CONNECT,
         stream: stream
       };
     default:
@@ -66,9 +66,9 @@ export const disconnectStream = stream => {
         type: VIEWER_DISCONNECT,
         stream: stream
       };
-    case "soupList":
+    case "puzzleList":
       return {
-        type: SOUP_DISCONNECT,
+        type: PUZZLE_DISCONNECT,
         stream: stream
       };
     default:
@@ -83,14 +83,14 @@ export const setCurrentUser = user => ({
   currentUser: user
 });
 
-export const addSoup = (soupId) => ({
-  type: ADD_SOUP,
-  stream: "soupList",
-  soupId
+export const addPuzzle = (puzzleId) => ({
+  type: ADD_PUZZLE,
+  stream: "puzzleList",
+  puzzleId
 });
 
-export const updateSoup = (soupId) => ({
-  type: UPDATE_SOUP,
-  stream: "soupList",
-  soupId
+export const updatePuzzle = (puzzleId) => ({
+  type: UPDATE_PUZZLE,
+  stream: "puzzleList",
+  puzzleId
 });

@@ -13,6 +13,7 @@ import { MondaiListBody } from "./components/MondaiList.jsx";
 import { MondaiAddBody } from "./components/MondaiAdd.jsx";
 import { MondaiShowBody } from "./components/MondaiShow.jsx";
 import { TopNavbar } from "./components/Navbar.jsx";
+import App from "./App.jsx";
 
 import socketMiddleware from "./socketMiddleware";
 import common from "../common";
@@ -22,23 +23,6 @@ var $ = jQuery;
 let store = createStore(
   cindyApp,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
-
-const App = () => (
-  <BrowserRouter>
-    <div>
-      <LeftBar />
-      <noscript>This appication requires javascript to function</noscript>
-      <TopNavbar />
-      <Switch>
-        <Route exact path="/" component={IndexBody} />
-        <Route exact path="/mondai" component={MondaiListBody} />
-        <Route exact path="/mondai/show/:mondaiId" component={MondaiShowBody} />
-        <Route exact path="/mondai/add" component={MondaiAddBody} />
-        <Route render={() => <h1>NOT FOUND!</h1>} />
-      </Switch>
-    </div>
-  </BrowserRouter>
 );
 
 $(document).ready(function() {

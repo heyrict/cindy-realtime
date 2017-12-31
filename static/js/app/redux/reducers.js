@@ -7,8 +7,8 @@ const initialState = {
     nickname: window.django.user_nickname
   },
   onlineViewerCount: 0,
-  soupList: {
-    allMondais: {
+  puzzleList: {
+    allPuzzles: {
       edges: []
     }
   }
@@ -18,9 +18,9 @@ const {
   UPDATE_ONLINE_VIEWER_COUNT,
   ADD_ONLINE_USER,
   REMOVE_ONLINE_USER,
-  INIT_SOUP_LIST,
-  PREPEND_SOUP_LIST,
-  UPDATE_SOUP_LIST
+  INIT_PUZZLE_LIST,
+  PREPEND_PUZZLE_LIST,
+  UPDATE_PUZZLE_LIST
 } = EXTERNAL_ACTIONS;
 
 function cindyApp(state = initialState, action) {
@@ -35,19 +35,19 @@ function cindyApp(state = initialState, action) {
         ...state,
         onlineViewerCount: action.onlineViewerCount
       };
-    case EXTERNAL_ACTIONS.INIT_SOUP_LIST:
+    case EXTERNAL_ACTIONS.INIT_PUZZLE_LIST:
       return {
         ...state,
-        soupList: action.soupList
+        puzzleList: action.puzzleList
       };
-    case PREPEND_SOUP_LIST:
+    case PREPEND_PUZZLE_LIST:
       return {
         ...state,
-        soupList: {
-          allMondais: {
+        puzzleList: {
+          allPuzzles: {
             edges: Array.concat(
-              [{ node: action.soupNode.mondai }],
-              state.soupList.allMondais.edges
+              [{ node: action.puzzleNode.puzzle }],
+              state.puzzleList.allPuzzles.edges
             )
           }
         }

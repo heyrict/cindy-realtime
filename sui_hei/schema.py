@@ -51,10 +51,10 @@ class UserAwardNode(DjangoObjectType):
         return self.id
 
 
-# {{{2 MondaiNode
-class MondaiNode(DjangoObjectType):
+# {{{2 PuzzleNode
+class PuzzleNode(DjangoObjectType):
     class Meta:
-        model = Mondai
+        model = Puzzle
         filter_fields = {
             "status": ["exact", "gt"],
         }
@@ -68,18 +68,18 @@ class MondaiNode(DjangoObjectType):
         return self.id
 
     def resolve_quesCount(self, info):
-        return Shitumon.objects.filter(mondai=self).count()
+        return Dialogue.objects.filter(puzzle=self).count()
 
     def resolve_uaquesCount(self, info):
-        return Shitumon.objects.filter(
-            Q(mondai=self) & (Q(kaitou__isnull=True)
-                              | Q(kaitou__exact=""))).count()
+        return Dialogue.objects.filter(
+            Q(puzzle=self) & (Q(answer__isnull=True)
+                              | Q(answer__exact=""))).count()
 
 
-# {{{2 ShitumonNode
-class ShitumonNode(DjangoObjectType):
+# {{{2 DialogueNode
+class DialogueNode(DjangoObjectType):
     class Meta:
-        model = Shitumon
+        model = Dialogue
         filter_fields = []
         interfaces = (relay.Node, )
 
@@ -89,10 +89,10 @@ class ShitumonNode(DjangoObjectType):
         return self.id
 
 
-# {{{2 LobbyNode
-class LobbyNode(DjangoObjectType):
+# {{{2 MinichatNode
+class MinichatNode(DjangoObjectType):
     class Meta:
-        model = Lobby
+        model = Minichat
         filter_fields = []
         interfaces = (relay.Node, )
 
@@ -129,16 +129,16 @@ class StarNode(DjangoObjectType):
 
 
 # {{{1 Mutations
-# {{{2 CreateMondai
-class CreateMondai(relay.ClientIDMutation):
+# {{{2 CreatePuzzle
+class CreatePuzzle(relay.ClientIDMutation):
     class Input:
-        mondaiTitle = graphene.String(required=True)
-        mondaiGenre = graphene.Int(required=True)
-        mondaiYami = graphene.Boolean(required=True)
-        mondaiContent = graphene.String(required=True)
-        mondaiKaisetu = graphene.String(required=True)
+        puzzleTitle = graphene.String(required=True)
+        puzzleGenre = graphene.Int(required=True)
+        puzzleYami = graphene.Boolean(required=True)
+        puzzleContent = graphene.String(required=True)
+        puzzleKaisetu = graphene.String(required=True)
 
-    mondai = graphene.Field(MondaiNode)
+    puzzle = graphene.Field(PuzzleNode)
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -146,26 +146,26 @@ class CreateMondai(relay.ClientIDMutation):
         if (not user.is_authenticated):
             raise ValidationError(_("Please login!"))
 
-        title = input["mondaiTitle"]
-        genre = input["mondaiGenre"]
-        yami = input["mondaiYami"]
-        content = input["mondaiContent"]
-        kaisetu = input["mondaiKaisetu"]
+        title = input["puzzleTitle"]
+        genre = input["puzzleGenre"]
+        yami = input["puzzleYami"]
+        content = input["puzzleContent"]
+        solution = input["puzzleKaisetu"]
 
         created = timezone.now()
 
-        mondai = Mondai.objects.create(
+        puzzle = Puzzle.objects.create(
             user=user,
             title=title,
             genre=genre,
             yami=yami,
             content=content,
-            kaisetu=kaisetu,
+            solution=solution,
             created=created,
             modified=created)
-        mondai.save()
+        puzzle.save()
 
-        return CreateMondai(mondai=mondai)
+        return CreatePuzzle(puzzle=puzzle)
 
 # {{{2 Login
 class UserLogin(relay.ClientIDMutation):
@@ -205,12 +205,12 @@ class Query(object):
         AwardNode, orderBy=graphene.List(of_type=graphene.String))
     all_userawards = DjangoFilterConnectionField(
         UserAwardNode, orderBy=graphene.List(of_type=graphene.String))
-    all_mondais = DjangoFilterConnectionField(
-        MondaiNode, orderBy=graphene.List(of_type=graphene.String))
-    all_shitumons = DjangoFilterConnectionField(
-        ShitumonNode, orderBy=graphene.List(of_type=graphene.String))
-    all_lobbys = DjangoFilterConnectionField(
-        LobbyNode, orderBy=graphene.List(of_type=graphene.String))
+    all_puzzles = DjangoFilterConnectionField(
+        PuzzleNode, orderBy=graphene.List(of_type=graphene.String))
+    all_dialogues = DjangoFilterConnectionField(
+        DialogueNode, orderBy=graphene.List(of_type=graphene.String))
+    all_minichats = DjangoFilterConnectionField(
+        MinichatNode, orderBy=graphene.List(of_type=graphene.String))
     all_comments = DjangoFilterConnectionField(
         CommentNode, orderBy=graphene.List(of_type=graphene.String))
     all_stars = DjangoFilterConnectionField(
@@ -219,9 +219,9 @@ class Query(object):
     user = relay.Node.Field(UserNode)
     award = relay.Node.Field(AwardNode)
     useraward = relay.Node.Field(UserAwardNode)
-    mondai = relay.Node.Field(MondaiNode)
-    shitumon = relay.Node.Field(ShitumonNode)
-    lobby = relay.Node.Field(LobbyNode)
+    puzzle = relay.Node.Field(PuzzleNode)
+    dialogue = relay.Node.Field(DialogueNode)
+    minichat = relay.Node.Field(MinichatNode)
     comment = relay.Node.Field(CommentNode)
     star = relay.Node.Field(StarNode)
 
@@ -251,29 +251,29 @@ class Query(object):
         else:
             return UserAward.objects.all()
 
-    def resolve_all_mondais(self, info, **kwargs):
+    def resolve_all_puzzles(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
 
         if orderBy:
-            return Mondai.objects.order_by(*orderBy)
+            return Puzzle.objects.order_by(*orderBy)
         else:
-            return Mondai.objects.all()
+            return Puzzle.objects.all()
 
-    def resolve_all_shitumons(self, info, **kwargs):
+    def resolve_all_dialogues(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
 
         if orderBy:
-            return Lobby.objects.order_by(*orderBy)
+            return Minichat.objects.order_by(*orderBy)
         else:
-            return Lobby.objects.all()
+            return Minichat.objects.all()
 
-    def resolve_all_lobbys(self, info, **kwargs):
+    def resolve_all_minichats(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
 
         if orderBy:
-            return Lobby.objects.order_by(*orderBy)
+            return Minichat.objects.order_by(*orderBy)
         else:
-            return Lobby.objects.all()
+            return Minichat.objects.all()
 
     def resolve_all_comments(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
@@ -310,22 +310,22 @@ class Query(object):
             return UserAward.objects.get(pk=useraward_id)
         return None
 
-    def resolve_mondai(self, info, **kwargs):
-        mondai_id = kwargs.get("rowid")
-        if mondai_id is not None:
-            return Mondai.objects.get(pk=mondai_id)
+    def resolve_puzzle(self, info, **kwargs):
+        puzzle_id = kwargs.get("rowid")
+        if puzzle_id is not None:
+            return Puzzle.objects.get(pk=puzzle_id)
         return None
 
-    def resolve_shitumon(self, info, **kwargs):
-        shitumon_id = kwargs.get("rowid")
-        if shitumon_id is not None:
-            return Lobby.objects.get(pk=shitumon_id)
+    def resolve_dialogue(self, info, **kwargs):
+        dialogue_id = kwargs.get("rowid")
+        if dialogue_id is not None:
+            return Minichat.objects.get(pk=dialogue_id)
         return None
 
-    def resolve_lobby(self, info, **kwargs):
-        lobby_id = kwargs.get("rowid")
-        if lobby_id is not None:
-            return Lobby.objects.get(pk=lobby_id)
+    def resolve_minichat(self, info, **kwargs):
+        minichat_id = kwargs.get("rowid")
+        if minichat_id is not None:
+            return Minichat.objects.get(pk=minichat_id)
         return None
 
     def resolve_comment(self, info, **kwargs):
@@ -341,6 +341,6 @@ class Query(object):
         return None
 # {{{1 Mutation
 class Mutation(graphene.ObjectType):
-    create_mondai = CreateMondai.Field()
+    create_puzzle = CreatePuzzle.Field()
     login = UserLogin.Field()
     logout = UserLogout.Field()

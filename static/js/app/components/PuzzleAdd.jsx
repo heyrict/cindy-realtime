@@ -12,24 +12,24 @@ import { commitMutation } from "react-relay";
 import bootbox from "bootbox";
 
 import { connect } from "react-redux";
-import { addSoup } from "../redux/actions";
+import { addPuzzle } from "../redux/actions";
 
 import { FieldGroup, PreviewEditor } from "./components.jsx";
 import common from "../common";
 import { environment } from "../Environment";
 
 // {{{1 Elements
-// {{{2 class MondaiAddFormAtom
-export class MondaiAddFormAtom extends React.Component {
+// {{{2 class PuzzleAddFormAtom
+export class PuzzleAddFormAtom extends React.Component {
   // {{{ constructor
   constructor(props) {
     super(props);
     this.state = {
-      mondaiTitle: "",
-      mondaiGenre: 0,
-      mondaiYami: false,
-      mondaiContent: "",
-      mondaiKaisetu: ""
+      puzzleTitle: "",
+      puzzleGenre: 0,
+      puzzleYami: false,
+      puzzleContent: "",
+      puzzleKaisetu: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -41,20 +41,20 @@ export class MondaiAddFormAtom extends React.Component {
     return (
       <Form horizontal>
         <FieldGroup
-          id="formMondaiAddTitle"
+          id="formPuzzleAddTitle"
           label={gettext("Title")}
           Ctl={FormControl}
           type="text"
-          value={this.state.mondaiTitle}
+          value={this.state.puzzleTitle}
           onChange={this.handleChange}
         />
         <FieldGroup
-          id="formMondaiAddGenre"
+          id="formPuzzleAddGenre"
           label={gettext("Genre")}
           Ctl={() => (
             <FormControl
               componentClass="select"
-              value={this.state.mondaiGenre}
+              value={this.state.puzzleGenre}
               onChange={this.handleChange}
             >
               {Object.entries(common.genre_code_dict).map(entry => (
@@ -66,29 +66,29 @@ export class MondaiAddFormAtom extends React.Component {
           )}
         />
         <FieldGroup
-          id="formMondaiAddYami"
+          id="formPuzzleAddYami"
           label={gettext("Yami")}
           Ctl={FormControl}
           type="checkbox"
-          checked={this.state.mondaiYami}
+          checked={this.state.puzzleYami}
           onChange={this.handleChange}
         />
         <FieldGroup
-          id="formMondaiAddContent"
+          id="formPuzzleAddContent"
           label={gettext("Content")}
           Ctl={PreviewEditor}
-          content={this.state.mondaiContent}
+          content={this.state.puzzleContent}
           onChange={this.handleChange}
         />
         <FieldGroup
-          id="formMondaiAddKaisetu"
+          id="formPuzzleAddKaisetu"
           label={gettext("Kaisetu")}
           Ctl={PreviewEditor}
-          content={this.state.mondaiKaisetu}
+          content={this.state.puzzleKaisetu}
           onChange={this.handleChange}
         />
         <FieldGroup
-          id="formMondaiAddSubmit"
+          id="formPuzzleAddSubmit"
           label={gettext("Submit")}
           Ctl={() => (
             <Button type="submit" block onClick={this.handleSubmit}>
@@ -103,16 +103,16 @@ export class MondaiAddFormAtom extends React.Component {
   // {{{ handleChange
   handleChange(e) {
     var target = e.target;
-    if (target.id == "formMondaiAddContent") {
-      this.setState({ mondaiContent: target.value });
-    } else if (target.id == "formMondaiAddKaisetu") {
-      this.setState({ mondaiKaisetu: target.value });
-    } else if (target.id == "formMondaiAddTitle") {
-      this.setState({ mondaiTitle: target.value });
-    } else if (target.id == "formMondaiAddGenre") {
-      this.setState({ mondaiGenre: target.value });
-    } else if (target.id == "formMondaiAddYami") {
-      this.setState({ mondaiYami: target.checked });
+    if (target.id == "formPuzzleAddContent") {
+      this.setState({ puzzleContent: target.value });
+    } else if (target.id == "formPuzzleAddKaisetu") {
+      this.setState({ puzzleKaisetu: target.value });
+    } else if (target.id == "formPuzzleAddTitle") {
+      this.setState({ puzzleTitle: target.value });
+    } else if (target.id == "formPuzzleAddGenre") {
+      this.setState({ puzzleGenre: target.value });
+    } else if (target.id == "formPuzzleAddYami") {
+      this.setState({ puzzleYami: target.checked });
     }
   }
   // }}}
@@ -120,7 +120,7 @@ export class MondaiAddFormAtom extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     commitMutation(environment, {
-      mutation: MondaiAddMutation,
+      mutation: PuzzleAddMutation,
       variables: { input: { ...this.state } },
       onCompleted: (response, errors) => {
         if (errors) {
@@ -130,10 +130,10 @@ export class MondaiAddFormAtom extends React.Component {
             ))
           );
         } else if (response) {
-          const mondaiId = response.createMondai.mondai.rowid,
-            nodeId = response.createMondai.mondai.id;
-          this.props.history.push(`/mondai/show/${mondaiId}`);
-          this.props.onNewSoupAdded(nodeId)
+          const puzzleId = response.createPuzzle.puzzle.rowid,
+            nodeId = response.createPuzzle.puzzle.id;
+          this.props.history.push(`/puzzle/show/${puzzleId}`);
+          this.props.onNewPuzzleAdded(nodeId)
         }
       },
       onError: err => console.error(err)
@@ -142,19 +142,19 @@ export class MondaiAddFormAtom extends React.Component {
   // }}}
 }
 
-// {{{2 const MondaiAddForm
+// {{{2 const PuzzleAddForm
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onNewSoupAdded: soupId => dispatch(addSoup(soupId))
+  onNewPuzzleAdded: puzzleId => dispatch(addPuzzle(puzzleId))
 });
 
-const MondaiAddForm = connect(null, mapDispatchToProps)(MondaiAddFormAtom);
+const PuzzleAddForm = connect(null, mapDispatchToProps)(PuzzleAddFormAtom);
 
 // {{{1 Fragments
-// {{{2 mutation MondaiAddMutation
-export const MondaiAddMutation = graphql`
-  mutation MondaiAddMutation($input: CreateMondaiInput!) {
-    createMondai(input: $input) {
-      mondai {
+// {{{2 mutation PuzzleAddMutation
+export const PuzzleAddMutation = graphql`
+  mutation PuzzleAddMutation($input: CreatePuzzleInput!) {
+    createPuzzle(input: $input) {
+      puzzle {
         id
         rowid
       }
@@ -162,10 +162,10 @@ export const MondaiAddMutation = graphql`
   }
 `;
 // {{{1 Body
-// {{{2 const MondaiAddBody
-export const MondaiAddBody = props => (
+// {{{2 const PuzzleAddBody
+export const PuzzleAddBody = props => (
   <Grid>
-    <PageHeader>{gettext("New Soup")}</PageHeader>
-    <MondaiAddForm {...props} />
+    <PageHeader>{gettext("New Puzzle")}</PageHeader>
+    <PuzzleAddForm {...props} />
   </Grid>
 );

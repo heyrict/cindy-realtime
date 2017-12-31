@@ -75,40 +75,6 @@ define(
       return hash;
     }
 
-    urls = {
-      register: "/users/add",
-      password_change: "/users/password_change",
-      index: "/",
-      mondai: "/mondai",
-      lobby_chat: "/lobby/chat",
-      mondai_list: "/mondai",
-      mondai_add: "/mondai/add",
-      mondai_show: pk => "/mondai/show/" + pk,
-      mondai_show_push_ques: "/mondai/show/push_ques",
-      mondai_show_push_answ: "/mondai/show/push_answ",
-      mondai_show_update_soup: "/mondai/show/update_soup",
-      mondai_star: "/mondai/show/star",
-      mondai_star_remove: "/mondai/show/remove_star",
-      mondai_comment: "/mondai/comment",
-      profile: pk => "/profile/" + pk,
-      profile_list: "/profile/list",
-      profile_edit: "/profile/edit",
-      profile_selledsoup: pk => "/profile/selledsoup/" + pk,
-      profile_mystar: pk => "/profile/mystar/" + pk,
-      award_change: "/profile/award_change",
-      set_language: "/language",
-      useraward_list_api: "/api/useraward_list",
-      profile_list_api: "/api/profile_list",
-      mondai_list_api: "/api/mondai_list",
-      mondai_edit_api: "/api/mondai_edit",
-      profile_api: "/api/profile",
-      star_api: "/api/star",
-      lobby_api: "/api/lobby",
-      comment_api: "/api/comment",
-      shitumon_api: "/api/shitumon",
-      mondai_show_api: "/api/mondai_show"
-    };
-
     status_class_dict = {
       0: "status_unsolved",
       1: "status_solved",
@@ -295,7 +261,6 @@ define(
       getURLParameter: getURLParameter,
       getCookie: getCookie,
       setCookie: setCookie,
-      urls: urls,
       line2md: line2md,
       text2md: text2md,
       bindEnterToSubmit: bindEnterToSubmit,

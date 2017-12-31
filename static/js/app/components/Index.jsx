@@ -15,7 +15,7 @@ function HomepageHero() {
       <Col xs={12} md={9}>
         <h2>「Cindy」へようこそ!</h2>
         <p>
-          Cindy is a MIT licensed open-source project aiming to build a forum of
+          Cindy is a MIT based open-source project aiming to build a forum of
           lateral thinking problems.
         </p>
       </Col>

@@ -37,7 +37,7 @@ soup = (
     (2000, Award.objects.get_or_create(name_ja="出題魔王")[0]),
     (3000, Award.objects.get_or_create(name_ja="出題魔神")[0]), )
 
-shitumon = (
+question = (
     (1000, Award.objects.get_or_create(name_ja="1000回質問")[0]),
     (2000, Award.objects.get_or_create(name_ja="2000回質問")[0]),
     (3000, Award.objects.get_or_create(name_ja="3000回質問")[0]),
@@ -170,51 +170,51 @@ def _award_or_none(count, awards):
 
 
 def _soup_judge(user):
-    soup_count = Mondai.objects.filter(user_id=user).count()
+    soup_count = Puzzle.objects.filter(user_id=user).count()
     return _award_or_none(soup_count, soup)
 
 
-def _shitumon_judge(user):
-    shitumon_count = Shitumon.objects.filter(user_id=user).count()
-    return _award_or_none(shitumon_count, shitumon)
+def _question_judge(user):
+    question_count = Dialogue.objects.filter(user_id=user).count()
+    return _award_or_none(question_count, question)
 
 
 def _seikai_judge(user):
-    seikai_count = Shitumon.objects.filter(user_id=user, true=True).count()
+    seikai_count = Dialogue.objects.filter(user_id=user, true=True).count()
     return _award_or_none(seikai_count, seikai)
 
 
 def _good_ques_judge(user):
-    good_ques_count = Shitumon.objects.filter(user_id=user, good=True).count()
+    good_ques_count = Dialogue.objects.filter(user_id=user, good=True).count()
     return _award_or_none(good_ques_count, good_ques)
 
 
 def _snipe_judge(user):
-    true_ques = Shitumon.objects.filter(user_id=user, true=True)
+    true_ques = Dialogue.objects.filter(user_id=user, true=True)
     tested_soups = []
     count = 0
     for q in true_ques:
-        if q.mondai_id_id in tested_soups:
+        if q.puzzle_id_id in tested_soups:
             continue
         else:
-            tested_soups.append(q.mondai_id_id)
+            tested_soups.append(q.puzzle_id_id)
 
-        soup = q.mondai_id
+        soup = q.puzzle_id
 
         if not (soup.genre == 0 or soup.yami):
             continue
 
         if soup.yami:
-            user_first = soup.shitumon_set.filter(
+            user_first = soup.dialogue_set.filter(
                 user_id=user).order_by("id").first()
             if user_first.true:
                 print("---", user, ':', soup)
                 count += 1
 
         elif soup.genre == 0:
-            first_good = soup.shitumon_set.filter(
+            first_good = soup.dialogue_set.filter(
                 good=True).order_by("id").first()
-            user_first = soup.shitumon_set.filter(
+            user_first = soup.dialogue_set.filter(
                 user_id=user).order_by("id").first()
             if (not first_good or first_good.id > q.id) and user_first.true:
                 print("---", user, ':', soup)
@@ -227,11 +227,11 @@ def _snipe_judge(user):
 
 
 def _sniped_judge(user):
-    soups = Mondai.objects.filter(
+    soups = Puzzle.objects.filter(
         Q(genre=0) | Q(yami=True), user_id=user, status=1)
     count = 0
     for s in soups:
-        first_good_or_true = s.shitumon_set.filter(
+        first_good_or_true = s.dialogue_set.filter(
             Q(good=True) | Q(true=True)).order_by("id").first()
         if (first_good_or_true and first_good_or_true.true):
             count += 1
@@ -249,7 +249,7 @@ def _star_judge(user):
 
 judgers = {
     "soup": SuiheiAwardJudger(judge=_soup_judge),
-    "shitumon": SuiheiAwardJudger(judge=_shitumon_judge),
+    "question": SuiheiAwardJudger(judge=_question_judge),
     "seikai": SuiheiAwardJudger(judge=_seikai_judge),
     "good_ques": SuiheiAwardJudger(judge=_good_ques_judge),
     "snipe": SuiheiAwardJudger(judge=_snipe_judge),
@@ -274,7 +274,7 @@ def best_of_month_granter():
         prevYear -= 1
 
     # get the best soup of the last month
-    soupInPrevMonth = Mondai.objects.filter(
+    soupInPrevMonth = Puzzle.objects.filter(
         created__month=prevMonth,
         created__year=prevYear).annotate(Count("star"))
     star_count_max = soupInPrevMonth.aggregate(

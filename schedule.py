@@ -9,7 +9,7 @@ from django.utils import timezone
 
 from scoring import update_user_exp
 from awards import judgers, granters
-from sui_hei.models import Award, Lobby, Mondai, User
+from sui_hei.models import Award, Minichat, Puzzle, User
 
 daily_message = ""
 
@@ -20,10 +20,10 @@ def feedBot(message):
         user = User.objects.get(username="System")
         if message:
             message = "My Work Today\n" + '=' * 20 + '\n' + message + '\n' + '=' * 20
-            Lobby(channel="lobby", user_id=user, content=message).save()
+            Minichat(channel="minichat", user_id=user, content=message).save()
         else:
-            Lobby(
-                channel="lobby",
+            Minichat(
+                channel="minichat",
                 user_id=user,
                 content="Today is my holiday :)").save()
 
@@ -31,34 +31,34 @@ def feedBot(message):
         print(e)
 
 
-def clean_recent_lobby(recent=None):
+def clean_recent_minichat(recent=None):
     if not isinstance(recent, int):
         return
 
-    count = Lobby.objects.filter(channel="lobby").count()
+    count = Minichat.objects.filter(channel="minichat").count()
     if count < recent:
         return
 
     try:
-        earliest = Lobby.objects.filter(channel="lobby")[count - recent].id
+        earliest = Minichat.objects.filter(channel="minichat")[count - recent].id
     except IndexError:
         return
 
-    Lobby.objects.filter(channel="lobby", id__lt=earliest).delete()
+    Minichat.objects.filter(channel="minichat", id__lt=earliest).delete()
 
 
-def mark_mondai_as_dazed(recent=7):
+def mark_puzzle_as_dazed(recent=7):
     message = ""
 
     now = timezone.now()
     recent_days_ago = now - timedelta(days=recent)
-    unsolved = Mondai.objects.filter(status=0, modified__lt=recent_days_ago)
-    for dazed_mondai in unsolved:
-        print("Mark dazed: ", dazed_mondai.id, "-", dazed_mondai.title)
-        message += "%s - %s\n" % (dazed_mondai.id, dazed_mondai.title)
-        dazed_mondai.status = 2
-        dazed_mondai.modified = now
-        dazed_mondai.save()
+    unsolved = Puzzle.objects.filter(status=0, modified__lt=recent_days_ago)
+    for dazed_puzzle in unsolved:
+        print("Mark dazed: ", dazed_puzzle.id, "-", dazed_puzzle.title)
+        message += "%s - %s\n" % (dazed_puzzle.id, dazed_puzzle.title)
+        dazed_puzzle.status = 2
+        dazed_puzzle.modified = now
+        dazed_puzzle.save()
 
     return message
 
@@ -91,11 +91,11 @@ if __name__ == "__main__":
     # Update user experience
     update_user_exp(recent=timedelta(days=1))
 
-    # delete old lobby chat messages
-    clean_recent_lobby(200)
+    # delete old minichat chat messages
+    clean_recent_minichat(200)
 
-    # mark outdated mondais as dazed
-    returned = mark_mondai_as_dazed(7)
+    # mark outdated puzzles as dazed
+    returned = mark_puzzle_as_dazed(7)
     if returned:
         daily_message += "## Dazed Soup :coffee:\n" + '- ' + '\n- '.join(
             returned.split('\n')) + '\n'

@@ -54,7 +54,7 @@ export class LoginFormAtom extends React.Component {
           onChange={this.handleChange}
         />
         <FormControl
-          id="formMondaiAddSubmit"
+          id="formModalAddSubmit"
           type="submit"
           onClick={this.handleSubmit}
           value={gettext("Submit")}

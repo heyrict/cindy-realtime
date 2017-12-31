@@ -59,29 +59,29 @@ class SuiheiAwardAdmin(TranslationAdmin):
     pass
 
 
-class SuiheiMondaiChangeForm(forms.ModelForm):
+class SuiheiPuzzleChangeForm(forms.ModelForm):
     class Meta(forms.ModelForm):
-        model = Mondai
+        model = Puzzle
         exclude = tuple()
 
     def __init__(self, *args, **kwargs):
-        super(SuiheiMondaiChangeForm, self).__init__(*args, **kwargs)
+        super(SuiheiPuzzleChangeForm, self).__init__(*args, **kwargs)
         self.fields['memo'].required = False
 
 
-class SuiheiMondaiAdmin(admin.ModelAdmin):
+class SuiheiPuzzleAdmin(admin.ModelAdmin):
     list_display = ('title', 'user', 'status', 'created', 'modified',
                     'score')
-    form = SuiheiMondaiChangeForm
+    form = SuiheiPuzzleChangeForm
 
 
-class SuiheiLobbyAdmin(admin.ModelAdmin):
+class SuiheiMinichatAdmin(admin.ModelAdmin):
     list_display = ('channel', 'user', 'content')
     search_fields = ('channel', )
 
 
-class SuiheiShitumonAdmin(admin.ModelAdmin):
-    list_display = ('id', 'mondai', 'user', 'shitumon', 'kaitou')
+class SuiheiDialogueAdmin(admin.ModelAdmin):
+    list_display = ('id', 'puzzle', 'user', 'question', 'answer')
 
 
 class SuiheiUserAwardAdmin(admin.ModelAdmin):
@@ -89,13 +89,13 @@ class SuiheiUserAwardAdmin(admin.ModelAdmin):
 
 
 class SuiheiCommentAdmin(admin.ModelAdmin):
-    list_display = ('content', 'user', 'mondai', 'spoiler')
+    list_display = ('content', 'user', 'puzzle', 'spoiler')
 
 
 admin.site.register(User, SuiheiUserAdmin)
-admin.site.register(Mondai, SuiheiMondaiAdmin)
-admin.site.register(Shitumon, SuiheiShitumonAdmin)
-admin.site.register(Lobby, SuiheiLobbyAdmin)
+admin.site.register(Puzzle, SuiheiPuzzleAdmin)
+admin.site.register(Dialogue, SuiheiDialogueAdmin)
+admin.site.register(Minichat, SuiheiMinichatAdmin)
 admin.site.register(Award, SuiheiAwardAdmin)
 admin.site.register(UserAward, SuiheiUserAwardAdmin)
 admin.site.register(Star)

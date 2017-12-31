@@ -39,11 +39,11 @@ onlineViewerCount = 0
 # {{{ unsolvedListQuery
 unsolvedListQuery = """
   query {
-    allMondais (status: 0, orderBy: "-modified") {
+    allPuzzles (status: 0, orderBy: "-modified") {
       edges {
         node {
           id
-          ...MondaiList_node
+          ...PuzzleList_node
         }
       }
     }
@@ -52,16 +52,16 @@ unsolvedListQuery = """
 # {{{ unsolvedListElementQuery
 unsolvedListElementQuery = """
   query {
-    mondai (id: "%s") {
+    puzzle (id: "%s") {
       id
-      ...MondaiList_node
+      ...PuzzleList_node
     }
   }
 """
 # }}}
-# {{{ mondaiListNodeFragment
-mondaiListNodeFragment = """
-  fragment MondaiList_node on MondaiNode {
+# {{{ puzzleListNodeFragment
+puzzleListNodeFragment = """
+  fragment PuzzleList_node on PuzzleNode {
     id
     rowid
     genre
@@ -101,60 +101,60 @@ componentsUserFragment = """
 
 # }}}
 # {{{ Standalones
-unsolvedListQueryStandalone = unsolvedListQuery + mondaiListNodeFragment + componentsUserFragment
-unsolvedListElementQueryStandalone = unsolvedListElementQuery + mondaiListNodeFragment + componentsUserFragment
+unsolvedListQueryStandalone = unsolvedListQuery + puzzleListNodeFragment + componentsUserFragment
+unsolvedListElementQueryStandalone = unsolvedListElementQuery + puzzleListNodeFragment + componentsUserFragment
 
 # }}}
 
 
-class SoupListUpdater(JsonWebsocketConsumer):
+class PuzzleListUpdater(JsonWebsocketConsumer):
     strict_ordering = False
     http_user_and_session = True
-    groupName = "soupList"
+    groupName = "puzzleList"
 
     def connection_groups(self, **kwargs):
         return [self.groupName]
 
     def connect(self, message, **kwargs):
-        print("souplist connected")
+        print("puzzlelist connected")
 
     def disconnect(self, message, **kwargs):
-        print("souplist disconnected")
+        print("puzzlelist disconnected")
 
     def receive(self, content, multiplexer, **kwargs):
-        print("souplist received", content)
-        if content.get("type") == "UPDATE_SOUP":
-            multiplexer.send(self.update_soup(content))
-        elif content.get("type") == "ADD_SOUP":
-            self.add_soup(content, multiplexer)
-        elif content.get("type") == "SOUP_CONNECT":
-            self.send_all_soup(multiplexer)
-        elif content.get("type") == "SOUP_DISCONNECT":
+        print("puzzlelist received", content)
+        if content.get("type") == "UPDATE_PUZZLE":
+            multiplexer.send(self.update_puzzle(content))
+        elif content.get("type") == "ADD_PUZZLE":
+            self.add_puzzle(content, multiplexer)
+        elif content.get("type") == "PUZZLE_CONNECT":
+            self.send_all_puzzle(multiplexer)
+        elif content.get("type") == "PUZZLE_DISCONNECT":
             self.close()
 
-    def add_soup(self, content, multiplexer):
+    def add_puzzle(self, content, multiplexer):
         global unsolvedListElementQueryStandalone
         results = schema.execute(
-            unsolvedListElementQueryStandalone % content["soupId"])
+            unsolvedListElementQueryStandalone % content["puzzleId"])
         if results.errors: print(results.errors)
         else:
             self.group_send(self.groupName, {
-                "type": "PREPEND_SOUP_LIST",
-                "soupNode": results.data
+                "type": "PREPEND_PUZZLE_LIST",
+                "puzzleNode": results.data
             })
 
-    def update_soup(self, content):
+    def update_puzzle(self, content):
         print(content)
         return {}
 
-    def send_all_soup(self, multiplexer):
+    def send_all_puzzle(self, multiplexer):
         global unsolvedListQueryStandalone
         results = schema.execute(unsolvedListQueryStandalone)
         if results.errors: print(results.errors)
         else:
             multiplexer.send({
-                "type": "INIT_SOUP_LIST",
-                "soupList": results.data
+                "type": "INIT_PUZZLE_LIST",
+                "puzzleList": results.data
             })
 
 
@@ -202,9 +202,9 @@ class ViewerUpdater(JsonWebsocketConsumer):
 
 class Demultiplexer(WebsocketDemultiplexer):
     '''
-    Demultiplexer. Accepts { stream : soupList, payload: content }
+    Demultiplexer. Accepts { stream : puzzleList, payload: content }
     '''
     consumers = {
         "viewer": ViewerUpdater,
-        "soupList": SoupListUpdater,
+        "puzzleList": PuzzleListUpdater,
     }

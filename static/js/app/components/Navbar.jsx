@@ -17,15 +17,15 @@ export const TopNavbar = () => (
           <NavItem eventKey={1}>{gettext("Homepage")}</NavItem>
         </LinkContainer>
         <NavDropdown
-          title={gettext("Soup")}
+          title={gettext("Puzzle")}
           eventKey={3}
-          id="mainnavbar-soup-dropdown"
+          id="mainnavbar-puzzle-dropdown"
         >
-          <LinkContainer exact to="/mondai">
-            <MenuItem eventKey="3.1">{gettext("All Soups")}</MenuItem>
+          <LinkContainer exact to="/puzzle">
+            <MenuItem eventKey="3.1">{gettext("All Puzzles")}</MenuItem>
           </LinkContainer>
-          <LinkContainer exact to="/mondai/add">
-            <MenuItem eventKey="3.2">{gettext("New Soup")}</MenuItem>
+          <LinkContainer exact to="/puzzle/add">
+            <MenuItem eventKey="3.2">{gettext("New Puzzle")}</MenuItem>
           </LinkContainer>
         </NavDropdown>
         <LinkContainer exact to="/profile">
