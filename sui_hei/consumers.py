@@ -1,3 +1,27 @@
+"""
+consumers.py
+
+File handling websocket requests.
+Most requests (except {accept: true} for connection) will be
+in the form of:
+    {
+      type: "ACTION_CONSTANT",
+      ...props
+    }
+, which is consistant to redux action.
+
+The required returned form is:
+    {
+      type: "ACTION_CONSTANT",
+      ...props
+    }
+, which will be directly dispatched by redux.
+
+**DEPRECATED**:
+    Both of { type, ...props } and { stream, payload: { type, ...props }}
+    are valid now, should be handled with in future versions.
+"""
+
 import json
 
 from channels import Channel, Group
