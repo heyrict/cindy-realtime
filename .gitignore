@@ -114,3 +114,6 @@ package-lock.json
 # relay stuff
 __generated__/
 schema.json
+
+# security
+security.py
