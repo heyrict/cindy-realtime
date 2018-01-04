@@ -1,6 +1,6 @@
 /*
  *
- * NavBar reducer
+ * WebSocketInterface reducer
  *
  */
 
@@ -11,7 +11,7 @@ import {
 
 const initialState = fromJS({});
 
-function navBarReducer(state = initialState, action) {
+function webSocketInterfaceReducer(state = initialState, action) {
   switch (action.type) {
     case DEFAULT_ACTION:
       return state;
@@ -20,4 +20,4 @@ function navBarReducer(state = initialState, action) {
   }
 }
 
-export default navBarReducer;
+export default webSocketInterfaceReducer;

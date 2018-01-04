@@ -123,13 +123,13 @@ class PuzzleListUpdater(JsonWebsocketConsumer):
 
     def receive(self, content, multiplexer, **kwargs):
         print("puzzlelist received", content)
-        if content.get("type") == "UPDATE_PUZZLE":
+        if content.get("type") == "ws/UPDATE_PUZZLE":
             multiplexer.send(self.update_puzzle(content))
-        elif content.get("type") == "ADD_PUZZLE":
+        elif content.get("type") == "ws/ADD_PUZZLE":
             self.add_puzzle(content, multiplexer)
-        elif content.get("type") == "PUZZLE_CONNECT":
+        elif content.get("type") == "ws/PUZZLE_CONNECT":
             self.send_all_puzzle(multiplexer)
-        elif content.get("type") == "PUZZLE_DISCONNECT":
+        elif content.get("type") == "ws/PUZZLE_DISCONNECT":
             self.close()
 
     def add_puzzle(self, content, multiplexer):
@@ -139,7 +139,7 @@ class PuzzleListUpdater(JsonWebsocketConsumer):
         if results.errors: print(results.errors)
         else:
             self.group_send(self.groupName, {
-                "type": "PREPEND_PUZZLE_LIST",
+                "type": "ws/PREPEND_PUZZLE_LIST",
                 "puzzleNode": results.data
             })
 
@@ -153,7 +153,7 @@ class PuzzleListUpdater(JsonWebsocketConsumer):
         if results.errors: print(results.errors)
         else:
             multiplexer.send({
-                "type": "INIT_PUZZLE_LIST",
+                "type": "ws/INIT_PUZZLE_LIST",
                 "puzzleList": results.data
             })
 
@@ -186,17 +186,19 @@ class ViewerUpdater(JsonWebsocketConsumer):
 
     def receive(self, content, multiplexer, **kwargs):
         print("viewer received", content)
-        if content.get("type") == "VIEWER_CONNECT":
+        if content.get("type") == "ws/VIEWER_CONNECT":
             self.broadcast_status()
-        elif content.get("type") == "VIEWER_DISCONNECT":
+        elif content.get("type") == "ws/VIEWER_DISCONNECT":
             self.close()
 
     def broadcast_status(self):
         global onlineViewerCount
         #onlineUsers = User.objects.filter(online=True)
         self.group_send(self.groupName, {
-            "type": "UPDATE_ONLINE_VIEWER_COUNT",
-            "onlineViewerCount": onlineViewerCount
+            "type": "ws/UPDATE_ONLINE_VIEWER_COUNT",
+            "data": {
+                "onlineViewerCount": onlineViewerCount
+            }
         })
 
 

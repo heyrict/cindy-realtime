@@ -3,8 +3,12 @@ coverage
 build
 node_modules
 stats.json
+schema.json
 
 # Cruft
 .DS_Store
 npm-debug.log
 .idea
+
+# Vim swap files
+*.swp

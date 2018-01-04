@@ -4,6 +4,7 @@ from django.db.models import Count, Sum
 from django.urls import path, re_path
 from django.views.generic import TemplateView
 from graphene_django.views import GraphQLView
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from . import views
 from .admin import *
@@ -20,6 +21,7 @@ urlpatterns = [
     path("graphql", GraphQLView.as_view(graphiql=True)),
     # rest
     #re_path("^(puzzle|profile)", views.simple, name="simple"),
+    re_path("(puzzle|profile)", views.main, name="main"),
     path("", views.main, name="main"),
 ]
 # yapf: enable
