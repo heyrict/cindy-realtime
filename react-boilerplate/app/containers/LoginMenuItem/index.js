@@ -10,22 +10,18 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 
 import { MenuItem } from "react-bootstrap";
-import ModalWrapper from "components/ModalWrapper";
 import LoginForm from "containers/LoginForm";
+
+import { show } from "containers/LoginForm/actions";
 
 export class LoginMenuItem extends React.Component {
   render() {
     return (
       <MenuItem eventKey={this.props.eventKey}>
-        <div onClick={() => this.childModal.showModal()}>{this.props.children}</div>
-        <ModalWrapper
-          header="Login"
-          body={LoginForm}
-          footer={{ confirm: true, close: true }}
-          ref={instance => {
-            this.childModal = instance;
-          }}
-        />
+        <div onClick={() => this.props.dispatch(show())}>
+          {this.props.children}
+        </div>
+        <LoginForm />
       </MenuItem>
     );
   }

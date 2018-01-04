@@ -12,10 +12,6 @@ export function connectViewer() {
   };
 }
 
-export function updateOnlineViewerCount(props) {
-  console.log(props);
-}
-
 export function setCurrentUser(user) {
   return {
     type: SET_CURRENT_USER,

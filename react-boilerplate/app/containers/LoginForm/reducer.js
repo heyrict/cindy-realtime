@@ -4,15 +4,17 @@
  *
  */
 
-import { fromJS } from 'immutable';
-import {
-  SET_CURRENT_USER,
-} from './constants';
+import { fromJS } from "immutable";
+import { SHOW_MODAL } from "./constants";
 
-const initialState = fromJS({});
+const initialState = fromJS({
+  show: false
+});
 
 function loginFormReducer(state = initialState, action) {
   switch (action.type) {
+    case SHOW_MODAL:
+      return state.set("show", action.show);
     default:
       return state;
   }

@@ -32,7 +32,6 @@ export class LogoutMenuItem extends React.PureComponent {
 
   confirm() {
     this.props.mutate({ variables: { input: {} } }).then(({ data, errors }) => {
-      console.log(data, errors)
       if (errors) {
         bootbox.alert(
           errors.map(e => (
@@ -41,7 +40,7 @@ export class LogoutMenuItem extends React.PureComponent {
         );
       } else if (data) {
         // TODO: Update Global User Interface here
-        this.props.updateCurrentUser();
+        window.location = "/";
       }
     });
   }
@@ -67,6 +66,8 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(null, mapDispatchToProps);
 
-export default compose(withApollo, graphql(LogoutMutation), withConnect)(
-  LogoutMenuItem
-);
+export default compose(
+  withApollo,
+  graphql(LogoutMutation, { options: { errorPolicy: "all" } }),
+  withConnect
+)(LogoutMenuItem);

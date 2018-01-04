@@ -26,6 +26,8 @@ import { getCookie } from "common";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
+const csrftoken = getCookie("csrftoken")
+
 const client = new ApolloClient({
   link: new HttpLink({
     uri: "/graphql",
@@ -33,7 +35,7 @@ const client = new ApolloClient({
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      "X-CSRFToken": getCookie("csrftoken")
+      "X-CSRFToken": csrftoken
     }
   }),
   cache: new InMemoryCache(),
