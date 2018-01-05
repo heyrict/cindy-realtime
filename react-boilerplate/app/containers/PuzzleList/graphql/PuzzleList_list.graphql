@@ -1,0 +1,16 @@
+#import "./PuzzleList_node.graphql"
+
+query PuzzleList_list {
+  allPuzzles(
+    first: $count
+    after: $cursor
+    orderBy: $orderBy
+  ) @connections(key: "PuzzleList_allPuzzles") {
+    edges {
+      node {
+        id
+        ...PuzzleList_node
+      }
+    }
+  }
+}

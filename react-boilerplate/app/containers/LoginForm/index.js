@@ -15,14 +15,10 @@ import { graphql, withApollo } from "react-apollo";
 import { Button, Form, FormControl, Modal, Panel } from "react-bootstrap";
 import FieldGroup from "components/FieldGroup";
 
-import injectReducer from "utils/injectReducer";
-import makeSelectLoginForm from "./selectors";
-import reducer from "./reducer";
 import messages from "./messages";
 import { LoginMutation } from "./constants";
 import { setCurrentUser } from "containers/NavbarUserDropdown/actions";
-
-import { show } from "./actions";
+import { withModal } from "components/withModal";
 
 export class LoginForm extends React.Component {
   // eslint-disable-line react/prefer-stateless-function
@@ -37,54 +33,42 @@ export class LoginForm extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.hideModal = this.hideModal.bind(this);
     this.confirm = this.confirm.bind(this);
   }
   // }}}
   // {{{ render
   render() {
     return (
-      <Modal show={this.props.loginform.show} onHide={this.hideModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>{gettext("Login")}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form horizontal>
-            {this.state.errorMsg
-              ? this.state.errorMsg.map(e => (
-                  <Panel header={e.message} bsStyle="danger" key={e.message} />
-                ))
-              : null}
-            <FieldGroup
-              id="formLoginUsername"
-              label={gettext("Username")}
-              Ctl={FormControl}
-              type="text"
-              value={this.state.username}
-              onChange={this.handleChange}
-            />
-            <FieldGroup
-              id="formLoginPassword"
-              label={gettext("Password")}
-              Ctl={FormControl}
-              type="password"
-              value={this.state.password}
-              onChange={this.handleChange}
-            />
-            <FormControl
-              id="formModalAddSubmit"
-              type="submit"
-              onClick={this.handleSubmit}
-              value={gettext("Submit")}
-              className="hidden"
-            />
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={this.confirm}>{gettext("Confirm")}</Button>
-          <Button onClick={this.hideModal}>{gettext("Close")}</Button>
-        </Modal.Footer>
-      </Modal>
+      <Form horizontal>
+        {this.state.errorMsg
+          ? this.state.errorMsg.map(e => (
+              <Panel header={e.message} bsStyle="danger" key={e.message} />
+            ))
+          : null}
+        <FieldGroup
+          id="formLoginUsername"
+          label={gettext("Username")}
+          Ctl={FormControl}
+          type="text"
+          value={this.state.username}
+          onChange={this.handleChange}
+        />
+        <FieldGroup
+          id="formLoginPassword"
+          label={gettext("Password")}
+          Ctl={FormControl}
+          type="password"
+          value={this.state.password}
+          onChange={this.handleChange}
+        />
+        <FormControl
+          id="formModalAddSubmit"
+          type="submit"
+          onClick={this.handleSubmit}
+          value={gettext("Submit")}
+          className="hidden"
+        />
+      </Form>
     );
   }
   // }}}
@@ -115,20 +99,9 @@ export class LoginForm extends React.Component {
         if (errors) {
           this.setState({ errorMsg: errors });
         } else if (data) {
-          this.props.dispatch(show(false));
-          const user = data.login.user;
-          // TODO: Update Global User Interface here
-          this.props.updateCurrentUser({
-            userId: user.rowid,
-            nickname: user.nickname
-          });
+          window.location.reload()
         }
       });
-  }
-  // }}}
-  // {{{ hideModal
-  hideModal() {
-    this.props.dispatch(show(false));
   }
   // }}}
 }
@@ -137,10 +110,6 @@ LoginForm.propTypes = {
   dispatch: PropTypes.func.isRequired,
   updateCurrentUser: PropTypes.func.isRequired
 };
-
-const mapStateToProps = createStructuredSelector({
-  loginform: makeSelectLoginForm()
-});
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -151,13 +120,17 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
-
-const withReducer = injectReducer({ key: "loginForm", reducer });
+const withConnect = connect(null, mapDispatchToProps);
 
 export default compose(
   withApollo,
   graphql(LoginMutation, { options: { errorPolicy: "all" } }),
-  withReducer,
-  withConnect
+  withConnect,
+  withModal({
+    header: "Login",
+    footer: {
+      confirm: true,
+      close: true
+    }
+  })
 )(LoginForm);

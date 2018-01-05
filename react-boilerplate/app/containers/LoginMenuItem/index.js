@@ -10,18 +10,27 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 
 import { MenuItem } from "react-bootstrap";
-import LoginForm from "containers/LoginForm";
+import LoginModal from "containers/LoginForm";
 
 import { show } from "containers/LoginForm/actions";
 
 export class LoginMenuItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      show: false
+    };
+  }
   render() {
     return (
       <MenuItem eventKey={this.props.eventKey}>
-        <div onClick={() => this.props.dispatch(show())}>
+        <div onClick={() => this.setState({ show: true })}>
           {this.props.children}
         </div>
-        <LoginForm />
+        <LoginModal
+          show={this.state.show}
+          onHide={() => this.setState({ show: false })}
+        />
       </MenuItem>
     );
   }

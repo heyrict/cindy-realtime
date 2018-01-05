@@ -11,3 +11,5 @@ export function getCookie(c_name) {
   }
   return "";
 }
+
+export default { getCookie: getCookie };

@@ -21,6 +21,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import WebSocketInterface from "containers/WebSocketInterface";
 import TopNavbar from "containers/TopNavbar";
 import HomePage from "containers/HomePage/Loadable";
+import PuzzlePage from "containers/PuzzlePage/Loadable";
 import NotFoundPage from "containers/NotFoundPage/Loadable";
 import { getCookie } from "common";
 
@@ -49,6 +50,7 @@ export default function App() {
         <TopNavbar />
         <Switch>
           <Route exact path="/" component={HomePage} />
+          <Route exact path="/puzzle" component={PuzzlePage} />
           <Route component={NotFoundPage} />
         </Switch>
       </div>

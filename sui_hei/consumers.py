@@ -107,6 +107,22 @@ unsolvedListElementQueryStandalone = unsolvedListElementQuery + puzzleListNodeFr
 # }}}
 
 
+# {{{1 Constants
+ADD_PUZZLE = "ws/ADD_PUZZLE"
+PUZZLE_CONNECT = "ws/PUZZLE_CONNECT"
+PUZZLE_DISCONNECT = "ws/PUZZLE_DISCONNECT"
+
+INIT_PUZZLE_LIST = "ws/INIT_PUZZLE_LIST"
+PREPEND_PUZZLE_LIST = "ws/PREPEND_PUZZLE_LIST"
+UPDATE_PUZZLE = "ws/UPDATE_PUZZLE"
+
+VIEWER_CONNECT = "ws/VIEWER_CONNECT"
+VIEWER_DISCONNECT = "ws/VIEWER_DISCONNECT"
+
+UPDATE_ONLINE_VIEWER_COUNT = "ws/UPDATE_ONLINE_VIEWER_COUNT"
+# }}}
+
+
 class PuzzleListUpdater(JsonWebsocketConsumer):
     strict_ordering = False
     http_user_and_session = True
@@ -123,13 +139,13 @@ class PuzzleListUpdater(JsonWebsocketConsumer):
 
     def receive(self, content, multiplexer, **kwargs):
         print("puzzlelist received", content)
-        if content.get("type") == "ws/UPDATE_PUZZLE":
+        if content.get("type") == UPDATE_PUZZLE:
             multiplexer.send(self.update_puzzle(content))
-        elif content.get("type") == "ws/ADD_PUZZLE":
+        elif content.get("type") == ADD_PUZZLE:
             self.add_puzzle(content, multiplexer)
-        elif content.get("type") == "ws/PUZZLE_CONNECT":
+        elif content.get("type") == PUZZLE_CONNECT:
             self.send_all_puzzle(multiplexer)
-        elif content.get("type") == "ws/PUZZLE_DISCONNECT":
+        elif content.get("type") == PUZZLE_DISCONNECT:
             self.close()
 
     def add_puzzle(self, content, multiplexer):
@@ -139,7 +155,7 @@ class PuzzleListUpdater(JsonWebsocketConsumer):
         if results.errors: print(results.errors)
         else:
             self.group_send(self.groupName, {
-                "type": "ws/PREPEND_PUZZLE_LIST",
+                "type": PREPEND_PUZZLE_LIST,
                 "puzzleNode": results.data
             })
 
@@ -153,7 +169,7 @@ class PuzzleListUpdater(JsonWebsocketConsumer):
         if results.errors: print(results.errors)
         else:
             multiplexer.send({
-                "type": "ws/INIT_PUZZLE_LIST",
+                "type": INIT_PUZZLE_LIST,
                 "puzzleList": results.data
             })
 
@@ -186,16 +202,16 @@ class ViewerUpdater(JsonWebsocketConsumer):
 
     def receive(self, content, multiplexer, **kwargs):
         print("viewer received", content)
-        if content.get("type") == "ws/VIEWER_CONNECT":
+        if content.get("type") == VIEWER_CONNECT:
             self.broadcast_status()
-        elif content.get("type") == "ws/VIEWER_DISCONNECT":
+        elif content.get("type") == VIEWER_DISCONNECT:
             self.close()
 
     def broadcast_status(self):
         global onlineViewerCount
         #onlineUsers = User.objects.filter(online=True)
         self.group_send(self.groupName, {
-            "type": "ws/UPDATE_ONLINE_VIEWER_COUNT",
+            "type": UPDATE_ONLINE_VIEWER_COUNT,
             "data": {
                 "onlineViewerCount": onlineViewerCount
             }

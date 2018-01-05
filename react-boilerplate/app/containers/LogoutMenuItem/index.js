@@ -40,7 +40,7 @@ export class LogoutMenuItem extends React.PureComponent {
         );
       } else if (data) {
         // TODO: Update Global User Interface here
-        window.location = "/";
+        window.location.reload();
       }
     });
   }

@@ -24,8 +24,8 @@ from django.views.i18n import JavaScriptCatalog
 last_modified_date = timezone.now()
 
 urlpatterns = [
-    path('', include('sui_hei.urls')),
     path('admin/', admin.site.urls),
+    path('', include('sui_hei.urls')),
 ] + i18n_patterns(
     path('jsi18n',
         last_modified(lambda req, **kw: last_modified_date)

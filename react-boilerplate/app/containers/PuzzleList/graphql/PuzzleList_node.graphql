@@ -1,0 +1,20 @@
+fragment PuzzleList_node on PuzzleNode {
+  id
+  rowid
+  genre
+  title
+  status
+  created
+  quesCount
+  uaquesCount
+  starSet {
+    edges {
+      node {
+        value
+      }
+    }
+  }
+  user {
+    ...components_user
+  }
+}

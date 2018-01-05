@@ -7,14 +7,10 @@
 import { fromJS } from "immutable";
 import { SHOW_MODAL } from "./constants";
 
-const initialState = fromJS({
-  show: false
-});
+const initialState = fromJS({});
 
 function loginFormReducer(state = initialState, action) {
   switch (action.type) {
-    case SHOW_MODAL:
-      return state.set("show", action.show);
     default:
       return state;
   }
