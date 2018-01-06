@@ -15,8 +15,8 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 
 import HomePage from "containers/HomePage/Loadable";
-import TestPage from "containers/TestPage/Loadable";
-import TestPageII from "containers/TestPageIi/Loadable";
+import TestPage from "containers/TestPage";
+import TestPageII from "containers/TestPageIi";
 import NotFoundPage from "containers/NotFoundPage/Loadable";
 import { getCookie } from "common";
 

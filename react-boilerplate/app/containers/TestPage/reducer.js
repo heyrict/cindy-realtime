@@ -14,9 +14,10 @@ const initialState = fromJS({
 });
 
 function testPageReducer(state = initialState, action) {
+  console.log("IN TESTPAGE REDUCER", state, action)
   switch (action.type) {
     case "TEST_ONE":
-      return state.set("data", action.data)
+      return state
     default:
       return state;
   }

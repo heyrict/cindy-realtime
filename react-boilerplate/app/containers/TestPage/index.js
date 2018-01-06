@@ -21,7 +21,12 @@ import messages from './messages';
 
 export class TestPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   componentWillMount() {
+    console.log("BEFORE DISPATCH", this.props.testpage)
     this.props.dispatch({type: "TEST_ONE", data: 1})
+    console.log("AFTER DISPATCH", this.props.testpage)
+  }
+  componentDidMount() {
+    console.log("IN COMPONENT_DID_MOUNT", this.props.testpage)
   }
   render() {
     return (
