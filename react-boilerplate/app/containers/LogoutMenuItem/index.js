@@ -8,12 +8,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { graphql, withApollo } from "react-apollo";
 
 import { MenuItem } from "react-bootstrap";
 
 import { setCurrentUser } from "containers/NavbarUserDropdown/actions";
-import { LogoutMutation } from "./constants";
 
 export class LogoutMenuItem extends React.PureComponent {
   // eslint-disable-line react/prefer-stateless-function
@@ -31,16 +29,20 @@ export class LogoutMenuItem extends React.PureComponent {
   }
 
   confirm() {
-    this.props.mutate({ variables: { input: {} } }).then(({ data, errors }) => {
-      if (errors) {
-        bootbox.alert(
-          errors.map(e => (
-            <Panel header={e.message} key={e.message} bsStyle="danger" />
-          ))
-        );
-      } else if (data) {
-        // TODO: Update Global User Interface here
-        window.location.reload();
+    commitMutation(environment, {
+      mutation: AuthFormLogoutMutation,
+      variables: { input: {} },
+      onCompleted: (response, errors) => {
+        if (errors) {
+          bootbox.alert(
+            errors.map(e => (
+              <Panel header={e.message} key={e.message} bsStyle="danger" />
+            ))
+          );
+        } else if (response) {
+          // TODO: Update Global User Interface here
+          this.props.updateCurrentUser();
+        }
       }
     });
   }
@@ -67,7 +69,13 @@ function mapDispatchToProps(dispatch) {
 const withConnect = connect(null, mapDispatchToProps);
 
 export default compose(
-  withApollo,
-  graphql(LogoutMutation, { options: { errorPolicy: "all" } }),
   withConnect
 )(LogoutMenuItem);
+
+const LogoutMenuItemMutation = graphql`
+  mutation LogoutMenuItemMutation($input: UserLogoutInput!) {
+    logout(input: $input) {
+      clientMutationId
+    }
+  }
+`;

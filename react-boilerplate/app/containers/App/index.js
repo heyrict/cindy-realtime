@@ -13,10 +13,6 @@
 
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import { ApolloProvider } from "react-apollo";
-import { ApolloClient } from "apollo-client";
-import { HttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
 
 import WebSocketInterface from "containers/WebSocketInterface";
 import TopNavbar from "containers/TopNavbar";
@@ -27,33 +23,18 @@ import { getCookie } from "common";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const csrftoken = getCookie("csrftoken")
-
-const client = new ApolloClient({
-  link: new HttpLink({
-    uri: "/graphql",
-    credentials: "same-origin",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "X-CSRFToken": csrftoken
-    }
-  }),
-  cache: new InMemoryCache(),
-});
+const csrftoken = getCookie("csrftoken");
 
 export default function App() {
   return (
-    <ApolloProvider client={client}>
-      <div>
-        <WebSocketInterface />
-        <TopNavbar />
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route exact path="/puzzle" component={PuzzlePage} />
-          <Route component={NotFoundPage} />
-        </Switch>
-      </div>
-    </ApolloProvider>
+    <div>
+      <WebSocketInterface />
+      <TopNavbar />
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/puzzle" component={PuzzlePage} />
+        <Route component={NotFoundPage} />
+      </Switch>
+    </div>
   );
 }

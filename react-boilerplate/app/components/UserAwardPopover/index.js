@@ -6,12 +6,13 @@
 
 import React from 'react';
 import PropTypes from "prop-types";
+import { Popover, OverlayTrigger } from "react-bootstrap"
 // import styled from 'styled-components';
 
 
 class UserAwardPopover extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
-    const ua = props.userAward;
+    const ua = this.props.userAward;
     if (!ua) {
       return null;
     } else {
@@ -40,7 +41,7 @@ class UserAwardPopover extends React.PureComponent { // eslint-disable-line reac
 }
 
 UserAwardPopover.propTypes = {
-  userAward: PropTypes.object.required
+  userAward: PropTypes.object
 };
 
 export default UserAwardPopover;

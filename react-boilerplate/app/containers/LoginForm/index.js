@@ -10,15 +10,15 @@ import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import { createStructuredSelector } from "reselect";
 import { compose } from "redux";
-import { graphql, withApollo } from "react-apollo";
+import { commitMutation } from "react-relay";
 
 import { Button, Form, FormControl, Modal, Panel } from "react-bootstrap";
 import FieldGroup from "components/FieldGroup";
 
 import messages from "./messages";
-import { LoginMutation } from "./constants";
 import { setCurrentUser } from "containers/NavbarUserDropdown/actions";
 import { withModal } from "components/withModal";
+import environment from "Environment";
 
 export class LoginForm extends React.Component {
   // eslint-disable-line react/prefer-stateless-function
@@ -91,17 +91,24 @@ export class LoginForm extends React.Component {
   // {{{ confirm
   confirm() {
     var { username, password } = this.state;
-    this.props
-      .mutate({
-        variables: { input: { username: username, password: password } }
-      })
-      .then(({ data, errors }) => {
+    commitMutation(environment, {
+      mutation: LoginFormMutation,
+      variables: { input: { username: username, password: password } },
+      onCompleted: (response, errors) => {
         if (errors) {
-          this.setState({ errorMsg: errors });
-        } else if (data) {
-          window.location.reload()
+          this.setState({
+            errorMsg: errors
+          });
+        } else if (response) {
+          const user = response.login.user;
+          // TODO: Update Global User Interface here
+          this.props.updateCurrentUser({
+            userId: user.rowid,
+            nickname: user.nickname
+          });
         }
-      });
+      }
+    });
   }
   // }}}
 }
@@ -123,8 +130,6 @@ function mapDispatchToProps(dispatch) {
 const withConnect = connect(null, mapDispatchToProps);
 
 export default compose(
-  withApollo,
-  graphql(LoginMutation, { options: { errorPolicy: "all" } }),
   withConnect,
   withModal({
     header: "Login",
@@ -134,3 +139,14 @@ export default compose(
     }
   })
 )(LoginForm);
+
+const LoginFormMutation = graphql`
+  mutation LoginFormMutation($input: UserLoginInput!) {
+    login(input: $input) {
+      user {
+        rowid
+        nickname
+      }
+    }
+  }
+`;
