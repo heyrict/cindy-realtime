@@ -15,7 +15,7 @@ module.exports = (options) => ({
   entry: options.entry,
   output: Object.assign({ // Compile into js/build.js
     path: path.resolve(process.cwd(), 'build'),
-    publicPath: '/static/',
+    publicPath: '/',
   }, options.output), // Merge with env dependent settings
   module: {
     rules: [
@@ -24,10 +24,7 @@ module.exports = (options) => ({
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: {
-            plugins: ["relay"]
-          }
-          //options: options.babelQuery,
+          options: options.babelQuery,
         },
       },
       {
@@ -99,7 +96,7 @@ module.exports = (options) => ({
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
     }),
-   new webpack.NamedModulesPlugin(),
+    new webpack.NamedModulesPlugin(),
   ]),
   resolve: {
     modules: ['app', 'node_modules'],

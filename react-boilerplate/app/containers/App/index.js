@@ -14,10 +14,9 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 
-import WebSocketInterface from "containers/WebSocketInterface";
-import TopNavbar from "containers/TopNavbar";
 import HomePage from "containers/HomePage/Loadable";
-import PuzzlePage from "containers/PuzzlePage/Loadable";
+import TestPage from "containers/TestPage/Loadable";
+import TestPageII from "containers/TestPageIi/Loadable";
 import NotFoundPage from "containers/NotFoundPage/Loadable";
 import { getCookie } from "common";
 
@@ -28,11 +27,10 @@ const csrftoken = getCookie("csrftoken");
 export default function App() {
   return (
     <div>
-      <WebSocketInterface />
-      <TopNavbar />
       <Switch>
         <Route exact path="/" component={HomePage} />
-        <Route exact path="/puzzle" component={PuzzlePage} />
+        <Route exact path="/test" component={TestPage} />
+        <Route exact path="/test2" component={TestPageII} />
         <Route component={NotFoundPage} />
       </Switch>
     </div>

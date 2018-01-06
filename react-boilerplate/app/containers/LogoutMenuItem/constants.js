@@ -1,6 +1,0 @@
-/*
- *
- * LogoutMenuItem constants
- *
- */
-
