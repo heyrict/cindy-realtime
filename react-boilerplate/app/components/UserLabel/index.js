@@ -19,7 +19,7 @@ const StyledNicknameLink = styled(Link)`
   word-wrap: break-word;
 `;
 
-function UserLabel(props) {
+export function UserLabel(props) {
   const user = props.user;
   return (
     <span>

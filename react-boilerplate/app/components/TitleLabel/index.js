@@ -6,19 +6,26 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from "react-router";
-// import styled from 'styled-components';
+import { Link } from "react-router-dom";
+import styled from 'styled-components';
 import common from "common";
 
 
-function TitleLabel() {
+const PuzzleTitle = styled(Link)`
+  display: inline-block;
+  color: brown;
+  font-size: 1.5em;
+  margin: 0.2em;
+  padding: 0.1em 0.25em;
+`;
+
+
+function TitleLabel(props) {
     const translatedGenre = common.genre_code_dict[props.genre];
     return (
-      <span className="title_label">
-        <Link to={"/puzzle/show/" + props.puzzleId}>
-          {`[${translatedGenre}] ${props.title}`}
-        </Link>
-      </span>
+      <PuzzleTitle to={"/puzzle/show/" + props.puzzleId}>
+        {`[${translatedGenre}] ${props.title}`}
+      </PuzzleTitle>
     );
 }
 

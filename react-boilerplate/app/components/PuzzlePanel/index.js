@@ -6,6 +6,7 @@
 
 import React from "react";
 import moment from "moment";
+import PropTypes from "prop-types";
 import { push } from "react-router-redux";
 import { Panel, Grid, Col, Row, Clearfix } from "react-bootstrap";
 import styled from "styled-components";
@@ -16,50 +17,55 @@ import ProcessLabel from "components/ProcessLabel";
 import StarLabel from "components/StarLabel";
 import StatusLabel from "components/StatusLabel";
 import TitleLabel from "components/TitleLabel";
-import UserLabel from "components/UserLabel";
+import UserLabel, { UserLabel as UserLabelPlain } from "components/UserLabel";
 import UserAwardPopover from "components/UserAwardPopover";
-
-const PuzzleTitle = styled.h3`
-  display: inline-block;
-  color: brown;
-  font-size: 1.5em;
-  margin: 0.2em;
-  padding: 0.1em 0.25em;
-`;
 
 const PuzzleDate = styled.span`
   color: gray;
   font-size: 0.8em;
 `;
 
-const SolarizedPanel = styled(Panel)`border-radius: 20px;`;
+const RoundedPanel = styled(Panel)`border-radius: 20px;`;
 
-function PuzzlePanel(props) {
+const UserCol = styled(Col)`
+  text-align: center;
+  margin-top: 5px;
+`;
+
+export function PuzzlePanel(props) {
+  const UserLabelInst = props.relay === undefined ? UserLabelPlain : UserLabel;
   const node = props.node;
   return (
-    <SolarizedPanel>
+    <RoundedPanel>
       <Grid fluid>
         <Row>
-          <Col xs={3} sm={2} md={1} style={{ "text-align": "center", "margin-top": "5px" }}>
-            <UserLabel user={node.user} />
-          </Col>
+          <UserCol xs={3} sm={2} md={1}>
+            <UserLabelInst user={node.user} />
+          </UserCol>
           <Col xs={9} sm={10} md={11}>
             <Row>
-              <PuzzleTitle>{node.title}</PuzzleTitle>
+              <TitleLabel
+                genre={node.genre}
+                puzzleId={node.rowid}
+                title={node.title}
+              />
               <PuzzleDate>{moment(node.created).format("llll")}</PuzzleDate>
             </Row>
             <Row>
+              <StatusLabel status={node.status} />
               <StarLabel starSet={node.starSet} />
             </Row>
           </Col>
         </Row>
         <Clearfix />
       </Grid>
-    </SolarizedPanel>
+    </RoundedPanel>
   );
 }
 
-PuzzlePanel.propTypes = {};
+PuzzlePanel.propTypes = {
+  node: PropTypes.object.isRequired
+};
 
 export default createFragmentContainer(PuzzlePanel, {
   node: graphql`

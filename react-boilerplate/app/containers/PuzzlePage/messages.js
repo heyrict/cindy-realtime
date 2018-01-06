@@ -8,6 +8,6 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
   header: {
     id: 'app.containers.PuzzlePage.header',
-    defaultMessage: 'This is PuzzlePage container !',
+    defaultMessage: 'Puzzle List',
   },
 });

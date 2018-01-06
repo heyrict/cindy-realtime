@@ -170,7 +170,7 @@ class PuzzleListUpdater(JsonWebsocketConsumer):
         else:
             multiplexer.send({
                 "type": INIT_PUZZLE_LIST,
-                "puzzleList": results.data
+                "data": results.data
             })
 
 
