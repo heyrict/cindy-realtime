@@ -1,0 +1,25 @@
+/*
+ * RegisterForm Messages
+ *
+ * This contains all the text for the RegisterForm component.
+ */
+import { defineMessages } from "react-intl";
+
+export default defineMessages({
+  usernameHelp: {
+    id: "app.containers.RegisterForm.usernameHelp",
+    defaultMessage:
+      "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.\
+       You need username to Login but it never shows in public."
+  },
+  nicknameHelp: {
+    id: "app.containers.RegisterForm.nicknameHelp",
+    defaultMessage:
+      "Your nickname will be shown in public. Take care not to use some offensive words."
+  },
+  passwordHelp: {
+    id: "app.containers.RegisterForm.passwordHelp",
+    defaultMessage:
+      "Required. 8 characters or more with at least one letter and one digit."
+  }
+});

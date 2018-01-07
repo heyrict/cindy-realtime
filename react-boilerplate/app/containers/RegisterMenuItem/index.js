@@ -1,6 +1,6 @@
 /**
  *
- * LoginMenuItem
+ * RegisterMenuItem
  *
  */
 
@@ -10,9 +10,9 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 
 import { MenuItem } from "react-bootstrap";
-import LoginModal from "containers/LoginForm";
+import RegisterModal from "containers/RegisterForm/Loadable";
 
-export class LoginMenuItem extends React.Component {
+class RegisterMenuItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,7 +25,7 @@ export class LoginMenuItem extends React.Component {
         <div onClick={() => this.setState({ show: true })}>
           {this.props.children}
         </div>
-        <LoginModal
+        <RegisterModal
           show={this.state.show}
           onHide={() => this.setState({ show: false })}
         />
@@ -34,7 +34,7 @@ export class LoginMenuItem extends React.Component {
   }
 }
 
-LoginMenuItem.propTypes = {
+RegisterMenuItem.propTypes = {
   dispatch: PropTypes.func.isRequired
 };
 
@@ -46,4 +46,4 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(null, mapDispatchToProps);
 
-export default compose(withConnect)(LoginMenuItem);
+export default compose(withConnect)(RegisterMenuItem);

@@ -15,6 +15,7 @@ import { MenuItem, Navbar, Nav, NavItem, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import LoginMenuItem from "containers/LoginMenuItem";
 import LogoutMenuItem from "containers/LogoutMenuItem";
+import RegisterMenuItem from "containers/RegisterMenuItem";
 
 import injectReducer from "utils/injectReducer";
 import injectSaga from "utils/injectSaga";
@@ -76,9 +77,7 @@ export class NavbarUserDropdown extends React.Component {
             onMouseLeave={() => this.setState({ hover: false })}
           >
             <LoginMenuItem eventKey={0.1}>{gettext("Login")}</LoginMenuItem>
-            <LinkContainer to="/register">
-              <MenuItem eventKey={0.2}>{gettext("Register")}</MenuItem>
-            </LinkContainer>
+            <RegisterMenuItem eventKey={0.2}>{gettext("Register")}</RegisterMenuItem>
           </NavDropdown>
         )}
       </Nav>

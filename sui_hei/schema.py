@@ -1,9 +1,9 @@
 import graphene
-from django.db.models import Count, Q
-from django.utils import timezone
+from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
+from django.db.models import Q, Count
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import login, logout, authenticate
 from graphene import relay, resolve_only_args
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
@@ -173,6 +173,7 @@ class CreatePuzzle(relay.ClientIDMutation):
 
         return CreatePuzzle(puzzle=puzzle)
 
+
 # {{{2 Login
 class UserLogin(relay.ClientIDMutation):
     class Input:
@@ -194,6 +195,7 @@ class UserLogin(relay.ClientIDMutation):
         login(request, user)
         return UserLogin(user=user)
 
+
 # {{{2 Logout
 class UserLogout(relay.ClientIDMutation):
     @classmethod
@@ -201,6 +203,44 @@ class UserLogout(relay.ClientIDMutation):
         request = info.context
         logout(request)
         return UserLogout()
+
+
+# {{{2 Register
+class UserRegister(relay.ClientIDMutation):
+    class Input:
+        username = graphene.String(required=True)
+        password = graphene.String(required=True)
+        nickname = graphene.String(required=True)
+
+    user = graphene.Field(UserNode)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        request = info.context
+        username = input["username"]    # username: [a-zA-Z0-9\@+_\-.], less than 150
+        password = input["password"]    # password: both num and alphabet, more than 8, less than 32
+        nickname = input["nickname"]    # nickname: (0, 64]
+
+        if not re.findall(r"^[a-zA-Z0-9\@+_\-.]+$", username):
+            raise ValidationError("Characters other than letters,"
+                                  "digits and @/./+/-/_ are not allowed in username")
+        if len(username) > 150:
+            raise ValidationError("Your username is too long (more than 150 characters)")
+        if not (re.findall(r"[0-9]+", password) and re.findall(r"[a-zA-Z]", password)):
+            raise ValidationError("Password should have both letters and digits")
+        if len(password) < 8:
+            raise ValidationError("Your password is too short (less than 8 characters)")
+        if len(password) > 64:
+            raise ValidationError("Your password is too long (more than 32 characters)")
+        if len(nickname) > 64:
+            raise ValidationError("Your nickname is too long (more than 64 characters)")
+
+        user = User.objects.create_user(
+            username=username, nickname=nickname, password=password)
+
+        login(request, user)
+        return UserRegister(user=user)
+
 
 # {{{1 Query
 class Query(object):
@@ -224,10 +264,13 @@ class Query(object):
 
     user = relay.Node.Field(UserNode, id=graphene.ID, rowid=graphene.Int)
     award = relay.Node.Field(AwardNode, id=graphene.ID, rowid=graphene.Int)
-    useraward = relay.Node.Field(UserAwardNode, id=graphene.ID, rowid=graphene.Int)
+    useraward = relay.Node.Field(
+        UserAwardNode, id=graphene.ID, rowid=graphene.Int)
     puzzle = relay.Node.Field(PuzzleNode, id=graphene.ID, rowid=graphene.Int)
-    dialogue = relay.Node.Field(DialogueNode, id=graphene.ID, rowid=graphene.Int)
-    minichat = relay.Node.Field(MinichatNode, id=graphene.ID, rowid=graphene.Int)
+    dialogue = relay.Node.Field(
+        DialogueNode, id=graphene.ID, rowid=graphene.Int)
+    minichat = relay.Node.Field(
+        MinichatNode, id=graphene.ID, rowid=graphene.Int)
     comment = relay.Node.Field(CommentNode, id=graphene.ID, rowid=graphene.Int)
     star = relay.Node.Field(StarNode, id=graphene.ID, rowid=graphene.Int)
 
@@ -345,8 +388,11 @@ class Query(object):
         if star_id is not None:
             return Star.objects.get(pk=star_id)
         return None
+
+
 # {{{1 Mutation
 class Mutation(graphene.ObjectType):
     create_puzzle = CreatePuzzle.Field()
     login = UserLogin.Field()
     logout = UserLogout.Field()
+    register = UserRegister.Field()
