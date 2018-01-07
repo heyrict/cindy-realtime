@@ -1,3 +1,159 @@
+import MarkdownIt from "markdown-it";
+import mdEmoji from "markdown-it-emoji";
+import sanitizeHtml from "sanitize-html";
+import "expose-loader?jQuery!expose-loader?$!jquery";
+import moment, * as moments from "moment";
+import bootstrap from "bootstrap";
+
+const md = MarkdownIt({
+  html: true,
+  breaks: true,
+  linkify: true,
+  typographer: true
+})
+  .enable(["table", "strikethrough"])
+  .use(mdEmoji);
+
+function hash(string) {
+  var chr;
+  var hash = 0;
+  if (string.length === 0) return hash;
+  for (var i = 0; i < string.length; i++) {
+    chr = string.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+}
+
+function _norm_openchat(string) {
+  return string.replace(
+    /\"chat:\/\/([0-9a-zA-Z\-]+)\"/g,
+    "\"javascript:sidebar.OpenChat('$1');\""
+  );
+}
+
+function _norm_countdown(string) {
+  return string.replace(
+    /\/countdown\(([^)]+)\)\//g,
+    "<span class='btn disabled countdownobj' until='$1'>CountDownObject</span>"
+  );
+}
+
+function _norm_tabs(string) {
+  var _createID = (text, nmspc) =>
+    "tab-" + (nmspc ? nmspc + "-" : "") + hash(text);
+
+  function _build_tabs_navtabs(tab_titles, tab_contents, namespace) {
+    var returns = `
+<ul class="nav nav-tabs"${namespace ? " id='tabs-" + namespace + "'" : ""}>`;
+
+    for (var i in tab_titles) {
+      returns += `
+<li${i == 0 ? " class='active'" : ""}>
+  <a data-toggle="tab" data-target="#${_createID(tab_contents[i], namespace)}"
+    href="javascript:void(0);">
+    ${tab_titles[i]}
+  </a>
+</li>`;
+    }
+
+    returns += "</ul>";
+    return returns;
+  }
+
+  function _build_tabs_contents(tab_titles, tab_contents, namespace) {
+    var returns = "<div class='tab-content'>";
+
+    for (var i in tab_titles) {
+      returns += `
+<div id="${_createID(tab_contents[i], namespace)}"
+  ${i == 0 ? "class='tab-pane active'" : "class='tab-pane'"}>
+  ${tab_contents[i]}
+</div>`;
+    }
+
+    returns += "</div>";
+    return returns;
+  }
+
+  function _build_tabs() {
+    var res,
+      tab_titles = Array(),
+      tab_contents = Array();
+
+    var namespace = arguments[1],
+      text = arguments[2],
+      returns = text,
+      regex = /<!--tab *([^>]*?)-->([\s\S]*?)<!--endtab-->/g;
+
+    while ((res = regex.exec(text))) {
+      tab_titles.push(res[1] ? res[1] : "tab");
+      tab_contents.push(res[2]);
+    }
+
+    return (
+      _build_tabs_navtabs(tab_titles, tab_contents, namespace) +
+      _build_tabs_contents(tab_titles, tab_contents, namespace)
+    );
+  }
+
+  return string.replace(
+    /<!--tabs ?([^>]*?)-->([\s\S]*?)<!--endtabs-->/g,
+    _build_tabs
+  );
+}
+
+function StartCountdown(selector) {
+  console.log(moment());
+  window.setInterval(function() {
+    $(selector || ".countdownobj").each(function() {
+      var until = moment($(this).attr("until")),
+        now = moment();
+      var diff = until.diff(now, "milliseconds"),
+        diffdays = until.diff(now, "days");
+      $(this).html(
+        diff < 0
+          ? `<font color='tomato'>${gettext("Time Out")}</font>`
+          : (diffdays ? diffdays + "d " : "") +
+            moment(diff).format("H[h]:mm[m]:ss[s]")
+      );
+    });
+  }, 1000);
+}
+
+function LinkNorm(string) {
+  string = _norm_openchat(string);
+  string = _norm_countdown(string);
+  return string;
+}
+
+function PreNorm(string) {
+  string = _norm_tabs(string);
+  return string;
+}
+
+function line2md(string) {
+  string = PreNorm(string)
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/^([*+-]) /g, "\\$1 ")
+    .replace(/^(\d+)\. /g, "$1\\. ")
+    .replace(/\n/g, "<br />");
+
+  return LinkNorm(md.render(string).replace(/<\/?p>/g, ""));
+}
+
+function text2md(string) {
+  return LinkNorm(
+    sanitizeHtml(md.render(PreNorm(string)), {
+      allowedTags: false,
+      allowedAttributes: false,
+      allowedSchemes: ["http", "https", "ftp", "mailto", "chat", "javascript"]
+    })
+  );
+}
+
 export function getCookie(c_name) {
   var c_start, c_end;
   if (document.cookie.length > 0) {
@@ -11,13 +167,6 @@ export function getCookie(c_name) {
   }
   return "";
 }
-
-const status_class_dict = {
-  0: "status_unsolved",
-  1: "status_solved",
-  2: "status_dazed",
-  3: "status_hidden"
-};
 
 const status_code_dict = {
   0: "unsolved",
@@ -36,7 +185,9 @@ const genre_code_dict = {
 
 export default {
   getCookie,
-  status_class_dict,
   status_code_dict,
-  genre_code_dict
+  genre_code_dict,
+  text2md,
+  line2md,
+  StartCountdown
 };
