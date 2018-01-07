@@ -53,11 +53,9 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-const withReducer = injectReducer({ key: 'puzzleActiveList', reducer });
 const withSaga = injectSaga({ key: 'puzzleActiveList', saga });
 
 export default compose(
-  withReducer,
   withSaga,
   withConnect,
 )(PuzzleActiveList);

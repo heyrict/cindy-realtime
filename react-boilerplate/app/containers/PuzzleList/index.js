@@ -13,7 +13,6 @@ import { compose } from "redux";
 import injectSaga from "utils/injectSaga";
 import injectReducer from "utils/injectReducer";
 import makeSelectPuzzleList from "./selectors";
-import reducer from "./reducer";
 import saga from "./saga";
 
 import { graphql, createPaginationContainer } from "react-relay";
@@ -92,7 +91,6 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-const withReducer = injectReducer({ key: "puzzleList", reducer });
 const withSaga = injectSaga({ key: "puzzleList", saga });
 
 const withPuzzleList_list = Component =>
@@ -149,6 +147,6 @@ const withPuzzleList_list = Component =>
     }
   );
 
-export default compose(withReducer, withSaga, withConnect, withPuzzleList_list)(
+export default compose(withSaga, withConnect, withPuzzleList_list)(
   PuzzleList
 );

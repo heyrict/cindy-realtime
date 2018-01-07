@@ -15,7 +15,6 @@ import { compose } from "redux";
 import injectSaga from "utils/injectSaga";
 import injectReducer from "utils/injectReducer";
 import makeSelectPuzzlePage from "./selectors";
-import reducer from "./reducer";
 import saga from "./saga";
 import messages from "./messages";
 import environment from "Environment";
@@ -90,7 +89,6 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-const withReducer = injectReducer({ key: "puzzlePage", reducer });
 const withSaga = injectSaga({ key: "puzzlePage", saga });
 
-export default compose(withReducer, withSaga, withConnect)(PuzzlePage);
+export default compose(withSaga, withConnect)(PuzzlePage);
