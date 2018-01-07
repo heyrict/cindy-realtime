@@ -12,6 +12,7 @@ const initialReducers = {
   puzzleActiveList: require("containers/PuzzleActiveList/reducer").default,
   puzzlePage: require("containers/PuzzlePage/reducer").default,
   puzzleList: require("containers/PuzzleList/reducer").default,
+  puzzleAddForm: require("containers/PuzzleAddForm/reducer").default,
 };
 
 /*

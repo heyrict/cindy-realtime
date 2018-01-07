@@ -152,6 +152,13 @@ class CreatePuzzle(relay.ClientIDMutation):
         content = input["puzzleContent"]
         solution = input["puzzleKaisetu"]
 
+        if not title:
+            raise ValidationError("Title cannot be empty!")
+        if not content:
+            raise ValidationError("Content cannot be empty!")
+        if not solution:
+            raise ValidationError("Solution cannot be empty!")
+
         created = timezone.now()
 
         puzzle = Puzzle.objects.create(

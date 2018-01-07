@@ -8,6 +8,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
+import { commitMutation } from "react-relay";
+import environment from "Environment";
 
 import { MenuItem } from "react-bootstrap";
 
@@ -30,7 +32,7 @@ export class LogoutMenuItem extends React.PureComponent {
 
   confirm() {
     commitMutation(environment, {
-      mutation: AuthFormLogoutMutation,
+      mutation: LogoutMenuItemMutation,
       variables: { input: {} },
       onCompleted: (response, errors) => {
         if (errors) {

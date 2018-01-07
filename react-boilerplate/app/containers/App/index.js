@@ -18,8 +18,10 @@ import WebSocketInterface from "containers/WebSocketInterface";
 import TopNavbar from "containers/TopNavbar";
 import HomePage from "containers/HomePage/Loadable";
 import PuzzlePage from "containers/PuzzlePage/Loadable";
+import PuzzleAddPage from "containers/PuzzleAddPage/Loadable";
 import NotFoundPage from "containers/NotFoundPage/Loadable";
 import { getCookie } from "common";
+import common from "common";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -33,6 +35,7 @@ export default function App() {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/puzzle" component={PuzzlePage} />
+        <Route exact path="/puzzle/add" component={PuzzleAddPage} />
         <Route component={NotFoundPage} />
       </Switch>
     </div>

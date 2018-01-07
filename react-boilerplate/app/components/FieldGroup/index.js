@@ -5,6 +5,7 @@
 */
 
 import React from "react";
+import PropTypes from "prop-types";
 import { Col, FormGroup, ControlLabel } from "react-bootstrap";
 // import styled from 'styled-components';
 
@@ -21,5 +22,12 @@ function FieldGroup({ id, label, help, Ctl, ...props }) {
     </FormGroup>
   );
 }
+
+FieldGroup.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.node.isRequired,
+  help: PropTypes.node,
+  Ctl: PropTypes.any.isRequired
+};
 
 export default FieldGroup;

@@ -27,12 +27,12 @@ import PuzzleActiveList from "containers/PuzzleActiveList";
 import { PuzzleListInitQuery } from "containers/PuzzleList";
 
 const Heading = styled.h1`
-font-size: 3em;
-color: tomato;
-margin-left: 0.5em;
-margin-top: 0;
-padding-top: 0.5em;
-`
+  font-size: 3em;
+  color: tomato;
+  margin-left: 0.5em;
+  margin-top: 0;
+  padding-top: 0.5em;
+`;
 
 export class PuzzlePage extends React.Component {
   // eslint-disable-line react/prefer-stateless-function
