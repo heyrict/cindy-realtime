@@ -31,10 +31,12 @@ from channels.handler import AsgiHandler
 from django.contrib.auth.models import AnonymousUser
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
+from graphql_relay import from_global_id, to_global_id
 
 from schema import schema
 
 from .models import User, Puzzle
+from .schema import PuzzleNode
 
 onlineViewerCount = 0
 
@@ -114,8 +116,8 @@ ADD_PUZZLE = "ws/ADD_PUZZLE"
 PUZZLE_CONNECT = "ws/PUZZLE_CONNECT"
 PUZZLE_DISCONNECT = "ws/PUZZLE_DISCONNECT"
 
-PUZZLE_ADDED = "ws/NEW_PUZZLE_ADDED"
-PUZZLE_UPDATED = "ws/NEW_PUZZLE_UPDATED"
+PUZZLE_ADDED = "ws/PUZZLE_ADDED"
+PUZZLE_UPDATED = "ws/PUZZLE_UPDATED"
 
 VIEWER_CONNECT = "ws/VIEWER_CONNECT"
 VIEWER_DISCONNECT = "ws/VIEWER_DISCONNECT"
@@ -175,16 +177,21 @@ class PuzzleListUpdater(JsonWebsocketConsumer):
 
 @receiver(post_save, sender=Puzzle)
 def send_update(sender, instance, created, *args, **kwargs):
-    puzzleId = str(instance.id)
+    puzzleId = instance.id
+    print("PUZZLE UPDATE TRACKED:", instance, created)
     if created:
         Group("viewer").send({
-            "type": PUZZLE_ADDED,
-            "data": { "rowid": puzzleId }
+            "text": json.dumps({
+                "type": PUZZLE_ADDED,
+                "data": { "id": to_global_id(PuzzleNode.__name__, puzzleId) }
+            })
         })
     else:
-        Group("puzzle-show.%d" % puzzleId).send({
-            "type": PUZZLE_UPDATED,
-            "data": { "rowid": puzzleId }
+        Group("viewer").send({
+            "text": json.dumps({
+                "type": PUZZLE_UPDATED,
+                "data": { "id": to_global_id(PuzzleNode.__name__, puzzleId) }
+            })
         })
 
 
@@ -193,11 +200,9 @@ class ViewerUpdater(JsonWebsocketConsumer):
     http_user_and_session = True
     groupName = "viewer"
 
-    def connection_groups(self, **kwargs):
-        return [self.groupName]
-
     def connect(self, message, multiplexer, **kwargs):
         print("view connected")
+        Group(self.groupName).add(message.reply_channel)
         global onlineViewerCount
         onlineViewerCount += 1
         if not message.user.is_anonymous:
@@ -206,6 +211,7 @@ class ViewerUpdater(JsonWebsocketConsumer):
 
     def disconnect(self, message, multiplexer, **kwargs):
         print("view disconnected")
+        Group(self.groupName).discard(message.reply_channel)
         global onlineViewerCount
         onlineViewerCount -= 1
         if not message.user.is_anonymous:

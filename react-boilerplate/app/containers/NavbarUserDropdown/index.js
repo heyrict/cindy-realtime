@@ -22,7 +22,7 @@ import makeSelectNavbarUserDropdown from "./selectors";
 import reducer from "./reducer";
 import saga from "./saga";
 
-import { connectViewer } from "./actions";
+import { connectViewer, disconnectViewer } from "./actions";
 
 export class NavbarUserDropdown extends React.Component {
   // eslint-disable-line react/prefer-stateless-function
@@ -33,6 +33,10 @@ export class NavbarUserDropdown extends React.Component {
 
   componentDidMount() {
     this.props.dispatch(connectViewer());
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch(disconnectViewer());
   }
 
   render() {

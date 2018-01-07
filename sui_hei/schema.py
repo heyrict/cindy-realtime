@@ -222,14 +222,14 @@ class Query(object):
     all_stars = DjangoFilterConnectionField(
         StarNode, orderBy=graphene.List(of_type=graphene.String))
 
-    user = relay.Node.Field(UserNode)
-    award = relay.Node.Field(AwardNode)
-    useraward = relay.Node.Field(UserAwardNode)
-    puzzle = relay.Node.Field(PuzzleNode)
-    dialogue = relay.Node.Field(DialogueNode)
-    minichat = relay.Node.Field(MinichatNode)
-    comment = relay.Node.Field(CommentNode)
-    star = relay.Node.Field(StarNode)
+    user = relay.Node.Field(UserNode, id=graphene.ID, rowid=graphene.Int)
+    award = relay.Node.Field(AwardNode, id=graphene.ID, rowid=graphene.Int)
+    useraward = relay.Node.Field(UserAwardNode, id=graphene.ID, rowid=graphene.Int)
+    puzzle = relay.Node.Field(PuzzleNode, id=graphene.ID, rowid=graphene.Int)
+    dialogue = relay.Node.Field(DialogueNode, id=graphene.ID, rowid=graphene.Int)
+    minichat = relay.Node.Field(MinichatNode, id=graphene.ID, rowid=graphene.Int)
+    comment = relay.Node.Field(CommentNode, id=graphene.ID, rowid=graphene.Int)
+    star = relay.Node.Field(StarNode, id=graphene.ID, rowid=graphene.Int)
 
     # {{{2 resolves
     # {{{3 resolve all

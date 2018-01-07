@@ -53,7 +53,7 @@ export function PuzzlePanel(props) {
             </Row>
             <Row>
               <StatusLabel status={node.status} />
-              <StarLabel starSet={node.starSet} />
+              {node.starSet ? <StarLabel starSet={node.starSet} /> : null}
             </Row>
           </Col>
         </Row>

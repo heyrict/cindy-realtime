@@ -21,9 +21,7 @@ import { PuzzlePanel } from "components/PuzzlePanel";
 
 export class PuzzleActiveList extends React.Component { // eslint-disable-line react/prefer-stateless-function
   componentDidMount() {
-    if (this.props.puzzleactivelist.allPuzzles.edges.length == 0) {
-      this.props.dispatch(loadAllPuzzles())
-    }
+    this.props.dispatch(loadAllPuzzles())
   }
 
   render() {
