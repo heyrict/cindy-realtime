@@ -15,7 +15,6 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import makeSelectTestPageIi from './selectors';
-import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
@@ -52,11 +51,9 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-const withReducer = injectReducer({ key: 'testPageIi', reducer });
 const withSaga = injectSaga({ key: 'testPageIi', saga });
 
 export default compose(
-  withReducer,
   withSaga,
   withConnect,
 )(TestPageIi);
