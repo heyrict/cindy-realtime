@@ -3,7 +3,7 @@ import common from "./common";
 
 const store = new Store(new RecordSource());
 
-const network = Network.create((operation, variables) => {
+export const gqlQuery = (operation, variables) => {
   return fetch("/graphql", {
     credentials: "same-origin",
     method: "POST",
@@ -19,7 +19,9 @@ const network = Network.create((operation, variables) => {
   }).then(response => {
     return response.json();
   });
-});
+}
+
+const network = Network.create(gqlQuery);
 
 const environment = new Environment({
   network,

@@ -170,7 +170,6 @@ class CreatePuzzle(relay.ClientIDMutation):
             solution=solution,
             created=created,
             modified=created)
-        puzzle.save()
 
         return CreatePuzzle(puzzle=puzzle)
 

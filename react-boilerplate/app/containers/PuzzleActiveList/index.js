@@ -15,14 +15,14 @@ import injectReducer from 'utils/injectReducer';
 import makeSelectPuzzleActiveList from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { connectPuzzle } from "./actions";
+import { loadAllPuzzles } from "./actions";
 
 import { PuzzlePanel } from "components/PuzzlePanel";
 
 export class PuzzleActiveList extends React.Component { // eslint-disable-line react/prefer-stateless-function
   componentDidMount() {
-    if (this.props.puzzleactivelist.connected == false) {
-      this.props.dispatch(connectPuzzle())
+    if (this.props.puzzleactivelist.allPuzzles.edges.length == 0) {
+      this.props.dispatch(loadAllPuzzles())
     }
   }
 

@@ -5,12 +5,11 @@
  */
 
 import {
-  PUZZLE_CONNECT,
+  LOAD_ALL_PUZZLES,
 } from './constants';
 
-export function connectPuzzle() {
+export function loadAllPuzzles() {
   return {
-    type: PUZZLE_CONNECT,
-    stream: "puzzleList",
+    type: LOAD_ALL_PUZZLES,
   };
 }

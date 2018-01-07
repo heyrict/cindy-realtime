@@ -105,7 +105,6 @@ function _norm_tabs(string) {
 }
 
 function StartCountdown(selector) {
-  console.log(moment());
   window.setInterval(function() {
     $(selector || ".countdownobj").each(function() {
       var until = moment($(this).attr("until")),

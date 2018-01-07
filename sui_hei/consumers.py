@@ -29,10 +29,12 @@ from channels.generic.websockets import (JsonWebsocketConsumer,
                                          WebsocketDemultiplexer)
 from channels.handler import AsgiHandler
 from django.contrib.auth.models import AnonymousUser
+from django.db.models.signals import post_save
+from django.dispatch.dispatcher import receiver
 
 from schema import schema
 
-from .models import User
+from .models import User, Puzzle
 
 onlineViewerCount = 0
 
@@ -112,9 +114,8 @@ ADD_PUZZLE = "ws/ADD_PUZZLE"
 PUZZLE_CONNECT = "ws/PUZZLE_CONNECT"
 PUZZLE_DISCONNECT = "ws/PUZZLE_DISCONNECT"
 
-INIT_PUZZLE_LIST = "ws/INIT_PUZZLE_LIST"
-PREPEND_PUZZLE_LIST = "ws/PREPEND_PUZZLE_LIST"
-UPDATE_PUZZLE = "ws/UPDATE_PUZZLE"
+PUZZLE_ADDED = "ws/NEW_PUZZLE_ADDED"
+PUZZLE_UPDATED = "ws/NEW_PUZZLE_UPDATED"
 
 VIEWER_CONNECT = "ws/VIEWER_CONNECT"
 VIEWER_DISCONNECT = "ws/VIEWER_DISCONNECT"
@@ -166,12 +167,25 @@ class PuzzleListUpdater(JsonWebsocketConsumer):
     def send_all_puzzle(self, multiplexer):
         global unsolvedListQueryStandalone
         results = schema.execute(unsolvedListQueryStandalone)
-        if results.errors: print(results.errors)
-        else:
-            multiplexer.send({
-                "type": INIT_PUZZLE_LIST,
-                "data": results.data
-            })
+        multiplexer.send({
+            "type": INIT_PUZZLE_LIST,
+            "data": results.data,
+            "errors": results.errors
+        })
+
+@receiver(post_save, sender=Puzzle)
+def send_update(sender, instance, created, *args, **kwargs):
+    puzzleId = str(instance.id)
+    if created:
+        Group("viewer").send({
+            "type": PUZZLE_ADDED,
+            "data": { "rowid": puzzleId }
+        })
+    else:
+        Group("puzzle-show.%d" % puzzleId).send({
+            "type": PUZZLE_UPDATED,
+            "data": { "rowid": puzzleId }
+        })
 
 
 class ViewerUpdater(JsonWebsocketConsumer):
