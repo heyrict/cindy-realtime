@@ -2,17 +2,22 @@
  * Combine all reducers in this file and export the combined reducers.
  */
 
-import { combineReducers } from "redux-immutable";
-import { fromJS } from "immutable";
-import { LOCATION_CHANGE } from "react-router-redux";
+import { combineReducers } from 'redux-immutable';
+import { fromJS } from 'immutable';
+import { LOCATION_CHANGE } from 'react-router-redux';
 
-import languageProviderReducer from "containers/LanguageProvider/reducer";
+import languageProviderReducer from 'containers/LanguageProvider/reducer';
+
+const puzzleActiveList = require('containers/PuzzleActiveList/reducer').default;
+const puzzlePage = require('containers/PuzzlePage/reducer').default;
+const puzzleList = require('containers/PuzzleList/reducer').default;
+const puzzleAddForm = require('containers/PuzzleAddForm/reducer').default;
 
 const initialReducers = {
-  puzzleActiveList: require("containers/PuzzleActiveList/reducer").default,
-  puzzlePage: require("containers/PuzzlePage/reducer").default,
-  puzzleList: require("containers/PuzzleList/reducer").default,
-  puzzleAddForm: require("containers/PuzzleAddForm/reducer").default,
+  puzzleActiveList,
+  puzzlePage,
+  puzzleList,
+  puzzleAddForm,
 };
 
 /*
@@ -25,7 +30,7 @@ const initialReducers = {
 
 // Initial routing state
 const routeInitialState = fromJS({
-  location: null
+  location: null,
 });
 
 /**
@@ -36,7 +41,7 @@ function routeReducer(state = routeInitialState, action) {
     /* istanbul ignore next */
     case LOCATION_CHANGE:
       return state.merge({
-        location: action.payload
+        location: action.payload,
       });
     default:
       return state;
@@ -51,6 +56,6 @@ export default function createReducer(injectedReducers) {
     route: routeReducer,
     language: languageProviderReducer,
     ...initialReducers,
-    ...injectedReducers
+    ...injectedReducers,
   });
 }

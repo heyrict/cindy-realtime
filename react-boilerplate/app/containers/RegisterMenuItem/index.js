@@ -4,25 +4,29 @@
  *
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { compose } from "redux";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
-import { MenuItem } from "react-bootstrap";
-import RegisterModal from "containers/RegisterForm/Loadable";
+import { MenuItem } from 'react-bootstrap';
+import RegisterModal from 'containers/RegisterForm/Loadable';
 
 class RegisterMenuItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false
+      show: false,
     };
   }
   render() {
     return (
       <MenuItem eventKey={this.props.eventKey}>
-        <div onClick={() => this.setState({ show: true })}>
+        <div
+          onClick={() => this.setState({ show: true })}
+          role="button"
+          tabIndex={this.props.tabIndex ? this.props.tabIndex : '-1'}
+        >
           {this.props.children}
         </div>
         <RegisterModal
@@ -35,12 +39,14 @@ class RegisterMenuItem extends React.Component {
 }
 
 RegisterMenuItem.propTypes = {
-  dispatch: PropTypes.func.isRequired
+  eventKey: PropTypes.number,
+  children: PropTypes.node,
+  tabIndex: PropTypes.string,
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch
+    dispatch,
   };
 }
 

@@ -4,30 +4,23 @@
  *
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { commitMutation } from "react-relay";
-import environment from "Environment";
+import React from 'react';
+import PropTypes from 'prop-types';
+import environment from 'Environment';
+import bootbox from 'bootbox';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { commitMutation, graphql } from 'react-relay';
 
-import { MenuItem } from "react-bootstrap";
+import { MenuItem, Panel } from 'react-bootstrap';
 
-import { setCurrentUser } from "containers/NavbarUserDropdown/actions";
+import { setCurrentUser } from 'containers/NavbarUserDropdown/actions';
 
 export class LogoutMenuItem extends React.PureComponent {
   // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
     this.confirm = this.confirm.bind(this);
-  }
-
-  render() {
-    return (
-      <MenuItem eventKey={this.props.eventKey} onClick={this.confirm}>
-        {this.props.children}
-      </MenuItem>
-    );
   }
 
   confirm() {
@@ -37,7 +30,7 @@ export class LogoutMenuItem extends React.PureComponent {
       onCompleted: (response, errors) => {
         if (errors) {
           bootbox.alert(
-            errors.map(e => (
+            errors.map((e) => (
               <Panel header={e.message} key={e.message} bsStyle="danger" />
             ))
           );
@@ -45,14 +38,23 @@ export class LogoutMenuItem extends React.PureComponent {
           // TODO: Update Global User Interface here
           this.props.updateCurrentUser();
         }
-      }
+      },
     });
+  }
+
+  render() {
+    return (
+      <MenuItem eventKey={this.props.eventKey} onClick={this.confirm}>
+        {this.props.children}
+      </MenuItem>
+    );
   }
 }
 
 LogoutMenuItem.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  updateCurrentUser: PropTypes.func.isRequired
+  eventKey: PropTypes.number,
+  children: PropTypes.node,
+  updateCurrentUser: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -62,17 +64,15 @@ function mapDispatchToProps(dispatch) {
       dispatch(
         setCurrentUser({
           userId: null,
-          nickname: null
+          nickname: null,
         })
-      )
+      ),
   };
 }
 
 const withConnect = connect(null, mapDispatchToProps);
 
-export default compose(
-  withConnect
-)(LogoutMenuItem);
+export default compose(withConnect)(LogoutMenuItem);
 
 const LogoutMenuItemMutation = graphql`
   mutation LogoutMenuItemMutation($input: UserLogoutInput!) {

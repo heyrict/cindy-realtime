@@ -1,11 +1,11 @@
 /**
-*
-* StarLabel
-*
-*/
+ *
+ * StarLabel
+ *
+ */
 
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const PuzzleScore = styled.span`
@@ -16,14 +16,14 @@ const PuzzleScore = styled.span`
   color: #fcf4dc;
   border: 2px solid darkviolet;
   border-radius: 10px;
+  margin-right: 6px;
 `;
 
 function StarLabel(props) {
-  const scale_one = num => Math.floor(num * 10) / 10;
   const stars = props.starSet.edges;
-  var starCount = 0,
-    starSum = 0;
-  stars.forEach(s => {
+  let starCount = 0;
+  let starSum = 0;
+  stars.forEach((s) => {
     starCount += 1;
     starSum += s.node.value;
   });
@@ -31,18 +31,17 @@ function StarLabel(props) {
     return (
       <PuzzleScore>
         <span className="glyphicon glyphicon-star" />
-        <span>{starSum + "(" + starCount + ")"}</span>
+        <span>{`${starSum}(${starCount})`}</span>
       </PuzzleScore>
     );
-  } else {
-    return null;
   }
+  return null;
 }
 
 StarLabel.propTypes = {
   starSet: PropTypes.shape({
-    edges: PropTypes.array.isRequired
-  })
+    edges: PropTypes.array.isRequired,
+  }),
 };
 
 export default StarLabel;

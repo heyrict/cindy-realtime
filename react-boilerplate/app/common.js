@@ -1,17 +1,28 @@
-import MarkdownIt from "markdown-it";
-import mdEmoji from "markdown-it-emoji";
-import sanitizeHtml from "sanitize-html";
-import "expose-loader?jQuery!expose-loader?$!jquery";
-import moment, * as moments from "moment";
-import bootstrap from "bootstrap";
+/*
+ *
+ * common.js
+ *
+ * legacy function definitions from Cindy.
+ *
+ *
+ */
+
+/*eslint-disable*/
+
+import MarkdownIt from 'markdown-it';
+import mdEmoji from 'markdown-it-emoji';
+import sanitizeHtml from 'sanitize-html';
+import 'expose-loader?jQuery!expose-loader?$!jquery';
+import moment, * as moments from 'moment';
+import bootstrap from 'bootstrap';
 
 const md = MarkdownIt({
   html: true,
   breaks: true,
   linkify: true,
-  typographer: true
+  typographer: true,
 })
-  .enable(["table", "strikethrough"])
+  .enable(['table', 'strikethrough'])
   .use(mdEmoji);
 
 function hash(string) {
@@ -29,7 +40,7 @@ function hash(string) {
 function _norm_openchat(string) {
   return string.replace(
     /\"chat:\/\/([0-9a-zA-Z\-]+)\"/g,
-    "\"javascript:sidebar.OpenChat('$1');\""
+    '"javascript:sidebar.OpenChat(\'$1\');"'
   );
 }
 
@@ -42,15 +53,15 @@ function _norm_countdown(string) {
 
 function _norm_tabs(string) {
   var _createID = (text, nmspc) =>
-    "tab-" + (nmspc ? nmspc + "-" : "") + hash(text);
+    'tab-' + (nmspc ? nmspc + '-' : '') + hash(text);
 
   function _build_tabs_navtabs(tab_titles, tab_contents, namespace) {
     var returns = `
-<ul class="nav nav-tabs"${namespace ? " id='tabs-" + namespace + "'" : ""}>`;
+<ul class="nav nav-tabs"${namespace ? " id='tabs-" + namespace + "'" : ''}>`;
 
     for (var i in tab_titles) {
       returns += `
-<li${i == 0 ? " class='active'" : ""}>
+<li${i == 0 ? " class='active'" : ''}>
   <a data-toggle="tab" data-target="#${_createID(tab_contents[i], namespace)}"
     href="javascript:void(0);">
     ${tab_titles[i]}
@@ -58,7 +69,7 @@ function _norm_tabs(string) {
 </li>`;
     }
 
-    returns += "</ul>";
+    returns += '</ul>';
     return returns;
   }
 
@@ -73,7 +84,7 @@ function _norm_tabs(string) {
 </div>`;
     }
 
-    returns += "</div>";
+    returns += '</div>';
     return returns;
   }
 
@@ -88,7 +99,7 @@ function _norm_tabs(string) {
       regex = /<!--tab *([^>]*?)-->([\s\S]*?)<!--endtab-->/g;
 
     while ((res = regex.exec(text))) {
-      tab_titles.push(res[1] ? res[1] : "tab");
+      tab_titles.push(res[1] ? res[1] : 'tab');
       tab_contents.push(res[2]);
     }
 
@@ -105,17 +116,17 @@ function _norm_tabs(string) {
 }
 
 function StartCountdown(selector) {
-  window.setInterval(function() {
-    $(selector || ".countdownobj").each(function() {
-      var until = moment($(this).attr("until")),
+  return window.setInterval(function() {
+    $(selector || '.countdownobj').each(function() {
+      var until = moment($(this).attr('until')),
         now = moment();
-      var diff = until.diff(now, "milliseconds"),
-        diffdays = until.diff(now, "days");
+      var diff = until.diff(now, 'milliseconds'),
+        diffdays = until.diff(now, 'days');
       $(this).html(
         diff < 0
-          ? `<font color='tomato'>${gettext("Time Out")}</font>`
-          : (diffdays ? diffdays + "d " : "") +
-            moment(diff).format("H[h]:mm[m]:ss[s]")
+          ? `<font color='tomato'>${gettext('Time Out')}</font>`
+          : (diffdays ? diffdays + 'd ' : '') +
+            moment(diff).format('H[h]:mm[m]:ss[s]')
       );
     });
   }, 1000);
@@ -134,13 +145,13 @@ function PreNorm(string) {
 
 function line2md(string) {
   string = PreNorm(string)
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/^([*+-]) /g, "\\$1 ")
-    .replace(/^(\d+)\. /g, "$1\\. ")
-    .replace(/\n/g, "<br />");
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/^([*+-]) /g, '\\$1 ')
+    .replace(/^(\d+)\. /g, '$1\\. ')
+    .replace(/\n/g, '<br />');
 
-  return LinkNorm(md.render(string).replace(/<\/?p>/g, ""));
+  return LinkNorm(md.render(string).replace(/<\/?p>/g, ''));
 }
 
 function text2md(string) {
@@ -148,7 +159,7 @@ function text2md(string) {
     sanitizeHtml(md.render(PreNorm(string)), {
       allowedTags: false,
       allowedAttributes: false,
-      allowedSchemes: ["http", "https", "ftp", "mailto", "chat", "javascript"]
+      allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'chat', 'javascript'],
     })
   );
 }
@@ -156,30 +167,30 @@ function text2md(string) {
 export function getCookie(c_name) {
   var c_start, c_end;
   if (document.cookie.length > 0) {
-    c_start = document.cookie.indexOf(c_name + "=");
+    c_start = document.cookie.indexOf(c_name + '=');
     if (c_start != -1) {
       c_start = c_start + c_name.length + 1;
-      c_end = document.cookie.indexOf(";", c_start);
+      c_end = document.cookie.indexOf(';', c_start);
       if (c_end == -1) c_end = document.cookie.length;
       return unescape(document.cookie.substring(c_start, c_end));
     }
   }
-  return "";
+  return '';
 }
 
 const status_code_dict = {
-  0: "unsolved",
-  1: "solved",
-  2: "dazed",
-  3: "hidden",
-  4: "forced hidden"
+  0: 'unsolved',
+  1: 'solved',
+  2: 'dazed',
+  3: 'hidden',
+  4: 'forced hidden',
 };
 
 const genre_code_dict = {
-  0: gettext("Albatross"),
-  1: gettext("Twenty Questions"),
-  2: gettext("Little Albat"),
-  3: gettext("Others & Formal")
+  0: gettext('Albatross'),
+  1: gettext('Twenty Questions'),
+  2: gettext('Little Albat'),
+  3: gettext('Others & Formal'),
 };
 
 export default {
@@ -188,5 +199,5 @@ export default {
   genre_code_dict,
   text2md,
   line2md,
-  StartCountdown
+  StartCountdown,
 };

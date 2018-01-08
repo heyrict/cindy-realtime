@@ -4,10 +4,10 @@
 *
 */
 
-import React from "react";
-import MarkdownEdit from "components/MarkdownEdit";
-import MarkdownPreview from "components/MarkdownPreview";
-import PropTypes from "prop-types";
+import React from 'react';
+import MarkdownEdit from 'components/MarkdownEdit';
+import MarkdownPreview from 'components/MarkdownPreview';
+import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
 function PreviewEdit(props) {
@@ -17,7 +17,7 @@ function PreviewEdit(props) {
       <MarkdownEdit
         value={props.content}
         onChange={props.onChange}
-        style={{ minHeight: "200px" }}
+        style={{ minHeight: '200px' }}
       />
       <MarkdownPreview content={props.content} />
     </div>
@@ -26,7 +26,7 @@ function PreviewEdit(props) {
 
 PreviewEdit.propTypes = {
   content: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
 };
 
 export default PreviewEdit;

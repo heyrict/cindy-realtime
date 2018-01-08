@@ -4,17 +4,15 @@
  *
  */
 
-export const PUZZLE_ADDED = "ws/PUZZLE_ADDED";
-export const PUZZLE_UPDATED = "ws/PUZZLE_UPDATED";
+export const PUZZLE_ADDED = 'ws/PUZZLE_ADDED';
+export const PUZZLE_UPDATED = 'ws/PUZZLE_UPDATED';
 
 export const LOAD_ALL_PUZZLES =
-  "app/containers/PuzzleActiveList/LOAD_ALL_PUZZLES";
+  'app/containers/PuzzleActiveList/LOAD_ALL_PUZZLES';
 export const INIT_PUZZLE_LIST =
-  "app/containers/PuzzleActiveList/INIT_PUZZLE_LIST";
-export const ADD_PUZZLE =
-  "app/containers/PuzzleActiveList/ADD_PUZZLE";
-export const UPDATE_PUZZLE =
-  "app/containers/PuzzleActiveList/UPDATE_PUZZLE";
+  'app/containers/PuzzleActiveList/INIT_PUZZLE_LIST';
+export const ADD_PUZZLE = 'app/containers/PuzzleActiveList/ADD_PUZZLE';
+export const UPDATE_PUZZLE = 'app/containers/PuzzleActiveList/UPDATE_PUZZLE';
 
 // {{{ const unsolvedListQuery
 const unsolvedListQuery = `
@@ -98,6 +96,6 @@ const componentsUserFragment = `
 export const unsolvedListQueryStandalone =
   unsolvedListQuery + puzzleListNodeFragment + componentsUserFragment;
 export const unsolvedListSubscribeQueryStandalone =
-  unsolvedListSubscribeQuery + puzzleListSubscribeFragment
+  unsolvedListSubscribeQuery + puzzleListSubscribeFragment;
 export const unsolvedListElementQueryStandalone =
   unsolvedListElementQuery + puzzleListNodeFragment + componentsUserFragment;

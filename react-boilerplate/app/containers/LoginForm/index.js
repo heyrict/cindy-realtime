@@ -4,30 +4,29 @@
  *
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { FormattedMessage } from "react-intl";
-import { compose } from "redux";
-import { commitMutation } from "react-relay";
+import React from 'react';
+import PropTypes from 'prop-types';
+import FieldGroup from 'components/FieldGroup';
+import environment from 'Environment';
 
-import { Button, Form, FormControl, Modal, Panel } from "react-bootstrap";
-import FieldGroup from "components/FieldGroup";
+import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
+import { compose } from 'redux';
+import { commitMutation, graphql } from 'react-relay';
 
-import messages from "./messages";
-import { setCurrentUser } from "containers/NavbarUserDropdown/actions";
-import { withModal } from "components/withModal";
-import environment from "Environment";
+import { Form, FormControl, Panel } from 'react-bootstrap';
+import { setCurrentUser } from 'containers/NavbarUserDropdown/actions';
+import { withModal } from 'components/withModal';
+import messages from './messages';
 
 export class LoginForm extends React.Component {
-  // eslint-disable-line react/prefer-stateless-function
   // {{{ constructor
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
-      password: "",
-      errorMsg: null
+      username: '',
+      password: '',
+      errorMsg: null,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -35,48 +34,12 @@ export class LoginForm extends React.Component {
     this.confirm = this.confirm.bind(this);
   }
   // }}}
-  // {{{ render
-  render() {
-    return (
-      <Form horizontal>
-        {this.state.errorMsg
-          ? this.state.errorMsg.map(e => (
-              <Panel header={e.message} bsStyle="danger" key={e.message} />
-            ))
-          : null}
-        <FieldGroup
-          id="formLoginUsername"
-          label={gettext("Username")}
-          Ctl={FormControl}
-          type="text"
-          value={this.state.username}
-          onChange={this.handleChange}
-        />
-        <FieldGroup
-          id="formLoginPassword"
-          label={gettext("Password")}
-          Ctl={FormControl}
-          type="password"
-          value={this.state.password}
-          onChange={this.handleChange}
-        />
-        <FormControl
-          id="formModalAddSubmit"
-          type="submit"
-          onClick={this.handleSubmit}
-          value={gettext("Submit")}
-          className="hidden"
-        />
-      </Form>
-    );
-  }
-  // }}}
   // {{{ handleChange
   handleChange(e) {
-    var target = e.target;
-    if (target.id == "formLoginUsername") {
+    const target = e.target;
+    if (target.id === 'formLoginUsername') {
       this.setState({ username: target.value });
-    } else if (target.id == "formLoginPassword") {
+    } else if (target.id === 'formLoginPassword') {
       this.setState({ password: target.value });
     }
   }
@@ -89,40 +52,74 @@ export class LoginForm extends React.Component {
   // }}}
   // {{{ confirm
   confirm() {
-    var { username, password } = this.state;
+    const { username, password } = this.state;
     commitMutation(environment, {
       mutation: LoginFormMutation,
-      variables: { input: { username: username, password: password } },
+      variables: { input: { username, password } },
       onCompleted: (response, errors) => {
         if (errors) {
           this.setState({
-            errorMsg: errors
+            errorMsg: errors,
           });
         } else if (response) {
           const user = response.login.user;
           // TODO: Update Global User Interface here
           this.props.updateCurrentUser({
             userId: user.rowid,
-            nickname: user.nickname
+            nickname: user.nickname,
           });
         }
-      }
+      },
     });
+  }
+  // }}}
+  // {{{ render
+  render() {
+    return (
+      <Form horizontal>
+        {this.state.errorMsg
+          ? this.state.errorMsg.map((e) => (
+              <Panel header={e.message} bsStyle="danger" key={e.message} />
+            ))
+          : null}
+        <FieldGroup
+          id="formLoginUsername"
+          label={<FormattedMessage {...messages.username} />}
+          Ctl={FormControl}
+          type="text"
+          value={this.state.username}
+          onChange={this.handleChange}
+        />
+        <FieldGroup
+          id="formLoginPassword"
+          label={<FormattedMessage {...messages.password} />}
+          Ctl={FormControl}
+          type="password"
+          value={this.state.password}
+          onChange={this.handleChange}
+        />
+        <FormControl
+          id="formModalAddSubmit"
+          type="submit"
+          onClick={this.handleSubmit}
+          value={'Submit'}
+          className="hidden"
+        />
+      </Form>
+    );
   }
   // }}}
 }
 
 LoginForm.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  updateCurrentUser: PropTypes.func.isRequired
+  updateCurrentUser: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
-    updateCurrentUser: user => {
+    updateCurrentUser: (user) => {
       dispatch(setCurrentUser(user));
-    }
+    },
   };
 }
 
@@ -131,11 +128,11 @@ const withConnect = connect(null, mapDispatchToProps);
 export default compose(
   withConnect,
   withModal({
-    header: "Login",
+    header: 'Login',
     footer: {
       confirm: true,
-      close: true
-    }
+      close: true,
+    },
   })
 )(LoginForm);
 

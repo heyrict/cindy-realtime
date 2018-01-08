@@ -4,8 +4,8 @@
  *
  */
 
-import { REGISTER_SUCCEEDED } from "./constants.js"
+import { REGISTER_SUCCEEDED } from './constants';
 
 export const registerSucceeded = () => ({
-  type: REGISTER_SUCCEEDED
-})
+  type: REGISTER_SUCCEEDED,
+});

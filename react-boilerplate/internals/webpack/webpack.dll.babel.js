@@ -13,9 +13,11 @@ const defaults = require('lodash/defaultsDeep');
 const webpack = require('webpack');
 const pkg = require(join(process.cwd(), 'package.json'));
 const dllPlugin = require('../config').dllPlugin;
-const BundleTracker = require("webpack-bundle-tracker");
+const BundleTracker = require('webpack-bundle-tracker');
 
-if (!pkg.dllPlugin) { process.exit(0); }
+if (!pkg.dllPlugin) {
+  process.exit(0);
+}
 
 const dllConfig = defaults(pkg.dllPlugin, dllPlugin.defaults);
 const outputPath = join(process.cwd(), dllConfig.path);
@@ -34,15 +36,17 @@ module.exports = require('./webpack.base.babel')({
       name: '[name]',
       path: join(outputPath, '[name].json'),
     }),
-    new BundleTracker({ filename: "build/webpack-stats.dll.json" }),
-    new webpack.ContextReplacementPlugin(/^\.\/locale$/, context => {
-      if (!/\/moment\//.test(context.context)) { return }
+    new BundleTracker({ filename: 'build/webpack-stats.dll.json' }),
+    new webpack.ContextReplacementPlugin(/^\.\/locale$/, (context) => {
+      if (!/\/moment\//.test(context.context)) {
+        return;
+      }
       // context needs to be modified in place
       Object.assign(context, {
         regExp: /^\.\/(ja|en|fr|zh)/,
         // point to the locale data folder relative to moment's src/lib/locale
-        request: '../../locale'
-      })
+        request: '../../locale',
+      });
     }),
     //new webpack.IgnorePlugin(/\.\/locale$/),
   ],

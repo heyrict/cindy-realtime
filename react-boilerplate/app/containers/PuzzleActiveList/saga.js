@@ -1,12 +1,5 @@
-import {
-  take,
-  call,
-  put,
-  select,
-  takeLatest,
-  takeEvery
-} from "redux-saga/effects";
-import { gqlQuery } from "Environment";
+import { call, put, takeLatest, takeEvery } from 'redux-saga/effects';
+import { gqlQuery } from 'Environment';
 
 import {
   unsolvedListQueryStandalone,
@@ -17,16 +10,12 @@ import {
   LOAD_ALL_PUZZLES,
   INIT_PUZZLE_LIST,
   ADD_PUZZLE,
-  UPDATE_PUZZLE
-} from "./constants";
+  UPDATE_PUZZLE,
+} from './constants';
 
-function* fetchAllPuzzles(action) {
-  try {
-    const data = yield call(gqlQuery, { text: unsolvedListQueryStandalone });
-    yield put({ type: INIT_PUZZLE_LIST, ...data });
-  } catch (e) {
-    console.log(e);
-  }
+function* fetchAllPuzzles() {
+  const data = yield call(gqlQuery, { text: unsolvedListQueryStandalone });
+  yield put({ type: INIT_PUZZLE_LIST, ...data });
 }
 
 function* fetchPuzzleUpdate(action) {
@@ -44,7 +33,6 @@ function* fetchPuzzleAdd(action) {
     { text: unsolvedListElementQueryStandalone },
     { ...action.data }
   );
-  console.log(data)
   yield put({ type: ADD_PUZZLE, ...data });
 }
 
@@ -54,6 +42,6 @@ export default function* defaultSaga() {
   yield [
     takeLatest(LOAD_ALL_PUZZLES, fetchAllPuzzles),
     takeEvery(PUZZLE_UPDATED, fetchPuzzleUpdate),
-    takeEvery(PUZZLE_ADDED, fetchPuzzleAdd)
+    takeEvery(PUZZLE_ADDED, fetchPuzzleAdd),
   ];
 }

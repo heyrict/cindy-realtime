@@ -4,4 +4,5 @@
  *
  */
 
-export const REGISTER_SUCCEEDED = "app/containers/RegisterForm/REGISTER_SUCCEEDED";
+export const REGISTER_SUCCEEDED =
+  'app/containers/RegisterForm/REGISTER_SUCCEEDED';

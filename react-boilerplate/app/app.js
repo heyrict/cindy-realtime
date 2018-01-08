@@ -16,9 +16,6 @@ import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 import 'sanitize.css/sanitize.css';
 
-import common from "common";
-common.StartCountdown();
-
 // Import root app
 import App from 'containers/App';
 

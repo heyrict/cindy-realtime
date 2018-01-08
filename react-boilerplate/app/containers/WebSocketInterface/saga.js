@@ -1,21 +1,29 @@
-import { call, race, take, put, takeEvery, all, select } from "redux-saga/effects";
-import { WebSocketBridge } from "django-channels";
-import { eventChannel, delay } from "redux-saga";
+/*
+ *
+ * WebSocketInterface saga
+ *
+ */
 
-import { WS_CONNECT, WS_DISCONNECT } from "./constants"
-import { INTERNAL_ACTIONS } from "./constants"
+/* eslint-disable no-constant-condition */
+/* eslint-disable no-unused-vars, no-param-reassign */
+
+import { call, race, take, put, takeEvery } from 'redux-saga/effects';
+import { WebSocketBridge } from 'django-channels';
+import { eventChannel, delay } from 'redux-saga';
+
+import { WS_CONNECT, WS_DISCONNECT, INTERNAL_ACTIONS } from './constants';
 
 function* handleInternalAction(socket, action) {
-  console.log("INTERNAL:", action);
+  console.log('INTERNAL:', action);
 
-  for (let i = 1; i <= 10; ++i) {
+  for (let i = 1; i <= 10; i += 1) {
     try {
-      const { stream = "viewer", ...payload } = action;
+      const { stream = 'viewer', ...payload } = action;
       socket.stream(stream).send(payload);
       return;
     } catch (e) {
-      console.log("Socket not connected. Retry..." + i);
-      if (socket.socket.readyState == 0) yield call(delay, 1000);
+      console.log(`Socket not connected. Retry...${i}`);
+      if (socket.socket.readyState === 0) yield call(delay, 1000);
     }
   }
 }
@@ -27,19 +35,18 @@ function* internalListener(socket) {
 function* externalListener(channel) {
   while (true) {
     const action = yield take(channel);
-    console.log("EXTERNAL:", action);
+    console.log('EXTERNAL:', action);
     yield put(action);
   }
 }
 
 function websocketWatch(socket) {
-  return eventChannel(emitter => {
-    socket.listen("/ws/");
+  return eventChannel((emitter) => {
+    socket.listen('/ws/');
     socket.socket.onmessage = ({ data }) => {
       data = JSON.parse(data);
       const { stream, payload } = data;
-      console.log("watch:", data);
-      //dispatch(data);
+      console.log('watch:', data);
       if (stream) emitter(payload);
       else emitter(data);
     };
@@ -54,16 +61,15 @@ export default function* websocketSagas() {
   while (true) {
     const data = yield take(WS_CONNECT);
     const socket = new WebSocketBridge();
-    socket.connect("/ws/");
+    socket.connect('/ws/');
     const socketChannel = yield call(websocketWatch, socket);
-    //dispatch({ type: "WS_CONNECTED" });
 
     const { cancel } = yield race({
       task: [
         call(externalListener, socketChannel),
-        call(internalListener, socket)
+        call(internalListener, socket),
       ],
-      cancel: take(WS_DISCONNECT)
+      cancel: take(WS_DISCONNECT),
     });
 
     if (cancel) {

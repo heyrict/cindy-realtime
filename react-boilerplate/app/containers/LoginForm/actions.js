@@ -4,9 +4,9 @@
  *
  */
 
-import { SHOW_MODAL } from "./constants"
+import { SHOW_MODAL } from './constants';
 
 export const show = (status = true) => ({
   type: SHOW_MODAL,
-  show: status
-})
+  show: status,
+});

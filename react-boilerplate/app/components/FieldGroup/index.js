@@ -1,12 +1,12 @@
 /**
-*
-* FieldGroup
-*
-*/
+ *
+ * FieldGroup
+ *
+ */
 
-import React from "react";
-import PropTypes from "prop-types";
-import { Col, FormGroup, ControlLabel, HelpBlock } from "react-bootstrap";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Col, FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
 // import styled from 'styled-components';
 
 function FieldGroup({ id, label, help, Ctl, valid, ...props }) {
@@ -28,7 +28,7 @@ FieldGroup.propTypes = {
   label: PropTypes.node.isRequired,
   help: PropTypes.node,
   Ctl: PropTypes.any.isRequired,
-  Valid: PropTypes.string
+  valid: PropTypes.string,
 };
 
 export default FieldGroup;

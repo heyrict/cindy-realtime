@@ -9,25 +9,22 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-
 import injectSaga from 'utils/injectSaga';
-import injectReducer from 'utils/injectReducer';
+
+import { PuzzlePanel } from 'components/PuzzlePanel';
 import makeSelectPuzzleActiveList from './selectors';
-import reducer from './reducer';
 import saga from './saga';
-import { loadAllPuzzles } from "./actions";
+import { loadAllPuzzles } from './actions';
 
-import { PuzzlePanel } from "components/PuzzlePanel";
-
-export class PuzzleActiveList extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class PuzzleActiveList extends React.Component {
   componentDidMount() {
-    this.props.dispatch(loadAllPuzzles())
+    this.props.dispatch(loadAllPuzzles());
   }
 
   render() {
     return (
       <div>
-        {this.props.puzzleactivelist.allPuzzles.edges.map(edge => (
+        {this.props.puzzleactivelist.allPuzzles.edges.map((edge) => (
           <PuzzlePanel node={edge.node} key={edge.node.id} />
         ))}
       </div>
@@ -37,6 +34,7 @@ export class PuzzleActiveList extends React.Component { // eslint-disable-line r
 
 PuzzleActiveList.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  puzzleactivelist: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -53,7 +51,4 @@ const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withSaga = injectSaga({ key: 'puzzleActiveList', saga });
 
-export default compose(
-  withSaga,
-  withConnect,
-)(PuzzleActiveList);
+export default compose(withSaga, withConnect)(PuzzleActiveList);

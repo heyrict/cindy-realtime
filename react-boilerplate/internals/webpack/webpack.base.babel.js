@@ -13,10 +13,14 @@ process.noDeprecation = true;
 
 module.exports = (options) => ({
   entry: options.entry,
-  output: Object.assign({ // Compile into js/build.js
-    path: path.resolve(process.cwd(), 'build'),
-    publicPath: '/static/',
-  }, options.output), // Merge with env dependent settings
+  output: Object.assign(
+    {
+      // Compile into js/build.js
+      path: path.resolve(process.cwd(), 'build'),
+      publicPath: '/static/',
+    },
+    options.output
+  ), // Merge with env dependent settings
   module: {
     rules: [
       {
@@ -25,9 +29,8 @@ module.exports = (options) => ({
         use: {
           loader: 'babel-loader',
           options: {
-            plugins: ["relay"]
-          }
-          //options: options.babelQuery,
+            plugins: ['relay'],
+          },
         },
       },
       {
@@ -99,19 +102,12 @@ module.exports = (options) => ({
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
     }),
-   new webpack.NamedModulesPlugin(),
+    new webpack.NamedModulesPlugin(),
   ]),
   resolve: {
     modules: ['app', 'node_modules'],
-    extensions: [
-      '.js',
-      '.jsx',
-      '.react.js',
-    ],
-    mainFields: [
-      'browser', 'jsnext:main',
-      'main',
-    ],
+    extensions: ['.js', '.jsx', '.react.js'],
+    mainFields: ['browser', 'jsnext:main', 'main'],
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window

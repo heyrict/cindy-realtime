@@ -4,26 +4,27 @@
  *
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { FormattedMessage } from "react-intl";
-import { createStructuredSelector } from "reselect";
-import { compose } from "redux";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
 
-import { MenuItem, Navbar, Nav, NavItem, NavDropdown } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
-import LoginMenuItem from "containers/LoginMenuItem";
-import LogoutMenuItem from "containers/LogoutMenuItem";
-import RegisterMenuItem from "containers/RegisterMenuItem";
+import { MenuItem, Nav, NavDropdown } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
+import LoginMenuItem from 'containers/LoginMenuItem';
+import LogoutMenuItem from 'containers/LogoutMenuItem';
+import RegisterMenuItem from 'containers/RegisterMenuItem';
 
-import injectReducer from "utils/injectReducer";
-import injectSaga from "utils/injectSaga";
-import makeSelectNavbarUserDropdown from "./selectors";
-import reducer from "./reducer";
-import saga from "./saga";
+import injectReducer from 'utils/injectReducer';
+import injectSaga from 'utils/injectSaga';
+import makeSelectNavbarUserDropdown from './selectors';
+import reducer from './reducer';
+import saga from './saga';
+import messages from './messages';
 
-import { connectViewer, disconnectViewer } from "./actions";
+import { connectViewer, disconnectViewer } from './actions';
 
 export class NavbarUserDropdown extends React.Component {
   // eslint-disable-line react/prefer-stateless-function
@@ -41,12 +42,21 @@ export class NavbarUserDropdown extends React.Component {
   }
 
   render() {
-    const loggedInTitle = interpolate(gettext("Welcome, %s"), [
-        this.props.navbaruserdropdown.user.nickname
-      ]),
-      notLoggedInTitle = gettext("Hello, guest!"),
-      onlineViewerNumTitle =
-        gettext("Online users:") + " " + this.props.navbaruserdropdown.onlineViewerCount;
+    const loggedInTitle = (
+      <FormattedMessage
+        {...messages.loggedInTitle}
+        values={{ nickname: this.props.navbaruserdropdown.user.nickname }}
+      />
+    );
+    const notLoggedInTitle = <FormattedMessage {...messages.guestTitle} />;
+    const onlineViewerNumTitle = (
+      <FormattedMessage
+        {...messages.onlineUsers}
+        values={{
+          userCount: this.props.navbaruserdropdown.onlineViewerCount,
+        }}
+      />
+    );
     return (
       <Nav pullRight>
         {this.props.navbaruserdropdown.user.userId ? (
@@ -58,13 +68,13 @@ export class NavbarUserDropdown extends React.Component {
             onMouseLeave={() => this.setState({ hover: false })}
           >
             <LinkContainer
-              to={"/profile/" + this.props.navbaruserdropdown.user.userId}
+              to={`/profile/${this.props.navbaruserdropdown.user.userId}`}
             >
-              <MenuItem eventKey={0.3}>{gettext("My Profile")}</MenuItem>
+              <MenuItem eventKey={0.3}>{gettext('My Profile')}</MenuItem>
             </LinkContainer>
             <LinkContainer to="/logout">
               <LogoutMenuItem eventKey={0.4}>
-                {gettext("Logout")}
+                {gettext('Logout')}
               </LogoutMenuItem>
             </LinkContainer>
           </NavDropdown>
@@ -76,8 +86,10 @@ export class NavbarUserDropdown extends React.Component {
             onMouseEnter={() => this.setState({ hover: true })}
             onMouseLeave={() => this.setState({ hover: false })}
           >
-            <LoginMenuItem eventKey={0.1}>{gettext("Login")}</LoginMenuItem>
-            <RegisterMenuItem eventKey={0.2}>{gettext("Register")}</RegisterMenuItem>
+            <LoginMenuItem eventKey={0.1}>{gettext('Login')}</LoginMenuItem>
+            <RegisterMenuItem eventKey={0.2}>
+              {gettext('Register')}
+            </RegisterMenuItem>
           </NavDropdown>
         )}
       </Nav>
@@ -85,9 +97,9 @@ export class NavbarUserDropdown extends React.Component {
   }
 }
 
-
 NavbarUserDropdown.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  navbaruserdropdown: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -105,8 +117,4 @@ const withConnect = connect(mapStateToProps, mapDispatchToProps);
 const withReducer = injectReducer({ key: 'navbarUserDropdown', reducer });
 const withSaga = injectSaga({ key: 'navbarUserDropdown', saga });
 
-export default compose(
-  withReducer,
-  withSaga,
-  withConnect,
-)(NavbarUserDropdown);
+export default compose(withReducer, withSaga, withConnect)(NavbarUserDropdown);

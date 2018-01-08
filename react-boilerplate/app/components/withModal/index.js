@@ -4,14 +4,12 @@
  *
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { compose } from "redux";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal } from 'react-bootstrap';
 
-export const withModal = ({ header, footer }) => Wrapped =>
+export const withModal = ({ header, footer }) => (Wrapped) => {
   // eslint-disable-line react/prefer-stateless-function
   /* Change a component to modal.
    * props:
@@ -20,11 +18,16 @@ export const withModal = ({ header, footer }) => Wrapped =>
    * - footer: { close: string or bool, confirm: string or bool }
    *   body component should have a `confirm` function if confirm == true
    */
-  class extends React.PureComponent {
+  class withModalWrapper extends React.PureComponent {
     constructor(props) {
       super(props);
       this.handleConfirm = this.handleConfirm.bind(this);
     }
+    // {{{ handleConfirm
+    handleConfirm() {
+      this.childBody.confirm();
+    }
+    // }}}
     // {{{ render
     render() {
       return (
@@ -34,7 +37,7 @@ export const withModal = ({ header, footer }) => Wrapped =>
           </Modal.Header>
           <Modal.Body>
             <Wrapped
-              ref={instance => {
+              ref={(instance) => {
                 this.childBody = instance;
               }}
               {...this.props}
@@ -43,12 +46,12 @@ export const withModal = ({ header, footer }) => Wrapped =>
           <Modal.Footer>
             {footer.confirm ? (
               <Button onClick={this.handleConfirm}>
-                {footer.confirm === true ? gettext("Confirm") : footer.confirm}
+                {footer.confirm === true ? gettext('Confirm') : footer.confirm}
               </Button>
             ) : null}
             {footer.close ? (
               <Button onClick={this.props.onHide}>
-                {footer.close === true ? gettext("Close") : footer.close}
+                {footer.close === true ? gettext('Close') : footer.close}
               </Button>
             ) : null}
           </Modal.Footer>
@@ -56,11 +59,14 @@ export const withModal = ({ header, footer }) => Wrapped =>
       );
     }
     // }}}
-    // {{{ handleConfirm
-    handleConfirm() {
-      this.childBody.confirm();
-    }
-    // }}}
+  }
+
+  withModalWrapper.propTypes = {
+    show: PropTypes.bool.isRequired,
+    onHide: PropTypes.func.isRequired,
   };
+
+  return withModalWrapper;
+};
 
 export default withModal;

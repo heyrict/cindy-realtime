@@ -11,23 +11,21 @@
  * the linting exception.
  */
 
-import React from "react";
-import { Switch, Route } from "react-router-dom";
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 
-import WebSocketInterface from "containers/WebSocketInterface";
-import TopNavbar from "containers/TopNavbar";
-import HomePage from "containers/HomePage/Loadable";
-import PuzzlePage from "containers/PuzzlePage/Loadable";
-import PuzzleAddPage from "containers/PuzzleAddPage/Loadable";
-import NotFoundPage from "containers/NotFoundPage/Loadable";
-import { getCookie } from "common";
-import common from "common";
+import WebSocketInterface from 'containers/WebSocketInterface';
+import TopNavbar from 'containers/TopNavbar';
+import HomePage from 'containers/HomePage/Loadable';
+import PuzzlePage from 'containers/PuzzlePage/Loadable';
+import PuzzleAddPage from 'containers/PuzzleAddPage/Loadable';
+import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import common from 'common';
 
-import "bootstrap/dist/css/bootstrap.min.css";
-
-const csrftoken = getCookie("csrftoken");
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function App() {
+  common.StartCountdown();
   return (
     <div>
       <WebSocketInterface />

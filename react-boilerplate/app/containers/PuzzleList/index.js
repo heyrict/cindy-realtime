@@ -4,21 +4,19 @@
  *
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import { compose } from "redux";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
+import { graphql, createPaginationContainer } from 'react-relay';
+import { Button } from 'react-bootstrap';
 
-import injectSaga from "utils/injectSaga";
-import injectReducer from "utils/injectReducer";
-import makeSelectPuzzleList from "./selectors";
-import saga from "./saga";
+import injectSaga from 'utils/injectSaga';
+import PuzzlePanel from 'components/PuzzlePanel';
 
-import { graphql, createPaginationContainer } from "react-relay";
-
-import { Button } from "react-bootstrap";
-import PuzzlePanel from "components/PuzzlePanel";
+import makeSelectPuzzleList from './selectors';
+import saga from './saga';
 
 // {{{ PuzzleListInitQuery
 export const PuzzleListInitQuery = graphql`
@@ -42,58 +40,59 @@ export const PuzzleListInitQuery = graphql`
 // }}}
 
 export class PuzzleList extends React.Component {
-  // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
-    this._loadMore = this._loadMore.bind(this);
-  }
-  render() {
-    return (
-      <div>
-        {this.props.list.allPuzzles.edges.map(edge => (
-          <PuzzlePanel node={edge.node} key={edge.node.__id} />
-        ))}
-        {this.props.relay.hasMore() ? (
-          <Button onClick={this._loadMore} block={true} bsStyle="info">
-            Load More ...
-          </Button>
-        ) : (
-          ""
-        )}
-      </div>
-    );
+    this.loadMore = this.loadMore.bind(this);
   }
 
-  _loadMore() {
+  loadMore() {
     if (!this.props.relay.hasMore() || this.props.relay.isLoading()) {
       return;
     }
 
-    this.props.relay.loadMore(10, error => {
+    this.props.relay.loadMore(10, (error) => {
       console.log(error);
     });
+  }
+
+  render() {
+    return (
+      <div>
+        {this.props.list.allPuzzles.edges.map((edge) => (
+          <PuzzlePanel node={edge.node} key={edge.node.__id} />
+        ))}
+        {this.props.relay.hasMore() ? (
+          <Button onClick={this.loadMore} block bsStyle="info">
+            Load More ...
+          </Button>
+        ) : (
+          ''
+        )}
+      </div>
+    );
   }
 }
 
 PuzzleList.propTypes = {
-  dispatch: PropTypes.func.isRequired
+  relay: PropTypes.object.isRequired,
+  list: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  puzzlelist: makeSelectPuzzleList()
+  puzzlelist: makeSelectPuzzleList(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch
+    dispatch,
   };
 }
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-const withSaga = injectSaga({ key: "puzzleList", saga });
+const withSaga = injectSaga({ key: 'puzzleList', saga });
 
-const withPuzzleList_list = Component =>
+const withPuzzleList = (Component) =>
   createPaginationContainer(
     Component,
     {
@@ -121,17 +120,17 @@ const withPuzzleList_list = Component =>
             }
           }
         }
-      `
+      `,
     },
     {
-      direction: "forward",
+      direction: 'forward',
       getConnectionFromProps(props) {
         return props.list && props.list.allPuzzles;
       },
       getFragmentVariables(prevVars, totalCount) {
         return {
           ...prevVars,
-          count: totalCount
+          count: totalCount,
         };
       },
       getVariables(props, { count, cursor }, fragmentVariables) {
@@ -140,13 +139,11 @@ const withPuzzleList_list = Component =>
           cursor,
           orderBy: fragmentVariables.orderBy,
           status: fragmentVariables.status,
-          status__gt: fragmentVariables.status__gt
+          status__gt: fragmentVariables.status__gt,
         };
       },
-      query: PuzzleListInitQuery
+      query: PuzzleListInitQuery,
     }
   );
 
-export default compose(withSaga, withConnect, withPuzzleList_list)(
-  PuzzleList
-);
+export default compose(withSaga, withConnect, withPuzzleList)(PuzzleList);

@@ -3,13 +3,11 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const OfflinePlugin = require('offline-plugin');
-const BundleTracker = require("webpack-bundle-tracker");
+const BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = require('./webpack.base.babel')({
   // In production, we skip all hot-reloading stuff
-  entry: [
-    path.join(process.cwd(), 'app/app.js'),
-  ],
+  entry: [path.join(process.cwd(), 'app/app.js')],
 
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
   output: {
@@ -68,10 +66,11 @@ module.exports = require('./webpack.base.babel')({
 
       AppCache: false,
     }),
-    new BundleTracker({ filename: "build/webpack-stats.json" }),
+    new BundleTracker({ filename: 'build/webpack-stats.json' }),
   ],
 
   performance: {
-    assetFilter: (assetFilename) => !(/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename)),
+    assetFilter: (assetFilename) =>
+      !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename),
   },
 });

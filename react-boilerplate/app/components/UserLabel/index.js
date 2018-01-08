@@ -1,16 +1,16 @@
 /**
-*
-* UserLabel
-*
-*/
+ *
+ * UserLabel
+ *
+ */
 
-import React from "react";
-import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
-import { graphql, createFragmentContainer } from "react-relay";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { graphql, createFragmentContainer } from 'react-relay';
 import styled from 'styled-components';
 
-import UserAwardPopover from "components/UserAwardPopover";
+import UserAwardPopover from 'components/UserAwardPopover';
 
 const StyledNicknameLink = styled(Link)`
   font-size: 1.2em;
@@ -23,7 +23,9 @@ export function UserLabel(props) {
   const user = props.user;
   return (
     <span>
-      <StyledNicknameLink to={"/profile/" + user.rowid}>{user.nickname}</StyledNicknameLink>
+      <StyledNicknameLink to={`/profile/${user.rowid}`}>
+        {user.nickname}
+      </StyledNicknameLink>
       <br />
       <UserAwardPopover userAward={user.currentAward} />
     </span>
@@ -34,8 +36,8 @@ UserLabel.propTypes = {
   user: PropTypes.shape({
     rowid: PropTypes.number.isRequired,
     nickname: PropTypes.string.isRequired,
-    currentAward: PropTypes.object
-  })
+    currentAward: PropTypes.object,
+  }),
 };
 
 export default createFragmentContainer(UserLabel, {
@@ -53,5 +55,5 @@ export default createFragmentContainer(UserLabel, {
         }
       }
     }
-  `
+  `,
 });
