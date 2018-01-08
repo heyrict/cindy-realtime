@@ -36,6 +36,9 @@ To upgrade from Cindy
 - Make sure you are at a node *BEFORE* an existing `v5.X` tag.
 - Checkout to branch relay-channels: `git checkout origin/relay-channels`
 - Run `upgrade.py` under `./upgrade-from-cindy/` folder
+
+    depending on how your database is initialized, you may have to manually remove the `RenameField`s in migration files.
+
 - Run `python3 manage.py migrate`
 - Then upgrade the database as you did before `python3 manage.py makemigrations; python3 manage.py migrate`
 

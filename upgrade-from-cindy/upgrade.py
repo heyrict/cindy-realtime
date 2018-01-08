@@ -17,6 +17,9 @@ if __name__ == "__main__":
     with open(os.path.join(DIR_PATH, "./migrate_from_cindy.py")) as f:
         migration = f.read()
 
+    with open(os.path.join(DIR_PATH, "./migrate_from_cindy_2.py")) as f:
+        migration2 = f.read()
+
     last_migration = 1
     for fn in os.listdir(os.path.join(DIR_PATH, "../sui_hei/migrations/")):
         current_migration = re.findall(r"^\d+", fn)
@@ -35,7 +38,6 @@ if __name__ == "__main__":
     assert last_migration_fn != None
 
     dependency_migration_1 = last_migration_fn
-    dependency_migration_2 = new_migration_fn_1 if prev_migration_1 == None else prev_migration_1
 
     if prev_migration_1 == None:
         new_migration_fn_1 = str(last_migration + 1).zfill(4) + MIGRATION_APPENDS_1
@@ -43,9 +45,11 @@ if __name__ == "__main__":
         with open(os.path.join(DIR_PATH, "../sui_hei/migrations/") + new_migration_fn_1, "w") as f:
             f.write(migration % dependency_migration_1)
 
+    dependency_migration_2 = os.path.splitext(new_migration_fn_1)[0] if prev_migration_1 == None else prev_migration_1
+
     if prev_migration_2 == None:
         new_migration_fn_2 = str(last_migration + 1).zfill(4) + MIGRATION_APPENDS_2
         last_migration += 1
         with open(os.path.join(DIR_PATH, "../sui_hei/migrations/") + new_migration_fn_2, "w") as f:
-            f.write(migration % dependency_migration_2)
+            f.write(migration2 % dependency_migration_2)
 
