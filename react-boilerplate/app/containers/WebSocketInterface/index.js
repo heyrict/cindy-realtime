@@ -7,16 +7,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import injectSaga from 'utils/injectSaga';
-import injectReducer from 'utils/injectReducer';
 
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { DAEMON } from 'utils/constants';
 
-import reducer from './reducer';
 import saga from './saga';
-import makeSelectWebSocketInterface from './selectors';
 import { wsConnect } from './actions';
 
 export class WebSocketInterface extends React.Component {
@@ -34,19 +30,13 @@ WebSocketInterface.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = createStructuredSelector({
-  websocketinterface: makeSelectWebSocketInterface(),
-});
-
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
   };
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
-
-const withReducer = injectReducer({ key: 'webSocketInterface', reducer });
+const withConnect = connect(null, mapDispatchToProps);
 const withSaga = injectSaga({ key: 'webSocketInterface', saga, mode: DAEMON });
 
-export default compose(withReducer, withSaga, withConnect)(WebSocketInterface);
+export default compose(withSaga, withConnect)(WebSocketInterface);

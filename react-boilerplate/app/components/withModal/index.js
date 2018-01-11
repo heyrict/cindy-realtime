@@ -9,8 +9,9 @@ import PropTypes from 'prop-types';
 
 import { Button, Modal } from 'react-bootstrap';
 
+/* eslint-disable no-undef */
+
 export const withModal = ({ header, footer }) => (Wrapped) => {
-  // eslint-disable-line react/prefer-stateless-function
   /* Change a component to modal.
    * props:
    * - header: String

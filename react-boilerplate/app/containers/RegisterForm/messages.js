@@ -34,7 +34,7 @@ export default defineMessages({
     id: 'app.containers.RegisterForm.passwordLabel',
     defaultMessage: 'Password',
   },
-  passwordConfirmlabel: {
+  passwordConfirmLabel: {
     id: 'app.containers.RegisterForm.passwordConfirmLabel',
     defaultMessage: 'Password (Confirm)',
   },

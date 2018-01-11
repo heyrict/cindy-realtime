@@ -15,6 +15,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import WebSocketInterface from 'containers/WebSocketInterface';
+import Notifier from 'containers/Notifier';
 import TopNavbar from 'containers/TopNavbar';
 import HomePage from 'containers/HomePage/Loadable';
 import PuzzlePage from 'containers/PuzzlePage/Loadable';
@@ -23,11 +24,14 @@ import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import common from 'common';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'alertifyjs/build/css/alertify.min.css';
+import 'alertifyjs/build/css/themes/semantic.min.css';
 
 export default function App() {
   common.StartCountdown();
   return (
     <div>
+      <Notifier />
       <WebSocketInterface />
       <TopNavbar />
       <Switch>

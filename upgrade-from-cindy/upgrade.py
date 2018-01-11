@@ -1,55 +1,85 @@
 #! /usr/bin/env python3
-import os, re
+import os
+import re
+
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
-MIGRATION_APPENDS_1 = "_relay_upgrade.py"
-MIGRATION_APPENDS_2 = "_spec_upgrade.py"
+MIG_PATH = os.path.join(DIR_PATH, "../sui_hei/migrations/")
 
-last_migration_fn = None
+migrates = [
+    {
+        "filename": "./migrate_from_cindy.py",
+        "dependency": None,
+        "appends": "_relay_upgrade.py",
+    },
+    {
+        "filename": "./migrate_from_cindy_2.py",
+        "dependency": None,
+        "appends": "_spec_upgrade.py",
+    },
+    {
+        "filename": "./migrate_from_cindy_3.py",
+        "dependency": None,
+        "appends": "_dialogue_rename_upgrade.py",
+    },
+]
 
-prev_migration_1 = None
-prev_migration_2 = None
-dependency_migration_1 = None
-dependency_migration_2 = None
-new_migration_fn_1 = None
-new_migration_fn_2 = None
 
-if __name__ == "__main__":
-    with open(os.path.join(DIR_PATH, "./migrate_from_cindy.py")) as f:
-        migration = f.read()
+def getLastMigration():
+    """
+    Get the last migration file with the largest prefix number.
 
-    with open(os.path.join(DIR_PATH, "./migrate_from_cindy_2.py")) as f:
-        migration2 = f.read()
-
+    returns filename (no extension).
+    """
     last_migration = 1
-    for fn in os.listdir(os.path.join(DIR_PATH, "../sui_hei/migrations/")):
+    last_migration_fn = None
+
+    for fn in os.listdir(MIG_PATH):
         current_migration = re.findall(r"^\d+", fn)
 
         if current_migration and int(current_migration[0]) > last_migration:
             last_migration = int(current_migration[0])
             last_migration_fn, _ = os.path.splitext(fn)
 
-        if re.findall(MIGRATION_APPENDS_1 + "$", fn):
-            prev_migration_1 = os.path.splitext(fn)[0]
-        if re.findall(MIGRATION_APPENDS_2 + "$", fn):
-            prev_migration_2 = os.path.splitext(fn)[0]
+    return last_migration, last_migration_fn
 
-    print("Last migration file: ", last_migration_fn)
 
-    assert last_migration_fn != None
+def fillDependencies(migrates):
+    for fn in os.listdir(MIG_PATH):
+        for i in range(len(migrates)):
+            if re.findall(migrates[i]["appends"] + "$", fn):
+                if i + 1 >= len(migrates):
+                    return []
 
-    dependency_migration_1 = last_migration_fn
+                migrates[i + 1]["dependency"] = fn
+                migrates.pop(i)
+                break
 
-    if prev_migration_1 == None:
-        new_migration_fn_1 = str(last_migration + 1).zfill(4) + MIGRATION_APPENDS_1
+    last_migration, last_migration_fn = getLastMigration()
+
+    if len(migrates) > 0:
+        migrates[0]["dependency"] = last_migration_fn
+        migrates[0]["output"] = str(last_migration + 1).zfill(
+            4) + migrates[0]["appends"]
         last_migration += 1
-        with open(os.path.join(DIR_PATH, "../sui_hei/migrations/") + new_migration_fn_1, "w") as f:
-            f.write(migration % dependency_migration_1)
 
-    dependency_migration_2 = os.path.splitext(new_migration_fn_1)[0] if prev_migration_1 == None else prev_migration_1
+        for i in range(1, len(migrates)):
+            if migrates[i]["dependency"] == None:
+                migrates[i]["dependency"] = migrates[i - 1]["output"][:-3]
+                migrates[i]["output"] = str(last_migration + 1).zfill(
+                    4) + migrates[i]["appends"]
+                last_migration += 1
 
-    if prev_migration_2 == None:
-        new_migration_fn_2 = str(last_migration + 1).zfill(4) + MIGRATION_APPENDS_2
-        last_migration += 1
-        with open(os.path.join(DIR_PATH, "../sui_hei/migrations/") + new_migration_fn_2, "w") as f:
-            f.write(migration2 % dependency_migration_2)
+    return migrates
 
+
+if __name__ == "__main__":
+    for mig in fillDependencies(migrates):
+        with open(os.path.join(DIR_PATH, mig["filename"])) as f:
+            migration = f.read()
+
+        # debug
+        print("Find dependency migration file %s" % mig["dependency"])
+        print("Adding new migration file %s...Done" % mig["output"])
+
+        with open(os.path.join(MIG_PATH, mig["output"]), "w") as f:
+            f.write(migration % mig["dependency"])

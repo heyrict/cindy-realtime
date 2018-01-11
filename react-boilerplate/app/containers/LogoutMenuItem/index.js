@@ -12,9 +12,9 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { commitMutation, graphql } from 'react-relay';
 
-import { MenuItem, Panel } from 'react-bootstrap';
+import { Panel, PanelHeader, NavLink } from 'rebass';
 
-import { setCurrentUser } from 'containers/NavbarUserDropdown/actions';
+import { setCurrentUser } from 'containers/UserNavbar/actions';
 
 export class LogoutMenuItem extends React.PureComponent {
   // eslint-disable-line react/prefer-stateless-function
@@ -31,7 +31,9 @@ export class LogoutMenuItem extends React.PureComponent {
         if (errors) {
           bootbox.alert(
             errors.map((e) => (
-              <Panel header={e.message} key={e.message} bsStyle="danger" />
+              <Panel key={e.message} color="tomato">
+                <PanelHeader>{e.message}</PanelHeader>
+              </Panel>
             ))
           );
         } else if (response) {
@@ -44,15 +46,14 @@ export class LogoutMenuItem extends React.PureComponent {
 
   render() {
     return (
-      <MenuItem eventKey={this.props.eventKey} onClick={this.confirm}>
+      <NavLink onClick={this.confirm} role="button" tabIndex="-1">
         {this.props.children}
-      </MenuItem>
+      </NavLink>
     );
   }
 }
 
 LogoutMenuItem.propTypes = {
-  eventKey: PropTypes.number,
   children: PropTypes.node,
   updateCurrentUser: PropTypes.func.isRequired,
 };

@@ -4,6 +4,8 @@
  *
  */
 
+/* eslint-disable react/jsx-indent */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import environment from 'Environment';
@@ -15,14 +17,13 @@ import { commitMutation, graphql } from 'react-relay';
 import { Form, FormControl, Panel } from 'react-bootstrap';
 
 import FieldGroup from 'components/FieldGroup';
-import { setCurrentUser } from 'containers/NavbarUserDropdown/actions';
+import { setCurrentUser } from 'containers/UserNavbar/actions';
 import { withModal } from 'components/withModal';
 
 import messages from './messages';
 import { registerSucceeded } from './actions';
 
 export class RegisterForm extends React.Component {
-  // eslint-disable-line react/prefer-stateless-function
   // {{{ constructor
   constructor(props) {
     super(props);

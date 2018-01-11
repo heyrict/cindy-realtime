@@ -4,6 +4,8 @@
  *
  */
 
+/* eslint-disable react/jsx-indent */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import FieldGroup from 'components/FieldGroup';
@@ -15,7 +17,7 @@ import { compose } from 'redux';
 import { commitMutation, graphql } from 'react-relay';
 
 import { Form, FormControl, Panel } from 'react-bootstrap';
-import { setCurrentUser } from 'containers/NavbarUserDropdown/actions';
+import { setCurrentUser } from 'containers/UserNavbar/actions';
 import { withModal } from 'components/withModal';
 import messages from './messages';
 

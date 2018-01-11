@@ -106,7 +106,7 @@ class Dialogue(models.Model):
     answer = models.TextField(_('answer'), null=True)
     good = models.BooleanField(_('good_ques'), default=False, null=False)
     true = models.BooleanField(_('true_ques'), default=False, null=False)
-    askedtime = models.DateTimeField(_('askedtime'), null=False)
+    created = models.DateTimeField(_('created'), null=False)
     answeredtime = models.DateTimeField(_('answeredtime'), null=True)
 
     class Meta:
@@ -115,6 +115,13 @@ class Dialogue(models.Model):
     def __str__(self):
         return "[%s]%s: {%s} puts {%50s}" % (self.puzzle.id, self.puzzle,
                                              self.user, self.question)
+
+
+class Hint(models.Model):
+    id = models.AutoField(max_length=11, null=False, primary_key=True)
+    puzzle = models.ForeignKey(Puzzle, on_delete=CASCADE)
+    content = models.TextField(_('content'), null=False)
+    created = models.DateTimeField(_('created'), null=False, default=timezone.now)
 
 
 class Minichat(models.Model):

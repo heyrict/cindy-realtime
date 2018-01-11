@@ -10,4 +10,4 @@ schema:
 	cd $(BASEDIR)/react-boilerplate && npm run relay
 
 makemessages:
-	python3 manage.py makemessages -d djangojs -e js,jsx -i node_modules
+	python3 manage.py makemessages -d djangojs -e js,jsx -i node_modules -i build -i dist

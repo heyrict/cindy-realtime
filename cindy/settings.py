@@ -148,7 +148,6 @@ LOCALE_PATHS = [
 LANGUAGES = [
     ('ja', _('Japanese')),
     ('en', _('English')),
-    ('zh-hans', _('Chinese')),
     ('fr', _('French')),
 ]
 

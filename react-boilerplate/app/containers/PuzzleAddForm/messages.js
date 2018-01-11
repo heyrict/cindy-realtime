@@ -22,9 +22,9 @@ export default defineMessages({
     id: 'app.containers.PuzzleAddForm.contentLabel',
     defaultMessage: 'Content',
   },
-  kaisetuLabel: {
-    id: 'app.containers.PuzzleAddForm.kaisetuLabel',
-    defaultMessage: 'Kaisetu',
+  solutionLabel: {
+    id: 'app.containers.PuzzleAddForm.solutionLabel',
+    defaultMessage: 'Solution',
   },
   submitLabel: {
     id: 'app.containers.PuzzleAddForm.submitLabel',

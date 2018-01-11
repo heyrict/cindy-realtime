@@ -35,81 +35,10 @@ from graphql_relay import from_global_id, to_global_id
 
 from schema import schema
 
-from .models import User, Puzzle
+from .models import Puzzle, User
 from .schema import PuzzleNode
 
 onlineViewerCount = 0
-
-# {{{ unsolvedListQuery
-unsolvedListQuery = """
-  query {
-    allPuzzles (status: 0, orderBy: "-modified") {
-      edges {
-        node {
-          id
-          ...PuzzleList_node
-        }
-      }
-    }
-  }"""
-# }}}
-# {{{ unsolvedListElementQuery
-unsolvedListElementQuery = """
-  query {
-    puzzle (id: "%s") {
-      id
-      ...PuzzleList_node
-    }
-  }
-"""
-# }}}
-# {{{ puzzleListNodeFragment
-puzzleListNodeFragment = """
-  fragment PuzzleList_node on PuzzleNode {
-    id
-    rowid
-    genre
-    title
-    status
-    created
-    quesCount
-    uaquesCount
-    starSet {
-      edges {
-        node {
-          value
-        }
-      }
-    }
-    user {
-      ...components_user
-    }
-  }"""
-# }}}
-# {{{ componentsUserFragment
-componentsUserFragment = """
-  fragment components_user on UserNode {
-    rowid
-    nickname
-    currentAward {
-      id
-      created
-      award {
-        id
-        name
-        description
-      }
-    }
-  }
-"""
-
-# }}}
-# {{{ Standalones
-unsolvedListQueryStandalone = unsolvedListQuery + puzzleListNodeFragment + componentsUserFragment
-unsolvedListElementQueryStandalone = unsolvedListElementQuery + puzzleListNodeFragment + componentsUserFragment
-
-# }}}
-
 
 # {{{1 Constants
 ADD_PUZZLE = "ws/ADD_PUZZLE"
@@ -126,71 +55,30 @@ UPDATE_ONLINE_VIEWER_COUNT = "ws/UPDATE_ONLINE_VIEWER_COUNT"
 # }}}
 
 
-class PuzzleListUpdater(JsonWebsocketConsumer):
-    strict_ordering = False
-    http_user_and_session = True
-    groupName = "puzzleList"
-
-    def connection_groups(self, **kwargs):
-        return [self.groupName]
-
-    def connect(self, message, **kwargs):
-        print("puzzlelist connected")
-
-    def disconnect(self, message, **kwargs):
-        print("puzzlelist disconnected")
-
-    def receive(self, content, multiplexer, **kwargs):
-        print("puzzlelist received", content)
-        if content.get("type") == UPDATE_PUZZLE:
-            multiplexer.send(self.update_puzzle(content))
-        elif content.get("type") == ADD_PUZZLE:
-            self.add_puzzle(content, multiplexer)
-        elif content.get("type") == PUZZLE_CONNECT:
-            self.send_all_puzzle(multiplexer)
-        elif content.get("type") == PUZZLE_DISCONNECT:
-            self.close()
-
-    def add_puzzle(self, content, multiplexer):
-        global unsolvedListElementQueryStandalone
-        results = schema.execute(
-            unsolvedListElementQueryStandalone % content["puzzleId"])
-        if results.errors: print(results.errors)
-        else:
-            self.group_send(self.groupName, {
-                "type": PREPEND_PUZZLE_LIST,
-                "puzzleNode": results.data
-            })
-
-    def update_puzzle(self, content):
-        print(content)
-        return {}
-
-    def send_all_puzzle(self, multiplexer):
-        global unsolvedListQueryStandalone
-        results = schema.execute(unsolvedListQueryStandalone)
-        multiplexer.send({
-            "type": INIT_PUZZLE_LIST,
-            "data": results.data,
-            "errors": results.errors
-        })
-
 @receiver(post_save, sender=Puzzle)
 def send_update(sender, instance, created, *args, **kwargs):
     puzzleId = instance.id
     print("PUZZLE UPDATE TRACKED:", instance, created)
     if created:
         Group("viewer").send({
-            "text": json.dumps({
+            "text":
+            json.dumps({
                 "type": PUZZLE_ADDED,
-                "data": { "id": to_global_id(PuzzleNode.__name__, puzzleId) }
+                "data": {
+                    "id": to_global_id(PuzzleNode.__name__, puzzleId),
+                    "title": instance.title,
+                    "nickname": instance.user.nickname
+                }
             })
         })
     else:
         Group("viewer").send({
-            "text": json.dumps({
+            "text":
+            json.dumps({
                 "type": PUZZLE_UPDATED,
-                "data": { "id": to_global_id(PuzzleNode.__name__, puzzleId) }
+                "data": {
+                    "id": to_global_id(PuzzleNode.__name__, puzzleId)
+                }
             })
         })
 
@@ -244,5 +132,4 @@ class Demultiplexer(WebsocketDemultiplexer):
     '''
     consumers = {
         "viewer": ViewerUpdater,
-        "puzzleList": PuzzleListUpdater,
     }

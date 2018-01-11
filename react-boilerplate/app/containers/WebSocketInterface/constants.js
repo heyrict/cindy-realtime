@@ -7,9 +7,7 @@
 import {
   VIEWER_CONNECT,
   VIEWER_DISCONNECT,
-} from 'containers/NavbarUserDropdown/constants';
-
-export const DEFAULT_ACTION = 'app/WebSocketInterface/DEFAULT_ACTION';
+} from 'containers/UserNavbar/constants';
 
 export const INTERNAL_ACTIONS = [VIEWER_CONNECT, VIEWER_DISCONNECT];
 

@@ -16,8 +16,8 @@ import bootbox from 'bootbox';
 import { Button, Form, FormControl } from 'react-bootstrap';
 import FieldGroup from 'components/FieldGroup';
 import PreviewEdit from 'components/PreviewEdit';
-import common from 'common';
 import environment from 'Environment';
+import genreMessages from 'components/TitleLabel/messages';
 
 import makeSelectPuzzleAddForm from './selectors';
 import messages from './messages';
@@ -45,7 +45,7 @@ export class PuzzleAddForm extends React.Component {
       puzzleGenre: 0,
       puzzleYami: false,
       puzzleContent: '',
-      puzzleKaisetu: '',
+      puzzleSolution: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -57,8 +57,8 @@ export class PuzzleAddForm extends React.Component {
     const target = e.target;
     if (target.id === 'formPuzzleAddContent') {
       this.setState({ puzzleContent: target.value });
-    } else if (target.id === 'formPuzzleAddKaisetu') {
-      this.setState({ puzzleKaisetu: target.value });
+    } else if (target.id === 'formPuzzleAddSolution') {
+      this.setState({ puzzleSolution: target.value });
     } else if (target.id === 'formPuzzleAddTitle') {
       this.setState({ puzzleTitle: target.value });
     } else if (target.id === 'formPuzzleAddGenre') {
@@ -110,11 +110,34 @@ export class PuzzleAddForm extends React.Component {
               value={this.state.puzzleGenre}
               onChange={this.handleChange}
             >
-              {Object.entries(common.genre_code_dict).map((entry) => (
-                <option value={entry[0]} key={entry[0]}>
-                  {entry[1]}
-                </option>
-              ))}
+              <FormattedMessage {...genreMessages.classic}>
+                {(msg) => (
+                  <option value={0} key={0}>
+                    {msg}
+                  </option>
+                )}
+              </FormattedMessage>
+              <FormattedMessage {...genreMessages.twentyQuestions}>
+                {(msg) => (
+                  <option value={1} key={1}>
+                    {msg}
+                  </option>
+                )}
+              </FormattedMessage>
+              <FormattedMessage {...genreMessages.littleAlbat}>
+                {(msg) => (
+                  <option value={2} key={2}>
+                    {msg}
+                  </option>
+                )}
+              </FormattedMessage>
+              <FormattedMessage {...genreMessages.others}>
+                {(msg) => (
+                  <option value={3} key={3}>
+                    {msg}
+                  </option>
+                )}
+              </FormattedMessage>
             </FormControl>
           )}
         />
@@ -134,10 +157,10 @@ export class PuzzleAddForm extends React.Component {
           onChange={this.handleChange}
         />
         <FieldGroup
-          id="formPuzzleAddKaisetu"
-          label={<FormattedMessage {...messages.kaisetuLabel} />}
+          id="formPuzzleAddSolution"
+          label={<FormattedMessage {...messages.solutionLabel} />}
           Ctl={PreviewEdit}
-          content={this.state.puzzleKaisetu}
+          content={this.state.puzzleSolution}
           onChange={this.handleChange}
         />
         <Button type="submit" block onClick={this.handleSubmit}>

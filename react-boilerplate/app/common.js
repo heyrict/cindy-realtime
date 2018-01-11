@@ -186,17 +186,9 @@ const status_code_dict = {
   4: 'forced hidden',
 };
 
-const genre_code_dict = {
-  0: gettext('Albatross'),
-  1: gettext('Twenty Questions'),
-  2: gettext('Little Albat'),
-  3: gettext('Others & Formal'),
-};
-
 export default {
   getCookie,
   status_code_dict,
-  genre_code_dict,
   text2md,
   line2md,
   StartCountdown,

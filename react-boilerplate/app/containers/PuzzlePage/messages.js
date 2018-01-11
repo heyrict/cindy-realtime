@@ -10,4 +10,8 @@ export default defineMessages({
     id: 'app.containers.PuzzlePage.header',
     defaultMessage: 'Puzzle List',
   },
+  addPuzzle: {
+    id: 'app.containers.PuzzlePage.addPuzzle',
+    defaultMessage: 'Add a new puzzle',
+  },
 });

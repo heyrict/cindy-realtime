@@ -19,14 +19,19 @@ injectGlobal`
   }
 
   #app {
-    background-color: #fafafa;
     min-height: 100%;
     min-width: 100%;
+    background-color: blanchedalmond;
   }
 
   p,
   label {
     font-family: Georgia, Times, 'Times New Roman', serif;
     line-height: 1.5em;
+  }
+
+  a:focus,
+  a:hover {
+    color: inherit;
   }
 `;

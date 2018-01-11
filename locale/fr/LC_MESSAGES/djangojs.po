@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-29 18:11+0900\n"
+"POT-Creation-Date: 2018-01-09 22:57+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,22 +18,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: sui_hei/static/js/app/common.js:135
-msgid "Albatross"
-msgstr ""
-
-#: sui_hei/static/js/app/common.js:136
-msgid "20th-Door"
-msgstr ""
-
-#: sui_hei/static/js/app/common.js:137
-msgid "Little Albat"
-msgstr ""
-
-#: sui_hei/static/js/app/common.js:138
-msgid "Others & Formal"
-msgstr ""
-
-#: sui_hei/static/js/app/common.js:232
+#: react-boilerplate/app/common.js:127
 msgid "Time Out"
+msgstr ""
+
+#: react-boilerplate/app/components/withModal/index.js:49
+msgid "Confirm"
+msgstr ""
+
+#: react-boilerplate/app/components/withModal/index.js:54
+msgid "Close"
+msgstr ""
+
+#: react-boilerplate/app/containers/Notifier/saga.js:10
+msgid "A new puzzle %(title)s is created by %(nickname)s!"
+msgstr ""
+
+#: react-boilerplate/app/containers/Notifier/saga.js:27
+#, javascript-format
+msgid "Your locale is now set to %s"
 msgstr ""

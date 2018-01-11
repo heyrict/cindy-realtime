@@ -17,8 +17,10 @@ import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+
 import PuzzleList, { PuzzleListInitQuery } from 'containers/PuzzleList';
 import PuzzleActiveList from 'containers/PuzzleActiveList';
+import AddPuzzleBtn from './AddPuzzleBtn';
 
 import makeSelectPuzzlePage from './selectors';
 import saga from './saga';
@@ -41,6 +43,8 @@ function PuzzlePage() {
       </Helmet>
       <Heading>
         <FormattedMessage {...messages.header} />
+        <span style={{ padding: '0 10px' }} />
+        <AddPuzzleBtn />
       </Heading>
       <PuzzleActiveList />
       <QueryRenderer

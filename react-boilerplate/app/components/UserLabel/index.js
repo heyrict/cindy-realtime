@@ -13,8 +13,8 @@ import styled from 'styled-components';
 import UserAwardPopover from 'components/UserAwardPopover';
 
 const StyledNicknameLink = styled(Link)`
-  font-size: 1.2em;
-  color: orange;
+  font-size: 1.3em;
+  color: chocolate;
   word-break: break-all;
   word-wrap: break-word;
 `;

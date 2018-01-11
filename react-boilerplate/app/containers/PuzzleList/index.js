@@ -59,7 +59,7 @@ export class PuzzleList extends React.Component {
     return (
       <div>
         {this.props.list.allPuzzles.edges.map((edge) => (
-          <PuzzlePanel node={edge.node} key={edge.node.__id} />
+          <PuzzlePanel node={edge.node} key={edge.node.id} />
         ))}
         {this.props.relay.hasMore() ? (
           <Button onClick={this.loadMore} block bsStyle="info">

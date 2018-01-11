@@ -9,7 +9,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import { MenuItem } from 'react-bootstrap';
+import { NavLink } from 'rebass';
+
 import LoginModal from 'containers/LoginForm';
 
 export class LoginMenuItem extends React.Component {
@@ -21,27 +22,25 @@ export class LoginMenuItem extends React.Component {
   }
   render() {
     return (
-      <MenuItem eventKey={this.props.eventKey}>
-        <div
+      <span>
+        <NavLink
           onClick={() => this.setState({ show: true })}
           role="button"
-          tabIndex={this.props.tabIndex ? this.props.tabIndex : '-1'}
+          tabIndex="0"
         >
           {this.props.children}
-        </div>
+        </NavLink>
         <LoginModal
           show={this.state.show}
           onHide={() => this.setState({ show: false })}
         />
-      </MenuItem>
+      </span>
     );
   }
 }
 
 LoginMenuItem.propTypes = {
-  eventKey: PropTypes.number,
   children: PropTypes.node,
-  tabIndex: PropTypes.string,
 };
 
 function mapDispatchToProps(dispatch) {

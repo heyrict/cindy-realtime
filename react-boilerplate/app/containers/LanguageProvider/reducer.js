@@ -14,7 +14,7 @@ import {
 } from '../App/constants'; // eslint-disable-line
 
 const initialState = fromJS({
-  locale: DEFAULT_LOCALE,
+  locale: window.django.LANGUAGE_CODE || DEFAULT_LOCALE,
 });
 
 function languageProviderReducer(state = initialState, action) {
