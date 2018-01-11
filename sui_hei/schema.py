@@ -3,12 +3,13 @@ from itertools import chain
 import graphene
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
-from django.db.models import Count, Q
+from django.db.models import Q, Count
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from graphene import relay, resolve_only_args
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
+from graphql_relay import from_global_id
 
 from .models import *
 
@@ -311,7 +312,7 @@ class Query(object):
 
     # {{{2 unions
     puzzle_show_union = relay.ConnectionField(
-        PuzzleShowUnionConnection, puzzle=graphene.Int())
+        PuzzleShowUnionConnection, id=graphene.ID(required=True))
 
     # {{{2 resolves
     # {{{3 resolve all
@@ -430,13 +431,11 @@ class Query(object):
 
     # {{{3 resolve union
     def resolve_puzzle_show_union(self, info, **kwargs):
-        puzzle = kwargs.get("puzzle")
-        if puzzle is not None:
-            puzzle = Puzzle.objects.get(id=puzzle)
-            dialogue_list = Dialogue.objects.filter(puzzle__exact=puzzle)
-            hint_list = Hint.objects.filter(puzzle__exact=puzzle)
-            return sorted(
-                chain(dialogue_list, hint_list), key=lambda x: x.created)
+        _, puzzleId = from_global_id(kwargs["id"])
+        puzzle = Puzzle.objects.get(id=puzzleId)
+        dialogue_list = Dialogue.objects.filter(puzzle__exact=puzzle)
+        hint_list = Hint.objects.filter(puzzle__exact=puzzle)
+        return sorted(chain(dialogue_list, hint_list), key=lambda x: x.created)
 
 
 # {{{1 Mutation

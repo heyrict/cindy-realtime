@@ -4,14 +4,17 @@
  *
  */
 
+import { componentsUserFragment } from 'containers/PuzzleActiveList/constants';
+
 export const PUZZLE_SHOWN = 'app/containers/PuzzleShowPage/PUZZLE_SHOWN';
 
-export const INIT_PUZZLE_SHOW = 'app/containers/PuzzleShowPage/INIT_PUZZLE_SHOW';
+export const INIT_PUZZLE_SHOW =
+  'app/containers/PuzzleShowPage/INIT_PUZZLE_SHOW';
 
 // {{{ const puzzleShowQuery
 export const puzzleShowQuery = `
-  query($puzzleId: Int!) {
-    puzzleShownUnion(puzzle: $puzzleId) {
+  query($id: ID!) {
+    puzzleShowUnion(id: $id) {
       edges {
         node {
           ... on DialogueNode {
@@ -35,6 +38,21 @@ export const puzzleShowQuery = `
         }
       }
     }
+    puzzle(id: $id) {
+      title
+      yami
+      genre
+      status
+      user {
+        ...components_user
+      }
+      content
+      solution
+      memo
+      created
+      modified
+    }
   }
+  ${componentsUserFragment}
 `;
 // }}}

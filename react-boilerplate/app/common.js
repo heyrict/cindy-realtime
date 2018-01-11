@@ -133,7 +133,6 @@ function StartCountdown(selector) {
 }
 
 function LinkNorm(string) {
-  string = _norm_openchat(string);
   string = _norm_countdown(string);
   return string;
 }
@@ -143,7 +142,7 @@ function PreNorm(string) {
   return string;
 }
 
-function line2md(string) {
+export function line2md(string) {
   string = PreNorm(string)
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -154,7 +153,7 @@ function line2md(string) {
   return LinkNorm(md.render(string).replace(/<\/?p>/g, ''));
 }
 
-function text2md(string) {
+export function text2md(string) {
   return LinkNorm(
     sanitizeHtml(md.render(PreNorm(string)), {
       allowedTags: false,
@@ -178,13 +177,23 @@ export function getCookie(c_name) {
   return '';
 }
 
-const status_code_dict = {
+export const status_code_dict = {
   0: 'unsolved',
   1: 'solved',
   2: 'dazed',
   3: 'hidden',
   4: 'forced hidden',
 };
+
+export const genre_type_dict = {
+  0: 'classic',
+  1: 'twentyQuestions',
+  2: 'littleAlbat',
+  3: 'others',
+};
+
+export const from_global_id = (id) => atob(id).split(':');
+export const to_global_id = (className, rid) => btoa(`${className}:${rid}`);
 
 export default {
   getCookie,

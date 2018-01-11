@@ -76,7 +76,7 @@ const puzzleListSubscribeFragment = `
 `;
 // }}}
 // {{{ const componentsUserFragment
-const componentsUserFragment = `
+export const componentsUserFragment = `
   fragment components_user on UserNode {
     rowid
     nickname

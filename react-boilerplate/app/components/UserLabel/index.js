@@ -12,7 +12,7 @@ import styled from 'styled-components';
 
 import UserAwardPopover from 'components/UserAwardPopover';
 
-const StyledNicknameLink = styled(Link)`
+export const StyledNicknameLink = styled(Link)`
   font-size: 1.3em;
   color: chocolate;
   word-break: break-all;

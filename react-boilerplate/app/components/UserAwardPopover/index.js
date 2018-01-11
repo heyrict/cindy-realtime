@@ -33,7 +33,11 @@ class UserAwardPopover extends React.PureComponent {
     );
     return (
       <OverlayTrigger placement="top" trigger="focus" overlay={popoverAward}>
-        <a href="#!" role="button" style={{ color: 'black' }}>
+        <a
+          href="#!"
+          role="button"
+          style={{ color: 'black', ...this.props.style }}
+        >
           [{ua.award.name}]
         </a>
       </OverlayTrigger>
@@ -43,6 +47,11 @@ class UserAwardPopover extends React.PureComponent {
 
 UserAwardPopover.propTypes = {
   userAward: PropTypes.object,
+  style: PropTypes.object,
+};
+
+UserAwardPopover.defaultProps = {
+  style: {},
 };
 
 export default UserAwardPopover;
