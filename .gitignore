@@ -106,6 +106,9 @@ ENV/
 # vim
 *.swp
 
+# collectstatic generated stuff
+collected_static
+
 # nodejs
 node_modules
 dist
