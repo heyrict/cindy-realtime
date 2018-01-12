@@ -4,13 +4,14 @@ import moment from 'moment';
 import { text2md } from 'common';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
-import { Flex, Box } from 'rebass';
+import { Box } from 'rebass';
 import { StyledNicknameLink } from 'components/UserLabel';
 import UserAwardPopover from 'components/UserAwardPopover';
 
+import Constrained from './Constrained';
 import messages from './messages';
 
-const PuzzleFrame = styled(Box)`
+export const PuzzleFrame = styled.div`
   border-radius: 10px;
   border: 2px solid #b928d7;
   padding: 5px;
@@ -40,9 +41,8 @@ const ContentBox = styled(Box)`
 
 function Frame(props) {
   return (
-    <Flex wrap ml={-2} pl={2} mb={20} justify="center" align="center">
-      <Box width={[1 / 16, 1 / 12, 1 / 10, 1 / 8]} />
-      <PuzzleFrame width={[7 / 8, 5 / 6, 4 / 5, 3 / 4]}>
+    <Constrained mt={20} mb={20}>
+      <PuzzleFrame>
         <ContentBox
           pl={10}
           dangerouslySetInnerHTML={{ __html: text2md(props.text) }}
@@ -76,8 +76,7 @@ function Frame(props) {
           </FormattedMessage>
         ) : null}
       </PuzzleFrame>
-      <Box width={[1 / 16, 1 / 12, 1 / 10, 1 / 8]} />
-    </Flex>
+    </Constrained>
   );
 }
 

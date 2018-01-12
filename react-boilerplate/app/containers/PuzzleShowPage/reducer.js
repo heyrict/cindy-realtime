@@ -22,7 +22,7 @@ function puzzleShowPageReducer(state = initialState, action) {
     case INIT_PUZZLE_SHOW:
       return state
         .setIn(['puzzle'], action.data.puzzle)
-        .mergeIn(
+        .setIn(
           ['puzzleShowUnion', 'edges'],
           action.data.puzzleShowUnion.edges
         );

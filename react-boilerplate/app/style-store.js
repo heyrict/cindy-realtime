@@ -34,3 +34,7 @@ export const ImgSm = styled.img`
   padding: 0;
   margin: 0;
 `;
+
+export const ImgMd = ImgSm.extend`
+  max-height: 60px;
+`;

@@ -20,7 +20,7 @@ export const puzzleShowQuery = `
           ... on DialogueNode {
             id
             user {
-              id
+              ...components_user
             }
             good
             true
