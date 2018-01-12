@@ -20,7 +20,7 @@ import Dialogue from 'containers/Dialogue/Loadable';
 import { Box } from 'rebass';
 
 import Frame from './Frame';
-import Constrained from './Constrained';
+import Constrained from 'components/Constrained';
 import makeSelectPuzzleShowPage from './selectors';
 import saga from './saga';
 import messages from './messages';
@@ -52,7 +52,7 @@ export class PuzzleShowPage extends React.Component {
       <div>
         <Helmet>
           <title>
-            {P.puzzle ? `[${genre}] ${P.puzzle.title}` : _(messages.title)}
+            {P.puzzle ? `Cindy - [${genre}] ${P.puzzle.title}` : _(messages.title)}
           </title>
           <meta name="description" content="Description of PuzzleShowPage" />
         </Helmet>
@@ -65,7 +65,7 @@ export class PuzzleShowPage extends React.Component {
           time={P.puzzle.created}
         />
         {D.edges.map((node, index) => (
-          <Dialogue key={node.node.id} index={index} {...node} />
+          <Dialogue key={node.node.id} index={index + 1} {...node} />
         ))}
         <Frame text={P.puzzle.solution} />
         <Box py={10} width={1} />

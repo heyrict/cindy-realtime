@@ -8,7 +8,7 @@ import { Box } from 'rebass';
 import { StyledNicknameLink } from 'components/UserLabel';
 import UserAwardPopover from 'components/UserAwardPopover';
 
-import Constrained from './Constrained';
+import Constrained from 'components/Constrained';
 import messages from './messages';
 
 export const PuzzleFrame = styled.div`

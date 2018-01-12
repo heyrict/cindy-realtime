@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Row } from 'rebass';
-import Constrained from 'containers/PuzzleShowPage/Constrained';
+import Constrained from 'components/Constrained';
 
 import Question from './Question';
 import Answer from './Answer';

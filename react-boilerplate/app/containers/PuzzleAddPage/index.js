@@ -8,7 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, intlShape } from 'react-intl';
 import { compose } from 'redux';
 import styled from 'styled-components';
 
@@ -25,15 +25,13 @@ const Heading = styled.h1`
   padding-top: 0.5em;
 `;
 
-export function PuzzleAddPage(props) {
+export function PuzzleAddPage(props, context) {
+  const _ = context.intl.formatMessage;
   return (
     <div>
       <Helmet>
-        <title>PuzzleAddPage</title>
-        <meta
-          name="description"
-          content="Create a lateral thinking puzzle of your own!"
-        />
+        <title>{_(messages.title)}</title>
+        <meta name="description" content={_(messages.description)} />
       </Helmet>
       <Grid>
         <Col xs={12}>
@@ -46,6 +44,10 @@ export function PuzzleAddPage(props) {
     </div>
   );
 }
+
+PuzzleAddPage.contextTypes = {
+  intl: intlShape,
+};
 
 PuzzleAddPage.propTypes = {
   dispatch: PropTypes.func.isRequired,

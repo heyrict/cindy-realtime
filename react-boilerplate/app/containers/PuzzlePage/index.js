@@ -14,7 +14,7 @@ import { QueryRenderer } from 'react-relay';
 import { ProgressBar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, intlShape } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
@@ -34,12 +34,13 @@ const Heading = styled.h1`
   padding-top: 0.5em;
 `;
 
-function PuzzlePage() {
+function PuzzlePage(p, context) {
+  const _ = context.intl.formatMessage;
   return (
     <div>
       <Helmet>
-        <title>PuzzlePage</title>
-        <meta name="description" content="Description of PuzzlePage" />
+        <title>{_(messages.title)}</title>
+        <meta name="description" content={_(messages.description)}/>
       </Helmet>
       <Heading>
         <FormattedMessage {...messages.header} />
@@ -69,6 +70,10 @@ function PuzzlePage() {
     </div>
   );
 }
+
+PuzzlePage.contextTypes = {
+  intl: intlShape,
+};
 
 PuzzlePage.propTypes = {
   dispatch: PropTypes.func.isRequired,

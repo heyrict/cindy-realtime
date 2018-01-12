@@ -6,6 +6,15 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
+  title: {
+    id: 'app.containers.PuzzlePage.title',
+    defaultMessage: 'Cindy - Puzzles',
+  },
+  description: {
+    id: 'app.containers.PuzzlePage.description',
+    defaultMessage:
+      'Playing lateral thinking puzzles online, and browsering all kinds of lateral thinking puzzles. Tons of lateral thinking puzzles are waiting for you!',
+  },
   header: {
     id: 'app.containers.PuzzlePage.header',
     defaultMessage: 'Puzzle List',
