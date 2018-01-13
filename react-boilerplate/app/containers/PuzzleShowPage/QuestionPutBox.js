@@ -108,7 +108,7 @@ class QuestionPutBox extends React.PureComponent {
   render() {
     return (
       <Constrained level={3}>
-        <Flex>
+        <Flex mx={-1}>
           <StyledInput
             value={this.state.content}
             placeholder="Input"

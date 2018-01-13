@@ -35,6 +35,7 @@
   "app.containers.PuzzlePage.title": "Cindy - Puzzles: Tons of lateral thinking puzzles are waiting for you!",
   "app.containers.PuzzleShowPage.created": "Created",
   "app.containers.PuzzleShowPage.creator": "Creator",
+  "app.containers.PuzzleShowPage.solved": "Solved",
   "app.containers.PuzzleShowPage.title": "Come and play lateral thinking puzzles at Cindy!",
   "app.containers.RegisterForm.nicknameHelp": "Your nickname will be shown in public. Take care not to use some offensive words.",
   "app.containers.RegisterForm.nicknameLabel": "Nickname",

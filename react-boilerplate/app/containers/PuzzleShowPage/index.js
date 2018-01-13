@@ -63,11 +63,11 @@ export class PuzzleShowPage extends React.Component {
         <Constrained>
           <Title>{`[${genre}] ${P.title}`}</Title>
         </Constrained>
-        <Frame user={P.user} text={P.content} time={P.created} />
+        <Frame user={P.user} text={P.content} created={P.created} />
         {D.edges.map((node, index) => (
           <Dialogue key={node.node.id} index={index + 1} {...node} />
         ))}
-        {P.status !== 0 && <Frame text={P.solution} />}
+        {P.status !== 0 && <Frame text={P.solution} solved={P.modified} />}
         {P.status === 0 &&
           U !== P.user.rowid && (
             <QuestionPutBox puzzleId={parseInt(this.puzzleId, 10)} />

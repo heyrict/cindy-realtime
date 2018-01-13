@@ -17,6 +17,7 @@ import { Helmet } from 'react-helmet';
 import { FormattedMessage, intlShape } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import Constrained from 'components/Constrained';
 
 import PuzzleList, { PuzzleListInitQuery } from 'containers/PuzzleList';
 import PuzzleActiveList from 'containers/PuzzleActiveList';
@@ -37,10 +38,10 @@ const Heading = styled.h1`
 function PuzzlePage(p, context) {
   const _ = context.intl.formatMessage;
   return (
-    <div>
+    <Constrained level={4}>
       <Helmet>
         <title>{_(messages.title)}</title>
-        <meta name="description" content={_(messages.description)}/>
+        <meta name="description" content={_(messages.description)} />
       </Helmet>
       <Heading>
         <FormattedMessage {...messages.header} />
@@ -67,7 +68,7 @@ function PuzzlePage(p, context) {
           return <ProgressBar now={100} label={'Loading...'} striped active />;
         }}
       />
-    </div>
+    </Constrained>
   );
 }
 

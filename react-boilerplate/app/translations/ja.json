@@ -35,6 +35,7 @@
   "app.containers.PuzzlePage.title": "Cindy - 問題一覧：数多の水平思考パズルがあなたを待っています！",
   "app.containers.PuzzleShowPage.created": "出題時間",
   "app.containers.PuzzleShowPage.creator": "出題者",
+  "app.containers.PuzzleShowPage.solved": "解決時間",
   "app.containers.PuzzleShowPage.title": "Cindy でリアルタイムの水平思考パズルを味わいましょう",
   "app.containers.RegisterForm.nicknameHelp": "あなたのニックネームは公開されます。他人に不快をもたらす言葉はお控えめにしましょう。",
   "app.containers.RegisterForm.nicknameLabel": "ニックネーム",

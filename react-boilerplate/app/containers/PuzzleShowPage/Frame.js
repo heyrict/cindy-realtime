@@ -64,12 +64,23 @@ function Frame(props) {
             )}
           </FormattedMessage>
         ) : null}
-        {props.time ? (
+        {props.created ? (
           <FormattedMessage {...messages.created}>
             {(c) => (
               <RightBox>
                 <Label>
-                  {c}: {moment(props.time).format('llll')}
+                  {c}: {moment(props.created).format('llll')}
+                </Label>
+              </RightBox>
+            )}
+          </FormattedMessage>
+        ) : null}
+        {props.solved ? (
+          <FormattedMessage {...messages.solved}>
+            {(c) => (
+              <RightBox>
+                <Label>
+                  {c}: {moment(props.solved).format('llll')}
                 </Label>
               </RightBox>
             )}
@@ -83,7 +94,8 @@ function Frame(props) {
 Frame.propTypes = {
   text: PropTypes.string.isRequired,
   user: PropTypes.object,
-  time: PropTypes.string,
+  created: PropTypes.string,
+  solved: PropTypes.string,
 };
 
 export default Frame;

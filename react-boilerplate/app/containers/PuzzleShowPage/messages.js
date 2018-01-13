@@ -18,4 +18,8 @@ export default defineMessages({
     id: 'app.containers.PuzzleShowPage.created',
     defaultMessage: 'Created',
   },
+  solved: {
+    id: 'app.containers.PuzzleShowPage.solved',
+    defaultMessage: 'Solved',
+  },
 });
