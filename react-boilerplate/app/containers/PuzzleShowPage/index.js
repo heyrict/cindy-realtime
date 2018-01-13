@@ -70,7 +70,10 @@ export class PuzzleShowPage extends React.Component {
         {P.status !== 0 && <Frame text={P.solution} solved={P.modified} />}
         {P.status === 0 &&
           U !== P.user.rowid && (
-            <QuestionPutBox puzzleId={parseInt(this.puzzleId, 10)} />
+            <QuestionPutBox
+              puzzleId={parseInt(this.puzzleId, 10)}
+              currentUserId={this.props.user.userId}
+            />
           )}
         <Box py={10} width={1} />
       </div>

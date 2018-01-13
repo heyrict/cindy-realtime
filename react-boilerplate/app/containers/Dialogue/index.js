@@ -8,10 +8,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import makeSelectDialogue from './selectors';
 // import messages from './messages';
 
 import Dialog from './Dialog';
@@ -25,11 +23,8 @@ class Dialogue extends React.Component {
 
 Dialogue.propTypes = {
   node: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
 };
-
-const mapStateToProps = createStructuredSelector({
-  dialogue: makeSelectDialogue(),
-});
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -37,6 +32,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(null, mapDispatchToProps);
 
 export default compose(withConnect)(Dialogue);

@@ -10,4 +10,16 @@ export default defineMessages({
     id: 'app.containers.Dialogue.waiting',
     defaultMessage: 'Waiting to be answered...',
   },
+  good: {
+    id: 'app.containers.Dialogue.good',
+    defaultMessage: 'Good Question',
+  },
+  true: {
+    id: 'app.containers.Dialogue.true',
+    defaultMessage: 'True Answer',
+  },
+  edit: {
+    id: 'app.containers.Dialogue.edit',
+    defaultMessage: 'Edit',
+  },
 });

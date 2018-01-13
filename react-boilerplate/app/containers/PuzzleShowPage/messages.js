@@ -22,4 +22,16 @@ export default defineMessages({
     id: 'app.containers.PuzzleShowPage.solved',
     defaultMessage: 'Solved',
   },
+  input: {
+    id: 'app.containers.PuzzleShowPage.input',
+    defaultMessage: 'Put your question here',
+  },
+  disableInput: {
+    id: 'app.containers.PuzzleShowPage.disableInput',
+    defaultMessage: 'Please login before playing ^^',
+  },
+  putQuestion: {
+    id: 'app.containers.PuzzleShowPage.putQuestion',
+    defaultMessage: 'Put',
+  },
 });

@@ -35,6 +35,10 @@ export const ImgSm = styled.img`
   margin: 0;
 `;
 
+export const ImgXs = styled.img`
+  max-height: 18px;
+`;
+
 export const ImgMd = ImgSm.extend`
   max-height: 60px;
 `;

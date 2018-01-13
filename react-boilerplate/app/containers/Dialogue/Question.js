@@ -2,32 +2,33 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import moment from 'moment';
-import { Flex, Box, Circle } from 'rebass';
+import { line2md } from 'common';
+import { Box } from 'rebass';
 import { StyledNicknameLink as Link } from 'components/UserLabel';
 import UserAwardPopover from 'components/UserAwardPopover';
 
 import { PuzzleFrame } from 'containers/PuzzleShowPage/Frame';
 
-const StyledNicknameLink = Link.extend`
+export const StyledNicknameLink = Link.extend`
   font-size: 1em;
   color: #b928d7;
   margin: 5px;
   word-break: break-all;
 `;
 
-const StyledTime = styled.span`
+export const StyledTime = styled.span`
   font-size: 0.8em;
   color: gray;
   margin: 5px;
 `;
 
-const Splitter = styled.hr`
+export const Splitter = styled.hr`
   border-top: 1px solid #b928d7;
   margin: 5px 0;
   width: 100%;
 `;
 
-const Indexer = styled.span`
+export const Indexer = styled.span`
   background-color: #9716ba;
   color: #fce6d3;
   font-weight: bold;
@@ -53,7 +54,9 @@ function Question(props) {
         </StyledTime>
       </Box>
       <Splitter />
-      <Box width={1}>{props.question}</Box>
+      <Box width={1}>
+        <span dangerouslySetInnerHTML={{ __html: line2md(props.question) }} />
+      </Box>
     </PuzzleFrame>
   );
 }

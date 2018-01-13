@@ -5,11 +5,12 @@
  */
 
 import {
-  DEFAULT_ACTION,
+  UPDATE_DIALOGUE,
 } from './constants';
 
-export function defaultAction() {
+export function updateDialogue(data) {
   return {
-    type: DEFAULT_ACTION,
+    type: UPDATE_DIALOGUE,
+    data,
   };
 }

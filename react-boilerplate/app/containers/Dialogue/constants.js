@@ -4,4 +4,4 @@
  *
  */
 
-export const DEFAULT_ACTION = 'app/Dialogue/DEFAULT_ACTION';
+export const UPDATE_DIALOGUE = 'app/containers/Dialogue/UPDATE_DIALOGUE';
