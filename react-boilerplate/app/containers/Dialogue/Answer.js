@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import good from 'images/good.svg';
-import victory from 'images/victory.svg';
+import bulb from 'images/bulb.svg';
+import cracker from 'images/cracker.svg';
 import { ImgMd } from 'style-store';
 
 import { PuzzleFrame } from 'containers/PuzzleShowPage/Frame';
@@ -18,8 +18,8 @@ function Answer(props) {
   if (props.answer !== null) {
     return (
       <PuzzleFrame>
-        {props.good && <Img src={good} alt="Good!" />}
-        {props.true && <Img src={victory} alt="Victory!" />}
+        {props.good && <Img src={bulb} alt="Good!" />}
+        {props.true && <Img src={cracker} alt="Congratulations!" />}
         {props.answer}
       </PuzzleFrame>
     );
