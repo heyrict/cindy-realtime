@@ -4,7 +4,7 @@
  *
  */
 
-import { PUZZLE_SHOWN, QUESTION_ADDED } from './constants';
+import { PUZZLE_SHOWN, PUZZLE_HID, ADD_QUESTION } from './constants';
 
 export function puzzleShown(puzzleId) {
   return {
@@ -13,9 +13,16 @@ export function puzzleShown(puzzleId) {
   };
 }
 
+export function puzzleHid(puzzleId) {
+  return {
+    type: PUZZLE_HID,
+    data: { puzzleId },
+  };
+}
+
 export function putQuestion(data) {
   return {
-    type: QUESTION_ADDED,
+    type: ADD_QUESTION,
     data,
   };
 }

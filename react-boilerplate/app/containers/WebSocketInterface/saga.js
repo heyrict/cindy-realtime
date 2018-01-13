@@ -19,7 +19,7 @@ function* handleInternalAction(socket, action) {
   for (let i = 1; i <= 10; i += 1) {
     try {
       const { stream = 'viewer', ...payload } = action;
-      socket.stream(stream).send(payload);
+      socket.send(action);
       return;
     } catch (e) {
       console.log(`Socket not connected. Retry...${i}`);
@@ -42,14 +42,12 @@ function* externalListener(channel) {
 
 function websocketWatch(socket) {
   return eventChannel((emitter) => {
-    socket.listen('/ws/');
-    socket.socket.onmessage = ({ data }) => {
-      data = JSON.parse(data);
-      const { stream, payload } = data;
-      console.log('watch:', data);
+    socket.listen((action) => {
+      const { stream, payload } = action;
+      console.log('watch:', action);
       if (stream) emitter(payload);
-      else emitter(data);
-    };
+      else emitter(action);
+    });
 
     return () => {
       socket.close();

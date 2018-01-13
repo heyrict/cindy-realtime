@@ -7,11 +7,15 @@
 import { componentsUserFragment } from 'containers/PuzzleActiveList/constants';
 
 export const PUZZLE_SHOWN = 'app/containers/PuzzleShowPage/PUZZLE_SHOWN';
+export const PUZZLE_HID = 'app/containers/PuzzleShowPage/PUZZLE_HID';
+
+export const DIALOGUE_ADDED = 'ws/DIALOGUE_ADDED';
+export const DIALOGUE_UPDATED = 'ws/DIALOGUE_UPDATED';
 
 export const INIT_PUZZLE_SHOW =
   'app/containers/PuzzleShowPage/INIT_PUZZLE_SHOW';
 
-export const QUESTION_ADDED = 'app/containers/PuzzleShowPage/QUESTION_ADDED';
+export const ADD_QUESTION = 'app/containers/PuzzleShowPage/ADD_QUESTION';
 
 // {{{ const componentsDialogueFragment
 export const componentsDialogueFragment = `
@@ -28,6 +32,17 @@ export const componentsDialogueFragment = `
     answeredtime
   }
   ${componentsUserFragment}
+`;
+// }}}
+
+// {{{ const dialogueQuery
+export const dialogueQuery = `
+  query($id: ID!) {
+    dialogue(id: $id) {
+      ...components_dialogue
+    }
+  }
+  ${componentsDialogueFragment}
 `;
 // }}}
 

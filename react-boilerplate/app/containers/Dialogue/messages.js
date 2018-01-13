@@ -22,4 +22,8 @@ export default defineMessages({
     id: 'app.containers.Dialogue.edit',
     defaultMessage: 'Edit',
   },
+  answerInputHint: {
+    id: 'app.containers.Dialogue.answerInputHint',
+    defaultMessage: 'Put your answer',
+  },
 });

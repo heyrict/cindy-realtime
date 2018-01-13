@@ -25,8 +25,8 @@ The required returned form is:
 import json
 
 from channels import Channel, Group
-from channels.generic.websockets import (JsonWebsocketConsumer,
-                                         WebsocketDemultiplexer)
+from channels.auth import channel_session_user
+from channels.generic.websockets import JsonWebsocketConsumer
 from channels.handler import AsgiHandler
 from django.contrib.auth.models import AnonymousUser
 from django.db.models.signals import post_save
@@ -35,18 +35,19 @@ from graphql_relay import from_global_id, to_global_id
 
 from schema import schema
 
-from .models import Puzzle, User
-from .schema import PuzzleNode
+from .models import Dialogue, Puzzle, User
+from .schema import DialogueNode, PuzzleNode
 
 onlineViewerCount = 0
 
 # {{{1 Constants
-ADD_PUZZLE = "ws/ADD_PUZZLE"
-PUZZLE_CONNECT = "ws/PUZZLE_CONNECT"
-PUZZLE_DISCONNECT = "ws/PUZZLE_DISCONNECT"
+PUZZLE_CONNECT = "app/containers/PuzzleShowPage/PUZZLE_SHOWN"
+PUZZLE_DISCONNECT = "app/containers/PuzzleShowPage/PUZZLE_HID"
 
 PUZZLE_ADDED = "ws/PUZZLE_ADDED"
 PUZZLE_UPDATED = "ws/PUZZLE_UPDATED"
+DIALOGUE_ADDED = "ws/DIALOGUE_ADDED"
+DIALOGUE_UPDATED = "ws/DIALOGUE_UPDATED"
 
 VIEWER_CONNECT = "ws/VIEWER_CONNECT"
 VIEWER_DISCONNECT = "ws/VIEWER_DISCONNECT"
@@ -55,8 +56,34 @@ UPDATE_ONLINE_VIEWER_COUNT = "ws/UPDATE_ONLINE_VIEWER_COUNT"
 # }}}
 
 
+@receiver(post_save, sender=Dialogue)
+def send_dialogue_update(sender, instance, created, *args, **kwargs):
+    dialogueId = instance.id
+    print("PUZZLE UPDATE TRACKED:", instance, created)
+    if created:
+        Group("puzzle-%d" % instance.puzzle.id).send({
+            "text":
+            json.dumps({
+                "type": DIALOGUE_ADDED,
+                "data": {
+                    "id": to_global_id(DialogueNode.__name__, dialogueId),
+                }
+            })
+        })
+    else:
+        Group("puzzle-%d" % instance.puzzle.id).send({
+            "text":
+            json.dumps({
+                "type": DIALOGUE_UPDATED,
+                "data": {
+                    "id": to_global_id(DialogueNode.__name__, dialogueId)
+                }
+            })
+        })
+
+
 @receiver(post_save, sender=Puzzle)
-def send_update(sender, instance, created, *args, **kwargs):
+def send_puzzle_update(sender, instance, created, *args, **kwargs):
     puzzleId = instance.id
     print("PUZZLE UPDATE TRACKED:", instance, created)
     if created:
@@ -83,53 +110,60 @@ def send_update(sender, instance, created, *args, **kwargs):
         })
 
 
-class ViewerUpdater(JsonWebsocketConsumer):
-    strict_ordering = False
-    http_user_and_session = True
-    groupName = "viewer"
-
-    def connect(self, message, multiplexer, **kwargs):
-        print("view connected")
-        Group(self.groupName).add(message.reply_channel)
-        global onlineViewerCount
-        onlineViewerCount += 1
-        if not message.user.is_anonymous:
-            message.user.online = True
-            message.user.save()
-
-    def disconnect(self, message, multiplexer, **kwargs):
-        print("view disconnected")
-        Group(self.groupName).discard(message.reply_channel)
-        global onlineViewerCount
-        onlineViewerCount -= 1
-        if not message.user.is_anonymous:
-            message.user.online = False
-            message.user.save()
-
-        self.broadcast_status()
-
-    def receive(self, content, multiplexer, **kwargs):
-        print("viewer received", content)
-        if content.get("type") == VIEWER_CONNECT:
-            self.broadcast_status()
-        elif content.get("type") == VIEWER_DISCONNECT:
-            self.close()
-
-    def broadcast_status(self):
-        global onlineViewerCount
-        #onlineUsers = User.objects.filter(online=True)
-        self.group_send(self.groupName, {
+def broadcast_status():
+    global onlineViewerCount
+    #onlineUsers = User.objects.filter(online=True)
+    Group("viewer").send({
+        "text":
+        json.dumps({
             "type": UPDATE_ONLINE_VIEWER_COUNT,
             "data": {
                 "onlineViewerCount": onlineViewerCount
             }
         })
+    })
 
 
-class Demultiplexer(WebsocketDemultiplexer):
-    '''
-    Demultiplexer. Accepts { stream : puzzleList, payload: content }
-    '''
-    consumers = {
-        "viewer": ViewerUpdater,
-    }
+@channel_session_user
+def ws_connect(message):
+    message.reply_channel.send({"accept": True})
+    Group("viewer").add(message.reply_channel)
+
+    global onlineViewerCount
+    onlineViewerCount += 1
+
+    if not message.user.is_anonymous:
+        message.user.online = True
+        message.user.save()
+
+
+@channel_session_user
+def ws_disconnect(message):
+    Group("viewer").discard(message.reply_channel)
+
+    global onlineViewerCount
+    onlineViewerCount -= 1
+
+    if not message.user.is_anonymous:
+        message.user.online = False
+        message.user.save()
+
+    broadcast_status()
+
+
+@channel_session_user
+def ws_message(message):
+    print("Received", message.content["text"])
+    data = json.loads(message.content["text"])
+
+    if data.get("type") == VIEWER_CONNECT:
+        broadcast_status()
+    elif data.get("type") == VIEWER_DISCONNECT:
+        Group("viewer").discard("viewer")
+        broadcast_status()
+    elif data.get("type") == PUZZLE_CONNECT:
+        Group("puzzle-%s" % data["data"]["puzzleId"])\
+                .add(message.reply_channel)
+    elif data.get("type") == PUZZLE_DISCONNECT:
+        Group("puzzle-%s" % data["data"]["puzzleId"])\
+                .discard(message.reply_channel)

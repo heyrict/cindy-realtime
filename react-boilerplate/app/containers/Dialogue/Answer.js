@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { commitMutation, graphql } from 'react-relay';
 import environment from 'Environment';
 import moment from 'moment';
+import bootbox from 'bootbox';
 import { line2md } from 'common';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -26,7 +27,7 @@ import {
 import { Splitter, StyledNicknameLink, StyledTime } from './Question';
 
 import messages from './messages';
-import { updateDialogue } from './actions';
+import { updateAnswer } from './actions';
 
 // {{{ const answerMutation
 const answerMutation = graphql`
@@ -117,6 +118,7 @@ class Answer extends React.PureComponent {
   }
 
   handleSubmit() {
+    if (this.state.content === '') return;
     if (
       this.state.content === this.props.answer &&
       this.state.good === this.props.good &&
@@ -139,12 +141,12 @@ class Answer extends React.PureComponent {
       },
       onCompleted: (response, errors) => {
         if (errors) {
-          console.log(errors);
+          bootbox.alert(errors.map((e) => e.message).join(','));
         } else if (response) {
           const dialogue = response.updateAnswer.dialogue;
           // TODO: Update Global User Interface here
           this.props.dispatch(
-            updateDialogue({
+            updateAnswer({
               dialogue,
             })
           );
@@ -159,12 +161,16 @@ class Answer extends React.PureComponent {
       return (
         <PuzzleFrame>
           <Box w={1}>
-            <StyledInput
-              placeholder="Input something"
-              value={this.state.content}
-              onChange={this.handleChange}
-              onKeyDown={this.handleKeyDown}
-            />
+            <FormattedMessage {...messages.answerInputHint}>
+              {(msg) => (
+                <StyledInput
+                  placeholder={msg}
+                  value={this.state.content}
+                  onChange={this.handleChange}
+                  onKeyDown={this.handleKeyDown}
+                />
+              )}
+            </FormattedMessage>
             <Flex align="center" justify="center" wrap>
               <Box w={[1, 1 / 2, 5 / 12]}>
                 <FormattedMessage {...messages.good} />
@@ -253,7 +259,7 @@ const mapStateToProps = createStructuredSelector({
     (substate) => substate.get('puzzle').status
   ),
   user: createSelector(selectUserNavbarDomain, (substate) =>
-    substate.get('user')
+    substate.get('user').toJS()
   ),
 });
 

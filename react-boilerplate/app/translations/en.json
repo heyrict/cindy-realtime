@@ -11,6 +11,7 @@
   "app.components.TitleLabel.littleAlbat": "Little Albat",
   "app.components.TitleLabel.others": "Others & Formal",
   "app.components.TitleLabel.twentyQuestions": "Twenty Questions",
+  "app.containers.Dialogue.answerInputHint": "Put your answer",
   "app.containers.Dialogue.edit": "Edit",
   "app.containers.Dialogue.good": "Good Question",
   "app.containers.Dialogue.true": "True Answer",

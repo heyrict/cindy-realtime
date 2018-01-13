@@ -4,4 +4,4 @@
  *
  */
 
-export const UPDATE_DIALOGUE = 'app/containers/Dialogue/UPDATE_DIALOGUE';
+export const UPDATE_ANSWER = 'app/containers/Dialogue/UPDATE_ANSWER';

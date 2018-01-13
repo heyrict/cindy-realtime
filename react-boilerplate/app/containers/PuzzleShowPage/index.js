@@ -25,7 +25,7 @@ import Frame from './Frame';
 import makeSelectPuzzleShowPage from './selectors';
 import saga from './saga';
 import messages from './messages';
-import { puzzleShown } from './actions';
+import { puzzleShown, puzzleHid } from './actions';
 import QuestionPutBox from './QuestionPutBox';
 
 const Title = styled.h1`
@@ -37,6 +37,10 @@ export class PuzzleShowPage extends React.Component {
   componentDidMount() {
     this.puzzleId = this.props.match.params.id;
     this.props.dispatch(puzzleShown(this.puzzleId));
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch(puzzleHid(this.puzzleId));
   }
 
   render() {

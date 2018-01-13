@@ -11,6 +11,7 @@
   "app.components.TitleLabel.littleAlbat": "亀夫君問題",
   "app.components.TitleLabel.others": "新＆形式",
   "app.components.TitleLabel.twentyQuestions": "２０の扉",
+  "app.containers.Dialogue.answerInputHint": "質問に回答する",
   "app.containers.Dialogue.edit": "編集",
   "app.containers.Dialogue.good": "良い質問",
   "app.containers.Dialogue.true": "正解",

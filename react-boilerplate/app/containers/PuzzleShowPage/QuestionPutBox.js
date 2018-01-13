@@ -9,35 +9,13 @@ import Constrained from 'components/Constrained';
 import { commitMutation, graphql } from 'react-relay';
 import environment from 'Environment';
 
-import { putQuestion } from './actions';
 import messages from './messages';
 
 // {{{ const putQuestionMutation
 const putQuestionMutation = graphql`
   mutation QuestionPutBoxMutation($input: CreateQuestionInput!) {
     createQuestion(input: $input) {
-      dialogue {
-        id
-        user {
-          rowid
-          nickname
-          currentAward {
-            id
-            created
-            award {
-              id
-              name
-              description
-            }
-          }
-        }
-        good
-        true
-        question
-        answer
-        created
-        answeredtime
-      }
+      clientMutationId
     }
   }
 `;
@@ -95,14 +73,6 @@ class QuestionPutBox extends React.PureComponent {
       onCompleted: (response, errors) => {
         if (errors) {
           console.log(errors);
-        } else if (response) {
-          const dialogue = response.createQuestion.dialogue;
-          // TODO: Update Global User Interface here
-          this.props.dispatch(
-            putQuestion({
-              dialogue,
-            })
-          );
         }
       },
     });
@@ -115,7 +85,7 @@ class QuestionPutBox extends React.PureComponent {
         <Flex mx={-1}>
           <FormattedMessage
             {...messages[
-              this.props.currentUserId === null ? 'disableInput' : 'input'
+              this.props.currentUserId === undefined ? 'disableInput' : 'input'
             ]}
           >
             {(msg) => (

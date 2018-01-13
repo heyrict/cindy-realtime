@@ -5,12 +5,12 @@
  */
 
 import {
-  UPDATE_DIALOGUE,
+  UPDATE_ANSWER,
 } from './constants';
 
-export function updateDialogue(data) {
+export function updateAnswer(data) {
   return {
-    type: UPDATE_DIALOGUE,
+    type: UPDATE_ANSWER,
     data,
   };
 }
