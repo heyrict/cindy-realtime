@@ -2,7 +2,11 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import { gqlQuery } from 'Environment';
 import { to_global_id as g } from 'common';
 
-import { PUZZLE_SHOWN, INIT_PUZZLE_SHOW, puzzleShowQuery } from './constants';
+import {
+  PUZZLE_SHOWN,
+  INIT_PUZZLE_SHOW,
+  puzzleShowQuery,
+} from './constants';
 
 function* fetchPuzzleBody(action) {
   const data = yield call(

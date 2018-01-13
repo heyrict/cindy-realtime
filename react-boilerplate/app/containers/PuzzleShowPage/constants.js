@@ -11,6 +11,26 @@ export const PUZZLE_SHOWN = 'app/containers/PuzzleShowPage/PUZZLE_SHOWN';
 export const INIT_PUZZLE_SHOW =
   'app/containers/PuzzleShowPage/INIT_PUZZLE_SHOW';
 
+export const QUESTION_ADDED = 'app/containers/PuzzleShowPage/QUESTION_ADDED';
+
+// {{{ const componentsDialogueFragment
+export const componentsDialogueFragment = `
+  fragment components_dialogue on DialogueNode {
+    id
+    user {
+      ...components_user
+    }
+    good
+    true
+    question
+    answer
+    created
+    answeredtime
+  }
+  ${componentsUserFragment}
+`;
+// }}}
+
 // {{{ const puzzleShowQuery
 export const puzzleShowQuery = `
   query($id: ID!) {
@@ -18,16 +38,7 @@ export const puzzleShowQuery = `
       edges {
         node {
           ... on DialogueNode {
-            id
-            user {
-              ...components_user
-            }
-            good
-            true
-            question
-            answer
-            created
-            answeredtime
+            ...components_dialogue
           }
 
           ... on HintNode {
@@ -53,6 +64,6 @@ export const puzzleShowQuery = `
       modified
     }
   }
-  ${componentsUserFragment}
+  ${componentsDialogueFragment}
 `;
 // }}}

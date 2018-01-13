@@ -159,14 +159,14 @@ class PuzzleShowUnionConnection(relay.Connection):
 # {{{1 Mutations
 # {{{2 CreatePuzzle
 class CreatePuzzle(relay.ClientIDMutation):
+    puzzle = graphene.Field(PuzzleNode)
+
     class Input:
         puzzleTitle = graphene.String(required=True)
         puzzleGenre = graphene.Int(required=True)
         puzzleYami = graphene.Boolean(required=True)
         puzzleContent = graphene.String(required=True)
         puzzleSolution = graphene.String(required=True)
-
-    puzzle = graphene.Field(PuzzleNode)
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -200,6 +200,35 @@ class CreatePuzzle(relay.ClientIDMutation):
             modified=created)
 
         return CreatePuzzle(puzzle=puzzle)
+
+
+# {{{2 CreateQuestion
+class CreateQuestion(graphene.ClientIDMutation):
+    dialogue = graphene.Field(DialogueNode)
+
+    class Input:
+        content = graphene.String()
+        puzzleId = graphene.Int()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        content = input['content']
+        puzzleId = input['puzzleId']
+
+        if not content:
+            raise ValidationError(_("Question content cannot be empty!"))
+
+        puzzle = Puzzle.objects.get(id=puzzleId)
+        created = timezone.now()
+
+        dialogue = Dialogue.objects.create(
+            user=user, puzzle=puzzle, question=content, created=created)
+
+        return CreateQuestion(dialogue=dialogue)
 
 
 # {{{2 Login
@@ -441,6 +470,7 @@ class Query(object):
 # {{{1 Mutation
 class Mutation(graphene.ObjectType):
     create_puzzle = CreatePuzzle.Field()
+    create_question = CreateQuestion.Field()
     login = UserLogin.Field()
     logout = UserLogout.Field()
     register = UserRegister.Field()

@@ -10,21 +10,23 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage, intlShape } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
+import { createStructuredSelector, createSelector } from 'reselect';
 import { compose } from 'redux';
 
 import injectSaga from 'utils/injectSaga';
+import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
 import { genre_type_dict as genreType } from 'common';
 import genreMessages from 'components/TitleLabel/messages';
 import Dialogue from 'containers/Dialogue/Loadable';
 import { Box } from 'rebass';
+import Constrained from 'components/Constrained';
 
 import Frame from './Frame';
-import Constrained from 'components/Constrained';
 import makeSelectPuzzleShowPage from './selectors';
 import saga from './saga';
 import messages from './messages';
 import { puzzleShown } from './actions';
+import QuestionPutBox from './QuestionPutBox';
 
 const Title = styled.h1`
   font-size: 2em;
@@ -33,41 +35,43 @@ const Title = styled.h1`
 
 export class PuzzleShowPage extends React.Component {
   componentDidMount() {
-    this.props.dispatch(puzzleShown(this.props.match.params.id));
+    this.puzzleId = this.props.match.params.id;
+    this.props.dispatch(puzzleShown(this.puzzleId));
   }
 
   render() {
-    const P = this.props.puzzleshowpage;
-    const D = P.puzzleShowUnion;
+    const P = this.props.puzzleshowpage.puzzle;
+    const D = this.props.puzzleshowpage.puzzleShowUnion;
+    const U = this.props.user.userId;
 
-    if (P.puzzle === null) {
+    if (P === null) {
       return <div>Loading...</div>;
     }
 
     const _ = this.context.intl.formatMessage;
     const translateGenreCode = (x) => _(genreMessages[genreType[x]]);
-    const genre = translateGenreCode(P.puzzle.genre);
+    const genre = translateGenreCode(P.genre);
 
     return (
       <div>
         <Helmet>
           <title>
-            {P.puzzle ? `Cindy - [${genre}] ${P.puzzle.title}` : _(messages.title)}
+            {P ? `Cindy - [${genre}] ${P.title}` : _(messages.title)}
           </title>
           <meta name="description" content="Description of PuzzleShowPage" />
         </Helmet>
         <Constrained>
-          <Title>{`[${genre}] ${P.puzzle.title}`}</Title>
+          <Title>{`[${genre}] ${P.title}`}</Title>
         </Constrained>
-        <Frame
-          user={P.puzzle.user}
-          text={P.puzzle.content}
-          time={P.puzzle.created}
-        />
+        <Frame user={P.user} text={P.content} time={P.created} />
         {D.edges.map((node, index) => (
           <Dialogue key={node.node.id} index={index + 1} {...node} />
         ))}
-        <Frame text={P.puzzle.solution} />
+        {P.status !== 0 && <Frame text={P.solution} />}
+        {P.status === 0 &&
+          U !== P.user.rowid && (
+            <QuestionPutBox puzzleId={parseInt(this.puzzleId, 10)} />
+          )}
         <Box py={10} width={1} />
       </div>
     );
@@ -81,6 +85,7 @@ PuzzleShowPage.contextTypes = {
 PuzzleShowPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
   puzzleshowpage: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -92,6 +97,9 @@ PuzzleShowPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   puzzleshowpage: makeSelectPuzzleShowPage(),
+  user: createSelector(selectUserNavbarDomain, (substate) =>
+    substate.get('user').toJS()
+  ),
 });
 
 function mapDispatchToProps(dispatch) {

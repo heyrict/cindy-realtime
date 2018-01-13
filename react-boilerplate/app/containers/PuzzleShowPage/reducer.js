@@ -5,10 +5,9 @@
  */
 
 import { fromJS } from 'immutable';
-import { PUZZLE_SHOWN, INIT_PUZZLE_SHOW } from './constants';
+import { PUZZLE_SHOWN, INIT_PUZZLE_SHOW, QUESTION_ADDED } from './constants';
 
 const initialState = fromJS({
-  puzzleId: 0,
   puzzle: null,
   puzzleShowUnion: {
     edges: [],
@@ -22,10 +21,11 @@ function puzzleShowPageReducer(state = initialState, action) {
     case INIT_PUZZLE_SHOW:
       return state
         .setIn(['puzzle'], action.data.puzzle)
-        .setIn(
-          ['puzzleShowUnion', 'edges'],
-          action.data.puzzleShowUnion.edges
-        );
+        .setIn(['puzzleShowUnion', 'edges'], action.data.puzzleShowUnion.edges);
+    case QUESTION_ADDED:
+      return state.updateIn(['puzzleShowUnion', 'edges'], (e) =>
+        Array.concat(e, [{ node: action.data.dialogue }])
+      );
     default:
       return state;
   }
