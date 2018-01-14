@@ -5,7 +5,7 @@ import { commitMutation, graphql } from 'react-relay';
 import environment from 'Environment';
 import moment from 'moment';
 import bootbox from 'bootbox';
-import { line2md } from 'common';
+import { line2md, from_global_id as f } from 'common';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector, createSelector } from 'reselect';
@@ -33,28 +33,7 @@ import { updateAnswer } from './actions';
 const answerMutation = graphql`
   mutation AnswerMutation($input: UpdateAnswerInput!) {
     updateAnswer(input: $input) {
-      dialogue {
-        id
-        user {
-          rowid
-          nickname
-          currentAward {
-            id
-            created
-            award {
-              id
-              name
-              description
-            }
-          }
-        }
-        good
-        true
-        question
-        answer
-        created
-        answeredtime
-      }
+      clientMutationId
     }
   }
 `;
@@ -71,7 +50,7 @@ const StyledButton = Button.extend`
   width: 100%;
 `;
 
-const StyledEditButton = Button.extend`
+export const StyledEditButton = Button.extend`
   padding: 5px 10px;
   margin: 0 5px;
   border-radius: 10px;
@@ -117,6 +96,22 @@ class Answer extends React.PureComponent {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    // When a user has two windows open, escape editMode
+    // if the answer is updated.
+    if (
+      this.props.answer !== nextProps.answer ||
+      this.props.good !== nextProps.good ||
+      this.props.true !== nextProps.true
+    ) {
+      this.setState({
+        editMode:
+          nextProps.owner.rowid === nextProps.user.userId &&
+          nextProps.answer === null,
+      });
+    }
+  }
+
   handleSubmit() {
     if (this.state.content === '') return;
     if (
@@ -128,7 +123,7 @@ class Answer extends React.PureComponent {
       return;
     }
 
-    const id = atob(this.props.id).split(':')[1];
+    const id = parseInt(f(this.props.id)[1], 10);
     commitMutation(environment, {
       mutation: answerMutation,
       variables: {
@@ -142,14 +137,6 @@ class Answer extends React.PureComponent {
       onCompleted: (response, errors) => {
         if (errors) {
           bootbox.alert(errors.map((e) => e.message).join(','));
-        } else if (response) {
-          const dialogue = response.updateAnswer.dialogue;
-          // TODO: Update Global User Interface here
-          this.props.dispatch(
-            updateAnswer({
-              dialogue,
-            })
-          );
         }
       },
     });
@@ -211,9 +198,17 @@ class Answer extends React.PureComponent {
             </StyledTime>
           </Box>
           <Splitter />
-          {this.props.good && <Img src={bulb} alt="Good!" />}
+          {this.props.good && (
+            <Img style={{ padding: '5px 2px' }} src={bulb} alt="Good!" />
+          )}
           {this.props.true && <Img src={cracker} alt="Congratulations!" />}
           <span
+            style={{
+              fontSize:
+                (this.props.true && '1.3em') ||
+                (this.props.good && '1.15em') ||
+                '1em',
+            }}
             dangerouslySetInnerHTML={{ __html: line2md(this.props.answer) }}
           />
           {this.props.owner.rowid === this.props.user.userId &&

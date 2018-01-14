@@ -12,10 +12,16 @@ export const PUZZLE_HID = 'app/containers/PuzzleShowPage/PUZZLE_HID';
 export const DIALOGUE_ADDED = 'ws/DIALOGUE_ADDED';
 export const DIALOGUE_UPDATED = 'ws/DIALOGUE_UPDATED';
 
+export const HINT_ADDED = 'ws/HINT_ADDED';
+export const HINT_UPDATED = 'ws/HINT_UPDATED';
+
 export const INIT_PUZZLE_SHOW =
   'app/containers/PuzzleShowPage/INIT_PUZZLE_SHOW';
 
 export const ADD_QUESTION = 'app/containers/PuzzleShowPage/ADD_QUESTION';
+
+export const ADD_HINT = 'app/containers/PuzzleShowPage/ADD_HINT';
+export const UPDATE_HINT = 'app/containers/PuzzleShowPage/UPDATE_HINT';
 
 // {{{ const componentsDialogueFragment
 export const componentsDialogueFragment = `
@@ -43,6 +49,18 @@ export const dialogueQuery = `
     }
   }
   ${componentsDialogueFragment}
+`;
+// }}}
+
+// {{{ const hintQuery
+export const hintQuery = `
+  query($id: ID!) {
+    hint(id: $id) {
+      id
+      content
+      created
+    }
+  }
 `;
 // }}}
 

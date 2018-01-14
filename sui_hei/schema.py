@@ -236,7 +236,7 @@ class UpdateAnswer(graphene.ClientIDMutation):
     dialogue = graphene.Field(DialogueNode)
 
     class Input:
-        dialogueId = graphene.String()
+        dialogueId = graphene.Int()
         content = graphene.String()
         good = graphene.Boolean()
         true = graphene.Boolean()
@@ -266,6 +266,38 @@ class UpdateAnswer(graphene.ClientIDMutation):
         dialogue.save()
 
         return UpdateAnswer(dialogue=dialogue)
+
+
+# {{{2 UpdateHint
+class UpdateHint(relay.ClientIDMutation):
+    hint = graphene.Field(HintNode)
+
+    class Input:
+        content = graphene.String()
+        hintId = graphene.Int()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        hintId = input['hintId']
+        content = input['content']
+
+        if not content:
+            raise ValidationError(_("Hint content cannot be empty!"))
+
+        hint = Hint.objects.get(id=hintId)
+
+        if hint.puzzle.user != user:
+            raise ValidationError(
+                _("Only puzzle's creator can edit this hint"))
+
+        hint.content = content
+        hint.save()
+
+        return UpdateHint(hint=hint)
 
 
 # {{{2 Login
@@ -446,55 +478,6 @@ class Query(object):
         else:
             return Star.objects.all()
 
-    # {{{3 resolve single
-    def resolve_user(self, info, **kwargs):
-        user_id = kwargs.get("rowid")
-        if user_id is not None:
-            return User.objects.get(pk=user_id)
-        return None
-
-    def resolve_award(self, info, **kwargs):
-        award_id = kwargs.get("rowid")
-        if award_id is not None:
-            return Award.objects.get(pk=award_id)
-        return None
-
-    def resolve_useraward(self, info, **kwargs):
-        useraward_id = kwargs.get("rowid")
-        if useraward_id is not None:
-            return UserAward.objects.get(pk=useraward_id)
-        return None
-
-    def resolve_puzzle(self, info, **kwargs):
-        puzzle_id = kwargs.get("rowid")
-        if puzzle_id is not None:
-            return Puzzle.objects.get(pk=puzzle_id)
-        return None
-
-    def resolve_dialogue(self, info, **kwargs):
-        dialogue_id = kwargs.get("rowid")
-        if dialogue_id is not None:
-            return Minichat.objects.get(pk=dialogue_id)
-        return None
-
-    def resolve_minichat(self, info, **kwargs):
-        minichat_id = kwargs.get("rowid")
-        if minichat_id is not None:
-            return Minichat.objects.get(pk=minichat_id)
-        return None
-
-    def resolve_comment(self, info, **kwargs):
-        comment_id = kwargs.get("rowid")
-        if comment_id is not None:
-            return Comment.objects.get(pk=comment_id)
-        return None
-
-    def resolve_star(self, info, **kwargs):
-        star_id = kwargs.get("rowid")
-        if star_id is not None:
-            return Star.objects.get(pk=star_id)
-        return None
-
     # {{{3 resolve union
     def resolve_puzzle_show_union(self, info, **kwargs):
         _, puzzleId = from_global_id(kwargs["id"])
@@ -509,6 +492,7 @@ class Mutation(graphene.ObjectType):
     create_puzzle = CreatePuzzle.Field()
     create_question = CreateQuestion.Field()
     update_answer = UpdateAnswer.Field()
+    update_hint = UpdateHint.Field()
     login = UserLogin.Field()
     logout = UserLogout.Field()
     register = UserRegister.Field()

@@ -15,10 +15,11 @@ import { compose } from 'redux';
 
 import injectSaga from 'utils/injectSaga';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
-import { genre_type_dict as genreType } from 'common';
+import { from_global_id as f, genre_type_dict as genreType } from 'common';
 import genreMessages from 'components/TitleLabel/messages';
 import Dialogue from 'containers/Dialogue/Loadable';
 import { Box } from 'rebass';
+import Hint from 'containers/Hint';
 import Constrained from 'components/Constrained';
 
 import Frame from './Frame';
@@ -55,6 +56,7 @@ export class PuzzleShowPage extends React.Component {
     const _ = this.context.intl.formatMessage;
     const translateGenreCode = (x) => _(genreMessages[genreType[x]]);
     const genre = translateGenreCode(P.genre);
+    let index = 0;
 
     return (
       <div>
@@ -68,9 +70,21 @@ export class PuzzleShowPage extends React.Component {
           <Title>{`[${genre}] ${P.title}`}</Title>
         </Constrained>
         <Frame user={P.user} text={P.content} created={P.created} />
-        {D.edges.map((node, index) => (
-          <Dialogue key={node.node.id} index={index + 1} {...node} />
-        ))}
+        {D.edges.map((node) => {
+          const type = f(node.node.id)[0];
+          if (type === 'DialogueNode') {
+            index += 1;
+            return (
+              <Dialogue
+                key={node.node.id}
+                index={index}
+                type={type}
+                {...node}
+              />
+            );
+          }
+          return <Hint key={node.node.id} {...node} />;
+        })}
         {P.status !== 0 && <Frame text={P.solution} solved={P.modified} />}
         {P.status === 0 &&
           U !== P.user.rowid && (

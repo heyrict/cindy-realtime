@@ -35,8 +35,7 @@ from graphql_relay import from_global_id, to_global_id
 
 from schema import schema
 
-from .models import Dialogue, Puzzle, User
-from .schema import DialogueNode, PuzzleNode
+from .models import Dialogue, Hint, Puzzle, User
 
 onlineViewerCount = 0
 
@@ -48,6 +47,8 @@ PUZZLE_ADDED = "ws/PUZZLE_ADDED"
 PUZZLE_UPDATED = "ws/PUZZLE_UPDATED"
 DIALOGUE_ADDED = "ws/DIALOGUE_ADDED"
 DIALOGUE_UPDATED = "ws/DIALOGUE_UPDATED"
+HINT_ADDED = "ws/HINT_ADDED"
+HINT_UPDATED = "ws/HINT_UPDATED"
 
 VIEWER_CONNECT = "ws/VIEWER_CONNECT"
 VIEWER_DISCONNECT = "ws/VIEWER_DISCONNECT"
@@ -66,7 +67,7 @@ def send_dialogue_update(sender, instance, created, *args, **kwargs):
             json.dumps({
                 "type": DIALOGUE_ADDED,
                 "data": {
-                    "id": to_global_id(DialogueNode.__name__, dialogueId),
+                    "id": to_global_id('DialogueNode', dialogueId),
                 }
             })
         })
@@ -76,7 +77,7 @@ def send_dialogue_update(sender, instance, created, *args, **kwargs):
             json.dumps({
                 "type": DIALOGUE_UPDATED,
                 "data": {
-                    "id": to_global_id(DialogueNode.__name__, dialogueId)
+                    "id": to_global_id('DialogueNode', dialogueId)
                 }
             })
         })
@@ -92,7 +93,7 @@ def send_puzzle_update(sender, instance, created, *args, **kwargs):
             json.dumps({
                 "type": PUZZLE_ADDED,
                 "data": {
-                    "id": to_global_id(PuzzleNode.__name__, puzzleId),
+                    "id": to_global_id('PuzzleNode', puzzleId),
                     "title": instance.title,
                     "nickname": instance.user.nickname
                 }
@@ -104,7 +105,34 @@ def send_puzzle_update(sender, instance, created, *args, **kwargs):
             json.dumps({
                 "type": PUZZLE_UPDATED,
                 "data": {
-                    "id": to_global_id(PuzzleNode.__name__, puzzleId)
+                    "id": to_global_id('PuzzleNode', puzzleId)
+                }
+            })
+        })
+
+
+@receiver(post_save, sender=Hint)
+def send_hint_update(sender, instance, created, *args, **kwargs):
+    hintId = instance.id
+    puzzleId = instance.puzzle.id
+    print("HINT UPDATE TRACKED:", instance, created)
+    if created:
+        Group("puzzle-%s" % puzzleId).send({
+            "text":
+            json.dumps({
+                "type": HINT_ADDED,
+                "data": {
+                    "id": to_global_id('HintNode', hintId),
+                }
+            })
+        })
+    else:
+        Group("puzzle-%s" % puzzleId).send({
+            "text":
+            json.dumps({
+                "type": HINT_UPDATED,
+                "data": {
+                    "id": to_global_id('HintNode', hintId),
                 }
             })
         })

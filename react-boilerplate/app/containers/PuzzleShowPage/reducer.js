@@ -6,7 +6,7 @@
 
 import { fromJS } from 'immutable';
 import { UPDATE_ANSWER } from 'containers/Dialogue/constants';
-import { PUZZLE_SHOWN, INIT_PUZZLE_SHOW, ADD_QUESTION } from './constants';
+import { PUZZLE_SHOWN, INIT_PUZZLE_SHOW, ADD_QUESTION, ADD_HINT, UPDATE_HINT } from './constants';
 
 const initialState = fromJS({
   puzzle: null,
@@ -33,6 +33,19 @@ function puzzleShowPageReducer(state = initialState, action) {
           (edge) =>
             edge.node.id === action.data.dialogue.id
               ? { node: action.data.dialogue }
+              : edge
+        )
+      );
+    case ADD_HINT:
+      return state.updateIn(['puzzleShowUnion', 'edges'], (e) =>
+        Array.concat(e, [{ node: action.data.hint }])
+      );
+    case UPDATE_HINT:
+      return state.updateIn(['puzzleShowUnion', 'edges'], (edges) =>
+        edges.map(
+          (edge) =>
+            edge.node.id === action.data.hint.id
+              ? { node: action.data.hint }
               : edge
         )
       );

@@ -6,11 +6,16 @@ import { UPDATE_ANSWER } from 'containers/Dialogue/constants';
 import {
   PUZZLE_SHOWN,
   INIT_PUZZLE_SHOW,
+  HINT_ADDED,
+  HINT_UPDATED,
   DIALOGUE_ADDED,
   DIALOGUE_UPDATED,
   ADD_QUESTION,
+  ADD_HINT,
+  UPDATE_HINT,
   puzzleShowQuery,
   dialogueQuery,
+  hintQuery,
 } from './constants';
 
 function* fetchPuzzleBody(action) {
@@ -39,10 +44,28 @@ function* fetchDialogue(action) {
   }
 }
 
+function* fetchHint(action) {
+  const data = yield call(
+    gqlQuery,
+    { text: hintQuery },
+    { id: action.data.id }
+  );
+  switch (action.type) {
+    case HINT_ADDED:
+      yield put({ type: ADD_HINT, ...data });
+      break;
+    case HINT_UPDATED:
+      yield put({ type: UPDATE_HINT, ...data });
+      break;
+    default:
+  }
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   yield [
     takeLatest(PUZZLE_SHOWN, fetchPuzzleBody),
     takeEvery([DIALOGUE_ADDED, DIALOGUE_UPDATED], fetchDialogue),
+    takeEvery([HINT_ADDED, HINT_UPDATED], fetchHint),
   ];
 }
