@@ -28,6 +28,7 @@ import saga from './saga';
 import messages from './messages';
 import { puzzleShown, puzzleHid } from './actions';
 import QuestionPutBox from './QuestionPutBox';
+import PuzzleModifyBox from './PuzzleModifyBox';
 
 const Title = styled.h1`
   font-size: 2em;
@@ -93,6 +94,9 @@ export class PuzzleShowPage extends React.Component {
               currentUserId={this.props.user.userId}
             />
           )}
+        {U === P.user.rowid && (
+          <PuzzleModifyBox currentUserId={this.props.user.userId} puzzle={P} />
+        )}
         <Box py={10} width={1} />
       </div>
     );

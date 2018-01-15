@@ -182,7 +182,7 @@ class Answer extends React.PureComponent {
           </Box>
         </PuzzleFrame>
       );
-    } else if (this.props.answer !== null) {
+    } else if (this.props.answer !== null && this.props.answer !== '') {
       return (
         <PuzzleFrame>
           <Box width={1}>
