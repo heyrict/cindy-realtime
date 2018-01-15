@@ -60,7 +60,7 @@ const Img = ImgMd.extend`
   padding-right: 10px;
 `;
 
-const StyledSwitch = styled(Switch)`
+export const StyledSwitch = styled(Switch)`
   color: #2075c7;
   margin: 2px 5px;
   background-color: ${(props) => (props.checked ? '#2075C7' : 'transparent')};

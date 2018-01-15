@@ -34,4 +34,28 @@ export default defineMessages({
     id: 'app.containers.PuzzleShowPage.putQuestion',
     defaultMessage: 'Put',
   },
+  putSolution: {
+    id: 'app.containers.PuzzleShowPage.putSolution',
+    defaultMessage: 'Put Solution',
+  },
+  toggleYami: {
+    id: 'app.containers.PuzzleShowPage.toggleYami',
+    defaultMessage: 'Yami',
+  },
+  toggleHidden: {
+    id: 'app.containers.PuzzleShowPage.toggleHidden',
+    defaultMessage: 'Hidden',
+  },
+  solution: {
+    id: 'app.containers.PuzzleShowPage.solution',
+    defaultMessage: 'Solution',
+  },
+  memo: {
+    id: 'app.containers.PuzzleShowPage.memo',
+    defaultMessage: 'Memo',
+  },
+  controlPanel: {
+    id: 'app.containers.PuzzleShowPage.controlPanel',
+    defaultMessage: 'Control Panel',
+  },
 });

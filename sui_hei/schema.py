@@ -268,6 +268,55 @@ class UpdateAnswer(graphene.ClientIDMutation):
         return UpdateAnswer(dialogue=dialogue)
 
 
+# {{{2 UpdatePuzzle
+class UpdatePuzzle(graphene.ClientIDMutation):
+    puzzle = graphene.Field(PuzzleNode)
+
+    class Input:
+        puzzleId = graphene.Int()
+        yami = graphene.Boolean()
+        solution = graphene.String()
+        memo = graphene.String()
+        solve = graphene.Boolean()
+        hidden = graphene.Boolean()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        puzzleId = input['puzzleId']
+        yami = input.get('yami')
+        solution = input.get('solution')
+        memo = input.get('memo')
+        solve = input.get('solve')
+        hidden = input.get('hidden')
+
+        if solution == '':
+            raise ValidationError(_("Solution cannot be empty!"))
+
+        puzzle = Puzzle.objects.get(id=puzzleId)
+
+        if yami:
+            puzzle.yami = yami
+
+        if solution:
+            puzzle.solution = solution
+
+        if memo is not None:
+            puzzle.memo = memo
+
+        if solve:
+            puzzle.status = 1
+
+        if hidden:
+            puzzle.status = 3
+
+        puzzle.save()
+        return UpdatePuzzle(puzzle=puzzle)
+
+
 # {{{2 UpdateHint
 class UpdateHint(relay.ClientIDMutation):
     hint = graphene.Field(HintNode)
@@ -492,6 +541,7 @@ class Mutation(graphene.ObjectType):
     create_puzzle = CreatePuzzle.Field()
     create_question = CreateQuestion.Field()
     update_answer = UpdateAnswer.Field()
+    update_puzzle = UpdatePuzzle.Field()
     update_hint = UpdateHint.Field()
     login = UserLogin.Field()
     logout = UserLogout.Field()

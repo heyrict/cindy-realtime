@@ -95,7 +95,11 @@ export class PuzzleShowPage extends React.Component {
             />
           )}
         {U === P.user.rowid && (
-          <PuzzleModifyBox currentUserId={this.props.user.userId} puzzle={P} />
+          <PuzzleModifyBox
+            currentUserId={this.props.user.userId}
+            puzzle={P}
+            puzzleId={parseInt(this.puzzleId, 10)}
+          />
         )}
         <Box py={10} width={1} />
       </div>

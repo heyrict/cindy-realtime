@@ -6,7 +6,14 @@
 
 import { fromJS } from 'immutable';
 import { UPDATE_ANSWER } from 'containers/Dialogue/constants';
-import { PUZZLE_SHOWN, INIT_PUZZLE_SHOW, ADD_QUESTION, ADD_HINT, UPDATE_HINT } from './constants';
+import {
+  PUZZLE_SHOWN,
+  INIT_PUZZLE_SHOW,
+  ADD_QUESTION,
+  ADD_HINT,
+  UPDATE_HINT,
+  UPDATE_PUZZLE,
+} from './constants';
 
 const initialState = fromJS({
   puzzle: null,
@@ -49,6 +56,11 @@ function puzzleShowPageReducer(state = initialState, action) {
               : edge
         )
       );
+    case UPDATE_PUZZLE:
+      return state.updateIn(['puzzle'], (pzl) => ({
+        ...pzl,
+        ...action.data.puzzle,
+      }));
     default:
       return state;
   }

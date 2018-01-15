@@ -1,8 +1,9 @@
-import { call, put, takeLatest, takeEvery } from 'redux-saga/effects';
+import { call, put, takeLatest, takeEvery, select } from 'redux-saga/effects';
 import { gqlQuery } from 'Environment';
 import { to_global_id as g } from 'common';
 
 import { UPDATE_ANSWER } from 'containers/Dialogue/constants';
+import { PUZZLE_UPDATED } from 'containers/PuzzleActiveList/constants';
 import {
   PUZZLE_SHOWN,
   INIT_PUZZLE_SHOW,
@@ -13,10 +14,13 @@ import {
   ADD_QUESTION,
   ADD_HINT,
   UPDATE_HINT,
+  UPDATE_PUZZLE,
   puzzleShowQuery,
+  puzzleUpdateQuery,
   dialogueQuery,
   hintQuery,
 } from './constants';
+import { selectPuzzleShowPageDomain } from './selectors';
 
 function* fetchPuzzleBody(action) {
   const data = yield call(
@@ -61,10 +65,24 @@ function* fetchHint(action) {
   }
 }
 
+function* fetchUpdatedPuzzle(action) {
+  const puzzle = yield select(selectPuzzleShowPageDomain);
+  const puzzleId = puzzle.get('puzzle').id;
+  if (puzzleId === action.data.id) {
+    const data = yield call(
+      gqlQuery,
+      { text: puzzleUpdateQuery },
+      { id: action.data.id }
+    );
+    yield put({ type: UPDATE_PUZZLE, ...data });
+  }
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   yield [
     takeLatest(PUZZLE_SHOWN, fetchPuzzleBody),
+    takeLatest(PUZZLE_UPDATED, fetchUpdatedPuzzle),
     takeEvery([DIALOGUE_ADDED, DIALOGUE_UPDATED], fetchDialogue),
     takeEvery([HINT_ADDED, HINT_UPDATED], fetchHint),
   ];

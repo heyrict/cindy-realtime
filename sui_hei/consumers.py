@@ -60,96 +60,85 @@ UPDATE_ONLINE_VIEWER_COUNT = "ws/UPDATE_ONLINE_VIEWER_COUNT"
 @receiver(post_save, sender=Dialogue)
 def send_dialogue_update(sender, instance, created, *args, **kwargs):
     dialogueId = instance.id
-    print("PUZZLE UPDATE TRACKED:", instance, created)
     if created:
-        Group("puzzle-%d" % instance.puzzle.id).send({
-            "text":
-            json.dumps({
-                "type": DIALOGUE_ADDED,
-                "data": {
-                    "id": to_global_id('DialogueNode', dialogueId),
-                }
-            })
+        text = json.dumps({
+            "type": DIALOGUE_ADDED,
+            "data": {
+                "id": to_global_id('DialogueNode', dialogueId),
+            }
         })
+        print("Send", text)
+        Group("puzzle-%d" % instance.puzzle.id).send({"text": text})
     else:
-        Group("puzzle-%d" % instance.puzzle.id).send({
-            "text":
-            json.dumps({
-                "type": DIALOGUE_UPDATED,
-                "data": {
-                    "id": to_global_id('DialogueNode', dialogueId)
-                }
-            })
+        text = json.dumps({
+            "type": DIALOGUE_UPDATED,
+            "data": {
+                "id": to_global_id('DialogueNode', dialogueId)
+            }
         })
+        print("Send", text)
+        Group("puzzle-%d" % instance.puzzle.id).send({"text": text})
 
 
 @receiver(post_save, sender=Puzzle)
 def send_puzzle_update(sender, instance, created, *args, **kwargs):
     puzzleId = instance.id
-    print("PUZZLE UPDATE TRACKED:", instance, created)
     if created:
-        Group("viewer").send({
-            "text":
-            json.dumps({
-                "type": PUZZLE_ADDED,
-                "data": {
-                    "id": to_global_id('PuzzleNode', puzzleId),
-                    "title": instance.title,
-                    "nickname": instance.user.nickname
-                }
-            })
+        text = json.dumps({
+            "type": PUZZLE_ADDED,
+            "data": {
+                "id": to_global_id('PuzzleNode', puzzleId),
+                "title": instance.title,
+                "nickname": instance.user.nickname
+            }
         })
+        print("Send", text)
+        Group("viewer").send({"text": text})
     else:
-        Group("viewer").send({
-            "text":
-            json.dumps({
-                "type": PUZZLE_UPDATED,
-                "data": {
-                    "id": to_global_id('PuzzleNode', puzzleId)
-                }
-            })
+        text = json.dumps({
+            "type": PUZZLE_UPDATED,
+            "data": {
+                "id": to_global_id('PuzzleNode', puzzleId)
+            }
         })
+        print("Send", text)
+        Group("viewer").send({"text": text})
 
 
 @receiver(post_save, sender=Hint)
 def send_hint_update(sender, instance, created, *args, **kwargs):
     hintId = instance.id
     puzzleId = instance.puzzle.id
-    print("HINT UPDATE TRACKED:", instance, created)
     if created:
-        Group("puzzle-%s" % puzzleId).send({
-            "text":
-            json.dumps({
-                "type": HINT_ADDED,
-                "data": {
-                    "id": to_global_id('HintNode', hintId),
-                }
-            })
+        text = json.dumps({
+            "type": HINT_ADDED,
+            "data": {
+                "id": to_global_id('HintNode', hintId),
+            }
         })
+        print("Send", text)
+        Group("puzzle-%s" % puzzleId).send({"text": text})
     else:
-        Group("puzzle-%s" % puzzleId).send({
-            "text":
-            json.dumps({
-                "type": HINT_UPDATED,
-                "data": {
-                    "id": to_global_id('HintNode', hintId),
-                }
-            })
+        text = json.dumps({
+            "type": HINT_UPDATED,
+            "data": {
+                "id": to_global_id('HintNode', hintId),
+            }
         })
+        print("Send", text)
+        Group("puzzle-%s" % puzzleId).send({"text": text})
 
 
 def broadcast_status():
     global onlineViewerCount
     #onlineUsers = User.objects.filter(online=True)
-    Group("viewer").send({
-        "text":
-        json.dumps({
-            "type": UPDATE_ONLINE_VIEWER_COUNT,
-            "data": {
-                "onlineViewerCount": onlineViewerCount
-            }
-        })
+    text = json.dumps({
+        "type": UPDATE_ONLINE_VIEWER_COUNT,
+        "data": {
+            "onlineViewerCount": onlineViewerCount
+        }
     })
+    Group("viewer").send({"text": text})
 
 
 @channel_session_user
@@ -187,7 +176,7 @@ def ws_message(message):
     if data.get("type") == VIEWER_CONNECT:
         broadcast_status()
     elif data.get("type") == VIEWER_DISCONNECT:
-        Group("viewer").discard("viewer")
+        Group("viewer").discard(message.reply_channel)
         broadcast_status()
     elif data.get("type") == PUZZLE_CONNECT:
         Group("puzzle-%s" % data["data"]["puzzleId"])\

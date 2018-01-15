@@ -17,6 +17,7 @@ export const HINT_UPDATED = 'ws/HINT_UPDATED';
 
 export const INIT_PUZZLE_SHOW =
   'app/containers/PuzzleShowPage/INIT_PUZZLE_SHOW';
+export const UPDATE_PUZZLE = 'app/containers/PuzzleShowPage/UPDATE_PUZZLE';
 
 export const ADD_QUESTION = 'app/containers/PuzzleShowPage/ADD_QUESTION';
 
@@ -83,6 +84,7 @@ export const puzzleShowQuery = `
       }
     }
     puzzle(id: $id) {
+      id
       title
       yami
       genre
@@ -98,5 +100,19 @@ export const puzzleShowQuery = `
     }
   }
   ${componentsDialogueFragment}
+`;
+// }}}
+
+// {{{ const puzzleUpdateQuery
+export const puzzleUpdateQuery = `
+  query($id: ID!) {
+    puzzle(id: $id) {
+      title
+      yami
+      status
+      solution
+      memo
+    }
+  }
 `;
 // }}}
