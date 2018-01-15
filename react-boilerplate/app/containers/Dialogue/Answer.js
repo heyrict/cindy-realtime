@@ -61,15 +61,15 @@ const Img = ImgMd.extend`
 `;
 
 const StyledSwitch = styled(Switch)`
-  color: violet;
+  color: #2075c7;
   margin: 2px 5px;
-  background-color: ${(props) => (props.checked ? 'violet' : 'transparent')};
+  background-color: ${(props) => (props.checked ? '#2075C7' : 'transparent')};
   select: {
     padding: 10px;
   }
   &::after {
     background-color: ${(props) =>
-      props.checked ? 'blanchedalmond' : 'violet'};
+      props.checked ? 'blanchedalmond' : '#2075C7'};
   }
 `;
 
@@ -190,7 +190,7 @@ class Answer extends React.PureComponent {
               {this.props.owner.nickname}
             </StyledNicknameLink>
             <UserAwardPopover
-              style={{ color: '#b928d7', fontSize: '1em' }}
+              style={{ color: '#006388', fontSize: '1em' }}
               userAward={this.props.owner.currentAward}
             />
             <StyledTime>

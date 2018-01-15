@@ -11,7 +11,7 @@ import { PuzzleFrame } from 'containers/PuzzleShowPage/Frame';
 
 export const StyledNicknameLink = Link.extend`
   font-size: 1em;
-  color: #b928d7;
+  color: #006388;
   margin: 5px;
   word-break: break-all;
 `;
@@ -23,13 +23,13 @@ export const StyledTime = styled.span`
 `;
 
 export const Splitter = styled.hr`
-  border-top: 1px solid #b928d7;
+  border-top: 1px solid #006388;
   margin: 5px 0;
   width: 100%;
 `;
 
 export const Indexer = styled.span`
-  background-color: #9716ba;
+  background-color: #006388;
   color: #fce6d3;
   font-weight: bold;
   padding: 2px;
@@ -46,7 +46,7 @@ function Question(props) {
           {props.user.nickname}
         </StyledNicknameLink>
         <UserAwardPopover
-          style={{ color: '#b928d7', fontSize: '1em' }}
+          style={{ color: '#006388', fontSize: '1em' }}
           userAward={props.user.currentAward}
         />
         <StyledTime>

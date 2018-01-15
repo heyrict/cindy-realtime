@@ -23,24 +23,24 @@ const putQuestionMutation = graphql`
 
 export const StyledButton = styled(ButtonOutline)`
   border-radius: 0 10px 10px 0;
-  color: violet;
+  color: #2075c7;
   font-weight: bold;
   &:hover {
     color: blanchdalmond;
-    background-color: violet;
+    background-color: #2075c7;
   }
 `;
 
 export const StyledInput = styled.input`
   border-radius: 10px 0 0 10px;
-  border-color: violet;
+  border-color: #2075c7;
   padding: 5px;
   width: 100%;
   color: #073642;
   font-size: 1.1em;
-  box-shadow: inset 0 0 0 1px violet;
+  box-shadow: inset 0 0 0 1px #2075c7;
   &:focus {
-    box-shadow: inset 0 0 0 2px violet;
+    box-shadow: inset 0 0 0 2px #2075c7;
   }
 `;
 

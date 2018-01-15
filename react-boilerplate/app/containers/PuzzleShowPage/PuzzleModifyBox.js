@@ -12,7 +12,7 @@ import { StyledEditButton } from 'containers/Dialogue/Answer';
 import { PuzzleFrame } from './Frame';
 
 const StyledTabItem = styled(TabItem)`
-  color: #b928d7;
+  color: #006388;
   cursor: pointer;
   &:hover {
     color: #6c71c4;
@@ -20,7 +20,7 @@ const StyledTabItem = styled(TabItem)`
 `;
 
 const StyledTabs = styled(Tabs)`
-  border-color: #b928d7;
+  border-color: #006388;
 `;
 
 class PuzzleModifyBox extends React.Component {
