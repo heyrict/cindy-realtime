@@ -62,4 +62,8 @@ export default defineMessages({
     id: 'app.containers.PuzzleShowPage.controlPanel',
     defaultMessage: 'Control Panel',
   },
+  hiddenFrame: {
+    id: 'app.containers.PuzzleShowPage.hiddenFrame',
+    defaultMessage: 'This puzzle is set to hidden, which means you cannot view it',
+  },
 });

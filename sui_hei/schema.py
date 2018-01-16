@@ -3,7 +3,7 @@ from itertools import chain
 import graphene
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
-from django.db.models import Count, Q
+from django.db.models import Q, Count
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from graphene import relay, resolve_only_args
@@ -329,7 +329,7 @@ class UpdatePuzzle(graphene.ClientIDMutation):
 
         puzzle = Puzzle.objects.get(id=puzzleId)
 
-        if yami:
+        if yami is not None:
             puzzle.yami = yami
 
         if solution:
@@ -340,9 +340,11 @@ class UpdatePuzzle(graphene.ClientIDMutation):
 
         if solve:
             puzzle.status = 1
+            puzzle.modified = timezone.now()
 
-        if hidden:
-            puzzle.status = 3
+        if hidden is not None and puzzle.status != 4:
+            if hidden: puzzle.status = 3
+            else: puzzle.status = 1
 
         puzzle.save()
         return UpdatePuzzle(puzzle=puzzle)

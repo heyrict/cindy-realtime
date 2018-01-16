@@ -71,12 +71,30 @@ export class PuzzleShowPage extends React.Component {
         <Constrained>
           <Title>{`[${genre}${yami}] ${P.title}`}</Title>
         </Constrained>
-        <Frame user={P.user} text={P.content} created={P.created} />
-        {D.edges.map((node) => {
-          const type = f(node.node.id)[0];
-          if (type === 'DialogueNode') {
-            index += 1;
-            if ((P.yami && U === node.node.user.rowid) || P.user.rowid === U) {
+        {(P.status <= 2 || P.user.rowid === U) && (
+          <Frame user={P.user} text={P.content} created={P.created} />
+        )}
+        {P.status >= 3 &&
+          P.user.rowid !== U && (
+            <FormattedMessage {...messages.hiddenFrame}>
+              {(msg) => (
+                <Frame
+                  user={P.user}
+                  text={msg}
+                  created={P.created}
+                  solved={P.solved}
+                />
+              )}
+            </FormattedMessage>
+          )}
+        {(P.status <= 2 || P.user.rowid === U) &&
+          D.edges.map((node) => {
+            const type = f(node.node.id)[0];
+            if (type === 'DialogueNode') {
+              index += 1;
+              if (P.yami && U !== node.node.user.rowid && U !== P.user.rowid) {
+                return null;
+              }
               return (
                 <Dialogue
                   key={node.node.id}
@@ -86,10 +104,10 @@ export class PuzzleShowPage extends React.Component {
                 />
               );
             }
-          }
-          return <Hint key={node.node.id} {...node} />;
-        })}
-        {P.status !== 0 && <Frame text={P.solution} solved={P.modified} />}
+            return <Hint key={node.node.id} {...node} />;
+          })}
+        {(P.status <= 2 || P.user.rowid === U) &&
+          P.status !== 0 && <Frame text={P.solution} solved={P.modified} />}
         {P.status === 0 &&
           U !== P.user.rowid && (
             <QuestionPutBox

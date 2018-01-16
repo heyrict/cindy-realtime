@@ -11,7 +11,7 @@ import moment from 'moment';
 import bootbox from 'bootbox';
 import { commitMutation, graphql } from 'react-relay';
 import environment from 'Environment';
-import { from_global_id as f } from 'common';
+import { line2md, from_global_id as f } from 'common';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
@@ -138,7 +138,11 @@ export class Hint extends React.Component {
     return (
       <Constrained level={3}>
         <PuzzleFrame>
-          {this.props.node.content}
+          <span
+            dangerouslySetInnerHTML={{
+              __html: line2md(this.props.node.content),
+            }}
+          />
           {this.props.owner.rowid === this.props.user.userId &&
             this.props.puzzleStatus === 0 && (
               <FormattedMessage {...dialogueMessages.edit}>

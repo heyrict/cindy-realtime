@@ -72,6 +72,7 @@ export default createFragmentContainer(PuzzlePanel, {
       id
       rowid
       genre
+      yami
       title
       status
       created
