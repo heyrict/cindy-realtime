@@ -48,6 +48,7 @@ export function PuzzlePanel(props) {
             genre={node.genre}
             puzzleId={node.rowid}
             title={node.title}
+            yami={node.yami}
           />
           <PuzzleDate>{moment(node.created).format('llll')}</PuzzleDate>
           <Divider mt={10} mb={5} />

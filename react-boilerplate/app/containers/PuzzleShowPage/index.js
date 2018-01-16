@@ -57,32 +57,35 @@ export class PuzzleShowPage extends React.Component {
     const _ = this.context.intl.formatMessage;
     const translateGenreCode = (x) => _(genreMessages[genreType[x]]);
     const genre = translateGenreCode(P.genre);
+    const yami = P.yami ? ` x ${_(genreMessages.yami)}` : '';
     let index = 0;
 
     return (
       <div>
         <Helmet>
           <title>
-            {P ? `Cindy - [${genre}] ${P.title}` : _(messages.title)}
+            {P ? `Cindy - [${genre}${yami}] ${P.title}` : _(messages.title)}
           </title>
           <meta name="description" content="Description of PuzzleShowPage" />
         </Helmet>
         <Constrained>
-          <Title>{`[${genre}] ${P.title}`}</Title>
+          <Title>{`[${genre}${yami}] ${P.title}`}</Title>
         </Constrained>
         <Frame user={P.user} text={P.content} created={P.created} />
         {D.edges.map((node) => {
           const type = f(node.node.id)[0];
           if (type === 'DialogueNode') {
             index += 1;
-            return (
-              <Dialogue
-                key={node.node.id}
-                index={index}
-                type={type}
-                {...node}
-              />
-            );
+            if ((P.yami && U === node.node.user.rowid) || P.user.rowid === U) {
+              return (
+                <Dialogue
+                  key={node.node.id}
+                  index={index}
+                  type={type}
+                  {...node}
+                />
+              );
+            }
           }
           return <Hint key={node.node.id} {...node} />;
         })}

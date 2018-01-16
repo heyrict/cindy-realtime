@@ -51,6 +51,9 @@ class QuestionPutBox extends React.PureComponent {
     this.state = {
       content: '',
     };
+    this.handleKeyDown = (e) => {
+      if (e.key === 'Enter') this.handleSubmit();
+    };
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -94,6 +97,7 @@ class QuestionPutBox extends React.PureComponent {
                 disabled={this.props.currentUserId === undefined}
                 placeholder={msg}
                 onChange={this.handleInput}
+                onKeyDown={this.handleKeyDown}
               />
             )}
           </FormattedMessage>

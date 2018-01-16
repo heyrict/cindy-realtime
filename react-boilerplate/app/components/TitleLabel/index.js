@@ -42,7 +42,9 @@ TranslatedGenre.propTypes = {
 function TitleLabel(props) {
   return (
     <PuzzleTitle to={`/puzzle/show/${props.puzzleId}`}>
-      [{<TranslatedGenre genre={props.genre} />}]
+      [{<TranslatedGenre genre={props.genre} />}
+      {props.yami ? ' x ' : null}
+      {props.yami ? <FormattedMessage {...messages.yami} /> : null}]
       {props.title}
     </PuzzleTitle>
   );
@@ -50,6 +52,7 @@ function TitleLabel(props) {
 
 TitleLabel.propTypes = {
   genre: PropTypes.number.isRequired,
+  yami: PropTypes.bool.isRequired,
   puzzleId: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
 };

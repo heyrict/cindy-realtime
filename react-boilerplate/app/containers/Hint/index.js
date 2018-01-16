@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
 import { Box, Flex } from 'rebass';
-import { PuzzleFrame } from 'containers/PuzzleShowPage/Frame';
+import { PuzzleFrame as Frame } from 'containers/PuzzleShowPage/Frame';
 import Constrained from 'components/Constrained';
 import { StyledButton as Button } from 'containers/PuzzleShowPage/QuestionPutBox';
 import { StyledEditButton } from 'containers/Dialogue/Answer';
@@ -39,18 +39,18 @@ const hintMutation = graphql`
   }
 `;
 
-const StyledTextarea = styled.textarea`
+export const StyledTextarea = styled.textarea`
   border-radius: 10px;
-  border-color: violet;
+  border-color: #2075c7;
   margin-bottom: 5px;
   padding: 5px;
   width: 100%;
   min-height: 75px;
   color: #073642;
   font-size: 1.1em;
-  box-shadow: inset 0 0 0 1px violet;
+  box-shadow: inset 0 0 0 1px #2075c7;
   &:focus {
-    box-shadow: inset 0 0 0 2px violet;
+    box-shadow: inset 0 0 0 2px #2075c7;
   }
 `;
 
@@ -59,6 +59,10 @@ const StyledButton = Button.extend`
   margin-bottom: 5px;
   border-radius: 10px;
   width: 100%;
+`;
+
+const PuzzleFrame = Frame.extend`
+  margin: 5px 0;
 `;
 
 export class Hint extends React.Component {

@@ -3,7 +3,7 @@ from itertools import chain
 import graphene
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
-from django.db.models import Q, Count
+from django.db.models import Count, Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from graphene import relay, resolve_only_args
@@ -229,6 +229,37 @@ class CreateQuestion(graphene.ClientIDMutation):
             user=user, puzzle=puzzle, question=content, created=created)
 
         return CreateQuestion(dialogue=dialogue)
+
+
+class CreateHint(graphene.ClientIDMutation):
+    hint = graphene.Field(HintNode)
+
+    class Input:
+        content = graphene.String()
+        puzzleId = graphene.Int()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        content = input['content']
+        puzzleId = input['puzzleId']
+
+        if not content:
+            raise ValidationError(_("Hint content cannot be empty!"))
+
+        puzzle = Puzzle.objects.get(id=puzzleId)
+        created = timezone.now()
+
+        if puzzle.user != user:
+            raise ValidationError(_("You are not the creator of this puzzle"))
+
+        hint = Hint.objects.create(
+            puzzle=puzzle, content=content, created=created)
+
+        return CreateHint(hint=hint)
 
 
 # {{{2 UpdateAnswer
@@ -540,6 +571,7 @@ class Query(object):
 class Mutation(graphene.ObjectType):
     create_puzzle = CreatePuzzle.Field()
     create_question = CreateQuestion.Field()
+    create_hint = CreateHint.Field()
     update_answer = UpdateAnswer.Field()
     update_puzzle = UpdatePuzzle.Field()
     update_hint = UpdateHint.Field()

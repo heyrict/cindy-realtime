@@ -56,6 +56,7 @@ const puzzleListNodeFragment = `
     genre
     title
     status
+    yami
     created
     quesCount
     uaquesCount

@@ -10,6 +10,7 @@ import Constrained from 'components/Constrained';
 import { text2md } from 'common';
 import dialogueMessages from 'containers/Dialogue/messages';
 import PreviewEdit from 'components/PreviewEdit';
+import { StyledTextarea } from 'containers/Hint';
 
 import tick from 'images/tick.svg';
 import cross from 'images/cross.svg';
@@ -28,6 +29,16 @@ const puzzleUpdateMutation = graphql`
 `;
 // }}}
 
+// {{{ const hintMutation
+const hintMutation = graphql`
+  mutation PuzzleModifyBoxHintMutation($input: CreateHintInput!) {
+    createHint(input: $input) {
+      clientMutationId
+    }
+  }
+`;
+// }}}
+
 const StyledTabItem = styled(TabItem)`
   color: #006388;
   cursor: pointer;
@@ -38,6 +49,7 @@ const StyledTabItem = styled(TabItem)`
 
 const StyledTabs = styled(Tabs)`
   border-color: #006388;
+  margin-bottom: 5px;
 `;
 
 class PuzzleModifyBox extends React.Component {
@@ -53,6 +65,7 @@ class PuzzleModifyBox extends React.Component {
       solve: props.puzzle.status !== 0,
       yami: props.puzzle.yami,
       hidden: props.puzzle.hidden,
+      hint: '',
     };
     this.changeTab = (t) => {
       this.setState({ activeTab: t });
@@ -69,6 +82,9 @@ class PuzzleModifyBox extends React.Component {
     this.handleMemoChange = (e) => {
       this.setState({ memo: e.target.value });
     };
+    this.handleHintChange = (e) => {
+      this.setState({ hint: e.target.value });
+    };
     this.handleSolveChange = () => {
       this.setState((p) => ({ solve: !p.solve }));
     };
@@ -81,6 +97,7 @@ class PuzzleModifyBox extends React.Component {
     this.handleSaveSolution = this.handleSaveSolution.bind(this);
     this.handleSaveMemo = this.handleSaveMemo.bind(this);
     this.handleSaveControl = this.handleSaveControl.bind(this);
+    this.handleCreateHint = this.handleCreateHint.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -154,6 +171,26 @@ class PuzzleModifyBox extends React.Component {
     });
   }
 
+  handleCreateHint() {
+    if (this.state.hint === '') return;
+    commitMutation(environment, {
+      mutation: hintMutation,
+      variables: {
+        input: {
+          puzzleId: this.props.puzzleId,
+          content: this.state.hint,
+        },
+      },
+      onCompleted: (response, errors) => {
+        if (errors) {
+          bootbox.alert(errors.map((e) => e.message).join(','));
+          return;
+        }
+        this.setState({ hint: '' });
+      },
+    });
+  }
+
   render() {
     return (
       <Constrained level={3}>
@@ -175,6 +212,13 @@ class PuzzleModifyBox extends React.Component {
             <StyledTabItem
               active={this.state.activeTab === 2}
               onClick={() => this.changeTab(2)}
+              hidden={this.props.puzzle.status !== 0}
+            >
+              <FormattedMessage {...messages.hint} />
+            </StyledTabItem>
+            <StyledTabItem
+              active={this.state.activeTab === 3}
+              onClick={() => this.changeTab(3)}
             >
               <FormattedMessage {...messages.controlPanel} />
             </StyledTabItem>
@@ -244,6 +288,24 @@ class PuzzleModifyBox extends React.Component {
             </div>
           </div>
           <div hidden={this.state.activeTab !== 2}>
+            <Flex mx={1}>
+              <Box w={(1, 5 / 6, 7 / 8)}>
+                <StyledTextarea
+                  value={this.state.hint}
+                  onChange={this.handleHintChange}
+                />
+              </Box>
+              <Box w={(1, 1 / 6, 1 / 8)}>
+                <StyledEditButton
+                  onClick={this.handleCreateHint}
+                  style={{ width: '100%' }}
+                >
+                  <ImgXs src={tick} />
+                </StyledEditButton>
+              </Box>
+            </Flex>
+          </div>
+          <div hidden={this.state.activeTab !== 3}>
             <Flex mx={1}>
               <Box w={1 / 3} hidden={this.props.puzzle.status !== 0}>
                 <FormattedMessage {...messages.putSolution} />

@@ -23,4 +23,8 @@ export default defineMessages({
     id: 'app.components.TitleLabel.others',
     defaultMessage: 'Others & Formal',
   },
+  yami: {
+    id: 'app.components.TitleLabel.yami',
+    defaultMessage: 'Yami',
+  },
 });

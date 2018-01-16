@@ -54,6 +54,10 @@ export default defineMessages({
     id: 'app.containers.PuzzleShowPage.memo',
     defaultMessage: 'Memo',
   },
+  hint: {
+    id: 'app.containers.PuzzleShowPage.hint',
+    defaultMessage: 'Hint',
+  },
   controlPanel: {
     id: 'app.containers.PuzzleShowPage.controlPanel',
     defaultMessage: 'Control Panel',
