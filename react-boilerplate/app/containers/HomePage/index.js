@@ -11,9 +11,11 @@
 
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { FormattedMessage, intlShape } from 'react-intl';
-import { Grid, Jumbotron, Col, Image, Clearfix } from 'react-bootstrap';
+import { intlShape } from 'react-intl';
+import Constrained from 'components/Constrained';
 import messages from './messages';
+
+import MainFrame from './MainFrame';
 
 export default function HomePage(props, context) {
   const _ = context.intl.formatMessage;
@@ -21,29 +23,9 @@ export default function HomePage(props, context) {
     <div>
       <Helmet>
         <title>{_(messages.title)}</title>
-        <meta name="description" content={_(messages.description)}/>
+        <meta name="description" content={_(messages.description)} />
       </Helmet>
-      <Grid>
-        <Jumbotron bsClass="jumbotron indexHero">
-          <Col xs={12} md={3}>
-            <Image
-              src="/static/pictures/cindylogo.png"
-              responsive
-              rounded
-              thumbnail
-            />
-          </Col>
-          <Col xs={12} md={9}>
-            <h2>
-              <FormattedMessage {...messages.header} />
-            </h2>
-            <p>
-              <FormattedMessage {...messages.body} />
-            </p>
-          </Col>
-          <Clearfix />
-        </Jumbotron>
-      </Grid>
+      <MainFrame />
     </div>
   );
 }
