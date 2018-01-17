@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { commitMutation, graphql } from 'react-relay';
+import { commitMutation } from 'react-relay';
 import bootbox from 'bootbox';
 
 import { Button, Form, FormControl } from 'react-bootstrap';
@@ -18,22 +18,10 @@ import FieldGroup from 'components/FieldGroup';
 import PreviewEdit from 'components/PreviewEdit';
 import environment from 'Environment';
 import genreMessages from 'components/TitleLabel/messages';
+import PuzzleAddFormMutation from 'graphql/PuzzleAddFormMutation';
 
 import makeSelectPuzzleAddForm from './selectors';
 import messages from './messages';
-
-// {{{ PuzzleAddFormMutation
-const PuzzleAddFormMutation = graphql`
-  mutation PuzzleAddFormMutation($input: CreatePuzzleInput!) {
-    createPuzzle(input: $input) {
-      puzzle {
-        id
-        rowid
-      }
-    }
-  }
-`;
-// }}}
 
 export class PuzzleAddForm extends React.Component {
   // eslint-disable-line react/prefer-stateless-function

@@ -19,7 +19,8 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import Constrained from 'components/Constrained';
 
-import PuzzleList, { PuzzleListInitQuery } from 'containers/PuzzleList';
+import PuzzleList from 'containers/PuzzleList';
+import PuzzleListInitQuery from 'graphql/PuzzleListInitQuery';
 import PuzzleActiveList from 'containers/PuzzleActiveList';
 import AddPuzzleBtn from './AddPuzzleBtn';
 

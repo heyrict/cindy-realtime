@@ -10,11 +10,12 @@ import environment from 'Environment';
 import bootbox from 'bootbox';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { commitMutation, graphql } from 'react-relay';
+import { commitMutation } from 'react-relay';
 
 import { Panel, PanelHeader, NavLink } from 'rebass';
 
 import { setCurrentUser } from 'containers/UserNavbar/actions';
+import LogoutMenuItemMutation from 'graphql/LogoutMutation';
 
 export class LogoutMenuItem extends React.PureComponent {
   // eslint-disable-line react/prefer-stateless-function
@@ -74,11 +75,3 @@ function mapDispatchToProps(dispatch) {
 const withConnect = connect(null, mapDispatchToProps);
 
 export default compose(withConnect)(LogoutMenuItem);
-
-const LogoutMenuItemMutation = graphql`
-  mutation LogoutMenuItemMutation($input: UserLogoutInput!) {
-    logout(input: $input) {
-      clientMutationId
-    }
-  }
-`;

@@ -5,18 +5,11 @@ import { text2md } from 'common';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import { Box } from 'rebass';
-import { StyledNicknameLink } from 'components/UserLabel';
+import { DarkNicknameLink as NicknameLink, PuzzleFrame } from 'style-store';
 import UserAwardPopover from 'components/UserAwardPopover';
 
 import Constrained from 'components/Constrained';
 import messages from './messages';
-
-export const PuzzleFrame = styled.div`
-  border-radius: 10px;
-  border: 2px solid #006388;
-  padding: 5px;
-  background-color: rgba(255, 255, 255, 0.5);
-`;
 
 const Label = styled.span`
   padding: 5px;
@@ -24,7 +17,7 @@ const Label = styled.span`
   color: #4877d7;
 `;
 
-const PuzzleUserLabel = StyledNicknameLink.extend`
+const PuzzleUserLabel = NicknameLink.extend`
   padding: 5px;
   font-size: 1.1em;
   color: #033393;

@@ -9,35 +9,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { graphql, createPaginationContainer } from 'react-relay';
+import { createPaginationContainer } from 'react-relay';
 import { Button } from 'react-bootstrap';
 
 import injectSaga from 'utils/injectSaga';
 import PuzzlePanel from 'components/PuzzlePanel';
+import PuzzleListInitQuery from 'graphql/PuzzleListInitQuery';
 
 import makeSelectPuzzleList from './selectors';
 import saga from './saga';
-
-// {{{ PuzzleListInitQuery
-export const PuzzleListInitQuery = graphql`
-  query PuzzleListInitQuery(
-    $count: Int
-    $cursor: String
-    $orderBy: [String]
-    $status: Float
-    $status__gt: Float
-  ) {
-    ...PuzzleList_list
-      @arguments(
-        count: $count
-        cursor: $cursor
-        orderBy: $orderBy
-        status__gt: $status__gt
-        status: $status
-      )
-  }
-`;
-// }}}
 
 export class PuzzleList extends React.Component {
   constructor(props) {

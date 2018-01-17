@@ -6,55 +6,35 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import moment from 'moment';
 import bootbox from 'bootbox';
-import { commitMutation, graphql } from 'react-relay';
+import { commitMutation } from 'react-relay';
 import environment from 'Environment';
 import { line2md, from_global_id as f } from 'common';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
 import { Box, Flex } from 'rebass';
-import { PuzzleFrame as Frame } from 'containers/PuzzleShowPage/Frame';
 import Constrained from 'components/Constrained';
-import { StyledButton as Button } from 'containers/PuzzleShowPage/QuestionPutBox';
-import { StyledEditButton } from 'containers/Dialogue/Answer';
-import { StyledTime } from 'containers/Dialogue/Question';
-import { ImgXs } from 'style-store';
+import {
+  ImgXs,
+  Textarea,
+  Time,
+  EditButton,
+  ButtonOutline,
+  PuzzleFrame as Frame,
+} from 'style-store';
 import tick from 'images/tick.svg';
 import cross from 'images/cross.svg';
 
 import { createStructuredSelector, createSelector } from 'reselect';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
 import { selectPuzzleShowPageDomain } from 'containers/PuzzleShowPage/selectors';
+import hintMutation from 'graphql/UpdateHintMutation';
 
 import dialogueMessages from 'containers/Dialogue/messages';
 
-const hintMutation = graphql`
-  mutation HintMutation($input: UpdateHintInput!) {
-    updateHint(input: $input) {
-      clientMutationId
-    }
-  }
-`;
-
-export const StyledTextarea = styled.textarea`
-  border-radius: 10px;
-  border-color: #2075c7;
-  margin-bottom: 5px;
-  padding: 5px;
-  width: 100%;
-  min-height: 75px;
-  color: #073642;
-  font-size: 1.1em;
-  box-shadow: inset 0 0 0 1px #2075c7;
-  &:focus {
-    box-shadow: inset 0 0 0 2px #2075c7;
-  }
-`;
-
-const StyledButton = Button.extend`
+const StyledButton = ButtonOutline.extend`
   padding: 5px 15px;
   margin-bottom: 5px;
   border-radius: 10px;
@@ -117,7 +97,7 @@ export class Hint extends React.Component {
           <PuzzleFrame>
             <Flex align="center" mx={-1}>
               <Box w={[5 / 6, 7 / 8, 11 / 12]} mx={1}>
-                <StyledTextarea
+                <Textarea
                   value={this.state.content}
                   onChange={this.handleChange}
                 />
@@ -147,16 +127,14 @@ export class Hint extends React.Component {
             this.props.puzzleStatus === 0 && (
               <FormattedMessage {...dialogueMessages.edit}>
                 {(msg) => (
-                  <StyledEditButton onClick={this.toggleEditMode}>
-                    {msg}
-                  </StyledEditButton>
+                  <EditButton onClick={this.toggleEditMode}>{msg}</EditButton>
                 )}
               </FormattedMessage>
             )}
           <Flex justify="right">
-            <StyledTime>
+            <Time>
               {moment(this.props.node.created).format('YYYY-MM-DD HH:mm')}
-            </StyledTime>
+            </Time>
           </Flex>
         </PuzzleFrame>
       </Constrained>

@@ -14,11 +14,12 @@ import environment from 'Environment';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
-import { commitMutation, graphql } from 'react-relay';
+import { commitMutation } from 'react-relay';
 
 import { Form, FormControl, Panel } from 'react-bootstrap';
 import { setCurrentUser } from 'containers/UserNavbar/actions';
 import { withModal } from 'components/withModal';
+import LoginFormMutation from 'graphql/LoginFormMutation';
 import messages from './messages';
 
 export class LoginForm extends React.Component {
@@ -137,14 +138,3 @@ export default compose(
     },
   })
 )(LoginForm);
-
-const LoginFormMutation = graphql`
-  mutation LoginFormMutation($input: UserLoginInput!) {
-    login(input: $input) {
-      user {
-        rowid
-        nickname
-      }
-    }
-  }
-`;

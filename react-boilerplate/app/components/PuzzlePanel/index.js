@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { Panel, Box, Row, Divider } from 'rebass';
 import styled from 'styled-components';
 
-import { graphql, createFragmentContainer } from 'react-relay';
+import { createFragmentContainer } from 'react-relay';
 
 import ProcessLabel from 'components/ProcessLabel';
 import StarLabel from 'components/StarLabel';

@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Flex } from 'rebass';
+import {
+  Flex,
+  ButtonOutline as RebassButtonOutline,
+  Switch as RebassSwitch,
+} from 'rebass';
 
 const NavbarBase = styled(Flex)`
   min-height: 50px;
@@ -37,8 +41,112 @@ export const ImgSm = styled.img`
 
 export const ImgXs = styled.img`
   max-height: 18px;
+  padding: 0;
+  margin: 0;
 `;
 
-export const ImgMd = ImgSm.extend`
+export const ImgMd = styled.img`
   max-height: 60px;
+  padding: 0;
+  margin: 0;
+`;
+
+export const LightNicknameLink = styled(Link)`
+  font-size: 1.3em;
+  color: chocolate;
+  word-break: break-all;
+  word-wrap: break-word;
+`;
+
+export const DarkNicknameLink = styled(Link)`
+  font-size: 1em;
+  color: #006388;
+  margin: 5px;
+  word-break: break-all;
+  word-wrap: break-word;
+`;
+
+export const Time = styled.span`
+  font-size: 0.8em;
+  color: gray;
+  margin: 5px;
+`;
+
+export const Splitter = styled.hr`
+  border-top: 1px solid #006388;
+  margin: 5px 0;
+  width: 100%;
+`;
+
+export const Indexer = styled.span`
+  background-color: #006388;
+  color: #fce6d3;
+  font-weight: bold;
+  padding: 2px;
+  min-width: 24px;
+  border-radius: 100px;
+`;
+
+export const ButtonOutline = styled(RebassButtonOutline)`
+  border-radius: 0 10px 10px 0;
+  color: #2075c7;
+  font-weight: bold;
+  &:hover {
+    color: blanchdalmond;
+    background-color: #2075c7;
+  }
+`;
+
+export const Input = styled.input`
+  border-radius: 10px 0 0 10px;
+  border-color: #2075c7;
+  padding: 5px;
+  width: 100%;
+  color: #073642;
+  font-size: 1.1em;
+  box-shadow: inset 0 0 0 1px #2075c7;
+  &:focus {
+    box-shadow: inset 0 0 0 2px #2075c7;
+  }
+`;
+
+export const EditButton = ButtonOutline.extend`
+  padding: 5px 10px;
+  margin: 0 5px;
+  border-radius: 10px;
+`;
+
+export const PuzzleFrame = styled.div`
+  border-radius: 10px;
+  border: 2px solid #006388;
+  padding: 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+`;
+
+export const Textarea = styled.textarea`
+  border-radius: 10px;
+  border-color: #2075c7;
+  margin-bottom: 5px;
+  padding: 5px;
+  width: 100%;
+  min-height: 75px;
+  color: #073642;
+  font-size: 1.1em;
+  box-shadow: inset 0 0 0 1px #2075c7;
+  &:focus {
+    box-shadow: inset 0 0 0 2px #2075c7;
+  }
+`;
+
+export const Switch = styled(RebassSwitch)`
+  color: #2075c7;
+  margin: 2px 5px;
+  background-color: ${(props) => (props.checked ? '#2075C7' : 'transparent')};
+  select: {
+    padding: 10px;
+  }
+  &::after {
+    background-color: ${(props) =>
+      props.checked ? 'blanchedalmond' : '#2075C7'};
+  }
 `;

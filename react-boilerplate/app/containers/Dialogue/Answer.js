@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { commitMutation, graphql } from 'react-relay';
+import { commitMutation } from 'react-relay';
 import environment from 'Environment';
 import moment from 'moment';
 import bootbox from 'bootbox';
@@ -11,66 +10,43 @@ import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector, createSelector } from 'reselect';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
 import { selectPuzzleShowPageDomain } from 'containers/PuzzleShowPage/selectors';
+import answerMutation from 'graphql/UpdateAnswerMutation';
 
 import tick from 'images/tick.svg';
 import bulb from 'images/bulb.svg';
 import cracker from 'images/cracker.svg';
-import { Switch, Box, Flex } from 'rebass';
-import { ImgMd, ImgXs } from 'style-store';
-
-import { PuzzleFrame } from 'containers/PuzzleShowPage/Frame';
-import UserAwardPopover from 'components/UserAwardPopover';
+import { Box, Flex } from 'rebass';
 import {
-  StyledInput as Input,
-  StyledButton as Button,
-} from 'containers/PuzzleShowPage/QuestionPutBox';
-import { Splitter, StyledNicknameLink, StyledTime } from './Question';
+  Input,
+  ButtonOutline,
+  EditButton,
+  ImgMd,
+  ImgXs,
+  Switch,
+  Splitter,
+  DarkNicknameLink as NicknameLink,
+  Time,
+  PuzzleFrame,
+} from 'style-store';
+
+import UserAwardPopover from 'components/UserAwardPopover';
 
 import messages from './messages';
 import { updateAnswer } from './actions';
-
-// {{{ const answerMutation
-const answerMutation = graphql`
-  mutation AnswerMutation($input: UpdateAnswerInput!) {
-    updateAnswer(input: $input) {
-      clientMutationId
-    }
-  }
-`;
-// }}}
 
 const StyledInput = Input.extend`
   border-radius: 10px;
   margin-bottom: 5px;
 `;
 
-const StyledButton = Button.extend`
+const StyledButton = ButtonOutline.extend`
   padding: 5px 15px;
   border-radius: 10px;
   width: 100%;
 `;
 
-export const StyledEditButton = Button.extend`
-  padding: 5px 10px;
-  margin: 0 5px;
-  border-radius: 10px;
-`;
-
 const Img = ImgMd.extend`
   padding-right: 10px;
-`;
-
-export const StyledSwitch = styled(Switch)`
-  color: #2075c7;
-  margin: 2px 5px;
-  background-color: ${(props) => (props.checked ? '#2075C7' : 'transparent')};
-  select: {
-    padding: 10px;
-  }
-  &::after {
-    background-color: ${(props) =>
-      props.checked ? 'blanchedalmond' : '#2075C7'};
-  }
 `;
 
 class Answer extends React.PureComponent {
@@ -161,17 +137,11 @@ class Answer extends React.PureComponent {
             <Flex align="center" justify="center" wrap>
               <Box w={[1, 1 / 2, 5 / 12]}>
                 <FormattedMessage {...messages.good} />
-                <StyledSwitch
-                  checked={this.state.good}
-                  onClick={this.toggleGood}
-                />
+                <Switch checked={this.state.good} onClick={this.toggleGood} />
               </Box>
               <Box w={[1, 1 / 2, 5 / 12]}>
                 <FormattedMessage {...messages.true} />
-                <StyledSwitch
-                  checked={this.state.true}
-                  onClick={this.toggleTrue}
-                />
+                <Switch checked={this.state.true} onClick={this.toggleTrue} />
               </Box>
               <Box w={[1, null, 1 / 6]}>
                 <StyledButton onClick={this.handleSubmit}>
@@ -186,16 +156,16 @@ class Answer extends React.PureComponent {
       return (
         <PuzzleFrame>
           <Box width={1}>
-            <StyledNicknameLink to={`/profile/${this.props.owner.rowid}`}>
+            <NicknameLink to={`/profile/${this.props.owner.rowid}`}>
               {this.props.owner.nickname}
-            </StyledNicknameLink>
+            </NicknameLink>
             <UserAwardPopover
               style={{ color: '#006388', fontSize: '1em' }}
               userAward={this.props.owner.currentAward}
             />
-            <StyledTime>
+            <Time>
               {moment(this.props.answeredTime).format('YYYY-MM-DD HH:mm')}
-            </StyledTime>
+            </Time>
           </Box>
           <Splitter />
           {this.props.good && (
@@ -215,9 +185,7 @@ class Answer extends React.PureComponent {
             this.props.puzzleStatus === 0 && (
               <FormattedMessage {...messages.edit}>
                 {(msg) => (
-                  <StyledEditButton onClick={this.toggleEditMode}>
-                    {msg}
-                  </StyledEditButton>
+                  <EditButton onClick={this.toggleEditMode}>{msg}</EditButton>
                 )}
               </FormattedMessage>
             )}

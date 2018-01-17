@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import bootbox from 'bootbox';
-import { commitMutation, graphql } from 'react-relay';
+import { commitMutation } from 'react-relay';
 import environment from 'Environment';
 import { FormattedMessage } from 'react-intl';
 import { Tabs, TabItem, Flex, Box } from 'rebass';
@@ -10,34 +10,14 @@ import Constrained from 'components/Constrained';
 import { text2md } from 'common';
 import dialogueMessages from 'containers/Dialogue/messages';
 import PreviewEdit from 'components/PreviewEdit';
-import { StyledTextarea } from 'containers/Hint';
+
+import hintMutation from 'graphql/CreateHintMutation';
+import puzzleUpdateMutation from 'graphql/UpdatePuzzleMutation';
 
 import tick from 'images/tick.svg';
 import cross from 'images/cross.svg';
-import { StyledEditButton, StyledSwitch } from 'containers/Dialogue/Answer';
-import { ImgXs } from 'style-store';
-import { PuzzleFrame } from './Frame';
+import { ImgXs, PuzzleFrame, EditButton, Switch, Textarea } from 'style-store';
 import messages from './messages';
-//
-// {{{ const answerMutation
-const puzzleUpdateMutation = graphql`
-  mutation PuzzleModifyBoxMutation($input: UpdatePuzzleInput!) {
-    updatePuzzle(input: $input) {
-      clientMutationId
-    }
-  }
-`;
-// }}}
-
-// {{{ const hintMutation
-const hintMutation = graphql`
-  mutation PuzzleModifyBoxHintMutation($input: CreateHintInput!) {
-    createHint(input: $input) {
-      clientMutationId
-    }
-  }
-`;
-// }}}
 
 const StyledTabItem = styled(TabItem)`
   color: #006388;
@@ -230,9 +210,9 @@ class PuzzleModifyBox extends React.Component {
                   __html: text2md(this.props.puzzle.solution),
                 }}
               />
-              <StyledEditButton onClick={this.toggleSolutionEditMode}>
+              <EditButton onClick={this.toggleSolutionEditMode}>
                 <FormattedMessage {...dialogueMessages.edit} />
-              </StyledEditButton>
+              </EditButton>
             </div>
             <div hidden={!this.state.solutionEditMode}>
               <PreviewEdit
@@ -240,18 +220,18 @@ class PuzzleModifyBox extends React.Component {
                 onChange={this.handleSolutionChange}
               />
               <Flex>
-                <StyledEditButton
+                <EditButton
                   onClick={this.handleSaveSolution}
                   style={{ width: '100%' }}
                 >
                   <ImgXs src={tick} />
-                </StyledEditButton>
-                <StyledEditButton
+                </EditButton>
+                <EditButton
                   onClick={this.toggleSolutionEditMode}
                   style={{ width: '100%' }}
                 >
                   <ImgXs src={cross} />
-                </StyledEditButton>
+                </EditButton>
               </Flex>
             </div>
           </div>
@@ -262,9 +242,9 @@ class PuzzleModifyBox extends React.Component {
                   __html: text2md(this.props.puzzle.memo),
                 }}
               />
-              <StyledEditButton onClick={this.toggleMemoEditMode}>
+              <EditButton onClick={this.toggleMemoEditMode}>
                 <FormattedMessage {...dialogueMessages.edit} />
-              </StyledEditButton>
+              </EditButton>
             </div>
             <div hidden={!this.state.memoEditMode}>
               <PreviewEdit
@@ -272,36 +252,36 @@ class PuzzleModifyBox extends React.Component {
                 onChange={this.handleMemoChange}
               />
               <Flex>
-                <StyledEditButton
+                <EditButton
                   onClick={this.handleSaveMemo}
                   style={{ width: '100%' }}
                 >
                   <ImgXs src={tick} />
-                </StyledEditButton>
-                <StyledEditButton
+                </EditButton>
+                <EditButton
                   onClick={this.toggleMemoEditMode}
                   style={{ width: '100%' }}
                 >
                   <ImgXs src={cross} />
-                </StyledEditButton>
+                </EditButton>
               </Flex>
             </div>
           </div>
           <div hidden={this.state.activeTab !== 2}>
             <Flex mx={1}>
               <Box w={(1, 5 / 6, 7 / 8)}>
-                <StyledTextarea
+                <Textarea
                   value={this.state.hint}
                   onChange={this.handleHintChange}
                 />
               </Box>
               <Box w={(1, 1 / 6, 1 / 8)}>
-                <StyledEditButton
+                <EditButton
                   onClick={this.handleCreateHint}
                   style={{ width: '100%' }}
                 >
                   <ImgXs src={tick} />
-                </StyledEditButton>
+                </EditButton>
               </Box>
             </Flex>
           </div>
@@ -309,7 +289,7 @@ class PuzzleModifyBox extends React.Component {
             <Flex mx={1}>
               <Box w={1 / 3} hidden={this.props.puzzle.status !== 0}>
                 <FormattedMessage {...messages.putSolution} />
-                <StyledSwitch
+                <Switch
                   checked={this.state.solve}
                   onClick={this.handleSolveChange}
                 />
@@ -322,25 +302,25 @@ class PuzzleModifyBox extends React.Component {
                 }
               >
                 <FormattedMessage {...messages.toggleHidden} />
-                <StyledSwitch
+                <Switch
                   checked={this.state.hidden}
                   onClick={this.handleHiddenChange}
                 />
               </Box>
               <Box w={1 / 3}>
                 <FormattedMessage {...messages.toggleYami} />
-                <StyledSwitch
+                <Switch
                   checked={this.state.yami}
                   onClick={this.handleYamiChange}
                 />
               </Box>
               <Box w={1 / 3}>
-                <StyledEditButton
+                <EditButton
                   onClick={this.handleSaveControl}
                   style={{ width: '100%' }}
                 >
                   <ImgXs src={tick} />
-                </StyledEditButton>
+                </EditButton>
               </Box>
             </Flex>
           </div>

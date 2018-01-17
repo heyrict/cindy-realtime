@@ -13,12 +13,13 @@ import environment from 'Environment';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
-import { commitMutation, graphql } from 'react-relay';
+import { commitMutation } from 'react-relay';
 import { Form, FormControl, Panel } from 'react-bootstrap';
 
 import FieldGroup from 'components/FieldGroup';
 import { setCurrentUser } from 'containers/UserNavbar/actions';
 import { withModal } from 'components/withModal';
+import RegisterFormMutation from 'graphql/RegisterFormMutation';
 
 import messages from './messages';
 import { registerSucceeded } from './actions';
@@ -212,14 +213,3 @@ export default compose(
     },
   })
 )(RegisterForm);
-
-const RegisterFormMutation = graphql`
-  mutation RegisterFormMutation($input: UserRegisterInput!) {
-    register(input: $input) {
-      user {
-        rowid
-        nickname
-      }
-    }
-  }
-`;
