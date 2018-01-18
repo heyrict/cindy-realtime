@@ -44,7 +44,7 @@ class PuzzleModifyBox extends React.Component {
       memoEditMode: props.puzzle.memo === '',
       solve: props.puzzle.status !== 0,
       yami: props.puzzle.yami,
-      hidden: props.puzzle.hidden,
+      hidden: props.puzzle.status === 3,
       hint: '',
     };
     this.changeTab = (t) => {
