@@ -12,6 +12,8 @@
   "app.components.TitleLabel.others": "Others & Formal",
   "app.components.TitleLabel.twentyQuestions": "Twenty Questions",
   "app.components.TitleLabel.yami": "Yami",
+  "app.containers.Chat.channel": "Channel",
+  "app.containers.Chat.chatroom": "ChatRoom",
   "app.containers.Dialogue.answerInputHint": "Put your answer",
   "app.containers.Dialogue.edit": "Edit",
   "app.containers.Dialogue.good": "Good Question",

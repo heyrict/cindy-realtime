@@ -18,6 +18,8 @@ import chatImg from 'images/chat.svg';
 import loginImg from 'images/login.svg';
 import menuImg from 'images/menu.svg';
 
+import { toggleChat } from 'containers/Chat/actions';
+
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
@@ -73,7 +75,7 @@ class TopNavbar extends React.Component {
           <MenuNavbar open={this.state.subnav === 'menu'} />
         </Box>
         <Box w={1 / 3} m="auto">
-          <NavbarBtn>
+          <NavbarBtn onClick={() => this.props.dispatch(toggleChat())}>
             <ImgSm src={chatImg} alt="chat" />
             <NavbarBtnMsg>
               <FormattedMessage {...messages.chat} />

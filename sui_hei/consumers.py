@@ -35,7 +35,7 @@ from graphql_relay import from_global_id, to_global_id
 
 from schema import schema
 
-from .models import Dialogue, Hint, Puzzle, User
+from .models import Dialogue, Hint, Minichat, Puzzle, User
 
 onlineViewerCount = 0
 
@@ -49,9 +49,14 @@ DIALOGUE_ADDED = "ws/DIALOGUE_ADDED"
 DIALOGUE_UPDATED = "ws/DIALOGUE_UPDATED"
 HINT_ADDED = "ws/HINT_ADDED"
 HINT_UPDATED = "ws/HINT_UPDATED"
+MINICHAT_ADDED = "ws/MINICHAT_ADDED"
+MINICHAT_UPDATED = "ws/MINICHAT_UPDATED"
 
 VIEWER_CONNECT = "ws/VIEWER_CONNECT"
 VIEWER_DISCONNECT = "ws/VIEWER_DISCONNECT"
+
+MINICHAT_CONNECT = "ws/MINICHAT_CONNECT"
+MINICHAT_DISCONNECT = "ws/MINICHAT_DISCONNECT"
 
 UPDATE_ONLINE_VIEWER_COUNT = "ws/UPDATE_ONLINE_VIEWER_COUNT"
 # }}}
@@ -129,6 +134,29 @@ def send_hint_update(sender, instance, created, *args, **kwargs):
         Group("puzzle-%s" % puzzleId).send({"text": text})
 
 
+@receiver(post_save, sender=Minichat)
+def send_minichat_update(sender, instance, created, *args, **kwargs):
+    minichatId = instance.id
+    if created:
+        text = json.dumps({
+            "type": MINICHAT_ADDED,
+            "data": {
+                "id": to_global_id('MinichatNode', minichatId),
+            }
+        })
+        print("Send", text)
+        Group("minichat-%s" % minichatId).send({"text": text})
+    else:
+        text = json.dumps({
+            "type": MINICHAT_UPDATED,
+            "data": {
+                "id": to_global_id('MinichatNode', minichatId),
+            }
+        })
+        print("Send", text)
+        Group("minichat-%s" % minichatId).send({"text": text})
+
+
 def broadcast_status():
     global onlineViewerCount
     #onlineUsers = User.objects.filter(online=True)
@@ -184,3 +212,7 @@ def ws_message(message):
     elif data.get("type") == PUZZLE_DISCONNECT:
         Group("puzzle-%s" % data["data"]["puzzleId"])\
                 .discard(message.reply_channel)
+    elif data.get("type") == MINICHAT_CONNECT:
+        Group("minichat-%s" % data["channel"]).add(message.reply_channel)
+    elif data.get("type") == MINICHAT_DISCONNECT:
+        Group("minichat-%s" % data["channel"]).discard(message.reply_channel)

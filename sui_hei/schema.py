@@ -109,7 +109,7 @@ class HintNode(DjangoObjectType):
 class MinichatNode(DjangoObjectType):
     class Meta:
         model = Minichat
-        filter_fields = []
+        filter_fields = ['channel']
         interfaces = (relay.Node, )
 
     rowid = graphene.Int()

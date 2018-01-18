@@ -13,6 +13,7 @@ const puzzlePage = require('containers/PuzzlePage/reducer').default;
 const puzzleList = require('containers/PuzzleList/reducer').default;
 const puzzleAddForm = require('containers/PuzzleAddForm/reducer').default;
 const puzzleShowPage = require('containers/PuzzleShowPage/reducer').default;
+const chat = require('containers/Chat/reducer').default;
 
 const initialReducers = {
   puzzleActiveList,
@@ -20,6 +21,7 @@ const initialReducers = {
   puzzleList,
   puzzleAddForm,
   puzzleShowPage,
+  chat,
 };
 
 /*
