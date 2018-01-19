@@ -146,9 +146,6 @@ export function line2md(string) {
   string = PreNorm(string)
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/^([*+-]) /g, '\\$1 ')
-    .replace(/^(\d+)\. /g, '$1\\. ')
-    .replace(/\n/g, '<br />');
 
   return LinkNorm(md.render(string).replace(/<\/?p>/g, ''));
 }

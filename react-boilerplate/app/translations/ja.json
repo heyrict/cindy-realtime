@@ -70,7 +70,7 @@
   "app.containers.RegisterForm.usernameHelp": "１５０文字以内の英数字、@/./+/-/_　公開されませんが、ログインに必要です。",
   "app.containers.RegisterForm.usernameLabel": "ユーザーネーム",
   "app.containers.UserNavbar.guestTitle": "旅人さん、こんにちは",
-  "app.containers.UserNavbar.loggedInTitle": "いらしゃいませ、{nickname}",
+  "app.containers.UserNavbar.loggedInTitle": "こんにちは、{nickname}さん！",
   "app.containers.UserNavbar.login": "ログイン",
   "app.containers.UserNavbar.logout": "ログアウト",
   "app.containers.UserNavbar.myprof": "マイページ",

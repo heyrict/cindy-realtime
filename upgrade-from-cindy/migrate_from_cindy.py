@@ -13,56 +13,56 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='useraward',
-            old_name='award_id',
-            new_name='award',
-        ),
-        migrations.RenameField(
-            model_name='useraward',
-            old_name='user_id',
-            new_name='user',
-        ),
-        migrations.RenameField(
-            model_name='comment',
-            old_name='mondai_id',
-            new_name='mondai',
-        ),
-        migrations.RenameField(
-            model_name='comment',
-            old_name='user_id',
-            new_name='user',
-        ),
-        migrations.RenameField(
-            model_name='lobby',
-            old_name='user_id',
-            new_name='user',
-        ),
-        migrations.RenameField(
-            model_name='mondai',
-            old_name='user_id',
-            new_name='user',
-        ),
-        migrations.RenameField(
-            model_name='shitumon',
-            old_name='mondai_id',
-            new_name='mondai',
-        ),
-        migrations.RenameField(
-            model_name='shitumon',
-            old_name='user_id',
-            new_name='user',
-        ),
-        migrations.RenameField(
-            model_name='star',
-            old_name='mondai_id',
-            new_name='mondai',
-        ),
-        migrations.RenameField(
-            model_name='star',
-            old_name='user_id',
-            new_name='user',
-        ),
+        #migrations.RenameField(
+        #    model_name='useraward',
+        #    old_name='award_id',
+        #    new_name='award',
+        #),
+        #migrations.RenameField(
+        #    model_name='useraward',
+        #    old_name='user_id',
+        #    new_name='user',
+        #),
+        #migrations.RenameField(
+        #    model_name='comment',
+        #    old_name='mondai_id',
+        #    new_name='mondai',
+        #),
+        #migrations.RenameField(
+        #    model_name='comment',
+        #    old_name='user_id',
+        #    new_name='user',
+        #),
+        #migrations.RenameField(
+        #    model_name='lobby',
+        #    old_name='user_id',
+        #    new_name='user',
+        #),
+        #migrations.RenameField(
+        #    model_name='mondai',
+        #    old_name='user_id',
+        #    new_name='user',
+        #),
+        #migrations.RenameField(
+        #    model_name='shitumon',
+        #    old_name='mondai_id',
+        #    new_name='mondai',
+        #),
+        #migrations.RenameField(
+        #    model_name='shitumon',
+        #    old_name='user_id',
+        #    new_name='user',
+        #),
+        #migrations.RenameField(
+        #    model_name='star',
+        #    old_name='mondai_id',
+        #    new_name='mondai',
+        #),
+        #migrations.RenameField(
+        #    model_name='star',
+        #    old_name='user_id',
+        #    new_name='user',
+        #),
         migrations.AlterField(
             model_name='user',
             name='current_award',

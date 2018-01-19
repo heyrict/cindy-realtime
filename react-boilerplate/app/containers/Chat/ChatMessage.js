@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { DarkNicknameLink as NicknameLink } from 'style-store';
 import UserAwardPopover from 'components/UserAwardPopover';
-import PropTypes from 'prop-types';
+import { line2md } from 'common';
 
 const MessageWrapper = styled.div`
   border-radius: 5px;
@@ -23,8 +24,7 @@ function ChatMessage(props) {
         userAward={props.user.currentAward}
         style={{ color: '#23527c', fontSize: '0.9em' }}
       />
-      {'  '}
-      {props.content}
+      <div dangerouslySetInnerHTML={{ __html: line2md(props.content) }} />
     </MessageWrapper>
   );
 }

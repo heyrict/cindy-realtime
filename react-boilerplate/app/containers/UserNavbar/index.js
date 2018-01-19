@@ -44,6 +44,14 @@ export class UserNavbar extends React.Component {
         }}
       />
     );
+    const welcomeTitle = (
+      <FormattedMessage
+        {...messages.loggedInTitle}
+        values={{
+          nickname: this.props.usernavbar.user.nickname,
+        }}
+      />
+    );
     if (this.props.usernavbar.user.userId) {
       return (
         <SubNavbar
@@ -61,7 +69,11 @@ export class UserNavbar extends React.Component {
           <LogoutMenuItem>
             <FormattedMessage {...messages.logout} />
           </LogoutMenuItem>
-          <NavLink is="span">{onlineViewerNumTitle}</NavLink>
+          <NavLink is="span">
+            {welcomeTitle}
+            {'  '}
+            {onlineViewerNumTitle}
+          </NavLink>
         </SubNavbar>
       );
     }
