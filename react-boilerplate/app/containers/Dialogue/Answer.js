@@ -32,7 +32,6 @@ import {
 import UserAwardPopover from 'components/UserAwardPopover';
 
 import messages from './messages';
-import { updateAnswer } from './actions';
 
 const StyledInput = Input.extend`
   border-radius: 10px;

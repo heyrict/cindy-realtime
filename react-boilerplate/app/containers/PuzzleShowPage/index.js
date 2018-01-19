@@ -100,6 +100,7 @@ export class PuzzleShowPage extends React.Component {
                   key={node.node.id}
                   index={index}
                   type={type}
+                  status={P.status}
                   {...node}
                 />
               );

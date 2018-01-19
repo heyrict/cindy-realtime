@@ -16,6 +16,8 @@ const Dialogue = (props) => (
           id={props.node.id}
           user={props.node.user}
           created={props.node.created}
+          answered={Boolean(props.node.answer)}
+          status={props.status}
         />
       </Box>
       <Box width={1 / 2} ml={5}>
@@ -25,6 +27,7 @@ const Dialogue = (props) => (
           answer={props.node.answer}
           good={props.node.good}
           true={props.node.true}
+          status={props.status}
         />
       </Box>
     </Row>
@@ -33,6 +36,7 @@ const Dialogue = (props) => (
 
 Dialogue.propTypes = {
   index: PropTypes.number.isRequired,
+  status: PropTypes.number.isRequired,
   node: PropTypes.shape({
     id: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired,

@@ -326,6 +326,34 @@ class UpdateAnswer(graphene.ClientIDMutation):
         return UpdateAnswer(dialogue=dialogue)
 
 
+# {{{2 UpdateQuestion
+class UpdateQuestion(graphene.ClientIDMutation):
+    dialogue = graphene.Field(DialogueNode)
+
+    class Input:
+        dialogueId = graphene.Int()
+        question = graphene.String()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        dialogueId = input['dialogueId']
+        question = input['question']
+
+        if not question:
+            raise ValidationError(_("Question content cannot be empty!"))
+
+        dialogue = Dialogue.objects.get(id=dialogueId)
+
+        dialogue.question = question
+        dialogue.save()
+
+        return UpdateQuestion(dialogue=dialogue)
+
+
 # {{{2 UpdatePuzzle
 class UpdatePuzzle(graphene.ClientIDMutation):
     puzzle = graphene.Field(PuzzleNode)
@@ -603,6 +631,7 @@ class Mutation(graphene.ObjectType):
     create_hint = CreateHint.Field()
     create_minichat = CreateMinichat.Field()
     update_answer = UpdateAnswer.Field()
+    update_question = UpdateQuestion.Field()
     update_puzzle = UpdatePuzzle.Field()
     update_hint = UpdateHint.Field()
     login = UserLogin.Field()
