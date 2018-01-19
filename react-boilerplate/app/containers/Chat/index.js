@@ -15,9 +15,11 @@ import { Toolbar, NavLink } from 'rebass';
 
 import injectSaga from 'utils/injectSaga';
 import ChatRoom from './ChatRoom';
+import Channels from './Channels';
 import makeSelectChat from './selectors';
 import saga from './saga';
 import messages from './messages';
+import { changeChannel } from './actions';
 
 const StyledToolbar = styled(Toolbar)`
   background-color: sienna;
@@ -35,6 +37,13 @@ export class Chat extends React.Component {
       activeTab: 0,
     };
     this.changeTab = (t) => this.setState({ activeTab: t });
+    this.tune = this.tune.bind(this);
+  }
+  tune(channel) {
+    if (channel !== this.props.chat.channel) {
+      this.props.dispatch(changeChannel(channel));
+    }
+    this.changeTab(0);
   }
   render() {
     return (
@@ -53,7 +62,9 @@ export class Chat extends React.Component {
           </div>
         </div>
         <div>
-          <div hidden={this.state.activeTab !== 1}>Channels</div>
+          <div hidden={this.state.activeTab !== 1}>
+            <Channels tune={this.tune} />
+          </div>
         </div>
       </div>
     );
@@ -62,6 +73,7 @@ export class Chat extends React.Component {
 
 Chat.propTypes = {
   chat: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -6,6 +6,7 @@
 
 import {
   TOGGLE_MINICHAT,
+  CHANGE_CHANNEL,
   MINICHAT_CONNECT,
   MINICHAT_DISCONNECT,
   MINICHAT_MORE,
@@ -35,5 +36,12 @@ export function disconnectChat(channel) {
 export function loadMore() {
   return {
     type: MINICHAT_MORE,
+  };
+}
+
+export function changeChannel(channel) {
+  return {
+    type: CHANGE_CHANNEL,
+    channel,
   };
 }

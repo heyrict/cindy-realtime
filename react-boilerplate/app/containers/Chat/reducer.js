@@ -6,6 +6,7 @@
 
 import { fromJS } from 'immutable';
 import {
+  CHANGE_CHANNEL,
   OPEN_MINICHAT,
   CLOSE_MINICHAT,
   INIT_MINICHAT,
@@ -28,6 +29,8 @@ function chatReducer(state = initialState, action) {
       return state.setIn(['open'], true);
     case CLOSE_MINICHAT:
       return state.setIn(['open'], false);
+    case CHANGE_CHANNEL:
+      return state.setIn(['channel'], action.channel);
     case MINICHAT_CONNECT:
     case MINICHAT_DISCONNECT:
       return state.setIn(['currentChannel'], action.channel);
