@@ -177,6 +177,7 @@ class Answer extends React.PureComponent {
                 (this.props.true && '1.3em') ||
                 (this.props.good && '1.15em') ||
                 '1em',
+              overflow: 'auto',
             }}
             dangerouslySetInnerHTML={{ __html: line2md(this.props.answer) }}
           />

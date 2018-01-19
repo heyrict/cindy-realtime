@@ -115,6 +115,7 @@ class Question extends React.PureComponent {
         <Splitter />
         <Box width={1}>
           <span
+            style={{ overflow: 'auto' }}
             dangerouslySetInnerHTML={{ __html: line2md(this.props.question) }}
           />
           {this.props.user.rowid === this.props.currentUser.userId &&

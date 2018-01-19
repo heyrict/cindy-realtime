@@ -24,7 +24,10 @@ function ChatMessage(props) {
         userAward={props.user.currentAward}
         style={{ color: '#23527c', fontSize: '0.9em' }}
       />
-      <div dangerouslySetInnerHTML={{ __html: line2md(props.content) }} />
+      <div
+        style={{ overflow: 'auto' }}
+        dangerouslySetInnerHTML={{ __html: line2md(props.content) }}
+      />
     </MessageWrapper>
   );
 }
