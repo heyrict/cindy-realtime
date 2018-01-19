@@ -231,6 +231,7 @@ class CreateQuestion(graphene.ClientIDMutation):
         return CreateQuestion(dialogue=dialogue)
 
 
+# {{{2 CreateHint
 class CreateHint(graphene.ClientIDMutation):
     hint = graphene.Field(HintNode)
 
@@ -260,6 +261,32 @@ class CreateHint(graphene.ClientIDMutation):
             puzzle=puzzle, content=content, created=created)
 
         return CreateHint(hint=hint)
+
+
+# {{{2 CreateMinichat
+class CreateMinichat(graphene.ClientIDMutation):
+    minichat = graphene.Field(MinichatNode)
+
+    class Input:
+        content = graphene.String()
+        channel = graphene.String()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        content = input['content']
+        channel = input['channel']
+
+        if not content:
+            raise ValidationError(_("Minichat content cannot be empty!"))
+
+        minichat = Minichat.objects.create(
+            content=content, user=user, channel=channel)
+
+        return CreateMinichat(minichat=minichat)
 
 
 # {{{2 UpdateAnswer
@@ -574,6 +601,7 @@ class Mutation(graphene.ObjectType):
     create_puzzle = CreatePuzzle.Field()
     create_question = CreateQuestion.Field()
     create_hint = CreateHint.Field()
+    create_minichat = CreateMinichat.Field()
     update_answer = UpdateAnswer.Field()
     update_puzzle = UpdatePuzzle.Field()
     update_hint = UpdateHint.Field()

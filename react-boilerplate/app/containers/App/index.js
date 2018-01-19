@@ -77,7 +77,7 @@ class App extends React.Component {
             height={this.state.height}
             hidden={!this.props.chat.open}
           >
-            <Chat />
+            <Chat height={this.state.height - 50} />
           </EasingBox>
           <EasingBox
             w={this.props.chat.open ? [0, 0.618, 0.7] : 1}

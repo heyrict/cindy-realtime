@@ -137,6 +137,7 @@ def send_hint_update(sender, instance, created, *args, **kwargs):
 @receiver(post_save, sender=Minichat)
 def send_minichat_update(sender, instance, created, *args, **kwargs):
     minichatId = instance.id
+    channel = instance.channel
     if created:
         text = json.dumps({
             "type": MINICHAT_ADDED,
@@ -145,7 +146,7 @@ def send_minichat_update(sender, instance, created, *args, **kwargs):
             }
         })
         print("Send", text)
-        Group("minichat-%s" % minichatId).send({"text": text})
+        Group("minichat-%s" % channel).send({"text": text})
     else:
         text = json.dumps({
             "type": MINICHAT_UPDATED,
@@ -154,7 +155,7 @@ def send_minichat_update(sender, instance, created, *args, **kwargs):
             }
         })
         print("Send", text)
-        Group("minichat-%s" % minichatId).send({"text": text})
+        Group("minichat-%s" % channel).send({"text": text})
 
 
 def broadcast_status():

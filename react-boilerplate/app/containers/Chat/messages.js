@@ -18,4 +18,20 @@ export default defineMessages({
     id: 'app.containers.Chat.defaultChannel',
     defaultMessage: 'Default Channel',
   },
+  channelName: {
+    id: 'app.containers.Chat.channelName',
+    defaultMessage: 'Channel Name',
+  },
+  change: {
+    id: 'app.containers.Chat.change',
+    defaultMessage: 'Change',
+  },
+  send: {
+    id: 'app.containers.Chat.send',
+    defaultMessage: 'Send',
+  },
+  loadMore: {
+    id: 'app.containers.Chat.loadMore',
+    defaultMessage: 'Load More',
+  },
 });

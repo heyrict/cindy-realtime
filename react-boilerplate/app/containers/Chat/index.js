@@ -14,6 +14,7 @@ import { compose } from 'redux';
 import { Toolbar, NavLink } from 'rebass';
 
 import injectSaga from 'utils/injectSaga';
+import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
 import ChatRoom from './ChatRoom';
 import Channels from './Channels';
 import makeSelectChat from './selectors';
@@ -25,7 +26,6 @@ const StyledToolbar = styled(Toolbar)`
   background-color: sienna;
   font-weight: bold;
   color: blanchedalmond;
-  border-radius: 10px;
   height: 50px;
 `;
 
@@ -58,7 +58,13 @@ export class Chat extends React.Component {
         </StyledToolbar>
         <div>
           <div hidden={this.state.activeTab !== 0}>
-            <ChatRoom chatMessages={this.props.chat.chatMessages} />
+            <ChatRoom
+              chatMessages={this.props.chat.chatMessages}
+              channel={this.props.chat.currentChannel}
+              currentUserId={this.props.currentUser.user.userId}
+              hasPreviousPage={this.props.chat.hasPreviousPage}
+              height={this.props.height - 50}
+            />
           </div>
         </div>
         <div>
@@ -73,11 +79,14 @@ export class Chat extends React.Component {
 
 Chat.propTypes = {
   chat: PropTypes.object.isRequired,
+  currentUser: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
+  height: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   chat: makeSelectChat(),
+  currentUser: makeSelectUserNavbar(),
 });
 
 function mapDispatchToProps(dispatch) {

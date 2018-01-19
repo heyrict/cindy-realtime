@@ -33,13 +33,9 @@ class UserAwardPopover extends React.PureComponent {
     );
     return (
       <OverlayTrigger placement="top" trigger="focus" overlay={popoverAward}>
-        <a
-          href="#!"
-          role="button"
-          style={{ color: 'black', ...this.props.style }}
-        >
+        <button style={{ color: 'black', padding: '0', ...this.props.style }}>
           [{ua.award.name}]
-        </a>
+        </button>
       </OverlayTrigger>
     );
   }

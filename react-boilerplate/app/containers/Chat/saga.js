@@ -9,9 +9,12 @@ import {
   MINICHAT_CONNECT,
   INIT_MINICHAT,
   MINICHAT_MORE,
+  MINICHAT_ADDED,
+  ADD_MINICHAT,
   MORE_MINICHAT,
   minichatQuery,
   minichatMoreQuery,
+  minichatUpdateQuery,
 } from './constants';
 import { selectChatDomain } from './selectors';
 
@@ -85,6 +88,15 @@ function* fetchMoreMinichats() {
   yield put({ type: MORE_MINICHAT, ...data });
 }
 
+function* fetchMinichatUpdate(action) {
+  const data = yield call(
+    gqlQuery,
+    { text: minichatUpdateQuery },
+    { id: action.data.id }
+  );
+  yield put({ type: ADD_MINICHAT, data });
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   yield [
@@ -93,5 +105,6 @@ export default function* defaultSaga() {
     takeLatest(CHANGE_CHANNEL, handleChannelChange),
     takeLatest(MINICHAT_CONNECT, fetchAllMinichats),
     takeLatest(MINICHAT_MORE, fetchMoreMinichats),
+    takeEvery(MINICHAT_ADDED, fetchMinichatUpdate),
   ];
 }
