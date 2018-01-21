@@ -21,7 +21,7 @@ function ProfRow(props) {
 }
 
 ProfRow.propTypes = {
-  heading: PropTypes.string.isRequired,
+  heading: PropTypes.any.isRequired,
   content: PropTypes.element,
 };
 

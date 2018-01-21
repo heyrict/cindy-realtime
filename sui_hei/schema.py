@@ -437,6 +437,30 @@ class UpdateHint(relay.ClientIDMutation):
         return UpdateHint(hint=hint)
 
 
+class UpdateCurrentAward(relay.ClientIDMutation):
+    class Input:
+        userawardId = graphene.Int()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        userawardId = input['userawardId']
+
+        if not userawardId:
+            user.current_award = None
+        else:
+            useraward = UserAward.objects.get(id=userawardId)
+            if useraward.user != user:
+                raise ValidationError(_("Only award owner can set this award"))
+            user.current_award = useraward
+
+        user.save()
+        return UpdateCurrentAward()
+
+
 # {{{2 Login
 class UserLogin(relay.ClientIDMutation):
     class Input:
@@ -634,6 +658,7 @@ class Mutation(graphene.ObjectType):
     update_question = UpdateQuestion.Field()
     update_puzzle = UpdatePuzzle.Field()
     update_hint = UpdateHint.Field()
+    update_current_award = UpdateCurrentAward.Field()
     login = UserLogin.Field()
     logout = UserLogout.Field()
     register = UserRegister.Field()

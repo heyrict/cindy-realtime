@@ -9,6 +9,7 @@ import {
   CHANGE_CHANNEL,
   OPEN_MINICHAT,
   CLOSE_MINICHAT,
+  CHANGE_TAB,
   INIT_MINICHAT,
   MORE_MINICHAT,
   ADD_MINICHAT,
@@ -19,6 +20,7 @@ import {
 const initialState = fromJS({
   open: false,
   channel: null,
+  activeTab: 'TAB_CHAT',
   currentChannel: null,
   chatMessages: [],
   hasPreviousPage: false,
@@ -31,6 +33,8 @@ function chatReducer(state = initialState, action) {
       return state.setIn(['open'], true);
     case CLOSE_MINICHAT:
       return state.setIn(['open'], false);
+    case CHANGE_TAB:
+      return state.setIn(['activeTab'], action.tab);
     case CHANGE_CHANNEL:
       return state.setIn(['channel'], action.channel);
     case MINICHAT_CONNECT:

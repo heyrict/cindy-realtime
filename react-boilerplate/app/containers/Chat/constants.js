@@ -9,6 +9,13 @@ import { componentsUserFragment } from 'containers/PuzzleActiveList/constants';
 export const TOGGLE_MINICHAT = 'app/Chat/TOGGLE_MINICHAT';
 export const CHANGE_CHANNEL = 'app/Chat/CHANGE_CHANNEL';
 
+export const CHANGE_TAB = 'app/Chat/CHANGE_TAB';
+export const TABS = {
+  TAB_CHAT: 'TAB_CHAT',
+  TAB_CHANNEL: 'TAB_CHANNEL',
+  TAB_USERS: 'TAB_USERS',
+};
+
 export const OPEN_MINICHAT = 'app/Chat/OPEN_MINICHAT';
 export const CLOSE_MINICHAT = 'app/Chat/CLOSE_MINICHAT';
 
@@ -25,6 +32,7 @@ export const INIT_MINICHAT = 'app/Chat/INIT_MINICHAT';
 
 export const PublicChannels = ['lobby', '7-5-7'];
 
+// {{{ const minichatFragment
 const minichatFragment = `
   fragment components_minichat on MinichatNode {
     id
@@ -35,6 +43,7 @@ const minichatFragment = `
   }
   ${componentsUserFragment}
 `;
+// }}}
 
 // {{{ const minichatQuery
 export const minichatQuery = `

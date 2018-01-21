@@ -20,7 +20,10 @@ import Channels from './Channels';
 import makeSelectChat from './selectors';
 import saga from './saga';
 import messages from './messages';
-import { changeChannel } from './actions';
+import { changeChannel, changeTab } from './actions';
+import { TABS } from './constants';
+
+const { TAB_CHAT, TAB_CHANNEL, TAB_USERS } = TABS;
 
 const StyledToolbar = styled(Toolbar)`
   background-color: sienna;
@@ -30,51 +33,41 @@ const StyledToolbar = styled(Toolbar)`
   overflow-y: auto;
 `;
 
-export class Chat extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      activeTab: 0,
-    };
-    this.changeTab = (t) => this.setState({ activeTab: t });
-    this.tune = this.tune.bind(this);
+export function Chat(props) {
+  function setActiveTab(tab) {
+    props.dispatch(changeTab(tab));
   }
-  tune(channel) {
-    if (channel !== this.props.chat.channel) {
-      this.props.dispatch(changeChannel(channel));
+  function tune(channel) {
+    if (channel !== props.chat.channel) {
+      props.dispatch(changeChannel(channel));
     }
-    this.changeTab(0);
+    changeTab(TAB_CHAT);
   }
-  render() {
-    return (
-      <div>
-        <StyledToolbar>
-          <NavLink onClick={() => this.changeTab(0)}>
-            <FormattedMessage {...messages.chatroom} />
-          </NavLink>
-          <NavLink onClick={() => this.changeTab(1)}>
-            <FormattedMessage {...messages.channel} />
-          </NavLink>
-          <NavLink onClick={() => this.changeTab(2)}>
-            <FormattedMessage {...messages.onlineUsers} />
-          </NavLink>
-        </StyledToolbar>
-        <div hidden={this.state.activeTab !== 0}>
-          <ChatRoom
-            chatMessages={this.props.chat.chatMessages}
-            channel={this.props.chat.currentChannel}
-            currentUserId={this.props.currentUser.user.userId}
-            hasPreviousPage={this.props.chat.hasPreviousPage}
-            height={this.props.height - 50}
-          />
-        </div>
-        <div hidden={this.state.activeTab !== 1}>
-          <Channels tune={this.tune} />
-        </div>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <StyledToolbar>
+        <NavLink onClick={() => setActiveTab(TAB_CHAT)}>
+          <FormattedMessage {...messages.chatroom} />
+        </NavLink>
+        <NavLink onClick={() => setActiveTab(TAB_CHANNEL)}>
+          <FormattedMessage {...messages.channel} />
+        </NavLink>
+        <NavLink onClick={() => setActiveTab(TAB_USERS)}>
+          <FormattedMessage {...messages.onlineUsers} />
+        </NavLink>
+      </StyledToolbar>
+      {props.chat.activeTab === TAB_CHAT && (
+        <ChatRoom
+          chatMessages={props.chat.chatMessages}
+          channel={props.chat.currentChannel}
+          currentUserId={props.currentUser.user.userId}
+          hasPreviousPage={props.chat.hasPreviousPage}
+          height={props.height - 50}
+        />
+      )}
+      {props.chat.activeTab === TAB_CHANNEL && <Channels tune={tune} />}
+    </div>
+  );
 }
 
 Chat.propTypes = {

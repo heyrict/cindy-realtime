@@ -25,6 +25,7 @@ import ProfileShowQuery from 'graphql/ProfileShowQuery';
 
 import injectSaga from 'utils/injectSaga';
 import ProfRow from './ProfRow';
+import AwardSwitch from './AwardSwitch';
 import makeSelectProfilePage from './selectors';
 import saga from './saga';
 import messages from './messages';
@@ -40,7 +41,6 @@ function ProfilePage(props, context) {
       <Constrained level={3}>
         <QueryRenderer
           environment={environment}
-          component={() => <div />}
           query={ProfileShowQuery}
           variables={{ id: t('UserNode', props.match.params.id) }}
           render={(raw) => {
@@ -73,6 +73,7 @@ function ProfilePage(props, context) {
                             <UserAwardPopover
                               userAward={edge.node}
                               placement="bottom"
+                              key={edge.node.id}
                               style={{
                                 color: 'darkslategray',
                                 padding: '0 3px',
@@ -89,6 +90,10 @@ function ProfilePage(props, context) {
                     <ProfRow
                       heading={_(messages.lastLogin)}
                       content={<div>{moment(U.lastLogin).format('llll')}</div>}
+                    />
+                    <AwardSwitch
+                      currentAwardId={U.currentAward.id}
+                      userawardSet={U.userawardSet}
                     />
                     <ProfRow
                       heading={_(messages.profile)}

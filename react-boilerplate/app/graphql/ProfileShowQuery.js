@@ -6,12 +6,6 @@ export const ProfileShowQuery = graphql`
       nickname
       currentAward {
         id
-        created
-        award {
-          id
-          name
-          description
-        }
       }
       userawardSet {
         edges {

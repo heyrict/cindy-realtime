@@ -34,4 +34,8 @@ export default defineMessages({
     id: 'app.containers.ProfilePage.profile',
     defaultMessage: 'Profile',
   },
+  awardSelect: {
+    id: 'app.containers.ProfilePage.awardSelect',
+    defaultMessage: 'Award Select',
+  },
 });

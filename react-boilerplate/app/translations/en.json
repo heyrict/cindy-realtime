@@ -34,6 +34,7 @@
   "app.containers.LoginForm.username": "Username",
   "app.containers.Notifier.puzzleAdded": "A New Puzzle {title} is Added by {nickname}!",
   "app.containers.Notifier.wsConnect": "Connected to server!",
+  "app.containers.ProfilePage.awardSelect": "Award Select",
   "app.containers.ProfilePage.dateJoined": "Joined Date",
   "app.containers.ProfilePage.description": "Profile of a user",
   "app.containers.ProfilePage.heading": "{nickname}'s Profile",

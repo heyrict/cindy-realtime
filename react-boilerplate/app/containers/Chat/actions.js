@@ -6,6 +6,7 @@
 
 import {
   TOGGLE_MINICHAT,
+  CHANGE_TAB,
   CHANGE_CHANNEL,
   MINICHAT_CONNECT,
   MINICHAT_DISCONNECT,
@@ -16,6 +17,13 @@ export function toggleChat(open) {
   return {
     type: TOGGLE_MINICHAT,
     open,
+  };
+}
+
+export function changeTab(tab) {
+  return {
+    type: CHANGE_TAB,
+    tab,
   };
 }
 

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import {
   Flex,
+  Button as RebassButton,
   ButtonOutline as RebassButtonOutline,
   Switch as RebassSwitch,
 } from 'rebass';
@@ -95,12 +96,23 @@ export const Heading = styled.h1`
   padding-top: 0.5em;
 `;
 
+export const Button = styled(RebassButton)`
+  border-radius: 0 10px 10px 0;
+  color: blanchedalmond;
+  background-color: #2075c7;
+  font-weight: bold;
+  &:hover {
+    color: blanchedalmond;
+    background-color: #2075c7;
+  }
+`;
+
 export const ButtonOutline = styled(RebassButtonOutline)`
   border-radius: 0 10px 10px 0;
   color: #2075c7;
   font-weight: bold;
   &:hover {
-    color: blanchdalmond;
+    color: blanchedalmond;
     background-color: #2075c7;
   }
 `;
