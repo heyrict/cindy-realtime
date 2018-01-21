@@ -27,6 +27,7 @@ const StyledToolbar = styled(Toolbar)`
   font-weight: bold;
   color: blanchedalmond;
   height: 50px;
+  overflow-y: auto;
 `;
 
 export class Chat extends React.Component {
@@ -55,22 +56,21 @@ export class Chat extends React.Component {
           <NavLink onClick={() => this.changeTab(1)}>
             <FormattedMessage {...messages.channel} />
           </NavLink>
+          <NavLink onClick={() => this.changeTab(2)}>
+            <FormattedMessage {...messages.onlineUsers} />
+          </NavLink>
         </StyledToolbar>
-        <div>
-          <div hidden={this.state.activeTab !== 0}>
-            <ChatRoom
-              chatMessages={this.props.chat.chatMessages}
-              channel={this.props.chat.currentChannel}
-              currentUserId={this.props.currentUser.user.userId}
-              hasPreviousPage={this.props.chat.hasPreviousPage}
-              height={this.props.height - 50}
-            />
-          </div>
+        <div hidden={this.state.activeTab !== 0}>
+          <ChatRoom
+            chatMessages={this.props.chat.chatMessages}
+            channel={this.props.chat.currentChannel}
+            currentUserId={this.props.currentUser.user.userId}
+            hasPreviousPage={this.props.chat.hasPreviousPage}
+            height={this.props.height - 50}
+          />
         </div>
-        <div>
-          <div hidden={this.state.activeTab !== 1}>
-            <Channels tune={this.tune} />
-          </div>
+        <div hidden={this.state.activeTab !== 1}>
+          <Channels tune={this.tune} />
         </div>
       </div>
     );

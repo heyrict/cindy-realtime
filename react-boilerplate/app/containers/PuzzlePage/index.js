@@ -7,7 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import injectSaga from 'utils/injectSaga';
-import styled from 'styled-components';
 import environment from 'Environment';
 
 import { QueryRenderer } from 'react-relay';
@@ -17,6 +16,7 @@ import { Helmet } from 'react-helmet';
 import { FormattedMessage, intlShape } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { Heading } from 'style-store';
 import Constrained from 'components/Constrained';
 
 import PuzzleList from 'containers/PuzzleList';
@@ -27,14 +27,6 @@ import AddPuzzleBtn from './AddPuzzleBtn';
 import makeSelectPuzzlePage from './selectors';
 import saga from './saga';
 import messages from './messages';
-
-const Heading = styled.h1`
-  font-size: 3em;
-  color: chocolate;
-  margin-left: 0.5em;
-  margin-top: 0;
-  padding-top: 0.5em;
-`;
 
 function PuzzlePage(p, context) {
   const _ = context.intl.formatMessage;

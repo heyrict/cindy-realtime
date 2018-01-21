@@ -155,7 +155,7 @@ class Answer extends React.PureComponent {
       return (
         <PuzzleFrame>
           <Box width={1}>
-            <NicknameLink to={`/profile/${this.props.owner.rowid}`}>
+            <NicknameLink to={`/profile/show/${this.props.owner.rowid}`}>
               {this.props.owner.nickname}
             </NicknameLink>
             <UserAwardPopover

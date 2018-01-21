@@ -59,7 +59,7 @@ export class UserNavbar extends React.Component {
           style={{ display: this.props.open ? 'block' : 'none' }}
         >
           <RouterLink
-            to={`/profile/${this.props.usernavbar.user.userId}`}
+            to={`/profile/show/${this.props.usernavbar.user.userId}`}
             tabIndex="0"
           >
             <NavLink is="span">

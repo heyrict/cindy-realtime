@@ -16,7 +16,7 @@ export function UserLabel(props) {
   const user = props.user;
   return (
     <span>
-      <NicknameLink to={`/profile/${user.rowid}`}>{user.nickname}</NicknameLink>
+      <NicknameLink to={`/profile/show/${user.rowid}`}>{user.nickname}</NicknameLink>
       <br />
       <UserAwardPopover userAward={user.currentAward} />
     </span>

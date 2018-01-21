@@ -14,6 +14,10 @@ export default defineMessages({
     id: 'app.containers.Chat.chatroom',
     defaultMessage: 'ChatRoom',
   },
+  onlineUsers: {
+    id: 'app.containers.Chat.onlineUsers',
+    defaultMessage: 'Online Users',
+  },
   defaultChannel: {
     id: 'app.containers.Chat.defaultChannel',
     defaultMessage: 'Default Channel',

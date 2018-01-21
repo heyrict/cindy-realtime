@@ -46,7 +46,7 @@ function Frame(props) {
             {(c) => (
               <RightBox>
                 <Label>{c}:</Label>
-                <PuzzleUserLabel to={`/profile/${props.user.rowid}`}>
+                <PuzzleUserLabel to={`/profile/show/${props.user.rowid}`}>
                   {props.user.nickname}
                 </PuzzleUserLabel>
                 <UserAwardPopover

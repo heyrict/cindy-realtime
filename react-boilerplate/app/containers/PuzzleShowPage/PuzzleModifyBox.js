@@ -176,26 +176,28 @@ class PuzzleModifyBox extends React.Component {
       <Constrained level={3}>
         <PuzzleFrame>
           <StyledTabs>
-            <StyledTabItem
-              active={this.state.activeTab === 0}
-              onClick={() => this.changeTab(0)}
-              hidden={this.props.puzzle.status !== 0}
-            >
-              <FormattedMessage {...messages.solution} />
-            </StyledTabItem>
+            {this.props.puzzle.status === 0 && (
+              <StyledTabItem
+                active={this.state.activeTab === 0}
+                onClick={() => this.changeTab(0)}
+              >
+                <FormattedMessage {...messages.solution} />
+              </StyledTabItem>
+            )}
             <StyledTabItem
               active={this.state.activeTab === 1}
               onClick={() => this.changeTab(1)}
             >
               <FormattedMessage {...messages.memo} />
             </StyledTabItem>
-            <StyledTabItem
-              active={this.state.activeTab === 2}
-              onClick={() => this.changeTab(2)}
-              hidden={this.props.puzzle.status !== 0}
-            >
-              <FormattedMessage {...messages.hint} />
-            </StyledTabItem>
+            {this.props.puzzle.status === 0 && (
+              <StyledTabItem
+                active={this.state.activeTab === 2}
+                onClick={() => this.changeTab(2)}
+              >
+                <FormattedMessage {...messages.hint} />
+              </StyledTabItem>
+            )}
             <StyledTabItem
               active={this.state.activeTab === 3}
               onClick={() => this.changeTab(3)}
@@ -203,127 +205,135 @@ class PuzzleModifyBox extends React.Component {
               <FormattedMessage {...messages.controlPanel} />
             </StyledTabItem>
           </StyledTabs>
-          <div hidden={this.state.activeTab !== 0}>
-            <div hidden={this.state.solutionEditMode}>
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: text2md(this.props.puzzle.solution),
-                }}
-              />
-              <EditButton onClick={this.toggleSolutionEditMode}>
-                <FormattedMessage {...dialogueMessages.edit} />
-              </EditButton>
+          {this.state.activeTab === 0 && (
+            <div>
+              <div hidden={this.state.solutionEditMode}>
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: text2md(this.props.puzzle.solution),
+                  }}
+                />
+                <EditButton onClick={this.toggleSolutionEditMode}>
+                  <FormattedMessage {...dialogueMessages.edit} />
+                </EditButton>
+              </div>
+              <div hidden={!this.state.solutionEditMode}>
+                <PreviewEdit
+                  content={this.state.solution}
+                  onChange={this.handleSolutionChange}
+                />
+                <Flex>
+                  <EditButton
+                    onClick={this.handleSaveSolution}
+                    style={{ width: '100%' }}
+                  >
+                    <ImgXs src={tick} />
+                  </EditButton>
+                  <EditButton
+                    onClick={this.toggleSolutionEditMode}
+                    style={{ width: '100%' }}
+                  >
+                    <ImgXs src={cross} />
+                  </EditButton>
+                </Flex>
+              </div>
             </div>
-            <div hidden={!this.state.solutionEditMode}>
-              <PreviewEdit
-                content={this.state.solution}
-                onChange={this.handleSolutionChange}
-              />
-              <Flex>
-                <EditButton
-                  onClick={this.handleSaveSolution}
-                  style={{ width: '100%' }}
-                >
-                  <ImgXs src={tick} />
+          )}
+          {this.state.activeTab === 1 && (
+            <div>
+              <div hidden={this.state.memoEditMode}>
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: text2md(this.props.puzzle.memo),
+                  }}
+                />
+                <EditButton onClick={this.toggleMemoEditMode}>
+                  <FormattedMessage {...dialogueMessages.edit} />
                 </EditButton>
-                <EditButton
-                  onClick={this.toggleSolutionEditMode}
-                  style={{ width: '100%' }}
-                >
-                  <ImgXs src={cross} />
-                </EditButton>
+              </div>
+              <div hidden={!this.state.memoEditMode}>
+                <PreviewEdit
+                  content={this.state.memo}
+                  onChange={this.handleMemoChange}
+                />
+                <Flex>
+                  <EditButton
+                    onClick={this.handleSaveMemo}
+                    style={{ width: '100%' }}
+                  >
+                    <ImgXs src={tick} />
+                  </EditButton>
+                  <EditButton
+                    onClick={this.toggleMemoEditMode}
+                    style={{ width: '100%' }}
+                  >
+                    <ImgXs src={cross} />
+                  </EditButton>
+                </Flex>
+              </div>
+            </div>
+          )}
+          {this.state.activeTab === 2 && (
+            <div>
+              <Flex mx={1}>
+                <Box w={(1, 5 / 6, 7 / 8)}>
+                  <Textarea
+                    value={this.state.hint}
+                    onChange={this.handleHintChange}
+                  />
+                </Box>
+                <Box w={(1, 1 / 6, 1 / 8)}>
+                  <EditButton
+                    onClick={this.handleCreateHint}
+                    style={{ width: '100%' }}
+                  >
+                    <ImgXs src={tick} />
+                  </EditButton>
+                </Box>
               </Flex>
             </div>
-          </div>
-          <div hidden={this.state.activeTab !== 1}>
-            <div hidden={this.state.memoEditMode}>
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: text2md(this.props.puzzle.memo),
-                }}
-              />
-              <EditButton onClick={this.toggleMemoEditMode}>
-                <FormattedMessage {...dialogueMessages.edit} />
-              </EditButton>
-            </div>
-            <div hidden={!this.state.memoEditMode}>
-              <PreviewEdit
-                content={this.state.memo}
-                onChange={this.handleMemoChange}
-              />
-              <Flex>
-                <EditButton
-                  onClick={this.handleSaveMemo}
-                  style={{ width: '100%' }}
+          )}
+          {this.state.activeTab === 3 && (
+            <div>
+              <Flex mx={1}>
+                <Box w={1 / 3} hidden={this.props.puzzle.status !== 0}>
+                  <FormattedMessage {...messages.putSolution} />
+                  <Switch
+                    checked={this.state.solve}
+                    onClick={this.handleSolveChange}
+                  />
+                </Box>
+                <Box
+                  w={1 / 3}
+                  hidden={
+                    this.props.puzzle.status !== 1 &&
+                    this.props.puzzle.status !== 3
+                  }
                 >
-                  <ImgXs src={tick} />
-                </EditButton>
-                <EditButton
-                  onClick={this.toggleMemoEditMode}
-                  style={{ width: '100%' }}
-                >
-                  <ImgXs src={cross} />
-                </EditButton>
+                  <FormattedMessage {...messages.toggleHidden} />
+                  <Switch
+                    checked={this.state.hidden}
+                    onClick={this.handleHiddenChange}
+                  />
+                </Box>
+                <Box w={1 / 3}>
+                  <FormattedMessage {...messages.toggleYami} />
+                  <Switch
+                    checked={this.state.yami}
+                    onClick={this.handleYamiChange}
+                  />
+                </Box>
+                <Box w={1 / 3}>
+                  <EditButton
+                    onClick={this.handleSaveControl}
+                    style={{ width: '100%' }}
+                  >
+                    <ImgXs src={tick} />
+                  </EditButton>
+                </Box>
               </Flex>
             </div>
-          </div>
-          <div hidden={this.state.activeTab !== 2}>
-            <Flex mx={1}>
-              <Box w={(1, 5 / 6, 7 / 8)}>
-                <Textarea
-                  value={this.state.hint}
-                  onChange={this.handleHintChange}
-                />
-              </Box>
-              <Box w={(1, 1 / 6, 1 / 8)}>
-                <EditButton
-                  onClick={this.handleCreateHint}
-                  style={{ width: '100%' }}
-                >
-                  <ImgXs src={tick} />
-                </EditButton>
-              </Box>
-            </Flex>
-          </div>
-          <div hidden={this.state.activeTab !== 3}>
-            <Flex mx={1}>
-              <Box w={1 / 3} hidden={this.props.puzzle.status !== 0}>
-                <FormattedMessage {...messages.putSolution} />
-                <Switch
-                  checked={this.state.solve}
-                  onClick={this.handleSolveChange}
-                />
-              </Box>
-              <Box
-                w={1 / 3}
-                hidden={
-                  this.props.puzzle.status !== 1 &&
-                  this.props.puzzle.status !== 3
-                }
-              >
-                <FormattedMessage {...messages.toggleHidden} />
-                <Switch
-                  checked={this.state.hidden}
-                  onClick={this.handleHiddenChange}
-                />
-              </Box>
-              <Box w={1 / 3}>
-                <FormattedMessage {...messages.toggleYami} />
-                <Switch
-                  checked={this.state.yami}
-                  onClick={this.handleYamiChange}
-                />
-              </Box>
-              <Box w={1 / 3}>
-                <EditButton
-                  onClick={this.handleSaveControl}
-                  style={{ width: '100%' }}
-                >
-                  <ImgXs src={tick} />
-                </EditButton>
-              </Box>
-            </Flex>
-          </div>
+          )}
         </PuzzleFrame>
       </Constrained>
     );

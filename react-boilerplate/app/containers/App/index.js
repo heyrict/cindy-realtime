@@ -26,6 +26,7 @@ import HomePage from 'containers/HomePage/Loadable';
 import PuzzlePage from 'containers/PuzzlePage/Loadable';
 import PuzzleAddPage from 'containers/PuzzleAddPage/Loadable';
 import PuzzleShowPage from 'containers/PuzzleShowPage';
+import ProfilePage from 'containers/ProfilePage';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Chat from 'containers/Chat';
 import makeSelectChat from 'containers/Chat/selectors';
@@ -88,6 +89,7 @@ class App extends React.Component {
               <Route exact path="/puzzle" component={PuzzlePage} />
               <Route exact path="/puzzle/add" component={PuzzleAddPage} />
               <Route path="/puzzle/show/:id" component={PuzzleShowPage} />
+              <Route path="/profile/show/:id" component={ProfilePage} />
               <Route component={NotFoundPage} />
             </Switch>
           </EasingBox>

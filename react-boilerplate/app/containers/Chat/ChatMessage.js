@@ -17,7 +17,7 @@ const MessageWrapper = styled.div`
 function ChatMessage(props) {
   return (
     <MessageWrapper>
-      <NicknameLink to={`/profile/${props.user.rowid}`}>
+      <NicknameLink to={`/profile/show/${props.user.rowid}`}>
         {props.user.nickname}
       </NicknameLink>
       <UserAwardPopover

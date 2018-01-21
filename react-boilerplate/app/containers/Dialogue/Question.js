@@ -103,7 +103,7 @@ class Question extends React.PureComponent {
       <PuzzleFrame>
         <Box width={1}>
           <Indexer>{this.props.index}</Indexer>
-          <NicknameLink to={`/profile/${this.props.user.rowid}`}>
+          <NicknameLink to={`/profile/show/${this.props.user.rowid}`}>
             {this.props.user.nickname}
           </NicknameLink>
           <UserAwardPopover

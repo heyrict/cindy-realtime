@@ -87,6 +87,14 @@ export const Indexer = styled.span`
   border-radius: 100px;
 `;
 
+export const Heading = styled.h1`
+  font-size: 3em;
+  color: chocolate;
+  margin-left: 0.5em;
+  margin-top: 0;
+  padding-top: 0.5em;
+`;
+
 export const ButtonOutline = styled(RebassButtonOutline)`
   border-radius: 0 10px 10px 0;
   color: #2075c7;
