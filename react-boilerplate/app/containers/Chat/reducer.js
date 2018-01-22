@@ -5,6 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
+import { UPDATE_ONLINE_VIEWER_COUNT } from 'containers/UserNavbar/constants';
 import {
   CHANGE_CHANNEL,
   OPEN_MINICHAT,
@@ -15,16 +16,24 @@ import {
   ADD_MINICHAT,
   MINICHAT_CONNECT,
   MINICHAT_DISCONNECT,
+  CHANGE_DIRECTCHAT,
+  ADD_DIRECTCHAT_MESSAGE,
 } from './constants';
 
 const initialState = fromJS({
+  // Sidebar State Stuff
   open: false,
-  channel: null,
   activeTab: 'TAB_CHAT',
+  // Chat State Stuff
+  channel: null, // default channel
   currentChannel: null,
-  chatMessages: [],
-  hasPreviousPage: false,
   startCursor: null,
+  hasPreviousPage: false,
+  chatMessages: [],
+  // User state Stuff
+  activeDirectChat: null,
+  onlineUsers: {},
+  directMessages: {},
 });
 
 function chatReducer(state = initialState, action) {
@@ -62,11 +71,18 @@ function chatReducer(state = initialState, action) {
           )
         );
     case ADD_MINICHAT:
-      console.log(action.data.data.minichat);
       return state.updateIn(['chatMessages'], () =>
         Array.concat(state.get('chatMessages'), [
           { node: action.data.data.minichat },
         ])
+      );
+    case UPDATE_ONLINE_VIEWER_COUNT:
+      return state.setIn(['onlineUsers'], action.data.onlineUsers);
+    case CHANGE_DIRECTCHAT:
+      return state.setIn(['activeDirectChat'], action.chat);
+    case ADD_DIRECTCHAT_MESSAGE:
+      return state.updateIn(['directMessages', action.chat], (prev) =>
+        Array.concat(prev || [], [action.data])
       );
     default:
       return state;

@@ -92,7 +92,7 @@ function ProfilePage(props, context) {
                       content={<div>{moment(U.lastLogin).format('llll')}</div>}
                     />
                     <AwardSwitch
-                      currentAwardId={U.currentAward.id}
+                      currentAwardId={U.currentAward ? U.currentAward.id : null}
                       userawardSet={U.userawardSet}
                     />
                     <ProfRow

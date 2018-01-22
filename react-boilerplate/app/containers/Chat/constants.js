@@ -30,7 +30,12 @@ export const MORE_MINICHAT = 'app/Chat/MORE_MINICHAT';
 
 export const INIT_MINICHAT = 'app/Chat/INIT_MINICHAT';
 
-export const PublicChannels = ['lobby', '7-5-7'];
+export const CHANGE_DIRECTCHAT = 'app/Chat/CHANGE_DIRECTCHAT';
+export const SEND_DIRECTCHAT = 'ws/SEND_DIRECTCHAT';
+export const DIRECTCHAT_RECEIVED = 'ws/DIRECTCHAT_RECEIVED';
+export const ADD_DIRECTCHAT_MESSAGE = 'app/Chat/ADD_DIRECTCHAT_MESSAGE';
+
+export const PublicChannels = ['lobby', '5-7-5'];
 
 // {{{ const minichatFragment
 const minichatFragment = `

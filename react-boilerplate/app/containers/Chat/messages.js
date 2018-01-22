@@ -14,9 +14,9 @@ export default defineMessages({
     id: 'app.containers.Chat.chatroom',
     defaultMessage: 'ChatRoom',
   },
-  onlineUsers: {
-    id: 'app.containers.Chat.onlineUsers',
-    defaultMessage: 'Online Users',
+  direct: {
+    id: 'app.containers.Chat.direct',
+    defaultMessage: 'Direct Messages',
   },
   defaultChannel: {
     id: 'app.containers.Chat.defaultChannel',
@@ -37,5 +37,17 @@ export default defineMessages({
   loadMore: {
     id: 'app.containers.Chat.loadMore',
     defaultMessage: 'Load More',
+  },
+  recent: {
+    id: 'app.containers.Chat.recent',
+    defaultMessage: 'Recent Sessions',
+  },
+  onlineUsers: {
+    id: 'app.containers.Chat.onlineUsers',
+    defaultMessage: 'Online Users',
+  },
+  back: {
+    id: 'app.containers.Chat.back',
+    defaultMessage: '< Back',
   },
 });

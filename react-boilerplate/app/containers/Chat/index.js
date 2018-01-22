@@ -17,6 +17,7 @@ import injectSaga from 'utils/injectSaga';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
 import ChatRoom from './ChatRoom';
 import Channels from './Channels';
+import Direct from './Direct';
 import makeSelectChat from './selectors';
 import saga from './saga';
 import messages from './messages';
@@ -52,9 +53,11 @@ export function Chat(props) {
         <NavLink onClick={() => setActiveTab(TAB_CHANNEL)}>
           <FormattedMessage {...messages.channel} />
         </NavLink>
-        <NavLink onClick={() => setActiveTab(TAB_USERS)}>
-          <FormattedMessage {...messages.onlineUsers} />
-        </NavLink>
+        {props.currentUser.user.userId && (
+          <NavLink onClick={() => setActiveTab(TAB_USERS)}>
+            <FormattedMessage {...messages.direct} />
+          </NavLink>
+        )}
       </StyledToolbar>
       {props.chat.activeTab === TAB_CHAT && (
         <ChatRoom
@@ -66,6 +69,13 @@ export function Chat(props) {
         />
       )}
       {props.chat.activeTab === TAB_CHANNEL && <Channels tune={tune} />}
+      {props.chat.activeTab === TAB_USERS && (
+        <Direct
+          currentUser={props.currentUser.user}
+          chat={props.chat}
+          height={props.height - 50}
+        />
+      )}
     </div>
   );
 }

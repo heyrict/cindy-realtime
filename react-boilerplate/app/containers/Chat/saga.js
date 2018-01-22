@@ -1,6 +1,7 @@
 import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
 import { gqlQuery } from 'Environment';
-import { connectChat, disconnectChat } from './actions';
+import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
+import { addDirectchatMessage, connectChat, disconnectChat } from './actions';
 import {
   CHANGE_CHANNEL,
   TOGGLE_MINICHAT,
@@ -12,6 +13,8 @@ import {
   MINICHAT_ADDED,
   ADD_MINICHAT,
   MORE_MINICHAT,
+  SEND_DIRECTCHAT,
+  DIRECTCHAT_RECEIVED,
   minichatQuery,
   minichatMoreQuery,
   minichatUpdateQuery,
@@ -69,6 +72,16 @@ function* handleChannelChange(action) {
   }
 }
 
+function* handleDirectchatSend(action) {
+  yield put(addDirectchatMessage({ data: action.data, chat: action.data.to }));
+}
+
+function* handleDirectchatReceive(action) {
+  yield put(
+    addDirectchatMessage({ data: action.data, chat: action.data.from.userId })
+  );
+}
+
 function* fetchAllMinichats(action) {
   const data = yield call(
     gqlQuery,
@@ -102,6 +115,8 @@ export default function* defaultSaga() {
   yield [
     takeLatest('@@router/LOCATION_CHANGE', onChangeLocation),
     takeEvery(TOGGLE_MINICHAT, handleToggleChat),
+    takeEvery(SEND_DIRECTCHAT, handleDirectchatSend),
+    takeEvery(DIRECTCHAT_RECEIVED, handleDirectchatReceive),
     takeLatest(CHANGE_CHANNEL, handleChannelChange),
     takeLatest(MINICHAT_CONNECT, fetchAllMinichats),
     takeLatest(MINICHAT_MORE, fetchMoreMinichats),

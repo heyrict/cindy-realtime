@@ -33,7 +33,11 @@ function ChatMessage(props) {
 }
 
 ChatMessage.propTypes = {
-  user: PropTypes.object.isRequired,
+  user: PropTypes.shape({
+    rowid: PropTypes.number.isRequired,
+    nickname: PropTypes.string.isRequired,
+    currentAward: PropTypes.object,
+  }),
   content: PropTypes.string.isRequired,
 };
 

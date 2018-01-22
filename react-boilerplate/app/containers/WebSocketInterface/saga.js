@@ -15,6 +15,7 @@ import { WS_CONNECT, WS_DISCONNECT, INTERNAL_ACTIONS } from './constants';
 
 function* handleInternalAction(socket, action) {
   console.log('INTERNAL:', action);
+  if (action.delay) yield delay(action.delay);
 
   for (let i = 1; i <= 10; i += 1) {
     try {
