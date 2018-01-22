@@ -1,2 +1,10 @@
 SECRET_KEY = 'ansecuritykeystring'
 
+POSTGREDB_SETTINGS = {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': 'cindy',
+    'USER': 'cindy',
+    'PASSWORD': 'cindy',
+    'HOST': 'localhost',
+    'POST': '',
+}
