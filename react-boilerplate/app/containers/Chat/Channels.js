@@ -55,7 +55,7 @@ class Channels extends React.PureComponent {
             )}
           </FormattedMessage>
           <ButtonOutline
-            onClick={this.handleSubmit}
+            onClick={() => this.props.tune(this.state.content)}
             p={10}
             style={{ wordBreak: 'keep-all' }}
           >

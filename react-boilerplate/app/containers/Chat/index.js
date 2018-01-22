@@ -42,7 +42,7 @@ export function Chat(props) {
     if (channel !== props.chat.channel) {
       props.dispatch(changeChannel(channel));
     }
-    changeTab(TAB_CHAT);
+    props.dispatch(changeTab(TAB_CHAT));
   }
   return (
     <div>
