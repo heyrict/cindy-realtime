@@ -33,8 +33,6 @@ import makeSelectChat from 'containers/Chat/selectors';
 import common from 'common';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'alertifyjs/build/css/alertify.min.css';
-import 'alertifyjs/build/css/themes/semantic.min.css';
 
 const EasingBox = styled(Box)`
   height: ${(props) => props.height - 50}px;
