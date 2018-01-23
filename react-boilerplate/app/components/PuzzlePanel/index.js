@@ -10,13 +10,15 @@ import PropTypes from 'prop-types';
 import { Panel, Box, Row, Divider } from 'rebass';
 import styled from 'styled-components';
 
-import { createFragmentContainer } from 'react-relay';
+import Relay from 'react-relay';
 
 import ProcessLabel from 'components/ProcessLabel';
 import StarLabel from 'components/StarLabel';
 import StatusLabel from 'components/StatusLabel';
 import TitleLabel from 'components/TitleLabel';
 import UserLabel, { UserLabel as UserLabelPlain } from 'components/UserLabel';
+
+import PuzzlePanelNodeFragment from 'graphql/PuzzlePanel';
 
 const PuzzleDate = styled.span`
   color: gray;
@@ -66,29 +68,7 @@ PuzzlePanel.propTypes = {
   relay: PropTypes.object,
 };
 
-export default createFragmentContainer(PuzzlePanel, {
-  node: graphql`
-    fragment PuzzlePanel_node on PuzzleNode {
-      id
-      rowid
-      genre
-      yami
-      title
-      status
-      created
-      content
-      quesCount
-      uaquesCount
-      starSet {
-        edges {
-          node {
-            value
-          }
-        }
-      }
-      user {
-        ...UserLabel_user
-      }
-    }
-  `,
-});
+export default Relay.createFragmentContainer(
+  PuzzlePanel,
+  PuzzlePanelNodeFragment
+);
