@@ -53,7 +53,7 @@ const minichatFragment = `
 // {{{ const minichatQuery
 export const minichatQuery = `
   query($channel: String!) {
-    allMinichats(channel: $channel, last: 10) {
+    allMinichats(channel: $channel, last: 10, orderBy: "id") {
       pageInfo {
         startCursor
         hasPreviousPage
@@ -72,7 +72,7 @@ export const minichatQuery = `
 // {{{ const minichatMoreQuery
 export const minichatMoreQuery = `
   query($channel: String!, $before: String!) {
-    allMinichats(channel: $channel, last: 10, before: $before) {
+    allMinichats(channel: $channel, last: 10, before: $before, orderBy: "id") {
       pageInfo {
         startCursor
         hasPreviousPage
