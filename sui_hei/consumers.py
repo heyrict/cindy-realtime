@@ -23,6 +23,7 @@ The required returned form is:
 """
 
 import json
+import logging
 
 from channels import Channel, Group
 from channels.auth import channel_session_user_from_http
@@ -39,6 +40,7 @@ from schema import schema
 from .models import Dialogue, Hint, Minichat, Puzzle, User
 
 onlineViewerCount = 0
+logger = logging.getLogger(__name__)
 
 # {{{1 Constants
 PUZZLE_CONNECT = "app/containers/PuzzleShowPage/PUZZLE_SHOWN"
@@ -77,7 +79,7 @@ def send_dialogue_update(sender, instance, created, *args, **kwargs):
                 "id": to_global_id('DialogueNode', dialogueId),
             }
         })
-        print("Send", text)
+        logger.debug("Send %s", text)
         Group("puzzle-%d" % instance.puzzle.id).send({"text": text})
     else:
         text = json.dumps({
@@ -86,7 +88,7 @@ def send_dialogue_update(sender, instance, created, *args, **kwargs):
                 "id": to_global_id('DialogueNode', dialogueId)
             }
         })
-        print("Send", text)
+        logger.debug("Send %s", text)
         Group("puzzle-%d" % instance.puzzle.id).send({"text": text})
 
 
@@ -102,7 +104,7 @@ def send_puzzle_update(sender, instance, created, *args, **kwargs):
                 "nickname": instance.user.nickname
             }
         })
-        print("Send", text)
+        logger.debug("Send %s", text)
         Group("viewer").send({"text": text})
     else:
         text = json.dumps({
@@ -111,7 +113,7 @@ def send_puzzle_update(sender, instance, created, *args, **kwargs):
                 "id": to_global_id('PuzzleNode', puzzleId)
             }
         })
-        print("Send", text)
+        logger.debug("Send %s", text)
         Group("viewer").send({"text": text})
 
 
@@ -126,7 +128,7 @@ def send_hint_update(sender, instance, created, *args, **kwargs):
                 "id": to_global_id('HintNode', hintId),
             }
         })
-        print("Send", text)
+        logger.debug("Send %s", text)
         Group("puzzle-%s" % puzzleId).send({"text": text})
     else:
         text = json.dumps({
@@ -135,7 +137,7 @@ def send_hint_update(sender, instance, created, *args, **kwargs):
                 "id": to_global_id('HintNode', hintId),
             }
         })
-        print("Send", text)
+        logger.debug("Send %s", text)
         Group("puzzle-%s" % puzzleId).send({"text": text})
 
 
@@ -150,7 +152,7 @@ def send_minichat_update(sender, instance, created, *args, **kwargs):
                 "id": to_global_id('MinichatNode', minichatId),
             }
         })
-        print("Send", text)
+        logger.debug("Send %s", text)
         Group("minichat-%s" % channel).send({"text": text})
     else:
         text = json.dumps({
@@ -159,7 +161,7 @@ def send_minichat_update(sender, instance, created, *args, **kwargs):
                 "id": to_global_id('MinichatNode', minichatId),
             }
         })
-        print("Send", text)
+        logger.debug("Send %s", text)
         Group("minichat-%s" % channel).send({"text": text})
 
 
@@ -243,7 +245,7 @@ def ws_disconnect(message):
 def ws_message(message):
     data = json.loads(message.content["text"])
 
-    print("RECEIVE", data)
+    logger.debug("RECEIVE %s", data)
     if data.get("type") == VIEWER_CONNECT:
         broadcast_status()
     elif data.get("type") == VIEWER_DISCONNECT:
