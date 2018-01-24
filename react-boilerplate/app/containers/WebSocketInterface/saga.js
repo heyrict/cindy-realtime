@@ -8,7 +8,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign */
 
 import { call, race, take, put, takeEvery } from 'redux-saga/effects';
-import { WebSocketBridge } from 'django-channels';
 import { eventChannel, delay } from 'redux-saga';
 
 import { WS_CONNECT, WS_DISCONNECT, INTERNAL_ACTIONS } from './constants';
@@ -19,12 +18,11 @@ function* handleInternalAction(socket, action) {
 
   for (let i = 1; i <= 10; i += 1) {
     try {
-      const { stream = 'viewer', ...payload } = action;
-      socket.send(action);
+      socket.send(JSON.stringify(action));
       return;
     } catch (e) {
       console.log(`Socket not connected. Retry...${i}`);
-      if (socket.socket.readyState === 0) yield call(delay, 1000);
+      if (socket.readyState === 0) yield call(delay, 1000);
     }
   }
 }
@@ -43,12 +41,9 @@ function* externalListener(channel) {
 
 function websocketWatch(socket) {
   return eventChannel((emitter) => {
-    socket.listen((action) => {
-      const { stream, payload } = action;
-      console.log('watch:', action);
-      if (stream) emitter(payload);
-      else emitter(action);
-    });
+    socket.onmessage = (action) => {
+      emitter(JSON.parse(action.data));
+    };
 
     return () => {
       socket.close();
@@ -59,8 +54,7 @@ function websocketWatch(socket) {
 export default function* websocketSagas() {
   while (true) {
     const data = yield take(WS_CONNECT);
-    const socket = new WebSocketBridge();
-    socket.connect('/ws/');
+    const socket = new WebSocket(`ws://${window.location.host}/ws/`);
     const socketChannel = yield call(websocketWatch, socket);
 
     const { cancel } = yield race({
