@@ -447,7 +447,7 @@ class UpdateCurrentAward(relay.ClientIDMutation):
         if (not user.is_authenticated):
             raise ValidationError(_("Please login!"))
 
-        userawardId = input['userawardId']
+        userawardId = input.get('userawardId')
 
         if not userawardId:
             user.current_award = None

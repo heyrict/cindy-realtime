@@ -56,6 +56,9 @@ class AwardSwitch extends React.PureComponent {
           heading={<FormattedMessage {...messages.awardSelect} />}
           content={
             <Flex>
+              <StyledButtonOutline onClick={() => this.selectAward(null)}>
+                <FormattedMessage {...messages.nullAward} />
+              </StyledButtonOutline>
               {this.props.userawardSet.edges.map((edge) => (
                 <span key={edge.node.id}>
                   {edge.node.id === this.state.selectedAward ? (

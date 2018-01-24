@@ -38,4 +38,8 @@ export default defineMessages({
     id: 'app.containers.ProfilePage.awardSelect',
     defaultMessage: 'Award Select',
   },
+  nullAward: {
+    id: 'app.containers.ProfilePage.nullAward',
+    defaultMessage: 'None',
+  },
 });

@@ -24,6 +24,7 @@ import Constrained from 'components/Constrained';
 import ProfileShowQuery from 'graphql/ProfileShowQuery';
 
 import injectSaga from 'utils/injectSaga';
+import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
 import ProfRow from './ProfRow';
 import AwardSwitch from './AwardSwitch';
 import makeSelectProfilePage from './selectors';
@@ -32,17 +33,18 @@ import messages from './messages';
 
 function ProfilePage(props, context) {
   const _ = context.intl.formatMessage;
+  const userId = t('UserNode', props.match.params.id);
   return (
     <div>
       <Helmet>
-        <title>{`Cindy - ${_(messages.heading)}`}</title>
+        <title>{`Cindy - ${_(messages.title)}`}</title>
         <meta name="description" content={_(messages.description)} />
       </Helmet>
       <Constrained level={3}>
         <QueryRenderer
           environment={environment}
           query={ProfileShowQuery}
-          variables={{ id: t('UserNode', props.match.params.id) }}
+          variables={{ id: userId }}
           render={(raw) => {
             const error = raw.error;
             const data = raw.props;
@@ -91,10 +93,14 @@ function ProfilePage(props, context) {
                       heading={_(messages.lastLogin)}
                       content={<div>{moment(U.lastLogin).format('llll')}</div>}
                     />
-                    <AwardSwitch
-                      currentAwardId={U.currentAward ? U.currentAward.id : null}
-                      userawardSet={U.userawardSet}
-                    />
+                    {userId === t('UserNode', props.usernavbar.user.userId) && (
+                      <AwardSwitch
+                        currentAwardId={
+                          U.currentAward ? U.currentAward.id : null
+                        }
+                        userawardSet={U.userawardSet}
+                      />
+                    )}
                     <ProfRow
                       heading={_(messages.profile)}
                       content={
@@ -126,6 +132,11 @@ ProfilePage.contextTypes = {
 
 ProfilePage.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  usernavbar: PropTypes.shape({
+    user: PropTypes.shape({
+      userId: PropTypes.number,
+    }),
+  }),
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -135,6 +146,7 @@ ProfilePage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   profilepage: makeSelectProfilePage(),
+  usernavbar: makeSelectUserNavbar(),
 });
 
 function mapDispatchToProps(dispatch) {

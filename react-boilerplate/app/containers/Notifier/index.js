@@ -20,8 +20,8 @@ import { NOTE_NEEDED, NOTE_MSG } from './constants';
 
 class Notifier extends React.Component {
   componentWillReceiveProps(nextProps) {
-    const { WS_CONNECT, PUZZLE_ADDED } = NOTE_NEEDED;
-    const { wsConnectMsg, puzzleAddedMsg } = NOTE_MSG;
+    const { WS_CONNECT, PUZZLE_ADDED, DIRECTCHAT_RECEIVED } = NOTE_NEEDED;
+    const { wsConnectMsg, puzzleAddedMsg, directMessageReceivedMsg } = NOTE_MSG;
 
     switch (nextProps.notification.type) {
       case WS_CONNECT:
@@ -29,6 +29,9 @@ class Notifier extends React.Component {
         break;
       case PUZZLE_ADDED:
         this.notif.addNotification(puzzleAddedMsg(nextProps.notification.data));
+        break;
+      case DIRECTCHAT_RECEIVED:
+        this.notif.addNotification(directMessageReceivedMsg(nextProps.notification.data));
         break;
       default:
     }

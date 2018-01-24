@@ -72,15 +72,17 @@ UPDATE_ONLINE_VIEWER_COUNT = "ws/UPDATE_ONLINE_VIEWER_COUNT"
 @receiver(post_save, sender=Dialogue)
 def send_dialogue_update(sender, instance, created, *args, **kwargs):
     dialogueId = instance.id
+    puzzleId = instance.puzzle.id
     if created:
         text = json.dumps({
             "type": DIALOGUE_ADDED,
             "data": {
                 "id": to_global_id('DialogueNode', dialogueId),
+                "puzzleId": to_global_id('PuzzleNode', puzzleId),
             }
         })
         logger.debug("Send %s", text)
-        Group("puzzle-%d" % instance.puzzle.id).send({"text": text})
+        Group("viewer").send({"text": text})
     else:
         text = json.dumps({
             "type": DIALOGUE_UPDATED,

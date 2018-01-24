@@ -1,6 +1,7 @@
 import { call, put, takeLatest, takeEvery } from 'redux-saga/effects';
 import { gqlQuery } from 'Environment';
 
+import { DIALOGUE_ADDED } from 'containers/PuzzleShowPage/constants';
 import {
   unsolvedListQueryStandalone,
   unsolvedListElementQueryStandalone,
@@ -22,7 +23,10 @@ function* fetchPuzzleUpdate(action) {
   const data = yield call(
     gqlQuery,
     { text: unsolvedListSubscribeQueryStandalone },
-    { ...action.data }
+    {
+      id:
+        action.type === PUZZLE_UPDATED ? action.data.id : action.data.puzzleId,
+    }
   );
   yield put({ type: UPDATE_PUZZLE, ...data });
 }
@@ -41,7 +45,7 @@ export default function* defaultSaga() {
   // See example in containers/HomePage/saga.js
   yield [
     takeLatest(LOAD_ALL_PUZZLES, fetchAllPuzzles),
-    takeEvery(PUZZLE_UPDATED, fetchPuzzleUpdate),
+    takeEvery([PUZZLE_UPDATED, DIALOGUE_ADDED], fetchPuzzleUpdate),
     takeEvery(PUZZLE_ADDED, fetchPuzzleAdd),
   ];
 }
