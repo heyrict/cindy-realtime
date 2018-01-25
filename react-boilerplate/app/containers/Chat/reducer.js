@@ -7,6 +7,7 @@
 import { fromJS } from 'immutable';
 import { UPDATE_ONLINE_VIEWER_COUNT } from 'containers/UserNavbar/constants';
 import {
+  OPEN_DIRECTCHAT,
   CHANGE_CHANNEL,
   OPEN_MINICHAT,
   CLOSE_MINICHAT,
@@ -38,6 +39,11 @@ const initialState = fromJS({
 
 function chatReducer(state = initialState, action) {
   switch (action.type) {
+    case OPEN_DIRECTCHAT:
+      return state
+        .setIn(['open'], true)
+        .setIn(['activeTab'], 'TAB_DIRECTCHAT')
+        .setIn(['activeDirectChat'], action.chat);
     case OPEN_MINICHAT:
       return state.setIn(['open'], true);
     case CLOSE_MINICHAT:

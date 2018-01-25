@@ -24,7 +24,7 @@ import messages from './messages';
 import { changeChannel, changeTab } from './actions';
 import { TABS } from './constants';
 
-const { TAB_CHAT, TAB_CHANNEL, TAB_USERS } = TABS;
+const { TAB_CHAT, TAB_CHANNEL, TAB_DIRECTCHAT } = TABS;
 
 const StyledToolbar = styled(Toolbar)`
   background-color: sienna;
@@ -54,7 +54,7 @@ export function Chat(props) {
           <FormattedMessage {...messages.channel} />
         </NavLink>
         {props.currentUser.user.userId && (
-          <NavLink onClick={() => setActiveTab(TAB_USERS)}>
+          <NavLink onClick={() => setActiveTab(TAB_DIRECTCHAT)}>
             <FormattedMessage {...messages.direct} />
           </NavLink>
         )}
@@ -69,7 +69,7 @@ export function Chat(props) {
         />
       )}
       {props.chat.activeTab === TAB_CHANNEL && <Channels tune={tune} />}
-      {props.chat.activeTab === TAB_USERS && (
+      {props.chat.activeTab === TAB_DIRECTCHAT && (
         <Direct
           currentUser={props.currentUser.user}
           chat={props.chat}

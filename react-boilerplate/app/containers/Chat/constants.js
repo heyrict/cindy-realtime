@@ -13,7 +13,7 @@ export const CHANGE_TAB = 'app/Chat/CHANGE_TAB';
 export const TABS = {
   TAB_CHAT: 'TAB_CHAT',
   TAB_CHANNEL: 'TAB_CHANNEL',
-  TAB_USERS: 'TAB_USERS',
+  TAB_DIRECTCHAT: 'TAB_DIRECTCHAT',
 };
 
 export const OPEN_MINICHAT = 'app/Chat/OPEN_MINICHAT';
@@ -34,6 +34,8 @@ export const CHANGE_DIRECTCHAT = 'app/Chat/CHANGE_DIRECTCHAT';
 export const SEND_DIRECTCHAT = 'ws/SEND_DIRECTCHAT';
 export const DIRECTCHAT_RECEIVED = 'ws/DIRECTCHAT_RECEIVED';
 export const ADD_DIRECTCHAT_MESSAGE = 'app/Chat/ADD_DIRECTCHAT_MESSAGE';
+
+export const OPEN_DIRECTCHAT = 'app/Chat/OPEN_DIRECTCHAT';
 
 export const PublicChannels = ['lobby', '5-7-5'];
 

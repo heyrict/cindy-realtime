@@ -12,15 +12,19 @@ import { createSelector } from 'reselect';
 
 import NotificationSystem from 'react-notification-system';
 
+import { openDirectChat } from 'containers/Chat/actions';
+
+import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import makeSelectNotifier from './selectors';
 import reducer from './reducer';
+import saga from './saga';
 
 import { NOTE_NEEDED, NOTE_MSG } from './constants';
 
 class Notifier extends React.Component {
   componentWillReceiveProps(nextProps) {
-    const { WS_CONNECT, PUZZLE_ADDED, DIRECTCHAT_RECEIVED } = NOTE_NEEDED;
+    const { WS_CONNECT, PUZZLE_ADDED, DIRECTCHAT_NOTIFY } = NOTE_NEEDED;
     const { wsConnectMsg, puzzleAddedMsg, directMessageReceivedMsg } = NOTE_MSG;
 
     switch (nextProps.notification.type) {
@@ -30,8 +34,18 @@ class Notifier extends React.Component {
       case PUZZLE_ADDED:
         this.notif.addNotification(puzzleAddedMsg(nextProps.notification.data));
         break;
-      case DIRECTCHAT_RECEIVED:
-        this.notif.addNotification(directMessageReceivedMsg(nextProps.notification.data));
+      case DIRECTCHAT_NOTIFY:
+        this.notif.addNotification(
+          directMessageReceivedMsg({
+            ...nextProps.notification.data,
+            callback: () =>
+              this.props.dispatch(
+                openDirectChat({
+                  chat: String(nextProps.notification.data.from.userId),
+                })
+              ),
+          })
+        );
         break;
       default:
     }
@@ -49,6 +63,7 @@ class Notifier extends React.Component {
 }
 
 Notifier.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   notification: PropTypes.any.isRequired,
 };
 
@@ -59,8 +74,14 @@ const mapStateToProps = createSelector(
   })
 );
 
-const withConnect = connect(mapStateToProps);
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withReducer = injectReducer({ key: 'notifier', reducer });
 
-export default compose(withReducer, withConnect)(Notifier);
+const withSaga = injectSaga({ key: 'notifier', saga });
+
+export default compose(withSaga, withReducer, withConnect)(Notifier);

@@ -6,7 +6,6 @@
 
 import { WS_CONNECT } from 'containers/WebSocketInterface/constants';
 import { PUZZLE_ADDED } from 'containers/PuzzleActiveList/constants';
-import { DIRECTCHAT_RECEIVED } from 'containers/Chat/constants';
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -31,18 +30,25 @@ const puzzleAddedMsg = (context) => ({
 
 const directMessageReceivedMsg = (context) => ({
   ...defaultMessageStyle,
-  autoDismiss: 0,
-  children: (
-    <div>
-      <FormattedMessage {...messages.directMessageReceived} values={{ nickname: context.from.nickname }} />
-    </div>
+  autoDismiss: 30,
+  action: {
+    label: 'Open',
+    callback: context.callback,
+  },
+  message: (
+    <FormattedMessage
+      {...messages.directMessageReceived}
+      values={{ nickname: context.from.nickname }}
+    />
   ),
 });
+
+export const DIRECTCHAT_NOTIFY = 'containers/Notifier/DIRECTCHAT_NOTIFY';
 
 export const NOTE_NEEDED = {
   WS_CONNECT,
   PUZZLE_ADDED,
-  DIRECTCHAT_RECEIVED,
+  DIRECTCHAT_NOTIFY,
 };
 
 export const NOTE_MSG = {

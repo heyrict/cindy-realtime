@@ -15,6 +15,7 @@ import {
   CHANGE_DIRECTCHAT,
   SEND_DIRECTCHAT,
   ADD_DIRECTCHAT_MESSAGE,
+  OPEN_DIRECTCHAT,
 } from './constants';
 
 export function toggleChat(open) {
@@ -75,6 +76,13 @@ export function sendDirectchat(data) {
 export function addDirectchatMessage(data) {
   return {
     type: ADD_DIRECTCHAT_MESSAGE,
+    ...data,
+  };
+}
+
+export function openDirectChat(data) {
+  return {
+    type: OPEN_DIRECTCHAT,
     ...data,
   };
 }
