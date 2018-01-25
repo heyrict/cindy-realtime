@@ -34,4 +34,16 @@ injectGlobal`
   a:hover {
     color: inherit;
   }
+
+  table {
+    border: 2px solid;
+  }
+
+  th {
+    border: 2px solid;
+  }
+
+  td {
+    border: 1px solid;
+  }
 `;

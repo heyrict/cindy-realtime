@@ -87,11 +87,11 @@ function ProfilePage(props, context) {
                     />
                     <ProfRow
                       heading={_(messages.dateJoined)}
-                      content={<div>{moment(U.dateJoined).format('llll')}</div>}
+                      content={<div>{moment(U.dateJoined).format('YYYY-MM-DD HH:mm')}</div>}
                     />
                     <ProfRow
                       heading={_(messages.lastLogin)}
-                      content={<div>{moment(U.lastLogin).format('llll')}</div>}
+                      content={<div>{moment(U.lastLogin).format('YYYY-MM-DD HH:mm')}</div>}
                     />
                     {userId === t('UserNode', props.usernavbar.user.userId) && (
                       <AwardSwitch
