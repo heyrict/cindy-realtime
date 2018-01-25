@@ -9,15 +9,18 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
+import { createStructuredSelector, createSelector } from 'reselect';
 import { compose } from 'redux';
+import { text2md } from 'common';
 import { Toolbar, NavLink } from 'rebass';
 
 import injectSaga from 'utils/injectSaga';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
+import { selectPuzzleShowPageDomain } from 'containers/PuzzleShowPage/selectors';
 import ChatRoom from './ChatRoom';
 import Channels from './Channels';
 import Direct from './Direct';
+import Wrapper from './Wrapper';
 import makeSelectChat from './selectors';
 import saga from './saga';
 import messages from './messages';
@@ -35,6 +38,17 @@ const StyledToolbar = styled(Toolbar)`
 `;
 
 export function Chat(props) {
+  if (props.chat.open === 'memo' && props.puzzle) {
+    return (
+      <Wrapper style={{ height: '100%' }}>
+        <div
+          style={{ overflow: 'auto' }}
+          dangerouslySetInnerHTML={{ __html: text2md(props.puzzle.memo) }}
+        />
+      </Wrapper>
+    );
+  }
+
   function setActiveTab(tab) {
     props.dispatch(changeTab(tab));
   }
@@ -85,11 +99,15 @@ Chat.propTypes = {
   currentUser: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
   height: PropTypes.number.isRequired,
+  puzzle: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   chat: makeSelectChat(),
   currentUser: makeSelectUserNavbar(),
+  puzzle: createSelector(selectPuzzleShowPageDomain, (substate) =>
+    substate.get('puzzle')
+  ),
 });
 
 function mapDispatchToProps(dispatch) {

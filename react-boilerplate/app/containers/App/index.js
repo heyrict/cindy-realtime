@@ -99,7 +99,7 @@ class App extends React.Component {
 
 App.propTypes = {
   chat: PropTypes.shape({
-    open: PropTypes.bool.isRequired,
+    open: PropTypes.string,
   }),
 };
 

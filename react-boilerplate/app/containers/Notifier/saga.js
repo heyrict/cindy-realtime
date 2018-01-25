@@ -7,7 +7,7 @@ import { DIRECTCHAT_NOTIFY } from './constants';
 function* handleDirectchatNotify(action) {
   const chat = yield select(selectChatDomain);
   if (
-    chat.get('open') !== true ||
+    chat.get('open') !== 'chat' ||
     chat.get('activeTab') !== 'TAB_DIRECTCHAT' ||
     chat.get('activeDirectChat') !== String(action.chat)
   ) {

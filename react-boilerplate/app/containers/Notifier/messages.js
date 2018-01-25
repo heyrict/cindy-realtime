@@ -13,4 +13,8 @@ export default defineMessages({
     id: 'app.containers.Notifier.directMessageReceived',
     defaultMessage: '{nickname} sends a direct message to you!',
   },
+  open: {
+    id: 'app.containers.Notifier.open',
+    defaultMessage: 'Open',
+  },
 });

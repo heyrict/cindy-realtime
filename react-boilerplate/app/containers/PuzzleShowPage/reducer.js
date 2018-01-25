@@ -7,7 +7,7 @@
 import { fromJS } from 'immutable';
 import { UPDATE_ANSWER } from 'containers/Dialogue/constants';
 import {
-  PUZZLE_SHOWN,
+  PUZZLE_HID,
   INIT_PUZZLE_SHOW,
   ADD_QUESTION,
   ADD_HINT,
@@ -24,8 +24,8 @@ const initialState = fromJS({
 
 function puzzleShowPageReducer(state = initialState, action) {
   switch (action.type) {
-    case PUZZLE_SHOWN:
-      return state.set('puzzleId', action.puzzleId);
+    case PUZZLE_HID:
+      return state.setIn(['puzzle'], null);
     case INIT_PUZZLE_SHOW:
       return state
         .setIn(['puzzle'], action.data.puzzle)

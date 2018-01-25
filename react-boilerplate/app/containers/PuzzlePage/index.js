@@ -10,7 +10,6 @@ import injectSaga from 'utils/injectSaga';
 import environment from 'Environment';
 
 import { QueryRenderer } from 'react-relay';
-import { ProgressBar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage, intlShape } from 'react-intl';
@@ -18,6 +17,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { Heading } from 'style-store';
 import Constrained from 'components/Constrained';
+import LoadingDots from 'components/LoadingDots';
 
 import PuzzleList from 'containers/PuzzleList';
 import PuzzleListInitQuery from 'graphql/PuzzleListInitQuery';
@@ -58,7 +58,7 @@ function PuzzlePage(p, context) {
           } else if (props) {
             return <PuzzleList list={props} />;
           }
-          return <ProgressBar now={100} label={'Loading...'} striped active />;
+          return <LoadingDots />;
         }}
       />
     </Constrained>

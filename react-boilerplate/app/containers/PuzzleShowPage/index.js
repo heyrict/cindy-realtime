@@ -21,6 +21,7 @@ import Dialogue from 'containers/Dialogue/Loadable';
 import { Box } from 'rebass';
 import Hint from 'containers/Hint';
 import Constrained from 'components/Constrained';
+import LoadingDots from 'components/LoadingDots';
 
 import Frame from './Frame';
 import makeSelectPuzzleShowPage from './selectors';
@@ -51,7 +52,11 @@ export class PuzzleShowPage extends React.Component {
     const U = this.props.user.userId;
 
     if (P === null) {
-      return <div>Loading...</div>;
+      return (
+        <div style={{ paddingTop: '100px' }}>
+          <LoadingDots />
+        </div>
+      );
     }
 
     const _ = this.context.intl.formatMessage;

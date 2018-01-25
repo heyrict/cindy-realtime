@@ -7,6 +7,7 @@
 import moment from 'moment';
 import {
   TOGGLE_MINICHAT,
+  TOGGLE_MEMO,
   CHANGE_TAB,
   CHANGE_CHANNEL,
   MINICHAT_CONNECT,
@@ -21,6 +22,13 @@ import {
 export function toggleChat(open) {
   return {
     type: TOGGLE_MINICHAT,
+    open,
+  };
+}
+
+export function toggleMemo(open) {
+  return {
+    type: TOGGLE_MEMO,
     open,
   };
 }

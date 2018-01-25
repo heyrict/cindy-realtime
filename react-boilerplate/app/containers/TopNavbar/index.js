@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { createStructuredSelector, createSelector } from 'reselect';
 
 import { Box, ButtonTransparent } from 'rebass';
 import { Navbar, ImgSm } from 'style-store';
@@ -15,10 +16,12 @@ import MenuNavbar from 'components/MenuNavbar';
 import UserNavbar from 'containers/UserNavbar';
 import styled from 'styled-components';
 import chatImg from 'images/chat.svg';
+import memoImg from 'images/memo.svg';
 import loginImg from 'images/login.svg';
 import menuImg from 'images/menu.svg';
 
-import { toggleChat } from 'containers/Chat/actions';
+import { toggleChat, toggleMemo } from 'containers/Chat/actions';
+import { selectPuzzleShowPageDomain } from 'containers/PuzzleShowPage/selectors';
 
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
@@ -82,6 +85,17 @@ class TopNavbar extends React.Component {
             </NavbarBtnMsg>
           </NavbarBtn>
         </Box>
+        {this.props.puzzle &&
+          this.props.puzzle.memo && (
+            <Box w={1 / 3} m="auto">
+              <NavbarBtn onClick={() => this.props.dispatch(toggleMemo())}>
+                <ImgSm src={memoImg} alt="memo" />
+                <NavbarBtnMsg>
+                  <FormattedMessage {...messages.memo} />
+                </NavbarBtnMsg>
+              </NavbarBtn>
+            </Box>
+          )}
         <Box w={1 / 3} m="auto">
           <NavbarBtn onClick={() => this.toggleSubNav('user')}>
             <ImgSm src={loginImg} alt="profile" />
@@ -98,7 +112,14 @@ class TopNavbar extends React.Component {
 
 TopNavbar.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  puzzle: PropTypes.object,
 };
+
+const mapStateToProps = createStructuredSelector({
+  puzzle: createSelector(selectPuzzleShowPageDomain, (substate) =>
+    substate.get('puzzle')
+  ),
+});
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -106,6 +127,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 export default compose(withConnect)(TopNavbar);

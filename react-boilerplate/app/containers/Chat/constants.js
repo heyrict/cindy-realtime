@@ -7,6 +7,7 @@
 import { componentsUserFragment } from 'containers/PuzzleActiveList/constants';
 
 export const TOGGLE_MINICHAT = 'app/Chat/TOGGLE_MINICHAT';
+export const TOGGLE_MEMO = 'app/Chat/TOGGLE_MEMO';
 export const CHANGE_CHANNEL = 'app/Chat/CHANGE_CHANNEL';
 
 export const CHANGE_TAB = 'app/Chat/CHANGE_TAB';
@@ -15,6 +16,9 @@ export const TABS = {
   TAB_CHANNEL: 'TAB_CHANNEL',
   TAB_DIRECTCHAT: 'TAB_DIRECTCHAT',
 };
+
+export const OPEN_MEMO = 'app/Chat/OPEN_MEMO';
+export const CLOSE_MEMO = 'app/Chat/CLOSE_MEMO';
 
 export const OPEN_MINICHAT = 'app/Chat/OPEN_MINICHAT';
 export const CLOSE_MINICHAT = 'app/Chat/CLOSE_MINICHAT';

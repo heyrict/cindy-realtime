@@ -10,7 +10,6 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { QueryRenderer } from 'react-relay';
-import { ProgressBar } from 'react-bootstrap';
 import { FormattedMessage, intlShape } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -20,6 +19,7 @@ import { Flex } from 'rebass';
 import { Heading } from 'style-store';
 import UserAwardPopover from 'components/UserAwardPopover';
 import Constrained from 'components/Constrained';
+import LoadingDots from 'components/LoadingDots';
 
 import ProfileShowQuery from 'graphql/ProfileShowQuery';
 
@@ -87,11 +87,19 @@ function ProfilePage(props, context) {
                     />
                     <ProfRow
                       heading={_(messages.dateJoined)}
-                      content={<div>{moment(U.dateJoined).format('YYYY-MM-DD HH:mm')}</div>}
+                      content={
+                        <div>
+                          {moment(U.dateJoined).format('YYYY-MM-DD HH:mm')}
+                        </div>
+                      }
                     />
                     <ProfRow
                       heading={_(messages.lastLogin)}
-                      content={<div>{moment(U.lastLogin).format('YYYY-MM-DD HH:mm')}</div>}
+                      content={
+                        <div>
+                          {moment(U.lastLogin).format('YYYY-MM-DD HH:mm')}
+                        </div>
+                      }
                     />
                     {userId === t('UserNode', props.usernavbar.user.userId) && (
                       <AwardSwitch
@@ -117,7 +125,9 @@ function ProfilePage(props, context) {
               );
             }
             return (
-              <ProgressBar now={100} label={'Loading...'} striped active />
+              <div style={{ paddingTop: '100px' }}>
+                <LoadingDots />
+              </div>
             );
           }}
         />

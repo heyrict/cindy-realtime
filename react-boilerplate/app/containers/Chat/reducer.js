@@ -11,6 +11,8 @@ import {
   CHANGE_CHANNEL,
   OPEN_MINICHAT,
   CLOSE_MINICHAT,
+  OPEN_MEMO,
+  CLOSE_MEMO,
   CHANGE_TAB,
   INIT_MINICHAT,
   MORE_MINICHAT,
@@ -23,7 +25,7 @@ import {
 
 const initialState = fromJS({
   // Sidebar State Stuff
-  open: false,
+  open: null,
   activeTab: 'TAB_CHAT',
   // Chat State Stuff
   channel: null, // default channel
@@ -41,13 +43,16 @@ function chatReducer(state = initialState, action) {
   switch (action.type) {
     case OPEN_DIRECTCHAT:
       return state
-        .setIn(['open'], true)
+        .setIn(['open'], 'chat')
         .setIn(['activeTab'], 'TAB_DIRECTCHAT')
         .setIn(['activeDirectChat'], action.chat);
     case OPEN_MINICHAT:
-      return state.setIn(['open'], true);
+      return state.setIn(['open'], 'chat');
+    case OPEN_MEMO:
+      return state.setIn(['open'], 'memo');
     case CLOSE_MINICHAT:
-      return state.setIn(['open'], false);
+    case CLOSE_MEMO:
+      return state.setIn(['open'], null);
     case CHANGE_TAB:
       return state.setIn(['activeTab'], action.tab);
     case CHANGE_CHANNEL:

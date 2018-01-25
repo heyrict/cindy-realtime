@@ -10,6 +10,10 @@ export default defineMessages({
     id: 'app.components.MenuNavbar.chat',
     defaultMessage: 'Chat',
   },
+  memo: {
+    id: 'app.components.MenuNavbar.memo',
+    defaultMessage: 'Memo',
+  },
   menu: {
     id: 'app.components.MenuNavbar.menu',
     defaultMessage: 'Menu',

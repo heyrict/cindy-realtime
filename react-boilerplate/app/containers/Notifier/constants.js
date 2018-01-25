@@ -32,7 +32,7 @@ const directMessageReceivedMsg = (context) => ({
   ...defaultMessageStyle,
   autoDismiss: 30,
   action: {
-    label: 'Open',
+    label: <FormattedMessage {...messages.open} />,
     callback: context.callback,
   },
   message: (

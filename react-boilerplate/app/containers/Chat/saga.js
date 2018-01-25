@@ -1,12 +1,14 @@
 import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
 import { gqlQuery } from 'Environment';
-import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
 import { addDirectchatMessage, connectChat, disconnectChat } from './actions';
 import {
   CHANGE_CHANNEL,
   TOGGLE_MINICHAT,
   OPEN_MINICHAT,
   CLOSE_MINICHAT,
+  TOGGLE_MEMO,
+  OPEN_MEMO,
+  CLOSE_MEMO,
   MINICHAT_CONNECT,
   INIT_MINICHAT,
   MINICHAT_MORE,
@@ -39,7 +41,7 @@ function* onChangeLocation(action) {
   const chatOpen = chat.get('open');
   const chatChannel = chat.get('channel');
   const currentChannel = chat.get('currentChannel');
-  if (chatChannel === null && chatOpen === true) {
+  if (chatChannel === null && chatOpen === 'chat') {
     const nextChannel = defaultChannel(action.payload.pathname);
     if (nextChannel !== currentChannel) {
       yield put(disconnectChat(currentChannel));
@@ -53,12 +55,22 @@ function* handleToggleChat(action) {
   const chatOpen = chat.get('open');
   const chatChannel = chat.get('channel');
   const nextChannel = getTrueChannel(chatChannel);
-  if (chatOpen === true && action.open !== true) {
+  if (chatOpen === 'chat' && action.open !== 'chat') {
     yield put({ type: CLOSE_MINICHAT });
     yield put(disconnectChat(nextChannel));
-  } else if (chatOpen === false && action.open !== false) {
+  } else if (chatOpen !== 'chat' && action.open !== null) {
     yield put({ type: OPEN_MINICHAT });
     yield put(connectChat(nextChannel));
+  }
+}
+
+function* handleToggleMemo(action) {
+  const chat = yield select(selectChatDomain);
+  const chatOpen = chat.get('open');
+  if (chatOpen === 'memo' && action.open !== 'memo') {
+    yield put({ type: CLOSE_MEMO });
+  } else if (chatOpen !== 'memo' && action.open !== null) {
+    yield put({ type: OPEN_MEMO });
   }
 }
 
@@ -115,6 +127,7 @@ export default function* defaultSaga() {
   yield [
     takeLatest('@@router/LOCATION_CHANGE', onChangeLocation),
     takeEvery(TOGGLE_MINICHAT, handleToggleChat),
+    takeEvery(TOGGLE_MEMO, handleToggleMemo),
     takeEvery(SEND_DIRECTCHAT, handleDirectchatSend),
     takeEvery(DIRECTCHAT_RECEIVED, handleDirectchatReceive),
     takeLatest(CHANGE_CHANNEL, handleChannelChange),

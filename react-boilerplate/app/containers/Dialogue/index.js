@@ -23,7 +23,7 @@ const Dialogue = (props) => (
       <Box width={1 / 2} ml={5}>
         <Answer
           id={props.node.id}
-          answeredTime={props.node.answeredTime}
+          answeredTime={props.node.answeredtime}
           answer={props.node.answer}
           good={props.node.good}
           true={props.node.true}
