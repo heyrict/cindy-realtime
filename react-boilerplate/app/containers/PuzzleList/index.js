@@ -9,15 +9,22 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { createPaginationContainer } from 'react-relay';
-import { Button } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
+import { createPaginationContainer, graphql } from 'react-relay';
+import { ButtonOutline } from 'style-store';
 
 import injectSaga from 'utils/injectSaga';
 import PuzzlePanel from 'components/PuzzlePanel';
 import PuzzleListInitQuery from 'graphql/PuzzleListInitQuery';
+import chatMessages from 'containers/Chat/messages';
 
 import makeSelectPuzzleList from './selectors';
 import saga from './saga';
+
+const StyledButtonOutline = ButtonOutline.extend`
+  border-radius: 10px;
+  padding: 10px 0;
+`;
 
 export class PuzzleList extends React.Component {
   constructor(props) {
@@ -42,9 +49,9 @@ export class PuzzleList extends React.Component {
           <PuzzlePanel node={edge.node} key={edge.node.id} />
         ))}
         {this.props.relay.hasMore() ? (
-          <Button onClick={this.loadMore} block bsStyle="info">
-            Load More ...
-          </Button>
+          <StyledButtonOutline onClick={this.loadMore} w={1}>
+            <FormattedMessage {...chatMessages.loadMore} />
+          </StyledButtonOutline>
         ) : (
           ''
         )}

@@ -32,8 +32,10 @@ class AwardSwitch extends React.PureComponent {
       selectedAward: props.currentAwardId,
     };
     this.selectAward = (a) => this.setState({ selectedAward: a });
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
-  componentWillUnmount() {
+
+  handleSubmit() {
     if (this.state.selectedAward === this.props.currentAwardId) return;
     commitMutation(environment, {
       mutation: UpdateCurrentAwardMutation,
@@ -49,13 +51,14 @@ class AwardSwitch extends React.PureComponent {
       onError: (err) => console.error(err),
     });
   }
+
   render() {
     if (this.props.currentUser.userId === this.props.currentUser.rowid) {
       return (
         <ProfRow
           heading={<FormattedMessage {...messages.awardSelect} />}
           content={
-            <Flex>
+            <Flex wrap>
               <StyledButtonOutline onClick={() => this.selectAward(null)}>
                 <FormattedMessage {...messages.nullAward} />
               </StyledButtonOutline>
@@ -74,6 +77,9 @@ class AwardSwitch extends React.PureComponent {
                   )}
                 </span>
               ))}
+              <StyledButtonOutline onClick={this.handleSubmit} w={1} mt={2}>
+                <FormattedMessage {...messages.save} />
+              </StyledButtonOutline>
             </Flex>
           }
         />

@@ -42,4 +42,8 @@ export default defineMessages({
     id: 'app.containers.ProfilePage.nullAward',
     defaultMessage: 'None',
   },
+  save: {
+    id: 'app.containers.ProfilePage.sage',
+    defaultMessage: 'Save',
+  },
 });
