@@ -8,3 +8,8 @@ POSTGREDB_SETTINGS = {
     'HOST': 'localhost',
     'POST': '',
 }
+
+HOSTS = [
+    'cindythink.com',
+    '139.59.247.106',
+]
