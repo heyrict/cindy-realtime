@@ -67,7 +67,7 @@ export const hintQuery = `
 
 // {{{ const puzzleShowQuery
 export const puzzleShowQuery = `
-  query($id: ID!) {
+  query($id: ID!, $userId: ID!) {
     puzzleShowUnion(id: $id) {
       edges {
         node {
@@ -97,6 +97,23 @@ export const puzzleShowQuery = `
       memo
       created
       modified
+    }
+    allComments(puzzle: $id, user: $userId) {
+      edges {
+        node {
+          id
+          content
+          spoiler
+        }
+      }
+    }
+    allStars(puzzle: $id, user: $userId) {
+      edges {
+        node {
+          id
+          value
+        }
+      }
     }
   }
   ${componentsDialogueFragment}

@@ -30,6 +30,7 @@ import messages from './messages';
 import { puzzleShown, puzzleHid } from './actions';
 import QuestionPutBox from './QuestionPutBox';
 import PuzzleModifyBox from './PuzzleModifyBox';
+import RewardingBox from './RewardingBox';
 
 const Title = styled.h1`
   font-size: 2em;
@@ -119,6 +120,14 @@ export class PuzzleShowPage extends React.Component {
             <QuestionPutBox
               puzzleId={parseInt(this.puzzleId, 10)}
               currentUserId={this.props.user.userId}
+            />
+          )}
+        {(P.status === 1 || P.status === 2) &&
+          U !== P.user.rowid && (
+            <RewardingBox
+              puzzleId={parseInt(this.puzzleId, 10)}
+              existingComment={this.props.puzzleshowpage.allComments.edges}
+              existingStar={this.props.puzzleshowpage.allStars.edges}
             />
           )}
         {U === P.user.rowid && (

@@ -2,6 +2,7 @@ import { call, put, takeLatest, takeEvery, select } from 'redux-saga/effects';
 import { gqlQuery } from 'Environment';
 import { to_global_id as g } from 'common';
 
+import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
 import { UPDATE_ANSWER } from 'containers/Dialogue/constants';
 import { PUZZLE_UPDATED } from 'containers/PuzzleActiveList/constants';
 import {
@@ -23,10 +24,15 @@ import {
 import { selectPuzzleShowPageDomain } from './selectors';
 
 function* fetchPuzzleBody(action) {
+  const usernavbar = yield select(selectUserNavbarDomain);
+  const currentUser = usernavbar.get('user');
   const data = yield call(
     gqlQuery,
     { text: puzzleShowQuery },
-    { id: g('PuzzleNode', action.data.puzzleId) }
+    {
+      id: g('PuzzleNode', action.data.puzzleId),
+      userId: g('UserNode', currentUser.get('userId')),
+    }
   );
   yield put({ type: INIT_PUZZLE_SHOW, ...data });
 }

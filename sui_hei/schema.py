@@ -122,7 +122,7 @@ class MinichatNode(DjangoObjectType):
 class CommentNode(DjangoObjectType):
     class Meta:
         model = Comment
-        filter_fields = []
+        filter_fields = ["user", "puzzle"]
         interfaces = (relay.Node, )
 
     rowid = graphene.Int()
@@ -135,7 +135,7 @@ class CommentNode(DjangoObjectType):
 class StarNode(DjangoObjectType):
     class Meta:
         model = Star
-        filter_fields = []
+        filter_fields = ["user", "puzzle"]
         interfaces = (relay.Node, )
 
     rowid = graphene.Int()
@@ -405,6 +405,60 @@ class UpdatePuzzle(graphene.ClientIDMutation):
         return UpdatePuzzle(puzzle=puzzle)
 
 
+# {{{2 UpdateStar
+class UpdateStar(graphene.ClientIDMutation):
+    star = graphene.Field(StarNode)
+
+    class Input:
+        puzzleId = graphene.Int()
+        value = graphene.Int()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        print(input)
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        value = input["value"]
+        puzzleId = input["puzzleId"]
+        puzzle = Puzzle.objects.get(id=puzzleId)
+
+        star = Star.objects.get_or_create(user=user, puzzle=puzzle)[0]
+        star.value = value
+        star.save()
+
+        return UpdateStar(star=star)
+
+
+# {{{2 UpdateComment
+class UpdateComment(graphene.ClientIDMutation):
+    comment = graphene.Field(CommentNode)
+
+    class Input:
+        puzzleId = graphene.Int()
+        content = graphene.String()
+        spoiler = graphene.Boolean()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        content = input["content"]
+        puzzleId = input["puzzleId"]
+        spoiler = input["spoiler"]
+        puzzle = Puzzle.objects.get(id=puzzleId)
+
+        comment = Comment.objects.get_or_create(user=user, puzzle=puzzle)[0]
+        comment.content = content
+        comment.spoiler = spoiler
+        comment.save()
+
+        return UpdateComment(comment=comment)
+
+
 # {{{2 UpdateHint
 class UpdateHint(relay.ClientIDMutation):
     hint = graphene.Field(HintNode)
@@ -437,6 +491,7 @@ class UpdateHint(relay.ClientIDMutation):
         return UpdateHint(hint=hint)
 
 
+# {{{2 UpdateCurrentAward
 class UpdateCurrentAward(relay.ClientIDMutation):
     class Input:
         userawardId = graphene.Int()
@@ -459,6 +514,29 @@ class UpdateCurrentAward(relay.ClientIDMutation):
 
         user.save()
         return UpdateCurrentAward()
+
+
+# {{{2 UpdateUser
+class UpdateUser(relay.ClientIDMutation):
+    user = graphene.Field(UserNode)
+
+    class Input:
+        profile = graphene.String()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        profile = input.get("profile")
+        if profile:
+            user.profile = profile
+
+        if profile:
+            user.save()
+
+        return UpdateUser(user=user)
 
 
 # {{{2 Login
@@ -657,8 +735,11 @@ class Mutation(graphene.ObjectType):
     update_answer = UpdateAnswer.Field()
     update_question = UpdateQuestion.Field()
     update_puzzle = UpdatePuzzle.Field()
+    update_star = UpdateStar.Field()
+    update_comment = UpdateComment.Field()
     update_hint = UpdateHint.Field()
     update_current_award = UpdateCurrentAward.Field()
+    update_user = UpdateUser.Field()
     login = UserLogin.Field()
     logout = UserLogout.Field()
     register = UserRegister.Field()

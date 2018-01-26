@@ -20,6 +20,12 @@ const initialState = fromJS({
   puzzleShowUnion: {
     edges: [],
   },
+  allComments: {
+    edges: [],
+  },
+  allStars: {
+    edges: [],
+  },
 });
 
 function puzzleShowPageReducer(state = initialState, action) {
@@ -29,7 +35,9 @@ function puzzleShowPageReducer(state = initialState, action) {
     case INIT_PUZZLE_SHOW:
       return state
         .setIn(['puzzle'], action.data.puzzle)
-        .setIn(['puzzleShowUnion', 'edges'], action.data.puzzleShowUnion.edges);
+        .setIn(['puzzleShowUnion', 'edges'], action.data.puzzleShowUnion.edges)
+        .setIn(['allComments', 'edges'], action.data.allComments.edges)
+        .setIn(['allStars', 'edges'], action.data.allStars.edges);
     case ADD_QUESTION:
       return state.updateIn(['puzzleShowUnion', 'edges'], (e) =>
         Array.concat(e, [{ node: action.data.dialogue }])

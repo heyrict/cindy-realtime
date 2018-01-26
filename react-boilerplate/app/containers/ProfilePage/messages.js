@@ -43,7 +43,7 @@ export default defineMessages({
     defaultMessage: 'None',
   },
   save: {
-    id: 'app.containers.ProfilePage.sage',
+    id: 'app.containers.ProfilePage.save',
     defaultMessage: 'Save',
   },
 });

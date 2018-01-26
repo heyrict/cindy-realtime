@@ -26,6 +26,7 @@ import ProfileShowQuery from 'graphql/ProfileShowQuery';
 import injectSaga from 'utils/injectSaga';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
 import ProfRow from './ProfRow';
+import ProfileRow from './ProfileRow';
 import AwardSwitch from './AwardSwitch';
 import makeSelectProfilePage from './selectors';
 import saga from './saga';
@@ -109,17 +110,7 @@ function ProfilePage(props, context) {
                         userawardSet={U.userawardSet}
                       />
                     )}
-                    <ProfRow
-                      heading={_(messages.profile)}
-                      content={
-                        <div
-                          style={{ overflow: 'auto' }}
-                          dangerouslySetInnerHTML={{
-                            __html: text2md(U.profile),
-                          }}
-                        />
-                      }
-                    />
+                    <ProfileRow userId={userId} profile={U.profile} />
                   </Flex>
                 </div>
               );

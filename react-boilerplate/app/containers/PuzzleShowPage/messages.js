@@ -66,4 +66,16 @@ export default defineMessages({
     id: 'app.containers.PuzzleShowPage.hiddenFrame',
     defaultMessage: 'This puzzle is set to hidden, which means you cannot view it',
   },
+  addStar: {
+    id: 'app.containers.PuzzleShowPage.addStar',
+    defaultMessage: 'Add Star',
+  },
+  addComment: {
+    id: 'app.containers.PuzzleShowPage.addComment',
+    defaultMessage: 'Add Comment',
+  },
+  spoiler: {
+    id: 'app.containers.PuzzleShowPage.spoiler',
+    defaultMessage: 'Spoiler',
+  },
 });

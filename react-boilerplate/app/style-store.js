@@ -4,6 +4,7 @@ import {
   Flex,
   Button as RebassButton,
   ButtonOutline as RebassButtonOutline,
+  Star as RebassStar,
   Switch as RebassSwitch,
 } from 'rebass';
 
@@ -50,6 +51,11 @@ export const ImgMd = styled.img`
   max-height: 60px;
   padding: 0;
   margin: 0;
+`;
+
+export const Star = styled(RebassStar)`
+  color: ${(props) =>
+    props.checked ? props.color || 'orange' : 'rgba(0, 0, 0, 0.125)'};
 `;
 
 export const LightNicknameLink = styled(Link)`

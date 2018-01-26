@@ -7,7 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Panel, Button } from 'react-bootstrap';
-import common from 'common';
+import { text2md } from 'common';
 // import styled from 'styled-components';
 
 import { FormattedMessage } from 'react-intl';
@@ -43,8 +43,9 @@ class MarkdownPreview extends React.Component {
         <Panel collapsible expanded={this.state.open}>
           <div
             dangerouslySetInnerHTML={{
-              __html: common.text2md(this.props.content),
+              __html: text2md(this.props.content),
             }}
+            style={{ overflow: 'auto' }}
           />
         </Panel>
       </div>
