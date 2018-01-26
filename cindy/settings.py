@@ -27,7 +27,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'heyrict.pythonanywhere.com',
+    'cindythink.com',
 ]
 
 # Application definition
