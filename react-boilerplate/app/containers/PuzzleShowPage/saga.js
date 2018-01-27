@@ -40,6 +40,8 @@ function* fetchPuzzleBody(action) {
 }
 
 function* fetchDialogue(action) {
+  const matches = window.location.pathname.match(/\/puzzle\/show\/([0-9]+)/);
+  if (matches === null || matches[1] !== String(action.data.puzzleId)) return;
   const data = yield call(
     gqlQuery,
     { text: dialogueQuery },

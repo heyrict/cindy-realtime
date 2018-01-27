@@ -78,7 +78,7 @@ def send_dialogue_update(sender, instance, created, *args, **kwargs):
             "type": DIALOGUE_ADDED,
             "data": {
                 "id": to_global_id('DialogueNode', dialogueId),
-                "puzzleId": to_global_id('PuzzleNode', puzzleId),
+                "puzzleId": puzzleId,
             }
         })
         logger.debug("Send %s", text)
@@ -87,7 +87,8 @@ def send_dialogue_update(sender, instance, created, *args, **kwargs):
         text = json.dumps({
             "type": DIALOGUE_UPDATED,
             "data": {
-                "id": to_global_id('DialogueNode', dialogueId)
+                "id": to_global_id('DialogueNode', dialogueId),
+                "puzzleId": puzzleId,
             }
         })
         logger.debug("Send %s", text)
