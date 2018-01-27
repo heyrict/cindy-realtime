@@ -49,7 +49,6 @@ function PuzzlePage(p, context) {
         variables={{
           orderBy: ['-modified', '-id'],
           count: 3,
-          status: null,
           status__gt: 0,
         }}
         render={({ error, props }) => {

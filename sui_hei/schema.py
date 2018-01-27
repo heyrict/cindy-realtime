@@ -80,6 +80,7 @@ class PuzzleNode(DjangoObjectType):
         model = Puzzle
         filter_fields = {
             "status": ["exact", "gt"],
+            "user": ["exact"],
         }
         interfaces = (relay.Node, )
 

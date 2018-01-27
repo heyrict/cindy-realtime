@@ -7,6 +7,7 @@ export const PuzzleListInitQuery = graphql`
     $orderBy: [String]
     $status: Float
     $status__gt: Float
+    $user: ID
   ) {
     ...PuzzleList_list
       @arguments(
@@ -15,6 +16,7 @@ export const PuzzleListInitQuery = graphql`
         orderBy: $orderBy
         status__gt: $status__gt
         status: $status
+        user: $user
       )
   }
 `;

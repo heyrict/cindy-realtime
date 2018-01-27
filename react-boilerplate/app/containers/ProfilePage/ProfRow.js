@@ -22,7 +22,7 @@ function ProfRow(props) {
 
 ProfRow.propTypes = {
   heading: PropTypes.any.isRequired,
-  content: PropTypes.element,
+  content: PropTypes.any.isRequired,
 };
 
 export default ProfRow;
