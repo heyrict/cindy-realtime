@@ -17,6 +17,7 @@ import {
   UPDATE_HINT,
   UPDATE_PUZZLE,
   puzzleShowQuery,
+  puzzleShowNonauthQuery,
   puzzleUpdateQuery,
   dialogueQuery,
   hintQuery,
@@ -26,12 +27,13 @@ import { selectPuzzleShowPageDomain } from './selectors';
 function* fetchPuzzleBody(action) {
   const usernavbar = yield select(selectUserNavbarDomain);
   const currentUser = usernavbar.get('user');
+  const currentUserId = currentUser.get('userId');
   const data = yield call(
     gqlQuery,
-    { text: puzzleShowQuery },
+    { text: currentUserId ? puzzleShowQuery : puzzleShowNonauthQuery },
     {
       id: g('PuzzleNode', action.data.puzzleId),
-      userId: g('UserNode', currentUser.get('userId')),
+      userId: currentUserId ? g('UserNode', currentUserId) : null,
     }
   );
   yield put({ type: INIT_PUZZLE_SHOW, ...data });

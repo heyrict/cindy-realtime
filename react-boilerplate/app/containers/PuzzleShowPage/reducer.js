@@ -36,8 +36,14 @@ function puzzleShowPageReducer(state = initialState, action) {
       return state
         .setIn(['puzzle'], action.data.puzzle)
         .setIn(['puzzleShowUnion', 'edges'], action.data.puzzleShowUnion.edges)
-        .setIn(['allComments', 'edges'], action.data.allComments.edges)
-        .setIn(['allStars', 'edges'], action.data.allStars.edges);
+        .setIn(
+          ['allComments', 'edges'],
+          action.data.allComments ? action.data.allComments.edges : []
+        )
+        .setIn(
+          ['allStars', 'edges'],
+          action.data.allComments ? action.data.allStars.edges : []
+        );
     case ADD_QUESTION:
       return state.updateIn(['puzzleShowUnion', 'edges'], (e) =>
         Array.concat(e, [{ node: action.data.dialogue }])

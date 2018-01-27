@@ -98,7 +98,12 @@ export class PuzzleShowPage extends React.Component {
             const type = f(node.node.id)[0];
             if (type === 'DialogueNode') {
               index += 1;
-              if (P.yami && U !== node.node.user.rowid && U !== P.user.rowid) {
+              if (
+                P.yami &&
+                U !== node.node.user.rowid &&
+                U !== P.user.rowid &&
+                P.status === 0
+              ) {
                 return null;
               }
               return (
@@ -123,6 +128,7 @@ export class PuzzleShowPage extends React.Component {
             />
           )}
         {(P.status === 1 || P.status === 2) &&
+          U &&
           U !== P.user.rowid && (
             <RewardingBox
               puzzleId={parseInt(this.puzzleId, 10)}

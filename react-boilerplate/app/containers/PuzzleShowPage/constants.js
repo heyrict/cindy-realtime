@@ -120,6 +120,44 @@ export const puzzleShowQuery = `
 `;
 // }}}
 
+// {{{ const puzzleShowNonauthQuery
+export const puzzleShowNonauthQuery = `
+  query($id: ID!) {
+    puzzleShowUnion(id: $id) {
+      edges {
+        node {
+          ... on DialogueNode {
+            ...components_dialogue
+          }
+
+          ... on HintNode {
+            id
+            content
+            created
+          }
+        }
+      }
+    }
+    puzzle(id: $id) {
+      id
+      title
+      yami
+      genre
+      status
+      user {
+        ...components_user
+      }
+      content
+      solution
+      memo
+      created
+      modified
+    }
+  }
+  ${componentsDialogueFragment}
+`;
+// }}}
+
 // {{{ const puzzleUpdateQuery
 export const puzzleUpdateQuery = `
   query($id: ID!) {
