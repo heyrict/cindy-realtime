@@ -13,7 +13,7 @@ import { QueryRenderer } from 'react-relay';
 import { FormattedMessage, intlShape } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { text2md, to_global_id as t } from 'common';
+import { to_global_id as t } from 'common';
 import environment from 'Environment';
 import { Flex } from 'rebass';
 import { Heading } from 'style-store';
@@ -85,6 +85,26 @@ function ProfilePage(props, context) {
                           ))}
                         </div>
                       }
+                    />
+                    <ProfRow
+                      heading={_(messages.puzzleCount)}
+                      content={U.puzzleCount}
+                    />
+                    <ProfRow
+                      heading={_(messages.quesCount)}
+                      content={U.quesCount}
+                    />
+                    <ProfRow
+                      heading={_(messages.goodQuesCount)}
+                      content={U.goodQuesCount}
+                    />
+                    <ProfRow
+                      heading={_(messages.trueQuesCount)}
+                      content={U.trueQuesCount}
+                    />
+                    <ProfRow
+                      heading={_(messages.commentCount)}
+                      content={U.commentCount}
                     />
                     <ProfRow
                       heading={_(messages.dateJoined)}

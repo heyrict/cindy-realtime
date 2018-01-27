@@ -23,9 +23,29 @@ class UserNode(DjangoObjectType):
         interfaces = (relay.Node, )
 
     rowid = graphene.Int()
+    puzzleCount = graphene.Int()
+    quesCount = graphene.Int()
+    goodQuesCount = graphene.Int()
+    trueQuesCount = graphene.Int()
+    commentCount = graphene.Int()
 
     def resolve_rowid(self, info):
         return self.id
+
+    def resolve_puzzleCount(self, info):
+        return self.puzzle_set.count()
+
+    def resolve_quesCount(self, info):
+        return self.dialogue_set.count()
+
+    def resolve_goodQuesCount(self, info):
+        return self.dialogue_set.filter(good=True).count()
+
+    def resolve_trueQuesCount(self, info):
+        return self.dialogue_set.filter(true=True).count()
+
+    def resolve_commentCount(self, info):
+        return self.comment_set.count()
 
 
 # {{{2 AwardNode
@@ -71,12 +91,11 @@ class PuzzleNode(DjangoObjectType):
         return self.id
 
     def resolve_quesCount(self, info):
-        return Dialogue.objects.filter(puzzle=self).count()
+        return self.dialogue_set.count()
 
     def resolve_uaquesCount(self, info):
-        return Dialogue.objects.filter(
-            Q(puzzle=self) & (Q(answer__isnull=True)
-                              | Q(answer__exact=""))).count()
+        return self.dialogue_set.filter(
+            Q(answer__isnull=True) | Q(answer__exact="")).count()
 
 
 # {{{2 DialogueNode
@@ -135,6 +154,19 @@ class CommentNode(DjangoObjectType):
 class StarNode(DjangoObjectType):
     class Meta:
         model = Star
+        filter_fields = ["user", "puzzle"]
+        interfaces = (relay.Node, )
+
+    rowid = graphene.Int()
+
+    def resolve_rowid(self, info):
+        return self.id
+
+
+# {{{2 BookmarkNode
+class BookmarkNode(DjangoObjectType):
+    class Meta:
+        model = Bookmark
         filter_fields = ["user", "puzzle"]
         interfaces = (relay.Node, )
 
@@ -635,6 +667,8 @@ class Query(object):
         CommentNode, orderBy=graphene.List(of_type=graphene.String))
     all_stars = DjangoFilterConnectionField(
         StarNode, orderBy=graphene.List(of_type=graphene.String))
+    all_bookmarks = DjangoFilterConnectionField(
+        BookmarkNode, orderBy=graphene.List(of_type=graphene.String))
 
     # {{{2 nodes
     user = relay.Node.Field(UserNode)
@@ -646,6 +680,7 @@ class Query(object):
     minichat = relay.Node.Field(MinichatNode)
     comment = relay.Node.Field(CommentNode)
     star = relay.Node.Field(StarNode)
+    bookmark = relay.Node.Field(BookmarkNode)
 
     # {{{2 unions
     puzzle_show_union = relay.ConnectionField(
@@ -716,6 +751,14 @@ class Query(object):
             return Star.objects.order_by(*orderBy)
         else:
             return Star.objects.all()
+
+    def resolve_all_bookmarks(self, info, **kwargs):
+        orderBy = kwargs.get("orderBy", None)
+
+        if orderBy:
+            return Bookmark.objects.order_by(*orderBy)
+        else:
+            return Bookmark.objects.all()
 
     # {{{3 resolve union
     def resolve_puzzle_show_union(self, info, **kwargs):

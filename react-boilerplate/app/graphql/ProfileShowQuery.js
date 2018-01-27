@@ -4,6 +4,11 @@ export const ProfileShowQuery = graphql`
   query ProfileShowQuery($id: ID!) {
     user(id: $id) {
       nickname
+      puzzleCount
+      quesCount
+      goodQuesCount
+      trueQuesCount
+      commentCount
       currentAward {
         id
       }

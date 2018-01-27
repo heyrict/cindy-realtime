@@ -22,6 +22,26 @@ export default defineMessages({
     id: 'app.containers.ProfilePage.nickname',
     defaultMessage: 'Nickname',
   },
+  puzzleCount: {
+    id: 'app.containers.ProfilePage.puzzleCount',
+    defaultMessage: 'Puzzle Count',
+  },
+  quesCount: {
+    id: 'app.containers.ProfilePage.quesCount',
+    defaultMessage: 'Question Count',
+  },
+  goodQuesCount: {
+    id: 'app.containers.ProfilePage.goodQuesCount',
+    defaultMessage: 'Good Question Count',
+  },
+  trueQuesCount: {
+    id: 'app.containers.ProfilePage.trueQuesCount',
+    defaultMessage: 'True Answer Count',
+  },
+  commentCount: {
+    id: 'app.containers.ProfilePage.commentCount',
+    defaultMessage: 'Comment Count',
+  },
   lastLogin: {
     id: 'app.containers.ProfilePage.lastLogin',
     defaultMessage: 'Last Login',
