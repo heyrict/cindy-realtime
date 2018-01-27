@@ -122,6 +122,12 @@ class Hint(models.Model):
     content = models.TextField(_('content'), null=False)
     created = models.DateTimeField(_('created'), null=False, default=timezone.now)
 
+    class Meta:
+        verbose_name = _("Hint")
+
+    def __str__(self):
+        return "[%s]: %50s" % (self.puzzle, self.content)
+
 
 class Minichat(models.Model):
     id = models.AutoField(max_length=11, null=False, primary_key=True)
@@ -155,6 +161,18 @@ class Comment(models.Model):
         return "{%s} commented on {%s}" % (self.user, self.puzzle.title)
 
 
+class Bookmark(models.Model):
+    user = models.ForeignKey(User, on_delete=CASCADE)
+    puzzle = models.ForeignKey(Puzzle, on_delete=CASCADE)
+    value = models.FloatField(_('Value'), null=False, default=0)
+
+    class Meta:
+        verbose_name = _("Bookmark")
+
+    def __str__(self):
+        return "%s -- %.1f --> %s" % (self.user, self.value, self.puzzle)
+
+
 class Star(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
     puzzle = models.ForeignKey(Puzzle, on_delete=CASCADE)
@@ -165,3 +183,5 @@ class Star(models.Model):
 
     def __str__(self):
         return "%s -- %.1f --> %s" % (self.user, self.value, self.puzzle)
+
+
