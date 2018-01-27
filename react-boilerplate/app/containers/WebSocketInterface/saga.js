@@ -14,7 +14,6 @@ import { eventChannel, delay } from 'redux-saga';
 import { WS_CONNECT, WS_DISCONNECT, INTERNAL_ACTIONS } from './constants';
 
 function* handleInternalAction(socket, action) {
-  console.log('INTERNAL:', action);
   if (action.delay) yield delay(action.delay);
 
   for (let i = 1; i <= 10; i += 1) {
@@ -36,7 +35,6 @@ function* internalListener(socket) {
 function* externalListener(channel) {
   while (true) {
     const action = yield take(channel);
-    console.log('EXTERNAL:', action);
     yield put(action);
   }
 }
@@ -45,7 +43,6 @@ function websocketWatch(socket) {
   return eventChannel((emitter) => {
     socket.listen((action) => {
       const { stream, payload } = action;
-      console.log('watch:', action);
       if (stream) emitter(payload);
       else emitter(action);
     });
