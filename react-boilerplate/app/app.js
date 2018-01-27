@@ -45,11 +45,19 @@ import { translationMessages } from './i18n';
 // Import CSS reset and Global Styles
 import './global-styles';
 
+// Import exposed actions
+import { openChat } from './containers/Chat/actions';
+
 // Create redux store with history
 const initialState = {};
 const history = createHistory();
 const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
+
+// exposed functions
+window.OpenChat = (channel) => {
+  store.dispatch(openChat(channel));
+};
 
 const render = (messages) => {
   ReactDOM.render(

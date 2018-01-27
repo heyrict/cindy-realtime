@@ -40,7 +40,7 @@ function hash(string) {
 function _norm_openchat(string) {
   return string.replace(
     /\"chat:\/\/([0-9a-zA-Z\-]+)\"/g,
-    '"javascript:sidebar.OpenChat(\'$1\');"'
+    '"javascript:window.OpenChat(\'$1\');"'
   );
 }
 
@@ -133,6 +133,7 @@ function StartCountdown(selector) {
 }
 
 function LinkNorm(string) {
+  string = _norm_openchat(string);
   string = _norm_countdown(string);
   return string;
 }
@@ -145,7 +146,7 @@ function PreNorm(string) {
 export function line2md(string) {
   string = PreNorm(string)
     .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
+    .replace(/>/g, '&gt;');
 
   return LinkNorm(md.render(string).replace(/<\/?p>/g, ''));
 }

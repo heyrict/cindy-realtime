@@ -1,6 +1,12 @@
 import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
 import { gqlQuery } from 'Environment';
-import { addDirectchatMessage, connectChat, disconnectChat } from './actions';
+import {
+  addDirectchatMessage,
+  connectChat,
+  disconnectChat,
+  toggleChat,
+  changeChannel,
+} from './actions';
 import {
   CHANGE_CHANNEL,
   TOGGLE_MINICHAT,
@@ -9,6 +15,7 @@ import {
   TOGGLE_MEMO,
   OPEN_MEMO,
   CLOSE_MEMO,
+  OPEN_CHAT,
   MINICHAT_CONNECT,
   INIT_MINICHAT,
   MINICHAT_MORE,
@@ -122,6 +129,11 @@ function* fetchMinichatUpdate(action) {
   yield put({ type: ADD_MINICHAT, data });
 }
 
+function* handleOpenChat(action) {
+  yield put(toggleChat('chat'));
+  yield put(changeChannel(action.channel));
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   yield [
@@ -134,5 +146,6 @@ export default function* defaultSaga() {
     takeLatest(MINICHAT_CONNECT, fetchAllMinichats),
     takeLatest(MINICHAT_MORE, fetchMoreMinichats),
     takeEvery(MINICHAT_ADDED, fetchMinichatUpdate),
+    takeLatest(OPEN_CHAT, handleOpenChat),
   ];
 }

@@ -16,6 +16,7 @@ import {
   CHANGE_DIRECTCHAT,
   SEND_DIRECTCHAT,
   ADD_DIRECTCHAT_MESSAGE,
+  OPEN_CHAT,
   OPEN_DIRECTCHAT,
 } from './constants';
 
@@ -85,6 +86,13 @@ export function addDirectchatMessage(data) {
   return {
     type: ADD_DIRECTCHAT_MESSAGE,
     ...data,
+  };
+}
+
+export function openChat(channel) {
+  return {
+    type: OPEN_CHAT,
+    channel,
   };
 }
 
