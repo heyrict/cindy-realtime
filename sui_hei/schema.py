@@ -207,7 +207,7 @@ class PuzzleNodeFilterSet(FilterSet):
     def qs(self):
         return super(PuzzleNodeFilterSet, self).qs.annotate(
             starCount=Count("star"),
-            starSum=Sum("star"),
+            starSum=Sum("star__value"),
             commentCount=Count("comment"))
 
 
