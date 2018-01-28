@@ -4,7 +4,7 @@ import django_filters
 import graphene
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
-from django.db.models import Q, Count, Sum
+from django.db.models import F, Q, Count, Sum
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django_filters import FilterSet
@@ -14,6 +14,31 @@ from graphene_django.types import DjangoObjectType
 from graphql_relay import from_global_id
 
 from .models import *
+
+
+def resolveOrderBy(instance, order_by):
+    '''
+    resolve order_by operation with nulls put at last.
+
+    Parameters
+    ----------
+    instance: Django Model
+    order_by: array of strings of default django order_by statement.
+              e.g. 'field' '-field'
+    '''
+    if order_by:
+        field = order_by[0]
+        desc = (field[0] == '-')
+        fieldQueries = []
+        for field in order_by:
+            desc = (field[0] == '-')
+            fieldName = re.sub("^-", "", field)
+            fieldQueries.append(
+                F(fieldName).desc(nulls_last=True)
+                if desc else F(fieldName).asc(nulls_last=True))
+        return instance.objects.order_by(*fieldQueries)
+    else:
+        return instance.objects.all()
 
 
 # {{{1 Nodes
@@ -727,75 +752,39 @@ class Query(object):
     # {{{3 resolve all
     def resolve_all_users(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-
-        if orderBy:
-            return User.objects.order_by(*orderBy)
-        else:
-            return User.objects.all()
+        return resolveOrderBy(User, orderBy)
 
     def resolve_all_awards(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-
-        if orderBy:
-            return Award.objects.order_by(*orderBy)
-        else:
-            return Award.objects.all()
+        return resolveOrderBy(Award, orderBy)
 
     def resolve_all_userawards(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-
-        if orderBy:
-            return UserAward.objects.order_by(*orderBy)
-        else:
-            return UserAward.objects.all()
+        return resolveOrderBy(UserAward, orderBy)
 
     def resolve_all_puzzles(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-
-        if orderBy:
-            return Puzzle.objects.order_by(*orderBy)
-        else:
-            return Puzzle.objects.all()
+        return resolveOrderBy(Puzzle, orderBy)
 
     def resolve_all_dialogues(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-
-        if orderBy:
-            return Minichat.objects.order_by(*orderBy)
-        else:
-            return Minichat.objects.all()
+        return resolveOrderBy(Dialogue, orderBy)
 
     def resolve_all_minichats(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-
-        if orderBy:
-            return Minichat.objects.order_by(*orderBy)
-        else:
-            return Minichat.objects.all()
+        return resolveOrderBy(Minichat, orderBy)
 
     def resolve_all_comments(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-
-        if orderBy:
-            return Comment.objects.order_by(*orderBy)
-        else:
-            return Comment.objects.all()
+        return resolveOrderBy(Comment, orderBy)
 
     def resolve_all_stars(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-
-        if orderBy:
-            return Star.objects.order_by(*orderBy)
-        else:
-            return Star.objects.all()
+        return resolveOrderBy(Star, orderBy)
 
     def resolve_all_bookmarks(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-
-        if orderBy:
-            return Bookmark.objects.order_by(*orderBy)
-        else:
-            return Bookmark.objects.all()
+        return resolveOrderBy(Bookmark, orderBy)
 
     # {{{3 resolve union
     def resolve_puzzle_show_union(self, info, **kwargs):

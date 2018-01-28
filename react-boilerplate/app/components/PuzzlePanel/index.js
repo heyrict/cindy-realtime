@@ -65,12 +65,15 @@ export function PuzzlePanel(props) {
           <ProcessLabel qCount={node.quesCount} uaCount={node.uaquesCount} />
           <StatusLabel status={node.status} />
           {node.starCount !== undefined &&
-            node.starSum !== undefined && (
+            node.starCount !== null &&
+            node.starSum !== undefined &&
+            node.starSum !== null && (
               <StarLabel starCount={node.starCount} starSum={node.starSum} />
             )}
-          {node.commentCount !== undefined && (
-            <CommentLabel commentCount={node.commentCount} />
-          )}
+          {node.commentCount !== undefined &&
+            node.commentCount !== null && (
+              <CommentLabel commentCount={node.commentCount} />
+            )}
         </Box>
       </Row>
     </RoundedPanel>

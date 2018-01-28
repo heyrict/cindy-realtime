@@ -13,9 +13,12 @@ function ProfilePuzzlesPanel(props) {
   return (
     <PuzzleFilterableList
       variables={{
-        orderBy: ['-created'],
         count: 10,
         user: props.userId,
+      }}
+      order={{
+        key: 'created',
+        asc: false,
       }}
     />
   );
