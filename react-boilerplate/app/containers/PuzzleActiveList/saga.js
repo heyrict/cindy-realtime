@@ -1,4 +1,5 @@
 import { call, put, takeLatest, takeEvery } from 'redux-saga/effects';
+import { to_global_id as t } from 'common';
 import { gqlQuery } from 'Environment';
 
 import { DIALOGUE_ADDED } from 'containers/PuzzleShowPage/constants';
@@ -25,7 +26,9 @@ function* fetchPuzzleUpdate(action) {
     { text: unsolvedListSubscribeQueryStandalone },
     {
       id:
-        action.type === PUZZLE_UPDATED ? action.data.id : action.data.puzzleId,
+        action.type === PUZZLE_UPDATED
+          ? action.data.id
+          : t('PuzzleNode', action.data.puzzleId),
     }
   );
   yield put({ type: UPDATE_PUZZLE, ...data });

@@ -3,6 +3,7 @@ import { gqlQuery } from 'Environment';
 import { to_global_id as g } from 'common';
 
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
+import { makeSelectLocation } from 'containers/App/selectors';
 import { UPDATE_ANSWER } from 'containers/Dialogue/constants';
 import { PUZZLE_UPDATED } from 'containers/PuzzleActiveList/constants';
 import {
@@ -40,21 +41,23 @@ function* fetchPuzzleBody(action) {
 }
 
 function* fetchDialogue(action) {
-  const matches = window.location.pathname.match(/\/puzzle\/show\/([0-9]+)/);
-  if (matches === null || matches[1] !== String(action.data.puzzleId)) return;
-  const data = yield call(
-    gqlQuery,
-    { text: dialogueQuery },
-    { id: action.data.id }
-  );
-  switch (action.type) {
-    case DIALOGUE_ADDED:
-      yield put({ type: ADD_QUESTION, ...data });
-      break;
-    case DIALOGUE_UPDATED:
-      yield put({ type: UPDATE_ANSWER, ...data });
-      break;
-    default:
+  const location = yield select(makeSelectLocation());
+  const matches = location.pathname.match(/\/puzzle\/show\/([0-9]+)/);
+  if (matches !== null && matches[1] === String(action.data.puzzleId)) {
+    const data = yield call(
+      gqlQuery,
+      { text: dialogueQuery },
+      { id: action.data.id }
+    );
+    switch (action.type) {
+      case DIALOGUE_ADDED:
+        yield put({ type: ADD_QUESTION, ...data });
+        break;
+      case DIALOGUE_UPDATED:
+        yield put({ type: UPDATE_ANSWER, ...data });
+        break;
+      default:
+    }
   }
 }
 

@@ -13,7 +13,9 @@ const puzzlePage = require('containers/PuzzlePage/reducer').default;
 const puzzleAddForm = require('containers/PuzzleAddForm/reducer').default;
 const puzzleShowPage = require('containers/PuzzleShowPage/reducer').default;
 const profilePage = require('containers/ProfilePage/reducer').default;
+const userNavbar = require('./containers/UserNavbar/reducer.js').default;
 const chat = require('containers/Chat/reducer').default;
+const notifier = require('./containers/Notifier/reducer.js').default;
 
 const initialReducers = {
   puzzleActiveList,
@@ -21,7 +23,9 @@ const initialReducers = {
   puzzleAddForm,
   puzzleShowPage,
   profilePage,
+  userNavbar,
   chat,
+  notifier,
 };
 
 /*
@@ -34,7 +38,7 @@ const initialReducers = {
 
 // Initial routing state
 const routeInitialState = fromJS({
-  location: null,
+  location: { pathname: window.location.pathname },
 });
 
 /**
