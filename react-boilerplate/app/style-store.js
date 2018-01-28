@@ -6,6 +6,7 @@ import {
   ButtonOutline as RebassButtonOutline,
   Star as RebassStar,
   Switch as RebassSwitch,
+  Panel as RebassPanel,
 } from 'rebass';
 
 const NavbarBase = styled(Flex)`
@@ -162,6 +163,11 @@ export const Textarea = styled.textarea`
   &:focus {
     box-shadow: inset 0 0 0 2px #2075c7;
   }
+`;
+
+export const RoundedPanel = styled(RebassPanel)`
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.382);
 `;
 
 export const Switch = styled(RebassSwitch)`

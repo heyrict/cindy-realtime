@@ -7,27 +7,27 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Panel, Box, Row, Divider } from 'rebass';
+import { Box, Row, Divider, Flex } from 'rebass';
+import { RoundedPanel } from 'style-store';
 import styled from 'styled-components';
 
 import Relay from 'react-relay';
 
 import ProcessLabel from 'components/ProcessLabel';
-import StarLabel from 'components/StarLabel';
 import StatusLabel from 'components/StatusLabel';
 import TitleLabel from 'components/TitleLabel';
 import UserLabel, { UserLabel as UserLabelPlain } from 'components/UserLabel';
 
 import PuzzlePanelNodeFragment from 'graphql/PuzzlePanel';
 
+import StarLabel from './StarLabel';
+import CommentLabel from './CommentLabel';
+
 const PuzzleDate = styled.span`
   color: gray;
-  font-size: 0.8em;
-`;
-
-const RoundedPanel = styled(Panel)`
-  border-radius: 20px;
-  background-color: rgba(255, 255, 255, 0.382);
+  @media (max-width: 760px) {
+    font-size: 0.9em;
+  }
 `;
 
 const UserCol = styled(Box)`
@@ -42,21 +42,35 @@ export function PuzzlePanel(props) {
   return (
     <RoundedPanel my={10}>
       <Row mx={10} py={10}>
-        <UserCol w={[1 / 3, 1 / 4, 1 / 6]} px={10}>
+        <UserCol w={[1 / 4, 1 / 6]} px={10}>
           <UserLabelInst user={node.user} />
         </UserCol>
-        <Box w={[2 / 3, 3 / 4, 5 / 6]} px={10}>
-          <TitleLabel
-            genre={node.genre}
-            puzzleId={node.rowid}
-            title={node.title}
-            yami={node.yami}
-          />
-          <PuzzleDate>{moment(node.created).format('llll')}</PuzzleDate>
-          <Divider mt={10} mb={5} />
+        <Box w={[3 / 4, 5 / 6]} px={10}>
+          <Flex wrap>
+            <Box>
+              <TitleLabel
+                genre={node.genre}
+                puzzleId={node.rowid}
+                title={node.title}
+                yami={node.yami}
+              />
+            </Box>
+            <Box ml="auto">
+              <PuzzleDate>
+                Created: {moment(node.created).format('YYYY-MM-DD HH:mm')}
+              </PuzzleDate>
+            </Box>
+          </Flex>
+          <Divider my={5} />
           <ProcessLabel qCount={node.quesCount} uaCount={node.uaquesCount} />
           <StatusLabel status={node.status} />
-          {node.starSet ? <StarLabel starSet={node.starSet} /> : null}
+          {node.starCount !== undefined &&
+            node.starSum !== undefined && (
+              <StarLabel starCount={node.starCount} starSum={node.starSum} />
+            )}
+          {node.commentCount !== undefined && (
+            <CommentLabel commentCount={node.commentCount} />
+          )}
         </Box>
       </Row>
     </RoundedPanel>

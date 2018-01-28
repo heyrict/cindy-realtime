@@ -11,7 +11,6 @@ import styled from 'styled-components';
 const ProcessBase = styled.span`
   text-align: center;
   border-radius: 10px;
-  font-size: 0.9em;
   margin-right: 6px;
   font-weight: bold;
   padding: 0 6px;

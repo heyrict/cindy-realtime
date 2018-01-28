@@ -14,7 +14,6 @@ const StatusBase = styled.span`
   text-align: center;
   border-radius: 10px;
   margin-right: 6px;
-  font-size: 0.8em;
   padding: 0 6px;
 `;
 

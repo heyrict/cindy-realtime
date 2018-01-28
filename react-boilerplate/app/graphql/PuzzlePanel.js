@@ -12,13 +12,9 @@ const PuzzlePanel = graphql`
     content
     quesCount
     uaquesCount
-    starSet {
-      edges {
-        node {
-          value
-        }
-      }
-    }
+    starCount
+    starSum
+    commentCount
     user {
       ...UserLabel_user
     }

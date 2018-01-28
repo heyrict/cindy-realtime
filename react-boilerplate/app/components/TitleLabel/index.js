@@ -15,9 +15,13 @@ import messages from './messages';
 const PuzzleTitle = styled(Link)`
   display: inline-block;
   color: brown;
-  font-size: 1.5em;
-  margin: 0.2em;
-  padding: 0.1em 0.25em;
+  padding: 0.05em 0.2em;
+  @media (min-width: 760px) {
+    font-size: 1.25em;
+  }
+  @media (max-width: 760px) {
+    font-size: 1.15em;
+  }
 `;
 
 const TranslatedGenre = ({ genre }) => {

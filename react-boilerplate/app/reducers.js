@@ -10,7 +10,6 @@ import languageProviderReducer from 'containers/LanguageProvider/reducer';
 
 const puzzleActiveList = require('containers/PuzzleActiveList/reducer').default;
 const puzzlePage = require('containers/PuzzlePage/reducer').default;
-const puzzleList = require('containers/PuzzleList/reducer').default;
 const puzzleAddForm = require('containers/PuzzleAddForm/reducer').default;
 const puzzleShowPage = require('containers/PuzzleShowPage/reducer').default;
 const profilePage = require('containers/ProfilePage/reducer').default;
@@ -19,7 +18,6 @@ const chat = require('containers/Chat/reducer').default;
 const initialReducers = {
   puzzleActiveList,
   puzzlePage,
-  puzzleList,
   puzzleAddForm,
   puzzleShowPage,
   profilePage,

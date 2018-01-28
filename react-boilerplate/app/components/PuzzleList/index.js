@@ -7,7 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { createPaginationContainer, graphql } from 'react-relay';
@@ -18,7 +17,6 @@ import PuzzlePanel from 'components/PuzzlePanel';
 import PuzzleListInitQuery from 'graphql/PuzzleListInitQuery';
 import chatMessages from 'containers/Chat/messages';
 
-import makeSelectPuzzleList from './selectors';
 import saga from './saga';
 
 const StyledButtonOutline = ButtonOutline.extend`
@@ -65,17 +63,13 @@ PuzzleList.propTypes = {
   list: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = createStructuredSelector({
-  puzzlelist: makeSelectPuzzleList(),
-});
-
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
   };
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(null, mapDispatchToProps);
 
 const withSaga = injectSaga({ key: 'puzzleList', saga });
 

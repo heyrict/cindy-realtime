@@ -1,11 +1,13 @@
 from itertools import chain
 
+import django_filters
 import graphene
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Sum
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from django_filters import FilterSet
 from graphene import relay, resolve_only_args
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
@@ -87,6 +89,9 @@ class PuzzleNode(DjangoObjectType):
     rowid = graphene.Int()
     quesCount = graphene.Int()
     uaquesCount = graphene.Int()
+    starCount = graphene.Int()
+    starSum = graphene.Int()
+    commentCount = graphene.Int()
 
     def resolve_rowid(self, info):
         return self.id
@@ -97,6 +102,15 @@ class PuzzleNode(DjangoObjectType):
     def resolve_uaquesCount(self, info):
         return self.dialogue_set.filter(
             Q(answer__isnull=True) | Q(answer__exact="")).count()
+
+    def resolve_starCount(self, info):
+        return self.starCount
+
+    def resolve_starSum(self, info):
+        return self.starSum
+
+    def resolve_commentCount(self, info):
+        return self.commentCount
 
 
 # {{{2 DialogueNode
@@ -175,6 +189,26 @@ class BookmarkNode(DjangoObjectType):
 
     def resolve_rowid(self, info):
         return self.id
+
+
+# {{{1 FilterSets
+# {{{2 PuzzleNodeFilterSet
+class PuzzleNodeFilterSet(FilterSet):
+    name = django_filters.CharFilter()
+
+    class Meta:
+        model = Puzzle
+        fields = {
+            "status": ["exact", "gt"],
+            "user": ["exact"],
+        }
+
+    @property
+    def qs(self):
+        return super(PuzzleNodeFilterSet, self).qs.annotate(
+            starCount=Count("star"),
+            starSum=Sum("star"),
+            commentCount=Count("comment"))
 
 
 # {{{1 Unions
@@ -659,7 +693,9 @@ class Query(object):
     all_userawards = DjangoFilterConnectionField(
         UserAwardNode, orderBy=graphene.List(of_type=graphene.String))
     all_puzzles = DjangoFilterConnectionField(
-        PuzzleNode, orderBy=graphene.List(of_type=graphene.String))
+        PuzzleNode,
+        filterset_class=PuzzleNodeFilterSet,
+        orderBy=graphene.List(of_type=graphene.String))
     all_dialogues = DjangoFilterConnectionField(
         DialogueNode, orderBy=graphene.List(of_type=graphene.String))
     all_minichats = DjangoFilterConnectionField(

@@ -9,24 +9,18 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const PuzzleScore = styled.span`
-  font-size: 0.8em;
-  background-color: darkviolet;
+  background-color: darkorchid;
   font-family: monaco;
   font-weight: bold;
+  font-size: 0.9em;
   color: #fcf4dc;
-  border: 2px solid darkviolet;
+  border: 2px solid darkorchid;
   border-radius: 10px;
   margin-right: 6px;
 `;
 
 function StarLabel(props) {
-  const stars = props.starSet.edges;
-  let starCount = 0;
-  let starSum = 0;
-  stars.forEach((s) => {
-    starCount += 1;
-    starSum += s.node.value;
-  });
+  const { starCount, starSum } = props;
   if (starCount > 0) {
     return (
       <PuzzleScore>
@@ -39,9 +33,8 @@ function StarLabel(props) {
 }
 
 StarLabel.propTypes = {
-  starSet: PropTypes.shape({
-    edges: PropTypes.array.isRequired,
-  }),
+  starCount: PropTypes.number.isRequired,
+  starSum: PropTypes.number.isRequired,
 };
 
 export default StarLabel;

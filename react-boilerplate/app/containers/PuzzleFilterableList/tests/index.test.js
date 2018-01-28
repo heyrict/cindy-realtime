@@ -1,9 +1,9 @@
 // import React from 'react';
 // import { shallow } from 'enzyme';
 
-// import { ProfilePuzzlesPage } from '../index';
+// import { PuzzleFilterableList } from '../index';
 
-describe('<ProfilePuzzlesPage />', () => {
+describe('<PuzzleFilterableList />', () => {
   it('Expect to have unit tests specified', () => {
     expect(true).toEqual(false);
   });

@@ -7,21 +7,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import injectSaga from 'utils/injectSaga';
-import environment from 'Environment';
 
-import { QueryRenderer } from 'react-relay';
-import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage, intlShape } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Heading } from 'style-store';
 import Constrained from 'components/Constrained';
-import LoadingDots from 'components/LoadingDots';
-
-import PuzzleList from 'containers/PuzzleList';
-import PuzzleListInitQuery from 'graphql/PuzzleListInitQuery';
 import PuzzleActiveList from 'containers/PuzzleActiveList';
+import PuzzleFilterableList from 'containers/PuzzleFilterableList';
 import AddPuzzleBtn from './AddPuzzleBtn';
 
 import makeSelectPuzzlePage from './selectors';
@@ -42,23 +37,10 @@ function PuzzlePage(p, context) {
         <AddPuzzleBtn />
       </Heading>
       <PuzzleActiveList />
-      <QueryRenderer
-        environment={environment}
-        component={PuzzleList}
-        query={PuzzleListInitQuery}
-        variables={{
-          orderBy: ['-modified', '-id'],
-          count: 3,
-          status__gt: 0,
-        }}
-        render={({ error, props }) => {
-          if (error) {
-            return <div>{error.message}</div>;
-          } else if (props) {
-            return <PuzzleList list={props} />;
-          }
-          return <LoadingDots />;
-        }}
+      <PuzzleFilterableList
+        variables={{ status__gt: 0 }}
+        order={[{ key: 'modified', asc: false }]}
+        orderList={['modified', 'starCount', 'starSum', 'commentCount']}
       />
     </Constrained>
   );
