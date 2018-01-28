@@ -55,7 +55,7 @@ export function PuzzlePanel(props) {
                 yami={node.yami}
               />
             </Box>
-            <Box ml="auto">
+            <Box ml="auto" style={{ alignSelf: 'center' }}>
               <PuzzleDate>
                 Created: {moment(node.created).format('YYYY-MM-DD HH:mm')}
               </PuzzleDate>

@@ -42,7 +42,7 @@ export const ADD_DIRECTCHAT_MESSAGE = 'app/Chat/ADD_DIRECTCHAT_MESSAGE';
 export const OPEN_CHAT = 'app/Chat/OPEN_CHAT';
 export const OPEN_DIRECTCHAT = 'app/Chat/OPEN_DIRECTCHAT';
 
-export const PublicChannels = ['lobby', '5-7-5'];
+export const PublicChannels = ['lobby', 'sp', 'yokoku', '5-7-5'];
 
 // {{{ const minichatFragment
 const minichatFragment = `
