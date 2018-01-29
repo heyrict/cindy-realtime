@@ -12,6 +12,14 @@ export default defineMessages({
   },
   puzzle: {
     id: 'app.components.MenuNavbar.puzzle',
-    defaultMessage: 'Puzzle',
+    defaultMessage: 'Puzzle List',
+  },
+  puzzleAdd: {
+    id: 'app.components.MenuNavbar.puzzleAdd',
+    defaultMessage: 'Create Puzzle',
+  },
+  rules: {
+    id: 'app.components.MenuNavbar.rules',
+    defaultMessage: 'Rules',
   },
 });

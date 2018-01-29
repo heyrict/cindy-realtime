@@ -56,6 +56,16 @@ function MenuNavbar(props) {
           <FormattedMessage {...messages.puzzle} />
         </NavLink>
       </RouterLink>
+      <RouterLink to="/puzzle/add">
+        <NavLink is="span">
+          <FormattedMessage {...messages.puzzleAdd} />
+        </NavLink>
+      </RouterLink>
+      <RouterLink to="/rules">
+        <NavLink is="span">
+          <FormattedMessage {...messages.rules} />
+        </NavLink>
+      </RouterLink>
       <NavLink p={5}>
         <Group>
           <GroupButton

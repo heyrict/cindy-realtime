@@ -23,6 +23,7 @@ import WebSocketInterface from 'containers/WebSocketInterface';
 import Notifier from 'containers/Notifier';
 import TopNavbar from 'containers/TopNavbar';
 import HomePage from 'containers/HomePage/Loadable';
+import RulesPage from 'containers/RulesPage/Loadable';
 import PuzzlePage from 'containers/PuzzlePage/Loadable';
 import PuzzleAddPage from 'containers/PuzzleAddPage/Loadable';
 import PuzzleShowPage from 'containers/PuzzleShowPage';
@@ -84,6 +85,7 @@ class App extends React.Component {
           >
             <Switch>
               <Route exact path="/" component={HomePage} />
+              <Route exact path="/rules" component={RulesPage} />
               <Route exact path="/puzzle" component={PuzzlePage} />
               <Route exact path="/puzzle/add" component={PuzzleAddPage} />
               <Route path="/puzzle/show/:id" component={PuzzleShowPage} />

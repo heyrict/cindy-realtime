@@ -20,7 +20,7 @@ urlpatterns = [
     path("graphql", GraphQLView.as_view(graphiql=True)),
     # rest
     #re_path("^(puzzle|profile)", views.simple, name="simple"),
-    re_path("(puzzle|profile)", views.main, name="main"),
+    re_path("(puzzle|profile|rules)", views.main, name="main"),
     path("", views.main, name="main"),
 ]
 # yapf: enable

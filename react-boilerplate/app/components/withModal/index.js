@@ -23,12 +23,12 @@ const ModalBody = styled(Modal.Body)`
 
 const ModalHeader = styled(Modal.Header)`
   background-color: #c6b571;
-  border-bottom: 1px solid #c6b571;
+  border-bottom: 1px solid #c6b571 !important;
 `;
 
 const ModalFooter = styled(Modal.Footer)`
   background-color: #d7c682;
-  border-top: 1px solid #c6b571;
+  border-top: 1px solid #c6b571 !important;
 `;
 
 /* eslint-disable no-undef */
