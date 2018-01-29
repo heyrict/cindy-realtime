@@ -79,11 +79,9 @@ export class PuzzlePanel extends React.Component {
             <Divider my={5} />
             <ProcessLabel qCount={node.quesCount} uaCount={node.uaquesCount} />
             <StatusLabel status={node.status} />
-            {node.starCount !== undefined &&
-              node.starCount !== null &&
-              node.starSum !== undefined &&
-              node.starSum !== null && (
-                <StarLabel starCount={node.starCount} starSum={node.starSum} />
+            {node.starSet &&
+              node.starSet.edges.length > 0 && (
+                <StarLabel starSet={node.starSet} puzzleId={node.id} />
               )}
             {node.commentCount !== undefined &&
               node.commentCount !== null && (

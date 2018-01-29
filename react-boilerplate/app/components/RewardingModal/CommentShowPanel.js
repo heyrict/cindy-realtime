@@ -22,7 +22,7 @@ class CommentShowPanel extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      show: props.node.spoiler,
+      show: !props.node.spoiler,
     };
     this.showComment = () => this.setState({ show: true });
   }

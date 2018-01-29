@@ -40,6 +40,7 @@ function RewardingModalComponent(props, context) {
   const translateGenreCode = (x) => _(genreMessages[genreType[x]]);
   const genre = translateGenreCode(props.genre);
   const yami = props.yami ? ` x ${_(genreMessages.yami)}` : '';
+  console.log(props.commentSet.edges);
   return (
     <div>
       <Frame>
