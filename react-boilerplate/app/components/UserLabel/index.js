@@ -19,7 +19,7 @@ export function UserLabel(props) {
       <NicknameLink to={`/profile/show/${user.rowid}`}>
         {user.nickname}
       </NicknameLink>
-      <br />
+      {props.break && <br />}
       <UserAwardPopover userAward={user.currentAward} />
     </span>
   );
@@ -31,6 +31,7 @@ UserLabel.propTypes = {
     nickname: PropTypes.string.isRequired,
     currentAward: PropTypes.object,
   }),
+  break: PropTypes.bool,
 };
 
 export default Relay.createFragmentContainer(UserLabel, UserLabelUserFragment);

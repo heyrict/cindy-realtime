@@ -12,6 +12,8 @@
   "app.components.ProfileNavbar.profile": "プロフィール",
   "app.components.ProfileNavbar.puzzles": "問題",
   "app.components.ProfileNavbar.stars": "スター",
+  "app.components.RewardingModal.jump": "解説を見る",
+  "app.components.RewardingModal.spoilerWarning": "注意：このコメントはネタバレ要素を含んでいます。",
   "app.components.TitleLabel.classic": "ウミガメのスープ",
   "app.components.TitleLabel.littleAlbat": "亀夫君問題",
   "app.components.TitleLabel.others": "新＆形式",

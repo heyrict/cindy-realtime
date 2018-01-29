@@ -16,7 +16,6 @@ const PuzzleScore = styled.span`
   color: #fcf4dc;
   border: 2px solid darkorchid;
   border-radius: 10px;
-  margin-right: 6px;
 `;
 
 function StarLabel(props) {
@@ -25,7 +24,7 @@ function StarLabel(props) {
     return (
       <PuzzleScore>
         <span className="glyphicon glyphicon-star" />
-        <span>{`${starSum}(${starCount})`}</span>
+        <span>{`${starCount}(${starSum})`}</span>
       </PuzzleScore>
     );
   }

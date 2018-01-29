@@ -12,6 +12,8 @@
   "app.components.ProfileNavbar.profile": "Profile",
   "app.components.ProfileNavbar.puzzles": "Puzzles",
   "app.components.ProfileNavbar.stars": "Stars",
+  "app.components.RewardingModal.jump": "View the solution",
+  "app.components.RewardingModal.spoilerWarning": "This comment is a spoiler, click here if you want to view it.",
   "app.components.TitleLabel.classic": "Classic",
   "app.components.TitleLabel.littleAlbat": "Little Albat",
   "app.components.TitleLabel.others": "Others & Formal",

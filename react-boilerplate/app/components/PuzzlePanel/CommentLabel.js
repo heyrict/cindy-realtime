@@ -18,7 +18,6 @@ const PuzzleComments = styled.span`
   color: #fcf4dc;
   border: 2px solid mediumslateblue;
   border-radius: 10px;
-  margin-right: 6px;
   padding: 0 2px;
 `;
 

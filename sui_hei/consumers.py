@@ -239,7 +239,8 @@ def ws_disconnect(message):
         cache.set('onlineUsers', onlineUsers, None)
 
     global onlineViewerCount
-    onlineViewerCount -= 1
+    if onlineViewerCount <= 0: onlineViewerCount = 0
+    else: onlineViewerCount -= 1
 
     broadcast_status()
 
