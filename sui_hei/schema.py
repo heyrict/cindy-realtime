@@ -129,13 +129,13 @@ class PuzzleNode(DjangoObjectType):
             Q(answer__isnull=True) | Q(answer__exact="")).count()
 
     def resolve_starCount(self, info):
-        return self.starCount
+        return self.star_set.count()
 
     def resolve_starSum(self, info):
-        return self.starSum
+        return self.star_set.aggregate(Sum("value"))
 
     def resolve_commentCount(self, info):
-        return self.commentCount
+        return self.comment_set.count()
 
 
 # {{{2 DialogueNode
