@@ -9,11 +9,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
-import { createPaginationContainer, graphql } from 'react-relay';
+import Relay from 'react-relay';
 import { ButtonOutline } from 'style-store';
 
 import injectSaga from 'utils/injectSaga';
 import PuzzlePanel from 'components/PuzzlePanel';
+import PuzzleListFragment from 'graphql/PuzzleList';
 import PuzzleListInitQuery from 'graphql/PuzzleListInitQuery';
 import chatMessages from 'containers/Chat/messages';
 
@@ -74,60 +75,28 @@ const withConnect = connect(null, mapDispatchToProps);
 const withSaga = injectSaga({ key: 'puzzleList', saga });
 
 const withPuzzleList = (Component) =>
-  createPaginationContainer(
-    Component,
-    {
-      list: graphql`
-        fragment PuzzleList_list on Query
-          @argumentDefinitions(
-            count: { type: Int, defaultValue: 3 }
-            cursor: { type: String }
-            orderBy: { type: "[String]", defaultValue: "-modified" }
-            status: { type: Float, defaultValue: null }
-            status__gt: { type: Float, defaultValue: null }
-            user: { type: ID, defaultValue: null }
-          ) {
-          allPuzzles(
-            first: $count
-            after: $cursor
-            orderBy: $orderBy
-            status: $status
-            status_Gt: $status__gt
-            user: $user
-          ) @connection(key: "PuzzleNode_allPuzzles") {
-            edges {
-              node {
-                id
-                ...PuzzlePanel_node
-              }
-            }
-          }
-        }
-      `,
+  Relay.createPaginationContainer(Component, PuzzleListFragment, {
+    direction: 'forward',
+    getConnectionFromProps(props) {
+      return props.list && props.list.allPuzzles;
     },
-    {
-      direction: 'forward',
-      getConnectionFromProps(props) {
-        return props.list && props.list.allPuzzles;
-      },
-      getFragmentVariables(prevVars, totalCount) {
-        return {
-          ...prevVars,
-          count: totalCount,
-        };
-      },
-      getVariables(props, { count, cursor }, fragmentVariables) {
-        return {
-          count,
-          cursor,
-          orderBy: fragmentVariables.orderBy,
-          status: fragmentVariables.status,
-          status__gt: fragmentVariables.status__gt,
-          user: fragmentVariables.user,
-        };
-      },
-      query: PuzzleListInitQuery,
-    }
-  );
+    getFragmentVariables(prevVars, totalCount) {
+      return {
+        ...prevVars,
+        count: totalCount,
+      };
+    },
+    getVariables(props, { count, cursor }, fragmentVariables) {
+      return {
+        count,
+        cursor,
+        orderBy: fragmentVariables.orderBy,
+        status: fragmentVariables.status,
+        status__gt: fragmentVariables.status__gt,
+        user: fragmentVariables.user,
+      };
+    },
+    query: PuzzleListInitQuery,
+  });
 
 export default compose(withSaga, withConnect, withPuzzleList)(PuzzleList);

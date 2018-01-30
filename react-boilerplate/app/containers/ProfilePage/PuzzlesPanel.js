@@ -16,10 +16,13 @@ function ProfilePuzzlesPanel(props) {
         count: 10,
         user: props.userId,
       }}
-      order={{
-        key: 'created',
-        asc: false,
-      }}
+      order={[
+        {
+          key: 'modified',
+          asc: false,
+        },
+      ]}
+      orderList={['modified', 'starCount', 'starSum', 'commentCount']}
     />
   );
 }

@@ -25,6 +25,8 @@ import { selectPuzzleShowPageDomain } from 'containers/PuzzleShowPage/selectors'
 
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
+import { toggleSubNav } from './actions';
+import makeSelectTopNavbar from './selectors';
 
 const NavbarBtn = styled(ButtonTransparent)`
   max-height: 50px;
@@ -43,79 +45,69 @@ const NavbarBtnMsg = styled.span`
   }
 `;
 
-class TopNavbar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      subnav: null,
-    };
-
-    this.toggleSubNav = this.toggleSubNav.bind(this);
-  }
-
-  toggleSubNav(navName, set = false) {
+function TopNavbar(props) {
+  function toggle(navName, set = false) {
     if (set === false) {
-      this.setState((prevState) => ({
-        subnav: prevState.subnav === navName ? null : navName,
-      }));
+      props.toggleSubNav(props.topnavbar.subnav === navName ? null : navName);
       return;
     }
-    this.setState({
-      subnav: navName,
-    });
+    props.toggleSubNav(navName);
   }
 
-  render() {
-    return (
-      <Navbar mx={-2}>
-        <Box w={1 / 3} m="auto">
-          <NavbarBtn onClick={() => this.toggleSubNav('menu')}>
-            <ImgSm src={menuImg} alt="menu" />
-            <NavbarBtnMsg>
-              <FormattedMessage {...messages.menu} />
-            </NavbarBtnMsg>
-          </NavbarBtn>
-          <MenuNavbar open={this.state.subnav === 'menu'} />
-        </Box>
-        <Box w={1 / 3} m="auto">
-          <NavbarBtn onClick={() => this.props.dispatch(toggleChat())}>
-            <ImgSm src={chatImg} alt="chat" />
-            <NavbarBtnMsg>
-              <FormattedMessage {...messages.chat} />
-            </NavbarBtnMsg>
-          </NavbarBtn>
-        </Box>
-        {this.props.puzzle &&
-          this.props.puzzle.memo && (
-            <Box w={1 / 3} m="auto">
-              <NavbarBtn onClick={() => this.props.dispatch(toggleMemo())}>
-                <ImgSm src={memoImg} alt="memo" />
-                <NavbarBtnMsg>
-                  <FormattedMessage {...messages.memo} />
-                </NavbarBtnMsg>
-              </NavbarBtn>
-            </Box>
-          )}
-        <Box w={1 / 3} m="auto">
-          <NavbarBtn onClick={() => this.toggleSubNav('user')}>
-            <ImgSm src={loginImg} alt="profile" />
-            <NavbarBtnMsg>
-              <FormattedMessage {...messages.profile} />
-            </NavbarBtnMsg>
-          </NavbarBtn>
-          <UserNavbar open={this.state.subnav === 'user'} />
-        </Box>
-      </Navbar>
-    );
-  }
+  return (
+    <Navbar mx={-2}>
+      <Box w={1 / 3} m="auto">
+        <NavbarBtn onClick={() => toggle('menu')}>
+          <ImgSm src={menuImg} alt="menu" />
+          <NavbarBtnMsg>
+            <FormattedMessage {...messages.menu} />
+          </NavbarBtnMsg>
+        </NavbarBtn>
+        <MenuNavbar open={props.topnavbar.subnav === 'menu'} />
+      </Box>
+      <Box w={1 / 3} m="auto">
+        <NavbarBtn onClick={() => props.dispatch(toggleChat())}>
+          <ImgSm src={chatImg} alt="chat" />
+          <NavbarBtnMsg>
+            <FormattedMessage {...messages.chat} />
+          </NavbarBtnMsg>
+        </NavbarBtn>
+      </Box>
+      {props.puzzle &&
+        props.puzzle.memo && (
+          <Box w={1 / 3} m="auto">
+            <NavbarBtn onClick={() => props.dispatch(toggleMemo())}>
+              <ImgSm src={memoImg} alt="memo" />
+              <NavbarBtnMsg>
+                <FormattedMessage {...messages.memo} />
+              </NavbarBtnMsg>
+            </NavbarBtn>
+          </Box>
+        )}
+      <Box w={1 / 3} m="auto">
+        <NavbarBtn onClick={() => toggle('user')}>
+          <ImgSm src={loginImg} alt="profile" />
+          <NavbarBtnMsg>
+            <FormattedMessage {...messages.profile} />
+          </NavbarBtnMsg>
+        </NavbarBtn>
+        <UserNavbar open={props.topnavbar.subnav === 'user'} />
+      </Box>
+    </Navbar>
+  );
 }
 
 TopNavbar.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  toggleSubNav: PropTypes.func.isRequired,
+  topnavbar: PropTypes.shape({
+    subnav: PropTypes.string,
+  }),
   puzzle: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
+  topnavbar: makeSelectTopNavbar(),
   puzzle: createSelector(selectPuzzleShowPageDomain, (substate) =>
     substate.get('puzzle')
   ),
@@ -124,6 +116,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
+    toggleSubNav: (subnav) => dispatch(toggleSubNav(subnav)),
   };
 }
 

@@ -44,10 +44,18 @@ const getTrueChannel = (channel) => {
 };
 
 function* onChangeLocation(action) {
+  const width = window.innerWidth || document.documentElement.clientWidth;
   const chat = yield select(selectChatDomain);
   const chatOpen = chat.get('open');
   const chatChannel = chat.get('channel');
   const currentChannel = chat.get('currentChannel');
+
+  if (width <= 720) {
+    yield put({ type: CLOSE_MINICHAT });
+    yield put(disconnectChat(currentChannel));
+    return;
+  }
+
   if (chatChannel === null && chatOpen === 'chat') {
     const nextChannel = defaultChannel(action.payload.pathname);
     if (nextChannel !== currentChannel) {

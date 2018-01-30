@@ -13,9 +13,10 @@ const puzzlePage = require('containers/PuzzlePage/reducer').default;
 const puzzleAddForm = require('containers/PuzzleAddForm/reducer').default;
 const puzzleShowPage = require('containers/PuzzleShowPage/reducer').default;
 const profilePage = require('containers/ProfilePage/reducer').default;
-const userNavbar = require('./containers/UserNavbar/reducer.js').default;
+const userNavbar = require('containers/UserNavbar/reducer').default;
+const topNavbar = require('containers/TopNavbar/reducer').default;
 const chat = require('containers/Chat/reducer').default;
-const notifier = require('./containers/Notifier/reducer.js').default;
+const notifier = require('containers/Notifier/reducer').default;
 
 const initialReducers = {
   puzzleActiveList,
@@ -24,6 +25,7 @@ const initialReducers = {
   puzzleShowPage,
   profilePage,
   userNavbar,
+  topNavbar,
   chat,
   notifier,
 };

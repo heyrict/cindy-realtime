@@ -129,7 +129,6 @@ export class RegisterForm extends React.Component {
             nickname: user.nickname,
           });
           this.props.dispatch(registerSucceeded());
-          this.props.onHide();
         }
       },
     });
