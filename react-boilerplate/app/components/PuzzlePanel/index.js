@@ -59,6 +59,7 @@ export class PuzzlePanel extends React.Component {
         <Row mx={10} py={10}>
           <UserCol w={[1 / 4, 1 / 6]} px={10}>
             <UserLabelInst user={node.user} break />
+            {this.props.additional}
           </UserCol>
           <Box w={[3 / 4, 5 / 6]} px={10}>
             <Flex wrap>
@@ -107,6 +108,7 @@ export class PuzzlePanel extends React.Component {
 PuzzlePanel.propTypes = {
   node: PropTypes.object.isRequired,
   relay: PropTypes.object,
+  additional: PropTypes.any,
 };
 
 export default Relay.createFragmentContainer(

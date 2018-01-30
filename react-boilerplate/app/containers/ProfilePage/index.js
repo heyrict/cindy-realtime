@@ -23,7 +23,8 @@ import ProfileShowQuery from 'graphql/ProfileShowQuery';
 
 import injectSaga from 'utils/injectSaga';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
-import PuzzlesPanel from './PuzzlesPanel.js';
+import PuzzlesPanel from './PuzzlesPanel';
+import StarsPanel from './StarsPanel';
 import ProfileDisplay from './ProfileDisplay';
 import makeSelectProfilePage from './selectors';
 import saga from './saga';
@@ -90,6 +91,9 @@ class ProfilePage extends React.Component {
                     )}
                     {this.state.tabIndex === 1 && (
                       <PuzzlesPanel userId={userId} />
+                    )}
+                    {this.state.tabIndex === 2 && (
+                      <StarsPanel userId={userId} />
                     )}
                   </div>
                 );

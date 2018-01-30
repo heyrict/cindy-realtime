@@ -6,6 +6,10 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
+  id: {
+    id: 'app.containers.FilterableList.id',
+    defaultMessage: 'ID',
+  },
   created: {
     id: 'app.containers.FilterableList.created',
     defaultMessage: 'Create Time',
@@ -25,6 +29,10 @@ export default defineMessages({
   starSum: {
     id: 'app.containers.FilterableList.starSum',
     defaultMessage: 'Star Sum',
+  },
+  star: {
+    id: 'app.containers.FilterableList.star',
+    defaultMessage: 'Star',
   },
   commentCount: {
     id: 'app.containers.FilterableList.commentCount',

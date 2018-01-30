@@ -1,6 +1,6 @@
 /**
  *
- * PuzzleList
+ * StarList
  *
  */
 
@@ -12,8 +12,9 @@ import Relay from 'react-relay';
 import { ButtonOutline } from 'style-store';
 
 import PuzzlePanel from 'components/PuzzlePanel';
-import PuzzleListFragment from 'graphql/PuzzleList';
-import PuzzleListInitQuery from 'graphql/PuzzleListInitQuery';
+import FiveStars from 'components/FiveStars';
+import StarListFragment from 'graphql/StarList';
+import StarListInitQuery from 'graphql/StarListInitQuery';
 import chatMessages from 'containers/Chat/messages';
 
 const StyledButtonOutline = ButtonOutline.extend`
@@ -21,7 +22,7 @@ const StyledButtonOutline = ButtonOutline.extend`
   padding: 10px 0;
 `;
 
-export class PuzzleList extends React.Component {
+export class StarList extends React.Component {
   constructor(props) {
     super(props);
     this.loadMore = this.loadMore.bind(this);
@@ -40,8 +41,18 @@ export class PuzzleList extends React.Component {
   render() {
     return (
       <div>
-        {this.props.list.allPuzzles.edges.map((edge) => (
-          <PuzzlePanel node={edge.node} key={edge.node.id} />
+        {this.props.list.allStars.edges.map((edge) => (
+          <PuzzlePanel
+            node={edge.node.puzzle}
+            key={edge.node.id}
+            additional={
+              <FiveStars
+                value={edge.node.value}
+                onSet={() => {}}
+                justify="center"
+              />
+            }
+          />
         ))}
         {this.props.relay.hasMore() ? (
           <StyledButtonOutline onClick={this.loadMore} w={1}>
@@ -55,13 +66,13 @@ export class PuzzleList extends React.Component {
   }
 }
 
-PuzzleList.propTypes = {
+StarList.propTypes = {
   relay: PropTypes.object.isRequired,
   list: PropTypes.object.isRequired,
 };
 
-const withPuzzleList = (Component) =>
-  Relay.createPaginationContainer(Component, PuzzleListFragment, {
+const withStarList = (Component) =>
+  Relay.createPaginationContainer(Component, StarListFragment, {
     direction: 'forward',
     getConnectionFromProps(props) {
       return props.list && props.list.allPuzzles;
@@ -82,7 +93,7 @@ const withPuzzleList = (Component) =>
         user: fragmentVariables.user,
       };
     },
-    query: PuzzleListInitQuery,
+    query: StarListInitQuery,
   });
 
-export default compose(withPuzzleList)(PuzzleList);
+export default compose(withStarList)(StarList);

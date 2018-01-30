@@ -16,6 +16,7 @@ from graphql_relay import from_global_id
 from .models import *
 
 
+# {{{1 resolveOrderBy
 def resolveOrderBy(instance, order_by):
     '''
     resolve order_by operation with nulls put at last.
@@ -203,7 +204,7 @@ class CommentNode(DjangoObjectType):
 class StarNode(DjangoObjectType):
     class Meta:
         model = Star
-        filter_fields = ["user", "puzzle"]
+        filter_fields = ["id", "user", "puzzle"]
         interfaces = (relay.Node, )
 
     rowid = graphene.Int()
