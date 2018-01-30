@@ -299,6 +299,9 @@ class CreatePuzzle(relay.ClientIDMutation):
             created=created,
             modified=created)
 
+        # Delete messages in puzzle-[id] channel
+        Minichat.objects.filter(channel="puzzle-" + puzzle.id).delete()
+
         return CreatePuzzle(puzzle=puzzle)
 
 
