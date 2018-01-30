@@ -40,7 +40,7 @@ function PuzzlePage(p, context) {
       <PuzzleFilterableList
         variables={{ status__gt: 0 }}
         order={[{ key: 'modified', asc: false }]}
-        orderList={['modified', 'starCount', 'starSum', 'commentCount']}
+        orderList={['modified', 'starCount', 'starSum']}
       />
     </Constrained>
   );

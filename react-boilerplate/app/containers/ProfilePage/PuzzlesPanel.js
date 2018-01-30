@@ -22,7 +22,7 @@ function ProfilePuzzlesPanel(props) {
           asc: false,
         },
       ]}
-      orderList={['modified', 'starCount', 'starSum', 'commentCount']}
+      orderList={['modified', 'starCount', 'starSum']}
     />
   );
 }

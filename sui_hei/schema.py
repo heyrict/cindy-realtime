@@ -240,9 +240,7 @@ class PuzzleNodeFilterSet(FilterSet):
     @property
     def qs(self):
         return super(PuzzleNodeFilterSet, self).qs.annotate(
-            starCount=Count("star"),
-            starSum=Sum("star__value"),
-            commentCount=Count("comment"))
+            starCount=Count("star__value"), starSum=Sum("star__value"))
 
 
 # {{{1 Unions
