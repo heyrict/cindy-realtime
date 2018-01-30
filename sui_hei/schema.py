@@ -686,15 +686,23 @@ class UserRegister(relay.ClientIDMutation):
             "username"]  # username: [a-zA-Z0-9\@+_\-.], less than 150
         password = input[
             "password"]  # password: both num and alphabet, more than 8, less than 32
-        nickname = input["nickname"]  # nickname: (0, 64]
+        nickname = input["nickname"].strip()  # nickname: (0, 64]
 
         if not re.findall(r"^[a-zA-Z0-9\@+_\-.]+$", username):
             raise ValidationError(
                 "Characters other than letters,"
                 "digits and @/./+/-/_ are not allowed in username")
+        if len(username) < 4:
+            raise ValidationError(
+                "Your username is too short (less than 4 characters)")
         if len(username) > 150:
             raise ValidationError(
                 "Your username is too long (more than 150 characters)")
+        if re.findall("^[ 　]*$", nickname):
+            raise ValidationError("Username cannot be blank!")
+        if len(nickname) > 64:
+            raise ValidationError(
+                "Your nickname is too long (more than 64 characters)")
         if not (re.findall(r"[0-9]+", password)
                 and re.findall(r"[a-zA-Z]", password)):
             raise ValidationError(
@@ -705,9 +713,6 @@ class UserRegister(relay.ClientIDMutation):
         if len(password) > 64:
             raise ValidationError(
                 "Your password is too long (more than 32 characters)")
-        if len(nickname) > 64:
-            raise ValidationError(
-                "Your nickname is too long (more than 64 characters)")
 
         user = User.objects.create_user(
             username=username, nickname=nickname, password=password)
