@@ -34,6 +34,7 @@ export class PuzzleAddForm extends React.Component {
       puzzleYami: false,
       puzzleContent: '',
       puzzleSolution: '',
+      loading: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -58,11 +59,15 @@ export class PuzzleAddForm extends React.Component {
   // }}}
   // {{{ handleSubmit
   handleSubmit(e) {
+    const { loading, ...input } = this.state;
+    if (loading) return;
+    this.setState({ loading: true });
     e.preventDefault();
     commitMutation(environment, {
       mutation: PuzzleAddFormMutation,
-      variables: { input: { ...this.state } },
+      variables: { input: { ...input } },
       onCompleted: (response, errors) => {
+        this.setState({ loading: false });
         if (errors) {
           bootbox.alert({
             title: 'Error',
@@ -151,7 +156,12 @@ export class PuzzleAddForm extends React.Component {
           content={this.state.puzzleSolution}
           onChange={this.handleChange}
         />
-        <Button type="submit" block onClick={this.handleSubmit}>
+        <Button
+          type="submit"
+          block
+          onClick={this.handleSubmit}
+          disabled={this.state.loading}
+        >
           {<FormattedMessage {...messages.submitLabel} />}
         </Button>
       </Form>

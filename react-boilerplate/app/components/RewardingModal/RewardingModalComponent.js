@@ -22,6 +22,7 @@ const Title = styled.h2`
 
 const Frame = PuzzleFrame.extend`
   margin: 5px 0;
+  overflow: auto;
 `;
 
 const JumpButton = ButtonOutline.extend`
@@ -40,7 +41,6 @@ function RewardingModalComponent(props, context) {
   const translateGenreCode = (x) => _(genreMessages[genreType[x]]);
   const genre = translateGenreCode(props.genre);
   const yami = props.yami ? ` x ${_(genreMessages.yami)}` : '';
-  console.log(props.commentSet.edges);
   return (
     <div>
       <Frame>
@@ -65,6 +65,7 @@ RewardingModalComponent.contextTypes = {
 };
 
 RewardingModalComponent.propTypes = {
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   genre: PropTypes.number.isRequired,
   yami: PropTypes.bool.isRequired,

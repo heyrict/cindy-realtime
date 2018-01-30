@@ -60,14 +60,14 @@ export class RegisterForm extends React.Component {
       this.setState({ nickname: target.value });
       this.setState((prevState) => ({
         nickname_valid:
-          prevState.nickname.length < 64 && prevState.nickname.length > 0,
+          prevState.nickname.length <= 64 && prevState.nickname.length > 0,
       }));
     } else if (target.id === 'formRegisterPassword') {
       this.setState({ password: target.value });
       this.setState((prevState) => ({
         password_valid:
-          prevState.password.length < 64 &&
-          prevState.password.length > 8 &&
+          prevState.password.length <= 64 &&
+          prevState.password.length >= 8 &&
           prevState.password.match(/[0-9]+/) &&
           prevState.password.match(/[a-zA-Z]+/),
       }));
@@ -93,11 +93,21 @@ export class RegisterForm extends React.Component {
       !this.state.username_valid ||
       !this.state.nickname_valid ||
       !this.state.password_valid ||
-      !this.state.passwordConfirm_valid
+      !this.state.passwordConfirm_valid ||
+      !(
+        this.state.nickname &&
+        this.state.username &&
+        this.state.password &&
+        this.state.passwordConfirm
+      )
     ) {
-      this.setState({
+      this.setState((prevState) => ({
+        username_valid: prevState.username !== '',
+        nickname_valid: prevState.nickname !== '',
+        password_valid: prevState.password !== '',
+        passwordConfirm_valid: prevState.passwordConfirm !== '',
         errorMsg: [{ message: 'There are some errors in your form!' }],
-      });
+      }));
       return;
     }
     // Commit

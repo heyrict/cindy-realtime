@@ -32,7 +32,7 @@ class ChatRoom extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { content: '' };
+    this.state = { content: '', loading: false };
     this.handleChange = (e) => this.setState({ content: e.target.value });
     this.handleKeyDown = (e) => {
       if (e.key === 'Enter') this.handleSubmit();
@@ -41,6 +41,8 @@ class ChatRoom extends React.Component {
   }
 
   handleSubmit() {
+    if (this.state.loading) return;
+    this.setState({ loading: true });
     commitMutation(environment, {
       mutation: CreateMinichatMutation,
       variables: {
@@ -50,6 +52,7 @@ class ChatRoom extends React.Component {
         },
       },
       onCompleted: (response, errors) => {
+        this.setState({ loading: false });
         if (errors) {
           bootbox.alert(errors.map((e) => e.message).join(','));
         }
