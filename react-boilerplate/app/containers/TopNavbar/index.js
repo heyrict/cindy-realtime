@@ -23,10 +23,12 @@ import menuImg from 'images/menu.svg';
 import { toggleChat, toggleMemo } from 'containers/Chat/actions';
 import { selectPuzzleShowPageDomain } from 'containers/PuzzleShowPage/selectors';
 
+import injectSaga from 'utils/injectSaga';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { toggleSubNav } from './actions';
 import makeSelectTopNavbar from './selectors';
+import saga from './saga';
 
 const NavbarBtn = styled(ButtonTransparent)`
   max-height: 50px;
@@ -122,4 +124,6 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(withConnect)(TopNavbar);
+const withSaga = injectSaga({ key: 'topNavBar', saga });
+
+export default compose(withSaga, withConnect)(TopNavbar);

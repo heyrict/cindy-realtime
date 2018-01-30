@@ -28,6 +28,7 @@ const RightBox = styled(Box)`
 `;
 
 const ContentBox = styled(Box)`
+  overflow: auto;
   font-size: 1.2em;
   font-family: 'Dejavu Sans';
 `;
