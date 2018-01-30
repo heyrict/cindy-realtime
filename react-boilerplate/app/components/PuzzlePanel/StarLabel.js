@@ -20,6 +20,8 @@ const PuzzleScore = styled.button`
   border: 2px solid darkorchid;
   border-radius: 10px;
   padding: 0 2px;
+  margin-right: 6px;
+  margin-bottom: 3px;
 `;
 
 function StarLabel(props) {

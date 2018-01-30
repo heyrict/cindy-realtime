@@ -48,7 +48,7 @@ export class StarList extends React.Component {
             additional={
               <FiveStars
                 value={edge.node.value}
-                onSet={() => {}}
+                starSize="15px"
                 justify="center"
               />
             }

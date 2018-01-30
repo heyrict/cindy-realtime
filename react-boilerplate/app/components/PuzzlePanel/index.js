@@ -13,8 +13,6 @@ import styled from 'styled-components';
 
 import Relay from 'react-relay';
 
-import ProcessLabel from 'components/ProcessLabel';
-import StatusLabel from 'components/StatusLabel';
 import TitleLabel from 'components/TitleLabel';
 import UserLabel, { UserLabel as UserLabelPlain } from 'components/UserLabel';
 import RewardingModal from 'components/RewardingModal/Loadable';
@@ -23,6 +21,8 @@ import PuzzlePanelNodeFragment from 'graphql/PuzzlePanel';
 
 import StarLabel from './StarLabel';
 import CommentLabel from './CommentLabel';
+import ProcessLabel from './ProcessLabel';
+import StatusLabel from './StatusLabel';
 
 const PuzzleDate = styled.span`
   color: gray;

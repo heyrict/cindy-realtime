@@ -19,6 +19,8 @@ const PuzzleComments = styled.span`
   border: 2px solid mediumslateblue;
   border-radius: 10px;
   padding: 0 2px;
+  margin-right: 6px;
+  margin-bottom: 3px;
 `;
 
 function CommentLabel(props) {

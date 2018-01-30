@@ -27,11 +27,25 @@ class FiveStars extends React.PureComponent {
     this.handleMouseLeave = (v) => this.setState({ value: v, hovered: false });
   }
   render() {
-    const { value, onSet, ...others } = this.props;
+    const { value, onSet, starSize, ...others } = this.props;
+    if (onSet === null) {
+      const UncontrolledStar = ({ v }) => (
+        <Star style={{ fontSize: starSize }} checked={value >= v} />
+      );
+      return (
+        <Flex {...others}>
+          <UncontrolledStar v={1} />
+          <UncontrolledStar v={2} />
+          <UncontrolledStar v={3} />
+          <UncontrolledStar v={4} />
+          <UncontrolledStar v={5} />
+        </Flex>
+      );
+    }
     const trueVal = this.state.hovered ? this.state.value : this.props.value;
     const ControlledStar = ({ v }) => (
       <Star
-        style={{ cursor: 'pointer' }}
+        style={{ cursor: 'pointer', fontSize: starSize }}
         checked={trueVal >= v}
         onMouseEnter={() => this.handleMouseEnter(v)}
         onMouseLeave={() => this.handleMouseLeave(v)}
@@ -52,7 +66,13 @@ class FiveStars extends React.PureComponent {
 
 FiveStars.propTypes = {
   value: PropTypes.number.isRequired,
-  onSet: PropTypes.func.isRequired,
+  onSet: PropTypes.func,
+  starSize: PropTypes.string.isRequired,
+};
+
+FiveStars.defaultProps = {
+  starSize: '20px',
+  onSet: null,
 };
 
 export default FiveStars;

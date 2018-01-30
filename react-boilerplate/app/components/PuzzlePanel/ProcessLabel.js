@@ -12,6 +12,7 @@ const ProcessBase = styled.span`
   text-align: center;
   border-radius: 10px;
   margin-right: 6px;
+  margin-bottom: 3px;
   font-weight: bold;
   padding: 0 6px;
 `;

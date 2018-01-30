@@ -13,8 +13,9 @@ import common from 'common';
 const StatusBase = styled.span`
   text-align: center;
   border-radius: 10px;
-  margin-right: 6px;
   padding: 0 6px;
+  margin-right: 6px;
+  margin-bottom: 3px;
 `;
 
 const styledStatus = (statusCode) => {
