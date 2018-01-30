@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import bootbox from 'bootbox';
@@ -7,9 +9,10 @@ import { commitMutation } from 'react-relay';
 import environment from 'Environment';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
-import { Input, ButtonOutline } from 'style-store';
+import { ButtonOutline } from 'style-store';
 import { CreateMinichatMutation } from 'graphql/CreateMinichatMutation';
 import ChatMessage from './ChatMessage';
+import MessageInput from './MessageInput';
 import Wrapper from './Wrapper';
 import { loadMore } from './actions';
 import messages from './messages';
@@ -32,12 +35,11 @@ class ChatRoom extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { content: '', loading: false };
-    this.handleChange = (e) => this.setState({ content: e.target.value });
-    this.handleKeyDown = (e) => {
-      if (e.key === 'Enter') this.handleSubmit();
-    };
+    this.state = { content: '', loading: false, taHeight: 36 };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = (e) => this.setState({ content: e.target.value });
+    this.handleHeightChange = (h, inst) =>
+      this.setState({ taHeight: inst._rootDOMNode.clientHeight });
   }
 
   handleSubmit() {
@@ -64,7 +66,7 @@ class ChatRoom extends React.Component {
   render() {
     return (
       <Flex wrap justify="center">
-        <MessageWrapper height={this.props.height - 50}>
+        <MessageWrapper height={this.props.height - this.state.taHeight - 14}>
           <LoadMoreBtn
             onClick={() => this.props.dispatch(loadMore())}
             hidden={!this.props.hasPreviousPage}
@@ -80,10 +82,12 @@ class ChatRoom extends React.Component {
           ))}
         </MessageWrapper>
         <Flex mx={1} w={1} hidden={this.props.currentUserId === null}>
-          <Input
+          <MessageInput
             value={this.state.content}
             onChange={this.handleChange}
-            onKeyDown={this.handleKeyDown}
+            onHeightChange={this.handleHeightChange}
+            minRows={1}
+            maxRows={5}
           />
           <ButtonOutline
             onClick={this.handleSubmit}

@@ -1,14 +1,16 @@
+/* eslint-disable no-underscore-dangle */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import moment from 'moment';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Flex, Box } from 'rebass';
-import { Button, Input, ButtonOutline } from 'style-store';
+import { Button, ButtonOutline } from 'style-store';
 
 import Wrapper from './Wrapper';
 import ChatMessage from './ChatMessage';
+import MessageInput from './MessageInput';
 import { changeDirectchat, sendDirectchat } from './actions';
 import messages from './messages';
 
@@ -41,11 +43,11 @@ class DirectChat extends React.Component {
     super(props);
     this.state = {
       content: '',
+      taHeight: 36,
     };
     this.handleChange = (e) => this.setState({ content: e.target.value });
-    this.handleKeyDown = (e) => {
-      if (e.key === 'Enter') this.handleSubmit();
-    };
+    this.handleHeightChange = (h, inst) =>
+      this.setState({ taHeight: inst._rootDOMNode.clientHeight });
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -72,7 +74,7 @@ class DirectChat extends React.Component {
               `User ${C.activeDirectChat} (Offline)`}
           </Box>
         </Topbar>
-        <MessageWrapper height={this.props.height - 36 - 50}>
+        <MessageWrapper height={this.props.height - this.state.taHeight - 50}>
           {C.activeDirectChat in C.directMessages &&
             C.directMessages[C.activeDirectChat].map((msg) => (
               <ChatMessage
@@ -83,10 +85,10 @@ class DirectChat extends React.Component {
             ))}
         </MessageWrapper>
         <Flex mx={1} w={1}>
-          <Input
+          <MessageInput
             value={this.state.content}
             onChange={this.handleChange}
-            onKeyDown={this.handleKeyDown}
+            onHeightChange={this.handleHeightChange}
             disabled={
               C.onlineUsers[C.activeDirectChat] === undefined ||
               !this.props.currentUser.userId

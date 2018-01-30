@@ -260,6 +260,7 @@
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "4.1.1",
     "react-router-redux": "5.0.0-alpha.6",
+    "react-textarea-autosize": "^5.2.1",
     "rebass": "^1.0.4",
     "redux": "^3.7.2",
     "redux-immutable": "4.0.0",
