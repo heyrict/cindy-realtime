@@ -27,10 +27,7 @@ class RewardingBox extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      stars:
-        this.props.existingStar.length === 0
-          ? 0
-          : this.props.existingStar[0].node.value,
+      stars: this.props.existingStar.length === 0 ? 0 : null,
       comment:
         this.props.existingComment.length === 0
           ? ''
@@ -86,21 +83,22 @@ class RewardingBox extends React.PureComponent {
   render() {
     return (
       <Constrained>
-        <PuzzleFrame>
-          <Flex wrap justify="center" align="center">
-            <FiveStars
-              justify="center"
-              align="center"
-              value={this.state.stars}
-              onSet={this.handleStarSet}
-              w={1 / 2}
-            />
-            <SubmitBtn w={1 / 2} onClick={this.handleSaveStar}>
-              <FormattedMessage {...messages.addStar} />
-            </SubmitBtn>
-          </Flex>
-        </PuzzleFrame>
-        <div style={{ padding: '5px' }} />
+        {this.state.stars !== null && (
+          <PuzzleFrame>
+            <Flex wrap justify="center" align="center">
+              <FiveStars
+                justify="center"
+                align="center"
+                value={this.state.stars}
+                onSet={this.handleStarSet}
+                w={1 / 2}
+              />
+              <SubmitBtn w={1 / 2} onClick={this.handleSaveStar}>
+                <FormattedMessage {...messages.addStar} />
+              </SubmitBtn>
+            </Flex>
+          </PuzzleFrame>
+        )}
         <PuzzleFrame>
           <Flex wrap mt={10}>
             <CommentInput

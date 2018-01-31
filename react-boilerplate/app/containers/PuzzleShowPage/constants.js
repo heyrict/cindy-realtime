@@ -115,6 +115,14 @@ export const puzzleShowQuery = `
         }
       }
     }
+    allBookmarks(puzzle: $id, user: $userId) {
+      edges {
+        node {
+          id
+          value
+        }
+      }
+    }
   }
   ${componentsDialogueFragment}
 `;

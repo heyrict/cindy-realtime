@@ -70,6 +70,10 @@ export default defineMessages({
     id: 'app.containers.PuzzleShowPage.addStar',
     defaultMessage: 'Add Star',
   },
+  addBookmark: {
+    id: 'app.containers.PuzzleShowPage.addBookmark',
+    defaultMessage: 'Add Bookmark',
+  },
   addComment: {
     id: 'app.containers.PuzzleShowPage.addComment',
     defaultMessage: 'Add Comment',

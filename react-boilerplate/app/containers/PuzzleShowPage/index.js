@@ -31,6 +31,7 @@ import { puzzleShown, puzzleHid } from './actions';
 import QuestionPutBox from './QuestionPutBox';
 import PuzzleModifyBox from './PuzzleModifyBox';
 import RewardingBox from './RewardingBox';
+import BookmarkBox from './BookmarkBox';
 
 const Title = styled.h1`
   font-size: 2em;
@@ -125,6 +126,13 @@ export class PuzzleShowPage extends React.Component {
             <QuestionPutBox
               puzzleId={parseInt(this.puzzleId, 10)}
               currentUserId={this.props.user.userId}
+            />
+          )}
+        {(P.status === 1 || P.status === 2) &&
+          U && (
+            <BookmarkBox
+              puzzleId={parseInt(this.puzzleId, 10)}
+              existingBookmark={this.props.puzzleshowpage.allBookmarks.edges}
             />
           )}
         {(P.status === 1 || P.status === 2) &&

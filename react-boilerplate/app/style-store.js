@@ -147,6 +147,7 @@ export const PuzzleFrame = styled.div`
   border-radius: 10px;
   border: 2px solid #006388;
   padding: 5px;
+  margin-bottom: 10px;
   background-color: rgba(255, 255, 255, 0.5);
 `;
 

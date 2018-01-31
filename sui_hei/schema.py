@@ -562,6 +562,31 @@ class UpdateComment(graphene.ClientIDMutation):
         return UpdateComment(comment=comment)
 
 
+# {{{2 UpdateBookmark
+class UpdateBookmark(graphene.ClientIDMutation):
+    bookmark = graphene.Field(BookmarkNode)
+
+    class Input:
+        puzzleId = graphene.Int()
+        value = graphene.Float()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        value = input["value"]
+        puzzleId = input["puzzleId"]
+        puzzle = Puzzle.objects.get(id=puzzleId)
+
+        bookmark = Bookmark.objects.get_or_create(user=user, puzzle=puzzle)[0]
+        bookmark.value = value
+        bookmark.save()
+
+        return UpdateBookmark(bookmark=bookmark)
+
+
 # {{{2 UpdateHint
 class UpdateHint(relay.ClientIDMutation):
     hint = graphene.Field(HintNode)
@@ -822,6 +847,7 @@ class Mutation(graphene.ObjectType):
     update_puzzle = UpdatePuzzle.Field()
     update_star = UpdateStar.Field()
     update_comment = UpdateComment.Field()
+    update_bookmark = UpdateBookmark.Field()
     update_hint = UpdateHint.Field()
     update_current_award = UpdateCurrentAward.Field()
     update_user = UpdateUser.Field()
