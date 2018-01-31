@@ -39,7 +39,7 @@ class ChatRoom extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = (e) => this.setState({ content: e.target.value });
     this.handleHeightChange = (h, inst) =>
-      this.setState({ taHeight: inst._rootDOMNode.clientHeight });
+      this.setState({ taHeight: inst._rootDOMNode.clientHeight || h });
   }
 
   handleSubmit() {
