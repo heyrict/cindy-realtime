@@ -7,16 +7,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import { from_global_id as f } from 'common';
 import { FormattedMessage } from 'react-intl';
 import Relay from 'react-relay';
-import { ButtonOutline, ImgXs } from 'style-store';
+import { ButtonOutline } from 'style-store';
 
 import PuzzlePanel from 'components/PuzzlePanel';
-import Slider from 'components/Slider';
 import BookmarkListFragment from 'graphql/BookmarkList';
 import BookmarkListInitQuery from 'graphql/BookmarkListInitQuery';
 import chatMessages from 'containers/Chat/messages';
-import tag from 'images/tag.svg';
+import BookmarkLabel from './BookmarkLabel';
 
 const StyledButtonOutline = ButtonOutline.extend`
   border-radius: 10px;
@@ -47,22 +47,11 @@ export class BookmarkList extends React.Component {
             node={edge.node.puzzle}
             key={edge.node.id}
             additional={
-              <div>
-                <ImgXs
-                  alt="Bookmark: "
-                  src={tag}
-                  style={{ marginRight: '5px' }}
-                />
-                <font
-                  style={{
-                    color: '#839496',
-                    fontWeight: 'bold',
-                    fontSize: '1.1em',
-                  }}
-                >
-                  {edge.node.value}
-                </font>
-              </div>
+              <BookmarkLabel
+                value={edge.node.value}
+                isCurrentUser={this.props.currentUserId === this.props.userId}
+                bookmarkId={f(edge.node.id)[1]}
+              />
             }
           />
         ))}
@@ -81,6 +70,8 @@ export class BookmarkList extends React.Component {
 BookmarkList.propTypes = {
   relay: PropTypes.object.isRequired,
   list: PropTypes.object.isRequired,
+  userId: PropTypes.string.isRequired,
+  currentUserId: PropTypes.string,
 };
 
 const withBookmarkList = (Component) =>

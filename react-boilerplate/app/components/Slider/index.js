@@ -10,7 +10,7 @@ import { Slider as RebassSlider } from 'rebass';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 function Slider(props) {
-  const { value, template, placement, onChange, style, ...others } = props;
+  const { value, template, placement, style, ...others } = props;
   return (
     <OverlayTrigger
       placement={placement}
@@ -18,7 +18,6 @@ function Slider(props) {
     >
       <RebassSlider
         value={value}
-        readOnly={onChange === null}
         style={{ margin: '5px 3px', ...style }}
         {...others}
       />
@@ -37,7 +36,6 @@ Slider.propTypes = {
 Slider.defaultProps = {
   template: (t) => t,
   placement: 'top',
-  onChange: null,
 };
 
 export default Slider;

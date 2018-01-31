@@ -20,7 +20,13 @@ function BookmarksPanel(props) {
         if (error) {
           return <div>{error.message}</div>;
         } else if (p) {
-          return <BookmarkList list={p} />;
+          return (
+            <BookmarkList
+              list={p}
+              userId={props.userId}
+              currentUserId={props.currentUserId}
+            />
+          );
         }
         return <LoadingDots />;
       }}
@@ -31,6 +37,7 @@ function BookmarksPanel(props) {
 
 BookmarksPanel.propTypes = {
   userId: PropTypes.string.isRequired,
+  currentUserId: PropTypes.string,
 };
 
 export default BookmarksPanel;

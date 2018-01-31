@@ -46,6 +46,10 @@ class RewardingBox extends React.PureComponent {
     this.handleSaveComment = this.handleSaveComment.bind(this);
   }
   handleSaveStar() {
+    if (this.state.stars === 0) {
+      bootbox.alert('Please Choose at least one star!');
+      return;
+    }
     commitMutation(environment, {
       mutation: UpdateStarMutation,
       variables: {
@@ -63,6 +67,10 @@ class RewardingBox extends React.PureComponent {
     });
   }
   handleSaveComment() {
+    if (this.state.comment === '') {
+      bootbox.alert('Comment cannot be blank!');
+      return;
+    }
     commitMutation(environment, {
       mutation: UpdateCommentMutation,
       variables: {

@@ -97,7 +97,13 @@ class ProfilePage extends React.Component {
                       <StarsPanel userId={userId} />
                     )}
                     {this.state.tabIndex === 3 && (
-                      <BookmarksPanel userId={userId} />
+                      <BookmarksPanel
+                        userId={userId}
+                        currentUserId={t(
+                          'UserNode',
+                          this.props.usernavbar.user.userId
+                        )}
+                      />
                     )}
                   </div>
                 );

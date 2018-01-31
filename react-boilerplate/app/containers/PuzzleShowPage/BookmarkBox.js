@@ -10,7 +10,7 @@ import tag from 'images/tag.svg';
 
 import { commitMutation } from 'react-relay';
 import environment from 'Environment';
-import UpdateBookmarkMutation from 'graphql/UpdateBookmarkMutation';
+import CreateBookmarkMutation from 'graphql/CreateBookmarkMutation';
 
 import messages from './messages';
 
@@ -31,7 +31,7 @@ class BookmarkBox extends React.PureComponent {
   }
   handleSaveBookmark() {
     commitMutation(environment, {
-      mutation: UpdateBookmarkMutation,
+      mutation: CreateBookmarkMutation,
       variables: {
         input: {
           puzzleId: this.props.puzzleId,

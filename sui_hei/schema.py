@@ -392,6 +392,31 @@ class CreateMinichat(graphene.ClientIDMutation):
         return CreateMinichat(minichat=minichat)
 
 
+# {{{2 CreateBookmark
+class CreateBookmark(graphene.ClientIDMutation):
+    bookmark = graphene.Field(BookmarkNode)
+
+    class Input:
+        puzzleId = graphene.Int()
+        value = graphene.Float()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        value = input["value"]
+        puzzleId = input["puzzleId"]
+        puzzle = Puzzle.objects.get(id=puzzleId)
+
+        bookmark = Bookmark.objects.get_or_create(user=user, puzzle=puzzle)[0]
+        bookmark.value = value
+        bookmark.save()
+
+        return CreateBookmark(bookmark=bookmark)
+
+
 # {{{2 UpdateAnswer
 class UpdateAnswer(graphene.ClientIDMutation):
     dialogue = graphene.Field(DialogueNode)
@@ -567,7 +592,7 @@ class UpdateBookmark(graphene.ClientIDMutation):
     bookmark = graphene.Field(BookmarkNode)
 
     class Input:
-        puzzleId = graphene.Int()
+        bookmarkId = graphene.Int()
         value = graphene.Float()
 
     @classmethod
@@ -577,10 +602,13 @@ class UpdateBookmark(graphene.ClientIDMutation):
             raise ValidationError(_("Please login!"))
 
         value = input["value"]
-        puzzleId = input["puzzleId"]
-        puzzle = Puzzle.objects.get(id=puzzleId)
+        bookmarkId = input["bookmarkId"]
+        bookmark = Bookmark.objects.get(id=bookmarkId)
 
-        bookmark = Bookmark.objects.get_or_create(user=user, puzzle=puzzle)[0]
+        if (bookmark.user.id != user.id):
+            raise ValidationError(
+                _("You are not the creator of this bookmark"))
+
         bookmark.value = value
         bookmark.save()
 
@@ -842,6 +870,7 @@ class Mutation(graphene.ObjectType):
     create_question = CreateQuestion.Field()
     create_hint = CreateHint.Field()
     create_minichat = CreateMinichat.Field()
+    create_bookmark = CreateBookmark.Field()
     update_answer = UpdateAnswer.Field()
     update_question = UpdateQuestion.Field()
     update_puzzle = UpdatePuzzle.Field()
