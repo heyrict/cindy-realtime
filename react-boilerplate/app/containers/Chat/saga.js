@@ -158,7 +158,7 @@ function* fetchMinichatUpdate(action) {
 
 function* getMinichatId(name) {
   const chat = yield select(selectChatDomain);
-  const channelIds = chat.get('channelIds');
+  const channelIds = chat.get('channelIds').toJS();
   if (name in channelIds) {
     return channelIds[name];
   }
