@@ -3,9 +3,9 @@ import re
 from django.contrib.auth.models import (AbstractBaseUser, AbstractUser,
                                         BaseUserManager)
 from django.db import connections, models
-from django.db.models import Q, DO_NOTHING, SET_NULL, CASCADE
-from django.utils.translation import ugettext_lazy as _
+from django.db.models import CASCADE, DO_NOTHING, Q, SET_NULL
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 
 # Create your models here.
@@ -24,7 +24,11 @@ class User(AbstractUser):
     nickname = models.CharField(
         _('nick_name'), max_length=255, null=False, unique=True)
     profile = models.TextField(_('profile'), default="")
-    current_award = models.ForeignKey("UserAward", null=True, on_delete=SET_NULL, related_name="current_award")
+    current_award = models.ForeignKey(
+        "UserAward",
+        null=True,
+        on_delete=SET_NULL,
+        related_name="current_award")
     experience = models.IntegerField(_('experience'), default=0)
     snipe = models.IntegerField(_('snipe'), default=0)
     sniped = models.IntegerField(_('sniped'), default=0)
@@ -120,7 +124,8 @@ class Hint(models.Model):
     id = models.AutoField(max_length=11, null=False, primary_key=True)
     puzzle = models.ForeignKey(Puzzle, on_delete=CASCADE)
     content = models.TextField(_('content'), null=False)
-    created = models.DateTimeField(_('created'), null=False, default=timezone.now)
+    created = models.DateTimeField(
+        _('created'), null=False, default=timezone.now)
 
     class Meta:
         verbose_name = _("Hint")
@@ -129,23 +134,35 @@ class Hint(models.Model):
         return "[%s]: %50s" % (self.puzzle, self.content)
 
 
-class Minichat(models.Model):
+class ChatMessage(models.Model):
     id = models.AutoField(max_length=11, null=False, primary_key=True)
     user = models.ForeignKey(User, on_delete=CASCADE)
-    channel = models.TextField(_('channel'), default="lobby", null=False)
+    chatroom = models.ForeignKey('ChatRoom', on_delete=CASCADE)
     content = models.TextField(_('content'), null=False)
-
-    #score = models.SmallIntegerField(_('score'), default=50)
+    created = models.DateField(_("created"), null=False, default=timezone.now)
+    editTimes = models.IntegerField(_("edit times"), null=False, default=0)
 
     class Meta:
-        permissions = (
-            ("can_add_info", _("Can add homepage info")),
-            ("can_grant_award", _("Can grant awards to users")), )
-        verbose_name = _("Minichat")
+        verbose_name = _("ChatMessage")
 
     def __str__(self):
         return "[%s]: {%s} puts {%50s}" % (self.channel, self.user,
                                            self.content)
+
+
+class ChatRoom(models.Model):
+    id = models.AutoField(max_length=11, null=False, primary_key=True)
+    user = models.ForeignKey(User, on_delete=CASCADE)
+    name = models.CharField(
+        _('channel'), max_length=255, null=False, unique=True)
+    description = models.TextField(_('description'), null=False, default='')
+    created = models.DateField(_("created"), null=False, default=timezone.now)
+
+    class Meta:
+        verbose_name = _("ChatRoom")
+
+    def __str__(self):
+        return self.name
 
 
 class Comment(models.Model):
@@ -183,5 +200,3 @@ class Star(models.Model):
 
     def __str__(self):
         return "%s -- %.1f --> %s" % (self.user, self.value, self.puzzle)
-
-

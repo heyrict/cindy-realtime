@@ -6,6 +6,7 @@
 
 import { WS_CONNECT } from 'containers/WebSocketInterface/constants';
 import { PUZZLE_ADDED } from 'containers/PuzzleActiveList/constants';
+import { GOTID_MINICHAT } from 'containers/Chat/constants';
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -19,6 +20,11 @@ const defaultMessageStyle = {
 const wsConnectMsg = () => ({
   ...defaultMessageStyle,
   children: <FormattedMessage {...messages.wsConnect} />,
+});
+
+const chatroomNotExistsMsg = (context) => ({
+  ...defaultMessageStyle,
+  children: <FormattedMessage {...messages.chatroomNotExists} values={{ name: context.name }} />,
 });
 
 const puzzleAddedMsg = (context) => ({
@@ -49,10 +55,12 @@ export const NOTE_NEEDED = {
   WS_CONNECT,
   PUZZLE_ADDED,
   DIRECTCHAT_NOTIFY,
+  GOTID_MINICHAT,
 };
 
 export const NOTE_MSG = {
   wsConnectMsg,
   puzzleAddedMsg,
   directMessageReceivedMsg,
+  chatroomNotExistsMsg,
 };

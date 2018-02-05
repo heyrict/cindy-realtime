@@ -10,7 +10,7 @@ import environment from 'Environment';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
 import { ButtonOutline } from 'style-store';
-import { CreateMinichatMutation } from 'graphql/CreateMinichatMutation';
+import { CreateChatmessageMutation } from 'graphql/CreateChatmessageMutation';
 import ChatMessage from './ChatMessage';
 import MessageInput from './MessageInput';
 import Wrapper from './Wrapper';
@@ -46,11 +46,11 @@ class ChatRoom extends React.Component {
     if (this.state.loading) return;
     this.setState({ loading: true });
     commitMutation(environment, {
-      mutation: CreateMinichatMutation,
+      mutation: CreateChatmessageMutation,
       variables: {
         input: {
           content: this.state.content,
-          channel: this.props.channel,
+          chatroom: this.props.channelIds[this.props.channel],
         },
       },
       onCompleted: (response, errors) => {
@@ -107,6 +107,7 @@ ChatRoom.propTypes = {
   chatMessages: PropTypes.array.isRequired,
   hasPreviousPage: PropTypes.bool,
   channel: PropTypes.string,
+  channelIds: PropTypes.object.isRequired,
   height: PropTypes.number.isRequired,
   currentUserId: PropTypes.number,
 };

@@ -23,11 +23,11 @@ export const CLOSE_MEMO = 'app/Chat/CLOSE_MEMO';
 export const OPEN_MINICHAT = 'app/Chat/OPEN_MINICHAT';
 export const CLOSE_MINICHAT = 'app/Chat/CLOSE_MINICHAT';
 
-export const MINICHAT_CONNECT = 'ws/MINICHAT_CONNECT';
-export const MINICHAT_DISCONNECT = 'ws/MINICHAT_DISCONNECT';
+export const CHATROOM_CONNECT = 'ws/CHATROOM_CONNECT';
+export const CHATROOM_DISCONNECT = 'ws/CHATROOM_DISCONNECT';
 
-export const MINICHAT_ADDED = 'ws/MINICHAT_ADDED';
-export const ADD_MINICHAT = 'app/Chat/ADD_MINICHAT';
+export const CHATMESSAGE_ADDED = 'ws/CHATMESSAGE_ADDED';
+export const ADD_CHATMESSAGE = 'app/Chat/ADD_CHATMESSAGE';
 
 export const MINICHAT_MORE = 'app/Chat/MINICHAT_MORE';
 export const MORE_MINICHAT = 'app/Chat/MORE_MINICHAT';
@@ -42,13 +42,18 @@ export const ADD_DIRECTCHAT_MESSAGE = 'app/Chat/ADD_DIRECTCHAT_MESSAGE';
 export const OPEN_CHAT = 'app/Chat/OPEN_CHAT';
 export const OPEN_DIRECTCHAT = 'app/Chat/OPEN_DIRECTCHAT';
 
+export const GOTID_MINICHAT = 'app/Chat/GOTID_MINICHAT';
+export const MINICHAT_GETID = 'app/Chat/MINICHAT_GETID';
+
 export const PublicChannels = ['lobby', 'sp', 'yokoku', '5-7-5'];
 
-// {{{ const minichatFragment
-const minichatFragment = `
-  fragment components_minichat on MinichatNode {
+// {{{ const chatmessageFragment
+const chatmessageFragment = `
+  fragment components_chatmessage on ChatMessageNode {
     id
     content
+    created
+    editTimes
     user {
       ...components_user
     }
@@ -57,51 +62,65 @@ const minichatFragment = `
 `;
 // }}}
 
-// {{{ const minichatQuery
-export const minichatQuery = `
-  query($channel: String!) {
-    allMinichats(channel: $channel, last: 10, orderBy: "id") {
+// {{{ const chatmessageQuery
+export const chatmessageQuery = `
+  query($chatroom: ID!) {
+    allChatmessages(chatroom: $chatroom, last: 10, orderBy: "id") {
       pageInfo {
         startCursor
         hasPreviousPage
       }
       edges {
         node {
-          ...components_minichat
+          ...components_chatmessage
         }
       }
     }
   }
-  ${minichatFragment}
+  ${chatmessageFragment}
 `;
 // }}}
 
-// {{{ const minichatMoreQuery
-export const minichatMoreQuery = `
-  query($channel: String!, $before: String!) {
-    allMinichats(channel: $channel, last: 10, before: $before, orderBy: "id") {
+// {{{ const chatmessageMoreQuery
+export const chatmessageMoreQuery = `
+  query($chatroom: ID!, $before: String!) {
+    allChatmessages(chatroom: $chatroom, last: 10, before: $before, orderBy: "id") {
       pageInfo {
         startCursor
         hasPreviousPage
       }
       edges {
         node {
-          ...components_minichat
+          ...components_chatmessage
         }
       }
     }
   }
-  ${minichatFragment}
+  ${chatmessageFragment}
 `;
 // }}}
 
-// {{{ const minichatUpdateQuery
-export const minichatUpdateQuery = `
+// {{{ const chatmessageUpdateQuery
+export const chatmessageUpdateQuery = `
   query($id: ID!) {
-    minichat(id: $id) {
-      ...components_minichat
+    chatmessage(id: $id) {
+      ...components_chatmessage
     }
   }
-  ${minichatFragment}
+  ${chatmessageFragment}
+`;
+// }}}
+
+// {{{ const chatmessageIdQuery
+export const chatmessageIdQuery = `
+  query($name: String!) {
+    allChatrooms(name: $name) {
+      edges {
+        node {
+          id
+        }
+      }
+    }
+  }
 `;
 // }}}

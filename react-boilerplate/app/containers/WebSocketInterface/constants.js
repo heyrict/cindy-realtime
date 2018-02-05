@@ -13,8 +13,8 @@ import {
 import { PUZZLE_SHOWN, PUZZLE_HID } from 'containers/PuzzleShowPage/constants';
 
 import {
-  MINICHAT_CONNECT,
-  MINICHAT_DISCONNECT,
+  CHATROOM_CONNECT,
+  CHATROOM_DISCONNECT,
   SEND_DIRECTCHAT,
 } from 'containers/Chat/constants';
 
@@ -24,8 +24,8 @@ export const INTERNAL_ACTIONS = [
   SET_CURRENT_USER,
   PUZZLE_SHOWN,
   PUZZLE_HID,
-  MINICHAT_CONNECT,
-  MINICHAT_DISCONNECT,
+  CHATROOM_CONNECT,
+  CHATROOM_DISCONNECT,
   SEND_DIRECTCHAT,
 ];
 

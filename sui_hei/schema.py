@@ -174,11 +174,24 @@ class HintNode(DjangoObjectType):
         return self.id
 
 
-# {{{2 MinichatNode
-class MinichatNode(DjangoObjectType):
+# {{{2 ChatMessageNode
+class ChatMessageNode(DjangoObjectType):
     class Meta:
-        model = Minichat
-        filter_fields = ['channel']
+        model = ChatMessage
+        filter_fields = ['chatroom']
+        interfaces = (relay.Node, )
+
+    rowid = graphene.Int()
+
+    def resolve_rowid(self, info):
+        return self.id
+
+
+# {{{2 ChatRoomNode
+class ChatRoomNode(DjangoObjectType):
+    class Meta:
+        model = ChatRoom
+        filter_fields = ['name']
         interfaces = (relay.Node, )
 
     rowid = graphene.Int()
@@ -300,7 +313,7 @@ class CreatePuzzle(relay.ClientIDMutation):
             modified=created)
 
         # Delete messages in puzzle-[id] channel
-        Minichat.objects.filter(channel="puzzle-" + puzzle.id).delete()
+        ChatRoom.objects.create(channel="puzzle-" + puzzle.id)
 
         return CreatePuzzle(puzzle=puzzle)
 
@@ -366,13 +379,13 @@ class CreateHint(graphene.ClientIDMutation):
         return CreateHint(hint=hint)
 
 
-# {{{2 CreateMinichat
-class CreateMinichat(graphene.ClientIDMutation):
-    minichat = graphene.Field(MinichatNode)
+# {{{2 CreateChatMessage
+class CreateChatMessage(graphene.ClientIDMutation):
+    chatmessage = graphene.Field(ChatMessageNode)
 
     class Input:
         content = graphene.String()
-        channel = graphene.String()
+        chatroom = graphene.String()
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -381,15 +394,16 @@ class CreateMinichat(graphene.ClientIDMutation):
             raise ValidationError(_("Please login!"))
 
         content = input['content']
-        channel = input['channel']
+        chatroom = ChatRoom.objects.get(
+            id=from_global_id(input['chatroom'])[1])
 
         if not content:
-            raise ValidationError(_("Minichat content cannot be empty!"))
+            raise ValidationError(_("Chatroom content cannot be empty!"))
 
-        minichat = Minichat.objects.create(
-            content=content, user=user, channel=channel)
+        chatmessage = ChatMessage.objects.create(
+            content=content, user=user, chatroom=chatroom)
 
-        return CreateMinichat(minichat=minichat)
+        return CreateChatMessage(chatmessage=chatmessage)
 
 
 # {{{2 CreateBookmark
@@ -792,8 +806,10 @@ class Query(object):
         orderBy=graphene.List(of_type=graphene.String))
     all_dialogues = DjangoFilterConnectionField(
         DialogueNode, orderBy=graphene.List(of_type=graphene.String))
-    all_minichats = DjangoFilterConnectionField(
-        MinichatNode, orderBy=graphene.List(of_type=graphene.String))
+    all_chatmessages = DjangoFilterConnectionField(
+        ChatMessageNode, orderBy=graphene.List(of_type=graphene.String))
+    all_chatrooms = DjangoFilterConnectionField(
+        ChatRoomNode, orderBy=graphene.List(of_type=graphene.String))
     all_comments = DjangoFilterConnectionField(
         CommentNode, orderBy=graphene.List(of_type=graphene.String))
     all_stars = DjangoFilterConnectionField(
@@ -808,7 +824,7 @@ class Query(object):
     puzzle = relay.Node.Field(PuzzleNode)
     hint = relay.Node.Field(HintNode)
     dialogue = relay.Node.Field(DialogueNode)
-    minichat = relay.Node.Field(MinichatNode)
+    chatmessage = relay.Node.Field(ChatMessageNode)
     comment = relay.Node.Field(CommentNode)
     star = relay.Node.Field(StarNode)
     bookmark = relay.Node.Field(BookmarkNode)
@@ -839,9 +855,9 @@ class Query(object):
         orderBy = kwargs.get("orderBy", None)
         return resolveOrderBy(Dialogue, orderBy)
 
-    def resolve_all_minichats(self, info, **kwargs):
+    def resolve_all_chatmessages(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Minichat, orderBy)
+        return resolveOrderBy(ChatMessage, orderBy)
 
     def resolve_all_comments(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
@@ -869,7 +885,7 @@ class Mutation(graphene.ObjectType):
     create_puzzle = CreatePuzzle.Field()
     create_question = CreateQuestion.Field()
     create_hint = CreateHint.Field()
-    create_minichat = CreateMinichat.Field()
+    create_chatmessage = CreateChatMessage.Field()
     create_bookmark = CreateBookmark.Field()
     update_answer = UpdateAnswer.Field()
     update_question = UpdateQuestion.Field()

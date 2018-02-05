@@ -6,7 +6,6 @@ from django.contrib.auth.forms import (PasswordChangeForm, PasswordResetForm,
                                        UserChangeForm, UserCreationForm)
 from django.contrib.auth.models import Group
 from django.utils.translation import ugettext_lazy as _
-
 from modeltranslation.admin import TranslationAdmin
 
 from .models import *
@@ -31,7 +30,6 @@ class SuiheiUserChangeForm(UserChangeForm):
         super(SuiheiUserChangeForm, self).__init__(*args, **kwargs)
         self.fields['profile'].required = False
         self.fields['current_award'].required = False
-
 
 
 class SuiheiPasswordChangeForm(PasswordChangeForm):
@@ -70,14 +68,16 @@ class SuiheiPuzzleChangeForm(forms.ModelForm):
 
 
 class SuiheiPuzzleAdmin(admin.ModelAdmin):
-    list_display = ('title', 'user', 'status', 'created', 'modified',
-                    'score')
+    list_display = ('title', 'user', 'status', 'created', 'modified', 'score')
     form = SuiheiPuzzleChangeForm
 
 
-class SuiheiMinichatAdmin(admin.ModelAdmin):
-    list_display = ('channel', 'user', 'content')
-    search_fields = ('channel', )
+class SuiheiChatRoomAdmin(admin.ModelAdmin):
+    list_display = ('name', 'user', 'created')
+
+
+class SuiheiChatMessageAdmin(admin.ModelAdmin):
+    list_display = ('chatroom', 'user', 'content')
 
 
 class SuiheiDialogueAdmin(admin.ModelAdmin):
@@ -94,8 +94,9 @@ class SuiheiCommentAdmin(admin.ModelAdmin):
 
 admin.site.register(User, SuiheiUserAdmin)
 admin.site.register(Puzzle, SuiheiPuzzleAdmin)
+admin.site.register(ChatMessage, SuiheiChatMessageAdmin)
+admin.site.register(ChatRoom, SuiheiChatRoomAdmin)
 admin.site.register(Dialogue, SuiheiDialogueAdmin)
-admin.site.register(Minichat, SuiheiMinichatAdmin)
 admin.site.register(Award, SuiheiAwardAdmin)
 admin.site.register(UserAward, SuiheiUserAwardAdmin)
 admin.site.register(Hint)

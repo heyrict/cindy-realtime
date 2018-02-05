@@ -37,7 +37,7 @@ from graphql_relay import from_global_id, to_global_id
 
 from schema import schema
 
-from .models import Dialogue, Hint, Minichat, Puzzle, User
+from .models import ChatMessage, Dialogue, Hint, Puzzle, User
 
 logger = logging.getLogger(__name__)
 
@@ -52,14 +52,14 @@ DIALOGUE_ADDED = "ws/DIALOGUE_ADDED"
 DIALOGUE_UPDATED = "ws/DIALOGUE_UPDATED"
 HINT_ADDED = "ws/HINT_ADDED"
 HINT_UPDATED = "ws/HINT_UPDATED"
-MINICHAT_ADDED = "ws/MINICHAT_ADDED"
-MINICHAT_UPDATED = "ws/MINICHAT_UPDATED"
+CHATMESSAGE_ADDED = "ws/CHATMESSAGE_ADDED"
+CHATMESSAGE_UPDATED = "ws/CHATMESSAGE_UPDATED"
 
 VIEWER_CONNECT = "ws/VIEWER_CONNECT"
 VIEWER_DISCONNECT = "ws/VIEWER_DISCONNECT"
 
-MINICHAT_CONNECT = "ws/MINICHAT_CONNECT"
-MINICHAT_DISCONNECT = "ws/MINICHAT_DISCONNECT"
+CHATROOM_CONNECT = "ws/CHATROOM_CONNECT"
+CHATROOM_DISCONNECT = "ws/CHATROOM_DISCONNECT"
 
 SEND_DIRECTCHAT = "ws/SEND_DIRECTCHAT"
 DIRECTCHAT_RECEIVED = "ws/DIRECTCHAT_RECEIVED"
@@ -143,28 +143,28 @@ def send_hint_update(sender, instance, created, *args, **kwargs):
         Group("puzzle-%s" % puzzleId).send({"text": text})
 
 
-@receiver(post_save, sender=Minichat)
-def send_minichat_update(sender, instance, created, *args, **kwargs):
-    minichatId = instance.id
-    channel = instance.channel
+@receiver(post_save, sender=ChatMessage)
+def send_chatmessage_update(sender, instance, created, *args, **kwargs):
+    chatmessageId = instance.id
+    channel = instance.chatroom.name
     if created:
         text = json.dumps({
-            "type": MINICHAT_ADDED,
+            "type": CHATMESSAGE_ADDED,
             "data": {
-                "id": to_global_id('MinichatNode', minichatId),
+                "id": to_global_id('ChatMessageNode', chatmessageId),
             }
         })
         logger.debug("Send %s", text)
-        Group("minichat-%s" % channel).send({"text": text})
+        Group("chatroom-%s" % channel).send({"text": text})
     else:
         text = json.dumps({
-            "type": MINICHAT_UPDATED,
+            "type": CHATMESSAGE_UPDATED,
             "data": {
-                "id": to_global_id('MinichatNode', minichatId),
+                "id": to_global_id('ChatMessageNode', chatmessageId),
             }
         })
         logger.debug("Send %s", text)
-        Group("minichat-%s" % channel).send({"text": text})
+        Group("chatroom-%s" % channel).send({"text": text})
 
 
 def broadcast_status():
@@ -261,10 +261,10 @@ def ws_message(message):
     elif data.get("type") == PUZZLE_DISCONNECT:
         Group("puzzle-%s" % data["data"]["puzzleId"])\
                 .discard(message.reply_channel)
-    elif data.get("type") == MINICHAT_CONNECT:
-        Group("minichat-%s" % data["channel"]).add(message.reply_channel)
-    elif data.get("type") == MINICHAT_DISCONNECT:
-        Group("minichat-%s" % data["channel"]).discard(message.reply_channel)
+    elif data.get("type") == CHATROOM_CONNECT:
+        Group("chatroom-%s" % data["channel"]).add(message.reply_channel)
+    elif data.get("type") == CHATROOM_DISCONNECT:
+        Group("chatroom-%s" % data["channel"]).discard(message.reply_channel)
     elif data.get("type") == SEND_DIRECTCHAT:
         data["type"] = DIRECTCHAT_RECEIVED
         Group("User-%s" % data["data"]["to"]).send({"text": json.dumps(data)})

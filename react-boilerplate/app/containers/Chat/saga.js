@@ -16,17 +16,19 @@ import {
   OPEN_MEMO,
   CLOSE_MEMO,
   OPEN_CHAT,
-  MINICHAT_CONNECT,
+  CHATROOM_CONNECT,
   INIT_MINICHAT,
   MINICHAT_MORE,
-  MINICHAT_ADDED,
-  ADD_MINICHAT,
+  CHATMESSAGE_ADDED,
+  ADD_CHATMESSAGE,
   MORE_MINICHAT,
   SEND_DIRECTCHAT,
   DIRECTCHAT_RECEIVED,
-  minichatQuery,
-  minichatMoreQuery,
-  minichatUpdateQuery,
+  GOTID_MINICHAT,
+  chatmessageQuery,
+  chatmessageMoreQuery,
+  chatmessageUpdateQuery,
+  chatmessageIdQuery,
 } from './constants';
 import { selectChatDomain } from './selectors';
 
@@ -110,10 +112,27 @@ function* handleDirectchatReceive(action) {
 }
 
 function* fetchAllMinichats(action) {
+  const chatroomId = yield call(getMinichatId, action.channel);
+  if (!chatroomId) {
+    yield put({
+      type: INIT_MINICHAT,
+      data: {
+        allChatmessages: {
+          edges: [],
+          pageInfo: {
+            startCursor: null,
+            hasPreviousPage: false,
+          },
+        },
+      },
+    });
+    return;
+  }
+
   const data = yield call(
     gqlQuery,
-    { text: minichatQuery },
-    { channel: action.channel }
+    { text: chatmessageQuery },
+    { chatroom: chatroomId }
   );
   yield put({ type: INIT_MINICHAT, ...data });
 }
@@ -122,8 +141,8 @@ function* fetchMoreMinichats() {
   const chat = yield select(selectChatDomain);
   const data = yield call(
     gqlQuery,
-    { text: minichatMoreQuery },
-    { channel: chat.get('currentChannel'), before: chat.get('startCursor') }
+    { text: chatmessageMoreQuery },
+    { chatroom: chat.get('currentChannel'), before: chat.get('startCursor') }
   );
   yield put({ type: MORE_MINICHAT, ...data });
 }
@@ -131,10 +150,24 @@ function* fetchMoreMinichats() {
 function* fetchMinichatUpdate(action) {
   const data = yield call(
     gqlQuery,
-    { text: minichatUpdateQuery },
+    { text: chatmessageUpdateQuery },
     { id: action.data.id }
   );
-  yield put({ type: ADD_MINICHAT, data });
+  yield put({ type: ADD_CHATMESSAGE, data });
+}
+
+function* getMinichatId(name) {
+  const chat = yield select(selectChatDomain);
+  const channelIds = chat.get('channelIds');
+  if (name in channelIds) {
+    return channelIds[name];
+  }
+
+  const data = yield call(gqlQuery, { text: chatmessageIdQuery }, { name });
+  const id =
+    data.data.allChatrooms.edges[0] && data.data.allChatrooms.edges[0].node.id;
+  yield put({ type: GOTID_MINICHAT, id, name });
+  return id;
 }
 
 function* handleOpenChat(action) {
@@ -151,9 +184,9 @@ export default function* defaultSaga() {
     takeEvery(SEND_DIRECTCHAT, handleDirectchatSend),
     takeEvery(DIRECTCHAT_RECEIVED, handleDirectchatReceive),
     takeLatest(CHANGE_CHANNEL, handleChannelChange),
-    takeLatest(MINICHAT_CONNECT, fetchAllMinichats),
+    takeLatest(CHATROOM_CONNECT, fetchAllMinichats),
     takeLatest(MINICHAT_MORE, fetchMoreMinichats),
-    takeEvery(MINICHAT_ADDED, fetchMinichatUpdate),
+    takeEvery(CHATMESSAGE_ADDED, fetchMinichatUpdate),
     takeLatest(OPEN_CHAT, handleOpenChat),
   ];
 }

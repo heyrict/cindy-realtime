@@ -13,6 +13,10 @@ export default defineMessages({
     id: 'app.containers.Notifier.directMessageReceived',
     defaultMessage: '{nickname} sends a direct message to you!',
   },
+  chatroomNotExists: {
+    id: 'app.containers.Notifier.chatroomNotExists',
+    defaultMessage: 'ChatRoom {name} does not exists.',
+  },
   open: {
     id: 'app.containers.Notifier.open',
     defaultMessage: 'Open',

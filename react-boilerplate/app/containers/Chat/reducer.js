@@ -16,11 +16,12 @@ import {
   CHANGE_TAB,
   INIT_MINICHAT,
   MORE_MINICHAT,
-  ADD_MINICHAT,
-  MINICHAT_CONNECT,
-  MINICHAT_DISCONNECT,
+  ADD_CHATMESSAGE,
+  CHATROOM_CONNECT,
+  CHATROOM_DISCONNECT,
   CHANGE_DIRECTCHAT,
   ADD_DIRECTCHAT_MESSAGE,
+  GOTID_MINICHAT,
 } from './constants';
 
 const initialState = fromJS({
@@ -30,6 +31,7 @@ const initialState = fromJS({
   // Chat State Stuff
   channel: null, // default channel
   currentChannel: null,
+  channelIds: {},
   startCursor: null,
   hasPreviousPage: false,
   chatMessages: [],
@@ -57,34 +59,40 @@ function chatReducer(state = initialState, action) {
       return state.setIn(['activeTab'], action.tab);
     case CHANGE_CHANNEL:
       return state.setIn(['channel'], action.channel);
-    case MINICHAT_CONNECT:
-    case MINICHAT_DISCONNECT:
+    case CHATROOM_CONNECT:
+    case CHATROOM_DISCONNECT:
       return state.setIn(['currentChannel'], action.channel);
     case INIT_MINICHAT:
       return state
-        .setIn(['chatMessages'], action.data.allMinichats.edges)
+        .setIn(['chatMessages'], action.data.allChatmessages.edges)
         .setIn(
           ['hasPreviousPage'],
-          action.data.allMinichats.pageInfo.hasPreviousPage
+          action.data.allChatmessages.pageInfo.hasPreviousPage
         )
-        .setIn(['startCursor'], action.data.allMinichats.pageInfo.startCursor);
+        .setIn(
+          ['startCursor'],
+          action.data.allChatmessages.pageInfo.startCursor
+        );
     case MORE_MINICHAT:
       return state
-        .setIn(['startCursor'], action.data.allMinichats.pageInfo.startCursor)
+        .setIn(
+          ['startCursor'],
+          action.data.allChatmessages.pageInfo.startCursor
+        )
         .setIn(
           ['hasPreviousPage'],
-          action.data.allMinichats.pageInfo.hasPreviousPage
+          action.data.allChatmessages.pageInfo.hasPreviousPage
         )
         .updateIn(['chatMessages'], () =>
           Array.concat(
-            action.data.allMinichats.edges,
+            action.data.allChatmessages.edges,
             state.get('chatMessages')
           )
         );
-    case ADD_MINICHAT:
+    case ADD_CHATMESSAGE:
       return state.updateIn(['chatMessages'], () =>
         Array.concat(state.get('chatMessages'), [
-          { node: action.data.data.minichat },
+          { node: action.data.data.chatmessage },
         ])
       );
     case UPDATE_ONLINE_VIEWER_COUNT:
@@ -95,6 +103,8 @@ function chatReducer(state = initialState, action) {
       return state.updateIn(['directMessages', action.chat], (prev) =>
         Array.concat(prev || [], [action.data])
       );
+    case GOTID_MINICHAT:
+      return state.setIn(['channelIds', action.name], action.id);
     default:
       return state;
   }

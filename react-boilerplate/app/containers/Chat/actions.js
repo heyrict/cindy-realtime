@@ -10,8 +10,8 @@ import {
   TOGGLE_MEMO,
   CHANGE_TAB,
   CHANGE_CHANNEL,
-  MINICHAT_CONNECT,
-  MINICHAT_DISCONNECT,
+  CHATROOM_CONNECT,
+  CHATROOM_DISCONNECT,
   MINICHAT_MORE,
   CHANGE_DIRECTCHAT,
   SEND_DIRECTCHAT,
@@ -43,14 +43,14 @@ export function changeTab(tab) {
 
 export function connectChat(channel) {
   return {
-    type: MINICHAT_CONNECT,
+    type: CHATROOM_CONNECT,
     channel,
   };
 }
 
 export function disconnectChat(channel) {
   return {
-    type: MINICHAT_DISCONNECT,
+    type: CHATROOM_DISCONNECT,
     channel,
   };
 }

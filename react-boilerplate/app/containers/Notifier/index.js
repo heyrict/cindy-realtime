@@ -24,8 +24,18 @@ import { NOTE_NEEDED, NOTE_MSG } from './constants';
 
 class Notifier extends React.Component {
   componentWillReceiveProps(nextProps) {
-    const { WS_CONNECT, PUZZLE_ADDED, DIRECTCHAT_NOTIFY } = NOTE_NEEDED;
-    const { wsConnectMsg, puzzleAddedMsg, directMessageReceivedMsg } = NOTE_MSG;
+    const {
+      WS_CONNECT,
+      PUZZLE_ADDED,
+      DIRECTCHAT_NOTIFY,
+      GOTID_MINICHAT,
+    } = NOTE_NEEDED;
+    const {
+      wsConnectMsg,
+      puzzleAddedMsg,
+      directMessageReceivedMsg,
+      chatroomNotExistsMsg,
+    } = NOTE_MSG;
 
     switch (nextProps.notification.type) {
       case WS_CONNECT:
@@ -47,6 +57,10 @@ class Notifier extends React.Component {
           })
         );
         break;
+      case GOTID_MINICHAT:
+        this.notif.addNotification(
+          chatroomNotExistsMsg(nextProps.notification)
+        );
       default:
     }
   }
