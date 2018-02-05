@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { RouterLink, SubNavbar } from 'style-store';
 import { NavLink, Group, Button, ButtonOutline } from 'rebass';
+import SponsersMenuItem from 'containers/SponsersMenuItem';
 
 import { FormattedMessage } from 'react-intl';
 import { changeLocale } from 'containers/LanguageProvider/actions';
@@ -61,6 +62,14 @@ function MenuNavbar(props) {
           <FormattedMessage {...messages.puzzleAdd} />
         </NavLink>
       </RouterLink>
+      <RouterLink to="//wiki3.jp/cindy-lat">
+        <NavLink is="span">
+          <FormattedMessage {...messages.wiki} />
+        </NavLink>
+      </RouterLink>
+      <SponsersMenuItem>
+        <FormattedMessage {...messages.sponsers} />
+      </SponsersMenuItem>
       <RouterLink to="/rules">
         <NavLink is="span">
           <FormattedMessage {...messages.rules} />

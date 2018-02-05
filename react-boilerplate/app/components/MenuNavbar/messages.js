@@ -18,8 +18,16 @@ export default defineMessages({
     id: 'app.components.MenuNavbar.puzzleAdd',
     defaultMessage: 'Create Puzzle',
   },
+  sponsers: {
+    id: 'app.components.MenuNavbar.sponsers',
+    defaultMessage: 'Links',
+  },
   rules: {
     id: 'app.components.MenuNavbar.rules',
     defaultMessage: 'Rules',
+  },
+  wiki: {
+    id: 'app.components.MenuNavbar.wiki',
+    defaultMessage: 'Wiki',
   },
 });

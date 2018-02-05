@@ -39,7 +39,6 @@ from schema import schema
 
 from .models import Dialogue, Hint, Minichat, Puzzle, User
 
-onlineViewerCount = 0
 logger = logging.getLogger(__name__)
 
 # {{{1 Constants
@@ -169,9 +168,9 @@ def send_minichat_update(sender, instance, created, *args, **kwargs):
 
 
 def broadcast_status():
-    global onlineViewerCount
-    onlineUsers = cache.get("onlineUsers")
-    onlineUserList = dict(set(onlineUsers.values())) if onlineUsers else {}
+    onlineUsers = cache.get("onlineUsers", {})
+    onlineUserList = dict(set(onlineUsers.values()))
+    onlineViewerCount = cache.get("onlineViewerCount", 0)
     text = json.dumps({
         "type": UPDATE_ONLINE_VIEWER_COUNT,
         "data": {
@@ -213,8 +212,7 @@ def ws_connect(message):
     message.reply_channel.send({"accept": True})
     Group("viewer").add(message.reply_channel)
 
-    onlineUsers = cache.get("onlineUsers")
-    onlineUsers = onlineUsers if onlineUsers else {}
+    onlineUsers = cache.get("onlineUsers", {})
     if not message.user.is_anonymous:
         Group("User-%s" % message.user.id).add(message.reply_channel)
         onlineUsers.update({
@@ -223,24 +221,24 @@ def ws_connect(message):
         })
         cache.set("onlineUsers", onlineUsers, None)
 
-    global onlineViewerCount
-    onlineViewerCount += 1
+    onlineViewerCount = cache.get("onlineViewerCount")
+    if onlineViewerCount: cache.incr("onlineViewerCount")
+    else: cache.set("onlineViewerCount", 1)
 
 
 def ws_disconnect(message):
     Group("viewer").discard(message.reply_channel)
 
-    onlineUsers = cache.get("onlineUsers")
-    onlineUsers = onlineUsers if onlineUsers else {}
+    onlineUsers = cache.get("onlineUsers", {})
     if str(message.reply_channel) in onlineUsers.keys():
         Group("User-%s" % onlineUsers[str(message.reply_channel)][0]).discard(
             message.reply_channel)
         onlineUsers.pop(str(message.reply_channel))
         cache.set('onlineUsers', onlineUsers, None)
 
-    global onlineViewerCount
-    if onlineViewerCount <= 0: onlineViewerCount = 0
-    else: onlineViewerCount -= 1
+    onlineViewerCount = cache.get("onlineViewerCount", 0)
+    if onlineViewerCount > 0: cache.decr("onlineViewerCount")
+    else: cache.set("onlineViewerCount", 0)
 
     broadcast_status()
 
