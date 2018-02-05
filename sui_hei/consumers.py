@@ -170,12 +170,13 @@ def send_chatmessage_update(sender, instance, created, *args, **kwargs):
 def broadcast_status():
     onlineUsers = cache.get("onlineUsers", {})
     onlineUserList = dict(set(onlineUsers.values()))
-    onlineViewerCount = cache.get("onlineViewerCount", 0)
     text = json.dumps({
         "type": UPDATE_ONLINE_VIEWER_COUNT,
         "data": {
-            "onlineViewerCount": onlineViewerCount,
-            "onlineUsers": onlineUserList
+            "onlineViewerCount":
+            len(Group('viewer').channel_layer.group_channels('viewer')),
+            "onlineUsers":
+            onlineUserList
         }
     })
     Group("viewer").send({"text": text})
@@ -221,10 +222,6 @@ def ws_connect(message):
         })
         cache.set("onlineUsers", onlineUsers, None)
 
-    onlineViewerCount = cache.get("onlineViewerCount")
-    if onlineViewerCount: cache.incr("onlineViewerCount")
-    else: cache.set("onlineViewerCount", 1)
-
 
 def ws_disconnect(message):
     Group("viewer").discard(message.reply_channel)
@@ -235,10 +232,6 @@ def ws_disconnect(message):
             message.reply_channel)
         onlineUsers.pop(str(message.reply_channel))
         cache.set('onlineUsers', onlineUsers, None)
-
-    onlineViewerCount = cache.get("onlineViewerCount", 0)
-    if onlineViewerCount > 0: cache.decr("onlineViewerCount")
-    else: cache.set("onlineViewerCount", 0)
 
     broadcast_status()
 
