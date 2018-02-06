@@ -148,7 +148,13 @@ export function line2md(string) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
-  return LinkNorm(md.render(string).replace(/<\/?p>/g, ''));
+  return LinkNorm(
+    md
+      .render(string)
+      .replace(/<p>/g, '')
+      .replace(/<\/p>\s*$/g, '')
+      .replace(/<\/p>/g, '<br style="margin-bottom: 10px" />')
+  );
 }
 
 export function text2md(string) {

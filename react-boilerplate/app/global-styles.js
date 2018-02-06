@@ -46,4 +46,9 @@ injectGlobal`
   td {
     border: 1px solid;
   }
+
+  hr {
+    border-top: 1px solid sienna;
+    margin: 10px;
+  }
 `;

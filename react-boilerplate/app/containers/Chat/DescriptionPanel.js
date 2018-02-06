@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import bootbox from 'bootbox';
+import { connect } from 'react-redux';
 import {
   Button,
   ButtonOutline,
@@ -11,6 +12,7 @@ import {
 import { Flex, Box } from 'rebass';
 import { line2md, from_global_id as f } from 'common';
 import { FormattedMessage } from 'react-intl';
+import { UserLabel } from 'components/UserLabel';
 import { commitMutation } from 'react-relay';
 import environment from 'Environment';
 import dialogueMessages from 'containers/Dialogue/messages';
@@ -18,6 +20,8 @@ import tick from 'images/tick.svg';
 import cross from 'images/cross.svg';
 import UpdateChatroomMutation from 'graphql/UpdateChatroomMutation';
 import Wrapper from './Wrapper';
+import { updateChannel } from './actions';
+import messages from './messages';
 
 const StyledButton = ButtonOutline.extend`
   padding: 5px 15px;
@@ -53,7 +57,7 @@ class DescriptionPanel extends React.Component {
     this.state = {
       show: false,
       editMode: false,
-      description: this.props.channel ? this.props.channel.description : '',
+      description: '',
     };
     this.toggleDescription = this.toggleDescription.bind(this);
     this.handleChange = (e) => this.setState({ description: e.target.value });
@@ -62,12 +66,11 @@ class DescriptionPanel extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.channel ||
-      this.props.channel.description !== nextProps.channel.description
-    ) {
+    if (nextProps.channel) {
       this.setState({
-        description: this.props.channel ? this.props.channel.description : '',
+        description: nextProps.channel
+          ? nextProps.channel.description || ''
+          : '',
       });
     }
   }
@@ -91,12 +94,18 @@ class DescriptionPanel extends React.Component {
         if (errors) {
           bootbox.alert(errors.map((e) => e.message).join(','));
         }
+        this.props.dispatch(
+          updateChannel(this.props.name, {
+            ...this.props.channel,
+            description: this.state.description,
+          })
+        );
         this.toggleEditMode();
       },
     });
   }
   render() {
-    if (this.props.name === null || this.props.channel === null) return null;
+    if (!this.props.name || !this.props.channel) return null;
     if (this.props.name.match(/^puzzle-\d+$/g)) return null;
     if (this.state.show) {
       return (
@@ -106,6 +115,11 @@ class DescriptionPanel extends React.Component {
           </DescriptionBtn>
           {this.state.editMode === false && (
             <div>
+              <span style={{ fontSize: '0.9em' }}>
+                <FormattedMessage {...messages.owner} />:{' '}
+                <UserLabel user={this.props.channel.user} />
+              </span>
+              <hr style={{ margin: '3px 0 7px 0' }} />
               <span
                 style={{ overflow: 'auto' }}
                 dangerouslySetInnerHTML={{
@@ -155,6 +169,7 @@ class DescriptionPanel extends React.Component {
 }
 
 DescriptionPanel.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   name: PropTypes.string,
   channel: PropTypes.object,
   height: PropTypes.number.isRequired,
@@ -162,4 +177,8 @@ DescriptionPanel.propTypes = {
   currentUserId: PropTypes.number,
 };
 
-export default DescriptionPanel;
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+
+export default connect(null, mapDispatchToProps)(DescriptionPanel);

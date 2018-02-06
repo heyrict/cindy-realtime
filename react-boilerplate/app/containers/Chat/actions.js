@@ -18,6 +18,7 @@ import {
   ADD_DIRECTCHAT_MESSAGE,
   OPEN_CHAT,
   OPEN_DIRECTCHAT,
+  GOTID_MINICHAT,
 } from './constants';
 
 export function toggleChat(open) {
@@ -100,5 +101,13 @@ export function openDirectChat(data) {
   return {
     type: OPEN_DIRECTCHAT,
     ...data,
+  };
+}
+
+export function updateChannel(name, chatroom) {
+  return {
+    type: GOTID_MINICHAT,
+    name,
+    chatroom,
   };
 }

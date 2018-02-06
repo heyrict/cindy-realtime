@@ -32,6 +32,7 @@
   "app.containers.Chat.direct": "Direct Messages",
   "app.containers.Chat.loadMore": "Load More",
   "app.containers.Chat.onlineUsers": "Online Users",
+  "app.containers.Chat.owner": "Owner",
   "app.containers.Chat.recent": "Recent Sessions",
   "app.containers.Chat.send": "Send",
   "app.containers.Dialogue.answerInputHint": "Put your answer",

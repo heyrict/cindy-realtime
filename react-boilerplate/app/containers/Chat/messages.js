@@ -50,4 +50,8 @@ export default defineMessages({
     id: 'app.containers.Chat.back',
     defaultMessage: '< Back',
   },
+  owner: {
+    id: 'app.containers.Chat.owner',
+    defaultMessage: 'Owner',
+  },
 });
