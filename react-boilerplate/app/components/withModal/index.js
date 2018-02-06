@@ -19,6 +19,7 @@ const StyledButton = Button.extend`
 
 const ModalBody = styled(Modal.Body)`
   background-color: #d7c682;
+  overflow: auto;
 `;
 
 const ModalHeader = styled(Modal.Header)`

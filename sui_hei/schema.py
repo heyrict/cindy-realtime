@@ -313,7 +313,11 @@ class CreatePuzzle(relay.ClientIDMutation):
             modified=created)
 
         # Delete messages in puzzle-[id] channel
-        ChatRoom.objects.create(channel="puzzle-" + puzzle.id)
+        crName = "puzzle-%d" % puzzle.id
+        existingChatRooms = ChatRoom.objects.filter(name=crName)
+        if len(existingChatRooms) != 0:
+            existingChatRooms.delete()
+        ChatRoom.objects.create(name=crName, user=user)
 
         return CreatePuzzle(puzzle=puzzle)
 

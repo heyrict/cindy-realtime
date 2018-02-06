@@ -62,11 +62,11 @@ function MenuNavbar(props) {
           <FormattedMessage {...messages.puzzleAdd} />
         </NavLink>
       </RouterLink>
-      <RouterLink to="//wiki3.jp/cindy-lat">
-        <NavLink is="span">
+      <NavLink is="span">
+        <a href="//wiki3.jp/cindy-lat" style={{ color: '#002731' }}>
           <FormattedMessage {...messages.wiki} />
-        </NavLink>
-      </RouterLink>
+        </a>
+      </NavLink>
       <SponsersMenuItem>
         <FormattedMessage {...messages.sponsers} />
       </SponsersMenuItem>

@@ -155,7 +155,7 @@ class ChatRoom(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
     name = models.CharField(
         _('channel'), max_length=255, null=False, unique=True)
-    description = models.TextField(_('description'), null=False, default='')
+    description = models.TextField(_('description'), null=True)
     created = models.DateField(_("created"), null=False, default=timezone.now)
 
     class Meta:

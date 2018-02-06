@@ -10,7 +10,11 @@ import withModal from 'components/withModal';
 
 function Sponsers() {
   return (
-    <table width="490" cellSpacing="1">
+    <table
+      width="490"
+      cellSpacing="1"
+      style={{ width: '100%', fontSize: '1.2em' }}
+    >
       <tbody>
         <tr>
           <td colSpan="3">
