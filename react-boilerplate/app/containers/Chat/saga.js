@@ -158,16 +158,16 @@ function* fetchMinichatUpdate(action) {
 
 function* getMinichatId(name) {
   const chat = yield select(selectChatDomain);
-  const channelIds = chat.get('channelIds').toJS();
-  if (name in channelIds) {
-    return channelIds[name];
+  const channelInfo = chat.get('channelInfo').toJS();
+  if (name in channelInfo) {
+    return channelInfo[name].id;
   }
 
   const data = yield call(gqlQuery, { text: chatmessageIdQuery }, { name });
-  const id =
-    data.data.allChatrooms.edges[0] && data.data.allChatrooms.edges[0].node.id;
-  yield put({ type: GOTID_MINICHAT, id, name });
-  return id;
+  const chatroom =
+    data.data.allChatrooms.edges[0] && data.data.allChatrooms.edges[0].node;
+  yield put({ type: GOTID_MINICHAT, chatroom, name });
+  return chatroom.id;
 }
 
 function* handleOpenChat(action) {

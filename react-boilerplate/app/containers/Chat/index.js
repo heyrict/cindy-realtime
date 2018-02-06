@@ -77,7 +77,7 @@ export function Chat(props) {
         <ChatRoom
           chatMessages={props.chat.chatMessages}
           channel={props.chat.currentChannel}
-          channelIds={props.chat.channelIds}
+          channelInfo={props.chat.channelInfo}
           currentUserId={props.currentUser.user.userId}
           hasPreviousPage={props.chat.hasPreviousPage}
           height={props.height - 50}

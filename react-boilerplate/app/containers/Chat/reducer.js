@@ -31,7 +31,7 @@ const initialState = fromJS({
   // Chat State Stuff
   channel: null, // default channel
   currentChannel: null,
-  channelIds: {},
+  channelInfo: {},
   startCursor: null,
   hasPreviousPage: false,
   chatMessages: [],
@@ -104,7 +104,7 @@ function chatReducer(state = initialState, action) {
         Array.concat(prev || [], [action.data])
       );
     case GOTID_MINICHAT:
-      return state.setIn(['channelIds', action.name], action.id);
+      return state.setIn(['channelInfo', action.name], action.chatroom);
     default:
       return state;
   }

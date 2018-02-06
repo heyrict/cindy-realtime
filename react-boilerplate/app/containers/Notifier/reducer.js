@@ -26,7 +26,7 @@ function notifierReducer(state = initialState, action) {
     case DIRECTCHAT_NOTIFY:
       return state.set('notification', action);
     case GOTID_MINICHAT:
-      if (!action.id) return state.set('notification', action);
+      if (!action.chatroom) return state.set('notification', action);
       return state;
     default:
       return state;

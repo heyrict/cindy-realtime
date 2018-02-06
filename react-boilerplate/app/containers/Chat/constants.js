@@ -118,9 +118,15 @@ export const chatmessageIdQuery = `
       edges {
         node {
           id
+          description
+          created
+          user {
+            ...components_user
+          }
         }
       }
     }
   }
+  ${componentsUserFragment}
 `;
 // }}}

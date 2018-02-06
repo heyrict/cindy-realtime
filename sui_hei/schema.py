@@ -633,6 +633,34 @@ class UpdateBookmark(graphene.ClientIDMutation):
         return UpdateBookmark(bookmark=bookmark)
 
 
+# {{{2 UpdateChatRoom
+class UpdateChatRoom(graphene.ClientIDMutation):
+    chatroom = graphene.Field(ChatRoomNode)
+
+    class Input:
+        chatroomId = graphene.Int()
+        description = graphene.String()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        description = input["description"]
+        chatroomId = input["chatroomId"]
+        chatroom = ChatRoom.objects.get(id=chatroomId)
+
+        if (chatroom.user.id != user.id):
+            raise ValidationError(
+                _("You are not the creator of this chatroom"))
+
+        chatroom.description = description
+        chatroom.save()
+
+        return UpdateChatRoom(chatroom=chatroom)
+
+
 # {{{2 UpdateHint
 class UpdateHint(relay.ClientIDMutation):
     hint = graphene.Field(HintNode)
@@ -897,6 +925,7 @@ class Mutation(graphene.ObjectType):
     update_star = UpdateStar.Field()
     update_comment = UpdateComment.Field()
     update_bookmark = UpdateBookmark.Field()
+    update_chatroom = UpdateChatRoom.Field()
     update_hint = UpdateHint.Field()
     update_current_award = UpdateCurrentAward.Field()
     update_user = UpdateUser.Field()

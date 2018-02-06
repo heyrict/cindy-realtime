@@ -12,6 +12,7 @@ import { Flex } from 'rebass';
 import { ButtonOutline } from 'style-store';
 import { CreateChatmessageMutation } from 'graphql/CreateChatmessageMutation';
 import ChatMessage from './ChatMessage';
+import DescriptionPanel from './DescriptionPanel';
 import MessageInput from './MessageInput';
 import Wrapper from './Wrapper';
 import { loadMore } from './actions';
@@ -35,11 +36,12 @@ class ChatRoom extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { content: '', loading: false, taHeight: 36 };
+    this.state = { content: '', loading: false, taHeight: 36, dpHeight: 20 };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = (e) => this.setState({ content: e.target.value });
     this.handleHeightChange = (h, inst) =>
       this.setState({ taHeight: inst._rootDOMNode.clientHeight || h });
+    this.handleDPHeightChange = (h) => this.setState({ dpHeight: h });
   }
 
   handleSubmit() {
@@ -50,7 +52,7 @@ class ChatRoom extends React.Component {
       variables: {
         input: {
           content: this.state.content,
-          chatroom: this.props.channelIds[this.props.channel],
+          chatroom: this.props.channelInfo[this.props.channel].id,
         },
       },
       onCompleted: (response, errors) => {
@@ -66,7 +68,18 @@ class ChatRoom extends React.Component {
   render() {
     return (
       <Flex wrap justify="center">
-        <MessageWrapper height={this.props.height - this.state.taHeight - 14}>
+        <DescriptionPanel
+          height={this.state.dpHeight}
+          changeHeight={this.handleDPHeightChange}
+          name={this.props.channel}
+          channel={this.props.channelInfo[this.props.channel]}
+          currentUserId={this.props.currentUserId}
+        />
+        <MessageWrapper
+          height={
+            this.props.height - this.state.taHeight - this.state.dpHeight - 14
+          }
+        >
           <LoadMoreBtn
             onClick={() => this.props.dispatch(loadMore())}
             hidden={!this.props.hasPreviousPage}
@@ -107,7 +120,7 @@ ChatRoom.propTypes = {
   chatMessages: PropTypes.array.isRequired,
   hasPreviousPage: PropTypes.bool,
   channel: PropTypes.string,
-  channelIds: PropTypes.object.isRequired,
+  channelInfo: PropTypes.object.isRequired,
   height: PropTypes.number.isRequired,
   currentUserId: PropTypes.number,
 };
