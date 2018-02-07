@@ -73,7 +73,7 @@ const withStarList = (Component) =>
   Relay.createPaginationContainer(Component, StarListFragment, {
     direction: 'forward',
     getConnectionFromProps(props) {
-      return props.list && props.list.allPuzzles;
+      return props.list && props.list.allStars;
     },
     getFragmentVariables(prevVars, totalCount) {
       return {
@@ -86,8 +86,6 @@ const withStarList = (Component) =>
         count,
         cursor,
         orderBy: fragmentVariables.orderBy,
-        status: fragmentVariables.status,
-        status__gt: fragmentVariables.status__gt,
         user: fragmentVariables.user,
       };
     },

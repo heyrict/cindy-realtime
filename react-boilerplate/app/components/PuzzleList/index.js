@@ -43,12 +43,10 @@ export class PuzzleList extends React.Component {
         {this.props.list.allPuzzles.edges.map((edge) => (
           <PuzzlePanel node={edge.node} key={edge.node.id} />
         ))}
-        {this.props.relay.hasMore() ? (
+        {this.props.relay.hasMore() && (
           <StyledButtonOutline onClick={this.loadMore} w={1}>
             <FormattedMessage {...chatMessages.loadMore} />
           </StyledButtonOutline>
-        ) : (
-          ''
         )}
       </div>
     );
