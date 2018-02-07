@@ -5,6 +5,8 @@ import { Flex } from 'rebass';
 import { ButtonOutline, Input } from 'style-store';
 import { PublicChannels } from './constants';
 import messages from './messages';
+import ChatRoomCreateModal from './ChatRoomCreateModal';
+import Bar from './Bar';
 
 const StyledButton = ButtonOutline.extend`
   border-radius: 5px;
@@ -15,11 +17,18 @@ class Channels extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = { content: '' };
+    this.state = {
+      content: '',
+      publicShown: true,
+      createModalShown: false,
+    };
     this.handleChange = (e) => this.setState({ content: e.target.value });
     this.handleKeyDown = (e) => {
       if (e.key === 'Enter') this.props.tune(this.state.content);
     };
+    this.toggleCreateModalShow = (s) => this.setState({ createModalShown: s });
+    this.togglePublicShown = () =>
+      this.setState((p) => ({ publicShown: !p.publicShown }));
   }
   render() {
     return (
@@ -32,18 +41,22 @@ class Channels extends React.PureComponent {
         >
           <FormattedMessage {...messages.defaultChannel} />
         </StyledButton>
-        {PublicChannels.map((c) => (
-          <StyledButton
-            w={1}
-            py={20}
-            my={5}
-            onClick={() => this.props.tune(c)}
-            key={c}
-          >
-            {c}
-          </StyledButton>
-        ))}
-        <Flex mx={1} w={1}>
+        <Bar open={this.state.publicShown} onClick={this.togglePublicShown}>
+          public channels
+        </Bar>
+        {this.state.publicShown &&
+          PublicChannels.map((c) => (
+            <StyledButton
+              w={1}
+              py={20}
+              my={5}
+              onClick={() => this.props.tune(c)}
+              key={c}
+            >
+              {c}
+            </StyledButton>
+          ))}
+        <Flex mx={1} mt={1} w={1}>
           <FormattedMessage {...messages.channelName}>
             {(msg) => (
               <Input
@@ -62,6 +75,20 @@ class Channels extends React.PureComponent {
             <FormattedMessage {...messages.change} />
           </ButtonOutline>
         </Flex>
+        <ButtonOutline
+          onClick={() => this.toggleCreateModalShow(true)}
+          p={10}
+          m={1}
+          w={1}
+          style={{ wordBreak: 'keep-all', borderRadius: '10px' }}
+        >
+          <FormattedMessage {...messages.createChatroom} />
+        </ButtonOutline>
+        <ChatRoomCreateModal
+          show={this.state.createModalShown}
+          onHide={() => this.toggleCreateModalShow(false)}
+          tune={this.props.tune}
+        />
       </Flex>
     );
   }

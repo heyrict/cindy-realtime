@@ -435,6 +435,33 @@ class CreateBookmark(graphene.ClientIDMutation):
         return CreateBookmark(bookmark=bookmark)
 
 
+# {{{2 CreateChatRoom
+class CreateChatRoom(graphene.ClientIDMutation):
+    chatroom = graphene.Field(ChatRoomNode)
+
+    class Input:
+        name = graphene.String()
+        description = graphene.String()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        name = input["name"]
+        description = input["description"]
+        existingChatrooms = ChatRoom.objects.filter(name=name)
+        if len(existingChatrooms) > 0:
+            raise ValidationError("Channel %s exists already!" % name)
+
+        chatroom = ChatRoom.objects.create(
+            user=user, name=name, description=description)
+        chatroom.save()
+
+        return CreateChatRoom(chatroom=chatroom)
+
+
 # {{{2 UpdateAnswer
 class UpdateAnswer(graphene.ClientIDMutation):
     dialogue = graphene.Field(DialogueNode)
@@ -919,6 +946,7 @@ class Mutation(graphene.ObjectType):
     create_hint = CreateHint.Field()
     create_chatmessage = CreateChatMessage.Field()
     create_bookmark = CreateBookmark.Field()
+    create_chatroom = CreateChatRoom.Field()
     update_answer = UpdateAnswer.Field()
     update_question = UpdateQuestion.Field()
     update_puzzle = UpdatePuzzle.Field()

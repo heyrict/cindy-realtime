@@ -1,12 +1,19 @@
 {
-    "libs": [
-        "browser",
-        "jquery",
-        "react",
-        "react-dom",
-        "relay-runtime",
-        "react-relay",
-        "moment",
-        "bootbox"
-    ]
+  "plugins": {
+    "node": {},
+    "es_modules": {}
+  },
+  "libs": [
+    "ecma5",
+    "ecma6"
+    "browser",
+    "jquery",
+    "react",
+    "react-dom",
+    "relay-runtime",
+    "react-relay",
+    "moment",
+    "bootbox"
+  ],
+  "ecmaVersion": 6
 }

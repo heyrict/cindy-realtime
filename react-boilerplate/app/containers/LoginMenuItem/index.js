@@ -13,18 +13,19 @@ import { NavLink } from 'rebass';
 
 import LoginModal from 'containers/LoginForm';
 
-export class LoginMenuItem extends React.Component {
+export class LoginMenuItem extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       show: false,
     };
+    this.toggleShow = (show) => this.setState({ show });
   }
   render() {
     return (
       <span>
         <NavLink
-          onClick={() => this.setState({ show: true })}
+          onClick={() => this.toggleShow(true)}
           role="button"
           tabIndex="0"
         >
@@ -32,7 +33,7 @@ export class LoginMenuItem extends React.Component {
         </NavLink>
         <LoginModal
           show={this.state.show}
-          onHide={() => this.setState({ show: false })}
+          onHide={() => this.toggleShow(false)}
         />
       </span>
     );

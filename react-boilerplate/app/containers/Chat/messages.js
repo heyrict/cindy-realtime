@@ -54,4 +54,12 @@ export default defineMessages({
     id: 'app.containers.Chat.owner',
     defaultMessage: 'Owner',
   },
+  createChatroom: {
+    id: 'app.containers.Chat.createChatroom',
+    defaultMessage: 'Create ChatRoom',
+  },
+  description: {
+    id: 'app.containers.Chat.description',
+    defaultMessage: 'Description',
+  },
 });

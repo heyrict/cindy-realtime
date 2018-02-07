@@ -40,11 +40,8 @@ const StyledToolbar = styled(Toolbar)`
 export function Chat(props) {
   if (props.chat.open === 'memo' && props.puzzle) {
     return (
-      <Wrapper style={{ height: '100%' }}>
-        <div
-          style={{ overflow: 'auto' }}
-          dangerouslySetInnerHTML={{ __html: text2md(props.puzzle.memo) }}
-        />
+      <Wrapper style={{ height: '100%', overflow: 'auto' }}>
+        <div dangerouslySetInnerHTML={{ __html: text2md(props.puzzle.memo) }} />
       </Wrapper>
     );
   }

@@ -146,7 +146,7 @@ class ChatMessage(models.Model):
         verbose_name = _("ChatMessage")
 
     def __str__(self):
-        return "[%s]: {%s} puts {%50s}" % (self.channel, self.user,
+        return "[%s]: {%s} puts {%50s}" % (self.chatroom, self.user,
                                            self.content)
 
 
