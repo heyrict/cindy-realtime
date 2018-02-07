@@ -54,12 +54,10 @@ export class StarList extends React.Component {
             }
           />
         ))}
-        {this.props.relay.hasMore() ? (
+        {this.props.relay.hasMore() && (
           <StyledButtonOutline onClick={this.loadMore} w={1}>
             <FormattedMessage {...chatMessages.loadMore} />
           </StyledButtonOutline>
-        ) : (
-          ''
         )}
       </div>
     );

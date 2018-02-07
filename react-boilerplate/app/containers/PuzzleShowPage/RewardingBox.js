@@ -28,6 +28,7 @@ class RewardingBox extends React.PureComponent {
     super(props);
     this.state = {
       stars: this.props.existingStar.length === 0 ? 0 : null,
+      commitStar: false,
       comment:
         this.props.existingComment.length === 0
           ? ''
@@ -42,29 +43,42 @@ class RewardingBox extends React.PureComponent {
       this.setState({ comment: e.target.value });
     this.handleSpoilerClick = () =>
       this.setState((p) => ({ spoiler: !p.spoiler }));
+    this.cancelStar = this.cancelStar.bind(this);
     this.handleSaveStar = this.handleSaveStar.bind(this);
     this.handleSaveComment = this.handleSaveComment.bind(this);
+  }
+  componentWillUnmount() {
+    if (!this.state.commitStar) return;
+    commitMutation(environment, {
+      mutation: UpdateStarMutation,
+      variables: {
+        input: this.state.commitStar,
+      },
+      onCompleted: (response, errors) => {
+        if (errors) {
+          bootbox.alert(errors.map((e) => e.message).join(','));
+        }
+      },
+    });
+  }
+  cancelStar() {
+    this.setState({
+      stars: 0,
+      commitStar: false,
+    });
   }
   handleSaveStar() {
     if (this.state.stars === 0) {
       bootbox.alert('Please Choose at least one star!');
       return;
     }
-    commitMutation(environment, {
-      mutation: UpdateStarMutation,
-      variables: {
-        input: {
-          puzzleId: this.props.puzzleId,
-          value: this.state.stars,
-        },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-        }
-        bootbox.alert('Save Succeeded');
+    this.setState({
+      commitStar: {
+        puzzleId: this.props.puzzleId,
+        value: this.state.stars,
       },
     });
+    bootbox.alert('Save Succeeded');
   }
   handleSaveComment() {
     if (this.state.comment === '') {
@@ -104,6 +118,11 @@ class RewardingBox extends React.PureComponent {
               <SubmitBtn w={1 / 2} onClick={this.handleSaveStar}>
                 <FormattedMessage {...messages.addStar} />
               </SubmitBtn>
+              {this.state.commitStar && (
+                <button onClick={this.cancelStar}>
+                  <FormattedMessage {...messages.cancelStar} />
+                </button>
+              )}
             </Flex>
           </PuzzleFrame>
         )}

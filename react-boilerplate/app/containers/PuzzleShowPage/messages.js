@@ -64,11 +64,16 @@ export default defineMessages({
   },
   hiddenFrame: {
     id: 'app.containers.PuzzleShowPage.hiddenFrame',
-    defaultMessage: 'This puzzle is set to hidden, which means you cannot view it',
+    defaultMessage:
+      'This puzzle is set to hidden, which means you cannot view it',
   },
   addStar: {
     id: 'app.containers.PuzzleShowPage.addStar',
     defaultMessage: 'Add Star',
+  },
+  cancelStar: {
+    id: 'app.containers.PuzzleShowPage.cancelStar',
+    defaultMessage: 'Add a star by mistaken? Cancel it.',
   },
   addBookmark: {
     id: 'app.containers.PuzzleShowPage.addBookmark',

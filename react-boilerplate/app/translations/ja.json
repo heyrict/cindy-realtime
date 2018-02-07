@@ -1,4 +1,6 @@
 {
+  "app.components.BookmarkList.deletePrompt": "このブクマを削除します。この操作は撤回することが出来ません。続けますか？",
+  "app.components.BookmarkList.deleted": "削除済み",
   "app.components.MarkdownPreview.hidePreview": "プレビューを閉じる",
   "app.components.MarkdownPreview.showPreview": "プレビューを開く",
   "app.components.MenuNavbar.chat": "チャット",
@@ -93,6 +95,7 @@
   "app.containers.PuzzleShowPage.addBookmark": "ブクマを追加する",
   "app.containers.PuzzleShowPage.addComment": "コメントを追加する",
   "app.containers.PuzzleShowPage.addStar": "スターを追加する",
+  "app.containers.PuzzleShowPage.cancelStar": "誤ってスターをつけましたか？ここをクリックして撤回します",
   "app.containers.PuzzleShowPage.controlPanel": "コントロールパネル",
   "app.containers.PuzzleShowPage.created": "出題時間",
   "app.containers.PuzzleShowPage.creator": "出題者",
