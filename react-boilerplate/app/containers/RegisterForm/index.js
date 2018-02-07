@@ -9,18 +9,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import environment from 'Environment';
+import { text2md } from 'common';
 
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
 import { commitMutation } from 'react-relay';
 import { Form, FormControl, Panel } from 'react-bootstrap';
+import { ButtonOutline } from 'style-store';
 
+import Constrained from 'components/Constrained';
 import FieldGroup from 'components/FieldGroup';
 import { setCurrentUser } from 'containers/UserNavbar/actions';
 import { withModal } from 'components/withModal';
 import RegisterFormMutation from 'graphql/RegisterFormMutation';
 
+import rulesMessages from 'containers/RulesPage/messages';
 import messages from './messages';
 import { registerSucceeded } from './actions';
 
@@ -29,6 +33,7 @@ export class RegisterForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      displayPolicy: true,
       username: '',
       nickname: '',
       password: '',
@@ -40,6 +45,7 @@ export class RegisterForm extends React.Component {
       passwordConfirm_valid: true,
     };
 
+    this.handlePolicyConfirm = () => this.setState({ displayPolicy: false });
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.confirm = this.confirm.bind(this);
@@ -123,7 +129,6 @@ export class RegisterForm extends React.Component {
           });
         } else if (response) {
           const user = response.register.user;
-          // TODO: Update Global User Interface here
           this.props.updateCurrentUser({
             userId: user.rowid,
             nickname: user.nickname,
@@ -136,6 +141,25 @@ export class RegisterForm extends React.Component {
   // }}}
   // {{{ render
   render() {
+    if (this.state.displayPolicy) {
+      return (
+        <Constrained level={5}>
+          <div style={{ maxHeight: '340px', overflow: 'auto' }}>
+            <FormattedMessage {...rulesMessages.rules}>
+              {(msg) => (
+                <div dangerouslySetInnerHTML={{ __html: text2md(msg) }} />
+              )}
+            </FormattedMessage>
+          </div>
+          <ButtonOutline
+            onClick={this.handlePolicyConfirm}
+            style={{ borderRadius: 0, width: '100%' }}
+          >
+            <FormattedMessage {...messages.policyReadPrompt} />
+          </ButtonOutline>
+        </Constrained>
+      );
+    }
     return (
       <Form horizontal>
         {this.state.errorMsg

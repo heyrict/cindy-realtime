@@ -24,7 +24,7 @@ export default defineMessages({
   },
   rules: {
     id: 'app.components.MenuNavbar.rules',
-    defaultMessage: 'Rules',
+    defaultMessage: 'User Policy',
   },
   wiki: {
     id: 'app.components.MenuNavbar.wiki',

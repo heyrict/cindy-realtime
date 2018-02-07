@@ -42,4 +42,8 @@ export default defineMessages({
     id: 'app.containers.RegisterForm.submitLabel',
     defaultMessage: 'Submit',
   },
+  policyReadPrompt: {
+    id: 'app.containers.RegisterForm.policyReadPrompt',
+    defaultMessage: 'I have read the user policy above',
+  },
 });
