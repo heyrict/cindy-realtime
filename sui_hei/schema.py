@@ -570,7 +570,7 @@ class UpdatePuzzle(graphene.ClientIDMutation):
             puzzle.status = 1
             puzzle.modified = timezone.now()
 
-        if hidden is not None and puzzle.status != 4:
+        if hidden is not None and puzzle.status != 4 and puzzle.status != 0:
             if hidden: puzzle.status = 3
             else: puzzle.status = 1
 
