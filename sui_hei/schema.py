@@ -768,6 +768,29 @@ class UpdateUser(relay.ClientIDMutation):
         return UpdateUser(user=user)
 
 
+# {{{2 DeleteBookmark
+class DeleteBookmark(graphene.ClientIDMutation):
+    class Input:
+        bookmarkId = graphene.Int()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        bookmarkId = input["bookmarkId"]
+        bookmark = Bookmark.objects.get(id=bookmarkId)
+
+        if (bookmark.user.id != user.id):
+            raise ValidationError(
+                _("You are not the creator of this bookmark"))
+
+        bookmark.delete()
+
+        return DeleteBookmark()
+
+
 # {{{2 Login
 class UserLogin(relay.ClientIDMutation):
     class Input:
@@ -957,6 +980,7 @@ class Mutation(graphene.ObjectType):
     update_hint = UpdateHint.Field()
     update_current_award = UpdateCurrentAward.Field()
     update_user = UpdateUser.Field()
+    delete_bookmark = DeleteBookmark.Field()
     login = UserLogin.Field()
     logout = UserLogout.Field()
     register = UserRegister.Field()
