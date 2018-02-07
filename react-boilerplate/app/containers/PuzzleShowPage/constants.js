@@ -35,6 +35,8 @@ export const componentsDialogueFragment = `
     true
     question
     answer
+    questionEditTimes
+    answerEditTimes
     created
     answeredtime
   }

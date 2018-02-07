@@ -21,6 +21,7 @@ import PuzzlePanelNodeFragment from 'graphql/PuzzlePanel';
 
 import StarLabel from './StarLabel';
 import CommentLabel from './CommentLabel';
+import BookmarkLabel from './BookmarkLabel';
 import ProcessLabel from './ProcessLabel';
 import StatusLabel from './StatusLabel';
 
@@ -89,6 +90,10 @@ export class PuzzlePanel extends React.Component {
                 <StyledButton onClick={() => this.toggleRewardingPanel(true)}>
                   <CommentLabel commentCount={node.commentCount} />
                 </StyledButton>
+              )}
+            {node.bookmarkCount !== undefined &&
+              node.bookmarkCount !== null && (
+                <BookmarkLabel bookmarkCount={node.bookmarkCount} />
               )}
           </Box>
           <RewardingModal

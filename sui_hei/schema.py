@@ -118,6 +118,7 @@ class PuzzleNode(DjangoObjectType):
     starCount = graphene.Int()
     starSum = graphene.Int()
     commentCount = graphene.Int()
+    bookmarkCount = graphene.Int()
 
     def resolve_rowid(self, info):
         return self.id
@@ -146,6 +147,12 @@ class PuzzleNode(DjangoObjectType):
             return self.commentCount
         except:
             return self.comment_set.count()
+
+    def resolve_bookmarkCount(self, info):
+        try:
+            return self.bookmarkCount
+        except:
+            return self.bookmark_set.count()
 
 
 # {{{2 DialogueNode
@@ -490,6 +497,8 @@ class UpdateAnswer(graphene.ClientIDMutation):
 
         if dialogue.answer is None:
             dialogue.answeredtime = timezone.now()
+        else:
+            dialogue.answerEditTimes += 1
 
         dialogue.answer = content
         dialogue.good = good
@@ -520,6 +529,7 @@ class UpdateQuestion(graphene.ClientIDMutation):
             raise ValidationError(_("Question content cannot be empty!"))
 
         dialogue = Dialogue.objects.get(id=dialogueId)
+        dialogue.questionEditTimes += 1
 
         dialogue.question = question
         dialogue.save()

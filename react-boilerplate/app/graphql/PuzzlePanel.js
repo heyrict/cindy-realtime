@@ -23,6 +23,7 @@ const PuzzlePanel = graphql`
       }
     }
     commentCount
+    bookmarkCount
     user {
       ...UserLabel_user
     }

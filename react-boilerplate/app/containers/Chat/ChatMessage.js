@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { DarkNicknameLink as NicknameLink } from 'style-store';
+import moment from 'moment';
+import { Time, DarkNicknameLink as NicknameLink } from 'style-store';
 import UserAwardPopover from 'components/UserAwardPopover';
 import { line2md } from 'common';
 
@@ -24,6 +25,9 @@ function ChatMessage(props) {
         userAward={props.user.currentAward}
         style={{ color: '#23527c', fontSize: '0.9em' }}
       />
+      {props.created && (
+        <Time>{moment(props.created).format('YYYY-MM-DD HH:mm')}</Time>
+      )}
       <div
         style={{ overflow: 'auto' }}
         dangerouslySetInnerHTML={{ __html: line2md(props.content) }}
@@ -38,6 +42,7 @@ ChatMessage.propTypes = {
     nickname: PropTypes.string.isRequired,
     currentAward: PropTypes.object,
   }),
+  created: PropTypes.string,
   content: PropTypes.string.isRequired,
 };
 

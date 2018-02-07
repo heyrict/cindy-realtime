@@ -22,6 +22,10 @@ export default defineMessages({
     id: 'app.containers.Dialogue.edit',
     defaultMessage: 'Edit',
   },
+  edited: {
+    id: 'app.containers.Dialogue.edited',
+    defaultMessage: 'edited({times})',
+  },
   answerInputHint: {
     id: 'app.containers.Dialogue.answerInputHint',
     defaultMessage: 'Put your answer',

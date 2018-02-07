@@ -106,7 +106,9 @@ class Dialogue(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
     puzzle = models.ForeignKey(Puzzle, on_delete=CASCADE)
     question = models.TextField(_('question'), null=False)
+    questionEditTimes = models.IntegerField(_("question edit times"), null=False, default=0)
     answer = models.TextField(_('answer'), null=True)
+    answerEditTimes = models.IntegerField(_("answer edit times"), null=False, default=0)
     good = models.BooleanField(_('good_ques'), default=False, null=False)
     true = models.BooleanField(_('true_ques'), default=False, null=False)
     created = models.DateTimeField(_('created'), null=False)
@@ -139,7 +141,8 @@ class ChatMessage(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
     chatroom = models.ForeignKey('ChatRoom', on_delete=CASCADE)
     content = models.TextField(_('content'), null=False)
-    created = models.DateField(_("created"), null=False, default=timezone.now)
+    created = models.DateTimeField(
+        _("created"), null=True, default=timezone.now)
     editTimes = models.IntegerField(_("edit times"), null=False, default=0)
 
     class Meta:

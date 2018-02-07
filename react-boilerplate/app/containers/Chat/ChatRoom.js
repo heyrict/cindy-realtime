@@ -87,11 +87,7 @@ class ChatRoom extends React.Component {
             <FormattedMessage {...messages.loadMore} />
           </LoadMoreBtn>
           {this.props.chatMessages.map((msg) => (
-            <ChatMessage
-              user={msg.node.user}
-              key={msg.node.id}
-              content={msg.node.content}
-            />
+            <ChatMessage key={msg.node.id} {...msg.node} />
           ))}
         </MessageWrapper>
         <Flex mx={1} w={1} hidden={this.props.currentUserId === null}>

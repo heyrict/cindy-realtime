@@ -118,6 +118,14 @@ class Question extends React.PureComponent {
             style={{ overflow: 'auto' }}
             dangerouslySetInnerHTML={{ __html: line2md(this.props.question) }}
           />
+          {this.props.questionEditTimes > 0 && (
+            <Time>
+              <FormattedMessage
+                {...messages.edited}
+                values={{ times: this.props.questionEditTimes }}
+              />
+            </Time>
+          )}
           {this.props.user.rowid === this.props.currentUser.userId &&
             this.props.status === 0 &&
             !this.props.answered && (
@@ -142,6 +150,7 @@ Question.propTypes = {
   user: PropTypes.object.isRequired,
   currentUser: PropTypes.object.isRequired,
   created: PropTypes.string.isRequired,
+  questionEditTimes: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

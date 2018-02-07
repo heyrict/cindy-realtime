@@ -17,14 +17,16 @@ const Dialogue = (props) => (
           user={props.node.user}
           created={props.node.created}
           answered={Boolean(props.node.answer)}
+          questionEditTimes={props.node.questionEditTimes}
           status={props.status}
         />
       </Box>
       <Box width={1 / 2} ml={5}>
         <Answer
           id={props.node.id}
-          answeredTime={props.node.answeredtime}
+          answeredTime={props.node.answeredTime}
           answer={props.node.answer}
+          answerEditTimes={props.node.answerEditTimes}
           good={props.node.good}
           true={props.node.true}
           status={props.status}
@@ -46,6 +48,8 @@ Dialogue.propTypes = {
     answer: PropTypes.string,
     created: PropTypes.string.isRequired,
     answeredTime: PropTypes.string,
+    answerEditTimes: PropTypes.number.isRequired,
+    questionEditTimes: PropTypes.number.isRequired,
   }),
 };
 

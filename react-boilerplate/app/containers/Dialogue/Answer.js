@@ -181,6 +181,14 @@ class Answer extends React.PureComponent {
             }}
             dangerouslySetInnerHTML={{ __html: line2md(this.props.answer) }}
           />
+          {this.props.answerEditTimes > 0 && (
+            <Time>
+              <FormattedMessage
+                {...messages.edited}
+                values={{ times: this.props.answerEditTimes }}
+              />
+            </Time>
+          )}
           {this.props.owner.rowid === this.props.user.userId &&
             this.props.puzzleStatus === 0 && (
               <FormattedMessage {...messages.edit}>
@@ -207,6 +215,7 @@ Answer.propTypes = {
   true: PropTypes.bool.isRequired,
   answer: PropTypes.string,
   answeredTime: PropTypes.string,
+  answerEditTimes: PropTypes.number.isRequired,
   owner: PropTypes.object.isRequired,
   user: PropTypes.object,
   puzzleStatus: PropTypes.number.isRequired,
