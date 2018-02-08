@@ -58,6 +58,10 @@ export default defineMessages({
     id: 'app.containers.ProfilePage.awardSelect',
     defaultMessage: 'Award Select',
   },
+  hideBookmark: {
+    id: 'app.containers.ProfilePage.hideBookmark',
+    defaultMessage: 'Hide Bookmark',
+  },
   nullAward: {
     id: 'app.containers.ProfilePage.nullAward',
     defaultMessage: 'None',

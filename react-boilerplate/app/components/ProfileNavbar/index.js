@@ -32,9 +32,11 @@ function ProfileNavbar(props) {
       <ProfileButton w={[1 / 4, 1 / 5]} onClick={props.onStarsClick}>
         <FormattedMessage {...messages.stars} />
       </ProfileButton>
-      <ProfileButton w={[1 / 4, 1 / 5]} onClick={props.onBookmarksClick}>
-        <FormattedMessage {...messages.bookmarks} />
-      </ProfileButton>
+      {!props.hideBookmark && (
+        <ProfileButton w={[1 / 4, 1 / 5]} onClick={props.onBookmarksClick}>
+          <FormattedMessage {...messages.bookmarks} />
+        </ProfileButton>
+      )}
     </Flex>
   );
 }
@@ -51,6 +53,7 @@ ProfileNavbar.propTypes = {
   onPuzzlesClick: PropTypes.func,
   onStarsClick: PropTypes.func,
   onBookmarksClick: PropTypes.func,
+  hideBookmark: PropTypes.bool.isRequired,
 };
 
 export default ProfileNavbar;

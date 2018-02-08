@@ -28,6 +28,7 @@ export const ProfileShowQuery = graphql`
       dateJoined
       lastLogin
       profile
+      hideBookmark
     }
   }
 `;

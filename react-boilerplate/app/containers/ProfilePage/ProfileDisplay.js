@@ -7,6 +7,7 @@ import UserAwardPopover from 'components/UserAwardPopover';
 import AwardSwitch from './AwardSwitch';
 import ProfRow from './ProfRow';
 import ProfileRow from './ProfileRow';
+import BookmarkHideRow from './BookmarkHideRow';
 
 import messages from './messages';
 
@@ -68,6 +69,11 @@ function ProfileDisplay(props, context) {
             props.user.currentAward ? props.user.currentAward.id : null
           }
           userawardSet={props.user.userawardSet}
+        />
+      )}
+      {props.user.userId === props.currentUserId && (
+        <BookmarkHideRow
+          hideBookmark={props.user.hideBookmark}
         />
       )}
       <ProfileRow userId={props.user.userId} profile={props.user.profile} />

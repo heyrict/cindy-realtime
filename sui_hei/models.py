@@ -3,7 +3,7 @@ import re
 from django.contrib.auth.models import (AbstractBaseUser, AbstractUser,
                                         BaseUserManager)
 from django.db import connections, models
-from django.db.models import CASCADE, DO_NOTHING, Q, SET_NULL
+from django.db.models import CASCADE, DO_NOTHING, SET_NULL, Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -29,9 +29,8 @@ class User(AbstractUser):
         null=True,
         on_delete=SET_NULL,
         related_name="current_award")
-    experience = models.IntegerField(_('experience'), default=0)
-    snipe = models.IntegerField(_('snipe'), default=0)
-    sniped = models.IntegerField(_('sniped'), default=0)
+    credit = models.IntegerField(_('credit'), default=0)
+    hide_bookmark = models.BooleanField(_('hide bookmark'), default=True)
 
     REQUIRED_FIELDS = ['nickname']
 
@@ -106,9 +105,11 @@ class Dialogue(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
     puzzle = models.ForeignKey(Puzzle, on_delete=CASCADE)
     question = models.TextField(_('question'), null=False)
-    questionEditTimes = models.IntegerField(_("question edit times"), null=False, default=0)
+    questionEditTimes = models.IntegerField(
+        _("question edit times"), null=False, default=0)
     answer = models.TextField(_('answer'), null=True)
-    answerEditTimes = models.IntegerField(_("answer edit times"), null=False, default=0)
+    answerEditTimes = models.IntegerField(
+        _("answer edit times"), null=False, default=0)
     good = models.BooleanField(_('good_ques'), default=False, null=False)
     true = models.BooleanField(_('true_ques'), default=False, null=False)
     created = models.DateTimeField(_('created'), null=False)
@@ -166,6 +167,12 @@ class ChatRoom(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class FavoriteChatRoom(models.Model):
+    id = models.AutoField(max_length=11, null=False, primary_key=True)
+    user = models.ForeignKey(User, on_delete=CASCADE)
+    chatroom = models.ForeignKey(ChatRoom, on_delete=CASCADE)
 
 
 class Comment(models.Model):

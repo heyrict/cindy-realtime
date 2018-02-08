@@ -80,6 +80,11 @@ class ProfilePage extends React.Component {
                       onPuzzlesClick={() => this.changeTab(1)}
                       onStarsClick={() => this.changeTab(2)}
                       onBookmarksClick={() => this.changeTab(3)}
+                      hideBookmark={
+                        U.hideBookmark &&
+                        t('UserNode', this.props.usernavbar.user.userId) !==
+                          userId
+                      }
                     />
                     {this.state.tabIndex === 0 && (
                       <ProfileDisplay

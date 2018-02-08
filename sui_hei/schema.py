@@ -4,7 +4,7 @@ import django_filters
 import graphene
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
-from django.db.models import F, Q, Count, Sum
+from django.db.models import Count, F, Q, Sum
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django_filters import FilterSet
@@ -761,6 +761,7 @@ class UpdateUser(relay.ClientIDMutation):
 
     class Input:
         profile = graphene.String()
+        hide_bookmark = graphene.Boolean()
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -769,10 +770,14 @@ class UpdateUser(relay.ClientIDMutation):
             raise ValidationError(_("Please login!"))
 
         profile = input.get("profile")
+        hide_bookmark = input.get("hide_bookmark", None)
         if profile:
             user.profile = profile
 
-        if profile:
+        if hide_bookmark is not None:
+            user.hide_bookmark = hide_bookmark
+
+        if profile or hide_bookmark is not None:
             user.save()
 
         return UpdateUser(user=user)
