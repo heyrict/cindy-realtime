@@ -38,4 +38,8 @@ export default defineMessages({
     id: 'app.containers.FilterableList.commentCount',
     defaultMessage: 'Comment Count',
   },
+  date_joined: {
+    id: 'app.containers.FilterableList.date_joined',
+    defaultMessage: 'Joined Date',
+  },
 });

@@ -47,6 +47,7 @@
   "app.containers.Dialogue.waiting": "Waiting to be answered...",
   "app.containers.FilterableList.commentCount": "Comment Count",
   "app.containers.FilterableList.created": "Create Time",
+  "app.containers.FilterableList.date_joined": "Joined Date",
   "app.containers.FilterableList.header": "Finish Time",
   "app.containers.FilterableList.id": "ID",
   "app.containers.FilterableList.sort": "Sort",
@@ -125,11 +126,15 @@
   "app.containers.RulesPage.description": "Rules in Cindy",
   "app.containers.RulesPage.rules": "User Policy for Cindy in English is still in edit...",
   "app.containers.RulesPage.title": "Cindy - Rules",
+  "app.containers.UserListPage.description": "Join the large community for lateral thinking puzzle game!",
+  "app.containers.UserListPage.header": "All Users",
+  "app.containers.UserListPage.title": "Cindy - User List",
   "app.containers.UserNavbar.guestTitle": "Hello guest!",
   "app.containers.UserNavbar.loggedInTitle": "Welcome {nickname}!",
   "app.containers.UserNavbar.login": "Login",
   "app.containers.UserNavbar.logout": "Logout",
   "app.containers.UserNavbar.myprof": "My Profile",
   "app.containers.UserNavbar.onlineUsers": "Online users: {userCount}",
-  "app.containers.UserNavbar.register": "Register"
+  "app.containers.UserNavbar.register": "Register",
+  "app.containers.UserNavbar.userlist": "User List"
 }

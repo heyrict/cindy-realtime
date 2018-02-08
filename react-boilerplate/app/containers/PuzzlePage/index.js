@@ -23,7 +23,7 @@ import makeSelectPuzzlePage from './selectors';
 import saga from './saga';
 import messages from './messages';
 
-function PuzzlePage(p, context) {
+function PuzzlePage(props, context) {
   const _ = context.intl.formatMessage;
   return (
     <Constrained level={4}>

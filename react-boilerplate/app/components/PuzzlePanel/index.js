@@ -9,13 +9,14 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Box, Row, Divider, Flex } from 'rebass';
 import { RoundedPanel } from 'style-store';
+import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
-
 import Relay from 'react-relay';
 
 import TitleLabel from 'components/TitleLabel';
 import UserLabel, { UserLabel as UserLabelPlain } from 'components/UserLabel';
 import RewardingModal from 'components/RewardingModal/Loadable';
+import sortMessages from 'components/FilterableList/messages';
 
 import PuzzlePanelNodeFragment from 'graphql/PuzzlePanel';
 
@@ -74,7 +75,8 @@ export class PuzzlePanel extends React.Component {
               </Box>
               <Box ml="auto" style={{ alignSelf: 'center' }}>
                 <PuzzleDate>
-                  Created: {moment(node.created).format('YYYY-MM-DD HH:mm')}
+                  <FormattedMessage {...sortMessages.created} />:{' '}
+                  {moment(node.created).format('YYYY-MM-DD HH:mm')}
                 </PuzzleDate>
               </Box>
             </Flex>

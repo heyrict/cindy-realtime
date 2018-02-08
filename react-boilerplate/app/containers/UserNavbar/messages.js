@@ -23,6 +23,10 @@ export default defineMessages({
     id: 'app.containers.UserNavbar.myprof',
     defaultMessage: 'My Profile',
   },
+  userlist: {
+    id: 'app.containers.UserNavbar.userlist',
+    defaultMessage: 'User List',
+  },
   logout: {
     id: 'app.containers.UserNavbar.logout',
     defaultMessage: 'Logout',

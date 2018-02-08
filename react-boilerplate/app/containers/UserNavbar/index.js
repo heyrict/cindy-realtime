@@ -66,6 +66,11 @@ export class UserNavbar extends React.Component {
               <FormattedMessage {...messages.myprof} />
             </NavLink>
           </RouterLink>
+          <RouterLink to="/profile" tabIndex="0">
+            <NavLink is="span">
+              <FormattedMessage {...messages.userlist} />
+            </NavLink>
+          </RouterLink>
           <LogoutMenuItem>
             <FormattedMessage {...messages.logout} />
           </LogoutMenuItem>
@@ -82,6 +87,11 @@ export class UserNavbar extends React.Component {
         mx={-2}
         style={{ display: this.props.open ? 'block' : 'none' }}
       >
+        <RouterLink to="/profile" tabIndex="0">
+          <NavLink is="span">
+            <FormattedMessage {...messages.userlist} />
+          </NavLink>
+        </RouterLink>
         <LoginMenuItem>
           <FormattedMessage {...messages.login} />
         </LoginMenuItem>
