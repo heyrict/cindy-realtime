@@ -22,14 +22,13 @@ The required returned form is:
     are valid now, should be handled with in future versions.
 """
 
+import asyncio
 import json
 import logging
 
-from channels import Channel, Group
-from channels.auth import channel_session_user_from_http
-from channels.generic.websockets import JsonWebsocketConsumer
-from channels.handler import AsgiHandler
-from django.contrib.auth.models import AnonymousUser
+from asgiref.sync import AsyncToSync
+from channels.generic.websocket import AsyncJsonWebsocketConsumer
+from channels.layers import get_channel_layer
 from django.core.cache import cache
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
@@ -65,199 +64,241 @@ SEND_DIRECTCHAT = "ws/SEND_DIRECTCHAT"
 DIRECTCHAT_RECEIVED = "ws/DIRECTCHAT_RECEIVED"
 
 UPDATE_ONLINE_VIEWER_COUNT = "ws/UPDATE_ONLINE_VIEWER_COUNT"
+
+
 # }}}
+class MainConsumer(AsyncJsonWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
+        await self.channel_layer.group_add("viewer", self.channel_name)
+
+        onlineUsers = cache.get("onlineUsers", {})
+        self.user = self.scope['user']
+        if not self.user.is_anonymous:
+            await self.channel_layer.group_add("User-%s" % self.user.id,
+                                               self.channel_name)
+            onlineUsers.update({
+                str(self.channel_name): (self.user.id, self.user.nickname)
+            })
+            cache.set("onlineUsers", onlineUsers, None)
+
+        onlineUserCount = cache.get("onlineUserCount", 0)
+        cache.set("onlineUserCount", onlineUserCount + 1, None)
+
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard("viewer", self.channel_name)
+
+        onlineUsers = cache.get("onlineUsers", {})
+        if str(self.channel_name) in onlineUsers.keys():
+            await self.channel_layer.group_discard(
+                "User-%s" % onlineUsers[str(self.channel_name)][0],
+                self.channel_name)
+            onlineUsers.pop(str(self.channel_name))
+            cache.set('onlineUsers', onlineUsers, None)
+
+        onlineUserCount = cache.get("onlineUserCount", 0)
+        cache.set("onlineUserCount", onlineUserCount - 1, None)
+
+        await self.broadcast_status()
+
+    async def broadcast_status(self):
+        onlineUsers = cache.get("onlineUsers", {})
+        onlineUserList = dict(set(onlineUsers.values()))
+        text = {
+            "type": UPDATE_ONLINE_VIEWER_COUNT,
+            "data": {
+                "onlineViewerCount": cache.get('onlineUserCount', 0),
+                "onlineUsers": onlineUserList
+            }
+        }
+        await self.channel_layer.group_send("viewer", {
+            "type": "viewer.message",
+            "content": text,
+        })
+
+    async def viewer_message(self, event):
+        print("SEND:", event['content'])
+        await self.send_json(event["content"])
+
+    async def receive_json(self, content):
+        print("RECEIVE:", content)
+        if content.get("type") == VIEWER_CONNECT:
+            await self.broadcast_status()
+        elif content.get("type") == VIEWER_DISCONNECT:
+            self.channel_layer.group_discard("viewer", self.channel_name)
+            await self.broadcast_status()
+        elif content.get("type") == SET_CURRENT_USER:
+            await self.user_change(content)
+        elif content.get("type") == PUZZLE_CONNECT:
+            self.channel_layer.group_add(
+                "puzzle-%s" % content["data"]["puzzleId"], self.channel_name)
+        elif content.get("type") == PUZZLE_DISCONNECT:
+            self.channel_layer.group_discard(
+                "puzzle-%s" % content["data"]["puzzleId"], self.channel_name)
+        elif content.get("type") == CHATROOM_CONNECT:
+            self.channel_layer.group_add("chatroom-%s" % content["channel"],
+                                         self.channel_name)
+        elif content.get("type") == CHATROOM_DISCONNECT:
+            self.channel_layer.group_discard(
+                "chatroom-%s" % content["channel"], self.channel_name)
+        elif content.get("type") == SEND_DIRECTCHAT:
+            content["type"] = DIRECTCHAT_RECEIVED
+            await self.channel_layer.group_send(
+                "User-%s" % content["data"]["to"], {
+                    "type": "viewer.message",
+                    "content": content
+                })
+
+    async def user_change(self, content):
+        onlineUsers = cache.get("onlineUsers")
+        onlineUsers = onlineUsers if onlineUsers else {}
+        update = False
+
+        if str(self.channel_name) in onlineUsers.keys():
+            await self.channel_layer.group_discard("User-%s" % onlineUsers[str(
+                self.channel_name, self.channel_name)])
+            onlineUsers.pop(str(self.channel_name))
+            update = True
+
+        if content.get('currentUser') and content['currentUser']['userId']:
+            await self.channel_layer.group_add(
+                "User-%s" % content['currentUser']['userId'],
+                self.channel_name)
+            onlineUsers.update({
+                str(self.channel_name): (content['currentUser']['userId'],
+                                         content['currentUser']['nickname'])
+            })
+            update = True
+
+        if update:
+            cache.set("onlineUsers", onlineUsers, None)
+            await self.broadcast_status()
 
 
 @receiver(post_save, sender=Dialogue)
 def send_dialogue_update(sender, instance, created, *args, **kwargs):
     dialogueId = instance.id
     puzzleId = instance.puzzle.id
+    channel_layer = get_channel_layer()
     if created:
-        text = json.dumps({
+        text = {
             "type": DIALOGUE_ADDED,
             "data": {
                 "id": to_global_id('DialogueNode', dialogueId),
                 "puzzleId": puzzleId,
             }
-        })
+        }
         logger.debug("Send %s", text)
-        Group("viewer").send({"text": text})
+        AsyncToSync(channel_layer.group_send)("viewer", {
+            "type": "viewer.message",
+            "content": text
+        })
     else:
-        text = json.dumps({
+        text = {
             "type": DIALOGUE_UPDATED,
             "data": {
                 "id": to_global_id('DialogueNode', dialogueId),
                 "puzzleId": puzzleId,
             }
-        })
+        }
         logger.debug("Send %s", text)
-        Group("puzzle-%d" % instance.puzzle.id).send({"text": text})
+        AsyncToSync(channel_layer.group_send)("puzzle-%d" % instance.puzzle.id,
+                                              {
+                                                  "type": "viewer.message",
+                                                  "content": text
+                                              })
 
 
 @receiver(post_save, sender=Puzzle)
 def send_puzzle_update(sender, instance, created, *args, **kwargs):
     puzzleId = instance.id
+    channel_layer = get_channel_layer()
     if created:
-        text = json.dumps({
+        text = {
             "type": PUZZLE_ADDED,
             "data": {
                 "id": to_global_id('PuzzleNode', puzzleId),
                 "title": instance.title,
                 "nickname": instance.user.nickname
             }
-        })
+        }
         logger.debug("Send %s", text)
-        Group("viewer").send({"text": text})
+        AsyncToSync(channel_layer.group_send)("viewer", {
+            "type": "viewer.message",
+            "content": text
+        })
     else:
-        text = json.dumps({
+        text = {
             "type": PUZZLE_UPDATED,
             "data": {
                 "id": to_global_id('PuzzleNode', puzzleId)
             }
-        })
+        }
         logger.debug("Send %s", text)
-        Group("viewer").send({"text": text})
+        AsyncToSync(channel_layer.group_send)("viewer", {
+            "type": "viewer.message",
+            "content": text
+        })
 
 
 @receiver(post_save, sender=Hint)
 def send_hint_update(sender, instance, created, *args, **kwargs):
     hintId = instance.id
     puzzleId = instance.puzzle.id
+    channel_layer = get_channel_layer()
     if created:
-        text = json.dumps({
+        text = {
             "type": HINT_ADDED,
             "data": {
                 "id": to_global_id('HintNode', hintId),
             }
-        })
+        }
         logger.debug("Send %s", text)
-        Group("puzzle-%s" % puzzleId).send({"text": text})
+        AsyncToSync(channel_layer.group_send)("puzzle-%s" % puzzleId, {
+            "type": "viewer.message",
+            "content": text
+        })
     else:
-        text = json.dumps({
+        text = {
             "type": HINT_UPDATED,
             "data": {
                 "id": to_global_id('HintNode', hintId),
             }
-        })
+        }
         logger.debug("Send %s", text)
-        Group("puzzle-%s" % puzzleId).send({"text": text})
+        AsyncToSync(channel_layer.group_send)("puzzle-%s" % puzzleId, {
+            "type": "viewer.message",
+            "content": text
+        })
 
 
 @receiver(post_save, sender=ChatMessage)
 def send_chatmessage_update(sender, instance, created, *args, **kwargs):
     chatmessageId = instance.id
     channel = instance.chatroom.name
+    channel_layer = get_channel_layer()
     if created:
-        text = json.dumps({
+        text = {
             "type": CHATMESSAGE_ADDED,
             "data": {
                 "id": to_global_id('ChatMessageNode', chatmessageId),
             }
-        })
+        }
         logger.debug("Send %s", text)
-        Group("chatroom-%s" % channel).send({"text": text})
+        __import__("pdb").set_trace()
+        AsyncToSync(channel_layer.group_send)("chatroom-%s" % channel, {
+            "type": "websocket.message",
+            "content": text
+        })
     else:
-        text = json.dumps({
+        text = {
             "type": CHATMESSAGE_UPDATED,
             "data": {
                 "id": to_global_id('ChatMessageNode', chatmessageId),
             }
-        })
-        logger.debug("Send %s", text)
-        Group("chatroom-%s" % channel).send({"text": text})
-
-
-def broadcast_status():
-    onlineUsers = cache.get("onlineUsers", {})
-    onlineUserList = dict(set(onlineUsers.values()))
-    text = json.dumps({
-        "type": UPDATE_ONLINE_VIEWER_COUNT,
-        "data": {
-            "onlineViewerCount":
-            len(Group('viewer').channel_layer.group_channels('viewer')),
-            "onlineUsers":
-            onlineUserList
         }
-    })
-    Group("viewer").send({"text": text})
-
-
-def user_change(message):
-    onlineUsers = cache.get("onlineUsers")
-    onlineUsers = onlineUsers if onlineUsers else {}
-    data = json.loads(message.content["text"])
-    update = False
-
-    if str(message.reply_channel) in onlineUsers.keys():
-        Group("User-%s" % onlineUsers[str(message.reply_channel)][0]).discard(
-            message.reply_channel)
-        onlineUsers.pop(str(message.reply_channel))
-        update = True
-
-    if data.get('currentUser') and data['currentUser']['userId']:
-        Group("User-%s" %
-              data['currentUser']['userId']).add(message.reply_channel)
-        onlineUsers.update({
-            str(message.reply_channel): (data['currentUser']['userId'],
-                                         data['currentUser']['nickname'])
+        logger.debug("Send %s", text)
+        AsyncToSync(channel_layer.group_send)("chatroom-%s" % channel, {
+            "type": "viewer.message",
+            "content": text
         })
-        update = True
-
-    if update:
-        cache.set("onlineUsers", onlineUsers, None)
-    broadcast_status()
-
-
-@channel_session_user_from_http
-def ws_connect(message):
-    message.reply_channel.send({"accept": True})
-    Group("viewer").add(message.reply_channel)
-
-    onlineUsers = cache.get("onlineUsers", {})
-    if not message.user.is_anonymous:
-        Group("User-%s" % message.user.id).add(message.reply_channel)
-        onlineUsers.update({
-            str(message.reply_channel): (message.user.id,
-                                         message.user.nickname)
-        })
-        cache.set("onlineUsers", onlineUsers, None)
-
-
-def ws_disconnect(message):
-    Group("viewer").discard(message.reply_channel)
-
-    onlineUsers = cache.get("onlineUsers", {})
-    if str(message.reply_channel) in onlineUsers.keys():
-        Group("User-%s" % onlineUsers[str(message.reply_channel)][0]).discard(
-            message.reply_channel)
-        onlineUsers.pop(str(message.reply_channel))
-        cache.set('onlineUsers', onlineUsers, None)
-
-    broadcast_status()
-
-
-@channel_session_user_from_http
-def ws_message(message):
-    data = json.loads(message.content["text"])
-
-    logger.debug("RECEIVE %s", data)
-    if data.get("type") == VIEWER_CONNECT:
-        broadcast_status()
-    elif data.get("type") == VIEWER_DISCONNECT:
-        Group("viewer").discard(message.reply_channel)
-        broadcast_status()
-    elif data.get("type") == SET_CURRENT_USER:
-        user_change(message)
-    elif data.get("type") == PUZZLE_CONNECT:
-        Group("puzzle-%s" % data["data"]["puzzleId"])\
-                .add(message.reply_channel)
-    elif data.get("type") == PUZZLE_DISCONNECT:
-        Group("puzzle-%s" % data["data"]["puzzleId"])\
-                .discard(message.reply_channel)
-    elif data.get("type") == CHATROOM_CONNECT:
-        Group("chatroom-%s" % data["channel"]).add(message.reply_channel)
-    elif data.get("type") == CHATROOM_DISCONNECT:
-        Group("chatroom-%s" % data["channel"]).discard(message.reply_channel)
-    elif data.get("type") == SEND_DIRECTCHAT:
-        data["type"] = DIRECTCHAT_RECEIVED
-        Group("User-%s" % data["data"]["to"]).send({"text": json.dumps(data)})

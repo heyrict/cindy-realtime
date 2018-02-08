@@ -1,9 +1,12 @@
-from channels.routing import route, route_class
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
+from django.conf.urls import url
 
-from .consumers import ws_connect, ws_disconnect, ws_message
+from sui_hei.consumers import MainConsumer
 
-channel_routing = [
-    route("websocket.connect", ws_connect, path="/ws/"),
-    route("websocket.receive", ws_message, path="/ws/"),
-    route("websocket.disconnect", ws_disconnect, path="/ws/"),
-]
+application = ProtocolTypeRouter({
+    "websocket":
+    AuthMiddlewareStack(URLRouter([
+        url("^ws/$", MainConsumer),
+    ])),
+})

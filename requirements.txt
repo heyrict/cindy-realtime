@@ -4,5 +4,5 @@ markdown>=2.6,<3.0
 django-webpack-loader>=0.5.0,<1.0
 graphene-django>=2.0,<3.0
 django-filter>=1.1,<2.0
-channels>=1.1,<2.0
+channels>=2.0,<3.0
 asgi-redis>=1.4,<2.0
