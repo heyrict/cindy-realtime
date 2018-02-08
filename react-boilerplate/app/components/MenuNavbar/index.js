@@ -9,11 +9,12 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { RouterLink, SubNavbar } from 'style-store';
+import { RouterLink, SubNavbar, ImgSm } from 'style-store';
 import { NavLink, Group, Button, ButtonOutline } from 'rebass';
 import SponsersMenuItem from 'containers/SponsersMenuItem';
 
 import { FormattedMessage } from 'react-intl';
+import githubMark from 'images/GitHub-Mark.svg';
 import { changeLocale } from 'containers/LanguageProvider/actions';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 import messages from './messages';
@@ -94,6 +95,11 @@ function MenuNavbar(props) {
             ja
           </GroupButton>
         </Group>
+      </NavLink>
+      <NavLink is="span" p={10}>
+        <a href="https://github.com/heyrict/cindy-realtime">
+          <ImgSm alt="GitHub" src={githubMark} />
+        </a>
       </NavLink>
     </SubNavbar>
   );
