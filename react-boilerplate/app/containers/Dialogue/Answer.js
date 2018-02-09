@@ -163,7 +163,7 @@ class Answer extends React.PureComponent {
               userAward={this.props.owner.currentAward}
             />
             <Time>
-              {moment(this.props.answeredTime).format('YYYY-MM-DD HH:mm')}
+              {moment(this.props.answeredtime).format('YYYY-MM-DD HH:mm')}
             </Time>
           </Box>
           <Splitter />
@@ -214,7 +214,7 @@ Answer.propTypes = {
   good: PropTypes.bool.isRequired,
   true: PropTypes.bool.isRequired,
   answer: PropTypes.string,
-  answeredTime: PropTypes.string,
+  answeredtime: PropTypes.string,
   answerEditTimes: PropTypes.number.isRequired,
   owner: PropTypes.object.isRequired,
   user: PropTypes.object,

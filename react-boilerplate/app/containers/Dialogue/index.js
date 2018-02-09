@@ -24,7 +24,7 @@ const Dialogue = (props) => (
       <Box width={1 / 2} ml={5}>
         <Answer
           id={props.node.id}
-          answeredTime={props.node.answeredTime}
+          answeredtime={props.node.answeredtime}
           answer={props.node.answer}
           answerEditTimes={props.node.answerEditTimes}
           good={props.node.good}
@@ -47,7 +47,7 @@ Dialogue.propTypes = {
     question: PropTypes.string.isRequired,
     answer: PropTypes.string,
     created: PropTypes.string.isRequired,
-    answeredTime: PropTypes.string,
+    answeredtime: PropTypes.string,
     answerEditTimes: PropTypes.number.isRequired,
     questionEditTimes: PropTypes.number.isRequired,
   }),

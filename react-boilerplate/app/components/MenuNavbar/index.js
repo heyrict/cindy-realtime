@@ -64,7 +64,11 @@ function MenuNavbar(props) {
         </NavLink>
       </RouterLink>
       <NavLink is="span">
-        <a href="//wiki3.jp/cindy-lat" style={{ color: '#002731' }}>
+        <a
+          target="_blank"
+          href="//wiki3.jp/cindy-lat"
+          style={{ color: '#002731' }}
+        >
           <FormattedMessage {...messages.wiki} />
         </a>
       </NavLink>
@@ -97,7 +101,7 @@ function MenuNavbar(props) {
         </Group>
       </NavLink>
       <NavLink is="span" p={10}>
-        <a href="https://github.com/heyrict/cindy-realtime">
+        <a target="_blank" href="https://github.com/heyrict/cindy-realtime">
           <ImgSm alt="GitHub" src={githubMark} />
         </a>
       </NavLink>

@@ -16,14 +16,16 @@ BEST_OF_MONTH_GRANT_DAY = 15
 snipe = (
     (5, Award.objects.get_or_create(name_ja="千里眼")[0]),
     (20, Award.objects.get_or_create(name_ja="★イーグルアイ")[0]),
-    (70, Award.objects.get_or_create(name_ja="★★サードアイ")[0]), )
+    (70, Award.objects.get_or_create(name_ja="★★サードアイ")[0]),
+)
 
 sniped = (
     (3, Award.objects.get_or_create(name_ja="かすり傷")[0]),
     (15, Award.objects.get_or_create(name_ja="手負いの兵")[0]),
     (50, Award.objects.get_or_create(name_ja="蜂の巣")[0]),
     (100, Award.objects.get_or_create(name_ja="不死身")[0]),
-    (200, Award.objects.get_or_create(name_ja="射撃演習場の的")[0]), )
+    (200, Award.objects.get_or_create(name_ja="射撃演習場の的")[0]),
+)
 
 soup = (
     (100, Award.objects.get_or_create(name_ja="100問出題")[0]),
@@ -35,7 +37,8 @@ soup = (
     (1000, Award.objects.get_or_create(name_ja="出題皇帝")[0]),
     (1500, Award.objects.get_or_create(name_ja="出題悪魔")[0]),
     (2000, Award.objects.get_or_create(name_ja="出題魔王")[0]),
-    (3000, Award.objects.get_or_create(name_ja="出題魔神")[0]), )
+    (3000, Award.objects.get_or_create(name_ja="出題魔神")[0]),
+)
 
 question = (
     (1000, Award.objects.get_or_create(name_ja="1000回質問")[0]),
@@ -47,7 +50,8 @@ question = (
     (10000, Award.objects.get_or_create(name_ja="質問皇帝")[0]),
     (15000, Award.objects.get_or_create(name_ja="質問天使")[0]),
     (20000, Award.objects.get_or_create(name_ja="質問大天使")[0]),
-    (30000, Award.objects.get_or_create(name_ja="質問神")[0]), )
+    (30000, Award.objects.get_or_create(name_ja="質問神")[0]),
+)
 
 seikai = (
     (50, Award.objects.get_or_create(name_ja="探偵")[0]),
@@ -58,7 +62,8 @@ seikai = (
     (800, Award.objects.get_or_create(name_ja="耕助")[0]),
     (1111, Award.objects.get_or_create(name_ja="★ポアロ")[0]),
     (2222, Award.objects.get_or_create(name_ja="★★コロンボ")[0]),
-    (3333, Award.objects.get_or_create(name_ja="★★★ホームズ")[0]), )
+    (3333, Award.objects.get_or_create(name_ja="★★★ホームズ")[0]),
+)
 
 good_ques = (
     (100, Award.objects.get_or_create(name_ja="ピン")[0]),
@@ -70,7 +75,8 @@ good_ques = (
     (7000, Award.objects.get_or_create(name_ja="コンパス")[0]),
     (11111, Award.objects.get_or_create(name_ja="地図")[0]),
     (22222, Award.objects.get_or_create(name_ja="地球儀")[0]),
-    (33333, Award.objects.get_or_create(name_ja="ポラリス")[0]), )
+    (33333, Award.objects.get_or_create(name_ja="ポラリス")[0]),
+)
 
 star = (
     (5, Award.objects.get_or_create(name_ja="スターター", )[0]),
@@ -79,7 +85,8 @@ star = (
     (500, Award.objects.get_or_create(name_ja="レジスター", )[0]),
     (1000, Award.objects.get_or_create(name_ja="マイスター", )[0]),
     (2000, Award.objects.get_or_create(name_ja="クラスター", )[0]),
-    (5000, Award.objects.get_or_create(name_ja="★", )[0]), )
+    (5000, Award.objects.get_or_create(name_ja="★", )[0]),
+)
 
 best_of_month = (
     (1, Award.objects.get_or_create(name_ja="★鶴")[0]),
@@ -93,7 +100,8 @@ best_of_month = (
     (9, Award.objects.get_or_create(name_ja="★蜻蛉")[0]),
     (10, Award.objects.get_or_create(name_ja="★啄木鳥")[0]),
     (11, Award.objects.get_or_create(name_ja="★鷹")[0]),
-    (12, Award.objects.get_or_create(name_ja="★狼")[0]), )
+    (12, Award.objects.get_or_create(name_ja="★狼")[0]),
+)
 
 
 class SuiheiAwardJudger(object):
@@ -107,8 +115,7 @@ class SuiheiAwardJudger(object):
 
     def _grant(self, user, award):
         '''grant award to user'''
-        ua, status = UserAward.objects.get_or_create(
-            user_id=user, award_id=award)
+        ua, status = UserAward.objects.get_or_create(user=user, award=award)
         if status:
             ua.created = timezone.now()
             ua.save()
@@ -170,43 +177,43 @@ def _award_or_none(count, awards):
 
 
 def _soup_judge(user):
-    soup_count = Puzzle.objects.filter(user_id=user).count()
+    soup_count = Puzzle.objects.filter(user=user).count()
     return _award_or_none(soup_count, soup)
 
 
 def _question_judge(user):
-    question_count = Dialogue.objects.filter(user_id=user).count()
+    question_count = Dialogue.objects.filter(user=user).count()
     return _award_or_none(question_count, question)
 
 
 def _seikai_judge(user):
-    seikai_count = Dialogue.objects.filter(user_id=user, true=True).count()
+    seikai_count = Dialogue.objects.filter(user=user, true=True).count()
     return _award_or_none(seikai_count, seikai)
 
 
 def _good_ques_judge(user):
-    good_ques_count = Dialogue.objects.filter(user_id=user, good=True).count()
+    good_ques_count = Dialogue.objects.filter(user=user, good=True).count()
     return _award_or_none(good_ques_count, good_ques)
 
 
 def _snipe_judge(user):
-    true_ques = Dialogue.objects.filter(user_id=user, true=True)
+    true_ques = Dialogue.objects.filter(user=user, true=True)
     tested_soups = []
     count = 0
     for q in true_ques:
-        if q.puzzle_id_id in tested_soups:
+        if q.puzzle_id in tested_soups:
             continue
         else:
-            tested_soups.append(q.puzzle_id_id)
+            tested_soups.append(q.puzzle_id)
 
-        soup = q.puzzle_id
+        soup = q.puzzle
 
         if not (soup.genre == 0 or soup.yami):
             continue
 
         if soup.yami:
             user_first = soup.dialogue_set.filter(
-                user_id=user).order_by("id").first()
+                user=user).order_by("id").first()
             if user_first.true:
                 print("---", user, ':', soup)
                 count += 1
@@ -215,7 +222,7 @@ def _snipe_judge(user):
             first_good = soup.dialogue_set.filter(
                 good=True).order_by("id").first()
             user_first = soup.dialogue_set.filter(
-                user_id=user).order_by("id").first()
+                user=user).order_by("id").first()
             if (not first_good or first_good.id > q.id) and user_first.true:
                 print("---", user, ':', soup)
                 count += 1
@@ -228,7 +235,7 @@ def _snipe_judge(user):
 
 def _sniped_judge(user):
     soups = Puzzle.objects.filter(
-        Q(genre=0) | Q(yami=True), user_id=user, status=1)
+        Q(genre=0) | Q(yami=True), user=user, status=1)
     count = 0
     for s in soups:
         first_good_or_true = s.dialogue_set.filter(
@@ -243,7 +250,7 @@ def _sniped_judge(user):
 
 
 def _star_judge(user):
-    star_count = Star.objects.filter(user_id=user).count()
+    star_count = Star.objects.filter(user=user).count()
     return _award_or_none(star_count, star)
 
 
@@ -252,9 +259,9 @@ judgers = {
     "question": SuiheiAwardJudger(judge=_question_judge),
     "seikai": SuiheiAwardJudger(judge=_seikai_judge),
     "good_ques": SuiheiAwardJudger(judge=_good_ques_judge),
-    "snipe": SuiheiAwardJudger(judge=_snipe_judge),
-    "sniped": SuiheiAwardJudger(judge=_sniped_judge),
-    "star": SuiheiAwardJudger(judge=_star_judge),
+    #"snipe": SuiheiAwardJudger(judge=_snipe_judge),
+    #"sniped": SuiheiAwardJudger(judge=_sniped_judge),
+    #"star": SuiheiAwardJudger(judge=_star_judge),
 }
 
 
@@ -275,8 +282,8 @@ def best_of_month_granter():
 
     # get the best soup of the last month
     soupInPrevMonth = Puzzle.objects.filter(
-        created__month=prevMonth,
-        created__year=prevYear).annotate(Count("star"))
+        created__month=prevMonth, created__year=prevYear).annotate(
+            Count("star"))
     star_count_max = soupInPrevMonth.aggregate(
         Max("star__count"))["star__count__max"]
     best_soups_of_last_month = soupInPrevMonth.filter(
@@ -294,12 +301,12 @@ def best_of_month_granter():
     best_soup_of_last_month = best_soups_of_last_month[best_soup_index]
 
     ua, status = UserAward.objects.get_or_create(
-        user_id=best_soup_of_last_month.user_id, award_id=award_of_last_month)
+        user=best_soup_of_last_month.user, award=award_of_last_month)
     if status:
         ua.created = timezone.now()
         ua.save()
         message += "Grant [" + str(award_of_last_month) + ']'\
-              " to " + str(best_soup_of_last_month.user_id.nickname) + \
+              " to " + str(best_soup_of_last_month.user.nickname) + \
               " for soup <" + str(best_soup_of_last_month.title) + '>'\
               " got the most star count " + str(best_soup_of_last_month.star__count) + \
               " in " + best_soup_of_last_month.created.date().strftime("%Y/%m/%d") + '\n'

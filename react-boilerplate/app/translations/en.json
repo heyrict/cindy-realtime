@@ -72,6 +72,7 @@
   "app.containers.ProfilePage.description": "Profile of a user",
   "app.containers.ProfilePage.goodQuesCount": "Good Question Count",
   "app.containers.ProfilePage.heading": "{nickname}'s Profile",
+  "app.containers.ProfilePage.hideBookmark": "Hide Bookmark",
   "app.containers.ProfilePage.lastLogin": "Last Login",
   "app.containers.ProfilePage.nickname": "Nickname",
   "app.containers.ProfilePage.nullAward": "None",

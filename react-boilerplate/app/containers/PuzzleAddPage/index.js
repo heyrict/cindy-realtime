@@ -12,7 +12,7 @@ import { FormattedMessage, intlShape } from 'react-intl';
 import { compose } from 'redux';
 import styled from 'styled-components';
 
-import { Grid, Col } from 'react-bootstrap';
+import { Constrained } from 'components/Constrained';
 import PuzzleAddForm from 'containers/PuzzleAddForm';
 
 import messages from './messages';
@@ -33,14 +33,13 @@ export function PuzzleAddPage(props, context) {
         <title>{_(messages.title)}</title>
         <meta name="description" content={_(messages.description)} />
       </Helmet>
-      <Grid>
-        <Col xs={12}>
-          <Heading>
-            <FormattedMessage {...messages.header} />
-          </Heading>
-          <PuzzleAddForm {...props} />
-        </Col>
-      </Grid>
+      <Constrained level={4}>
+        <Heading>
+          <FormattedMessage {...messages.header} />
+        </Heading>
+        <PuzzleAddForm {...props} />
+        <div style={{ marginBottom: '30px' }} />
+      </Constrained>
     </div>
   );
 }
