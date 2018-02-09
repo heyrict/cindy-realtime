@@ -2,8 +2,6 @@
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cindy.settings")
 
-import numpy as np
-
 import django
 django.setup()
 from django.utils import timezone
@@ -12,6 +10,11 @@ from django.db.models import Count, Max, Q
 from sui_hei.models import *
 
 BEST_OF_MONTH_GRANT_DAY = 15
+
+
+def argmax(values):
+    return max(enumerate(values), key=lambda x: x[1])[0]
+
 
 snipe = (
     (5, Award.objects.get_or_create(name_ja="千里眼")[0]),
@@ -296,8 +299,7 @@ def best_of_month_granter():
 
     # grant award
     message = ""
-    best_soup_index = int(
-        np.argmax([s.score for s in best_soups_of_last_month]))
+    best_soup_index = int(argmax([s.score for s in best_soups_of_last_month]))
     best_soup_of_last_month = best_soups_of_last_month[best_soup_index]
 
     ua, status = UserAward.objects.get_or_create(
