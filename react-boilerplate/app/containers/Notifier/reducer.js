@@ -13,6 +13,7 @@ const {
   PUZZLE_ADDED,
   DIRECTCHAT_NOTIFY,
   GOTID_MINICHAT,
+  USERAWARD_ADDED,
 } = NOTE_NEEDED;
 
 const initialState = fromJS({
@@ -24,6 +25,7 @@ function notifierReducer(state = initialState, action) {
     case WS_CONNECT:
     case PUZZLE_ADDED:
     case DIRECTCHAT_NOTIFY:
+    case USERAWARD_ADDED:
       return state.set('notification', action);
     case GOTID_MINICHAT:
       if (!action.chatroom) return state.set('notification', action);

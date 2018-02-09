@@ -37,7 +37,7 @@ from graphql_relay import from_global_id, to_global_id
 
 from schema import schema
 
-from .models import ChatMessage, Dialogue, Hint, Puzzle, User
+from .models import ChatMessage, Dialogue, Hint, Puzzle, User, UserAward
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +54,7 @@ HINT_ADDED = "ws/HINT_ADDED"
 HINT_UPDATED = "ws/HINT_UPDATED"
 CHATMESSAGE_ADDED = "ws/CHATMESSAGE_ADDED"
 CHATMESSAGE_UPDATED = "ws/CHATMESSAGE_UPDATED"
+USERAWARD_ADDED = "ws/USERAWARD_ADDED"
 
 VIEWER_CONNECT = "ws/VIEWER_CONNECT"
 VIEWER_DISCONNECT = "ws/VIEWER_DISCONNECT"
@@ -167,6 +168,22 @@ def send_chatmessage_update(sender, instance, created, *args, **kwargs):
         Group("chatroom-%s" % channel).send({"text": text})
 
 
+@receiver(post_save, sender=UserAward)
+def send_useraward_update(sender, instance, created, *args, **kwargs):
+    user = instance.user
+    award = instance.award
+    if created:
+        text = json.dumps({
+            "type": USERAWARD_ADDED,
+            "data": {
+                "nickname": user.nickname,
+                "award": award.name,
+            }
+        })
+        logger.debug("Send %s", text)
+        Group("viewer").send({"text": text})
+
+
 def broadcast_status():
     onlineUsers = cache.get("onlineUsers", {})
     onlineUserList = dict(set(onlineUsers.values()))
@@ -195,8 +212,8 @@ def user_change(message):
         update = True
 
     if data.get('currentUser') and data['currentUser']['userId']:
-        Group("User-%s" %
-              data['currentUser']['userId']).add(message.reply_channel)
+        Group("User-%s" % data['currentUser']['userId']).add(
+            message.reply_channel)
         onlineUsers.update({
             str(message.reply_channel): (data['currentUser']['userId'],
                                          data['currentUser']['nickname'])

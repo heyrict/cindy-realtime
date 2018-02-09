@@ -97,7 +97,8 @@ if __name__ == "__main__":
 
     # grant awards to users
     returned = grant_awards_to_users(recent=timedelta(days=1))
-    if returned:
-        daily_message += "## Awards :crown:\n" + returned + '\n'
+    #if returned:
+    #    daily_message += "## Awards :crown:\n" + returned + '\n'
 
-    feedBot(daily_message)
+    # Don't feed to Bot in favor of notification.
+    #feedBot(daily_message)

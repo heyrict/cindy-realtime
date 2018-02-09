@@ -65,6 +65,7 @@
   "app.containers.Notifier.directMessageReceived": "{nickname} sends a direct message to you!",
   "app.containers.Notifier.open": "Open",
   "app.containers.Notifier.puzzleAdded": "A New Puzzle {title} is Added by {nickname}!",
+  "app.containers.Notifier.userawardAdded": "Congratulations to {nickname} for getting award {award}!",
   "app.containers.Notifier.wsConnect": "Connected to server!",
   "app.containers.ProfilePage.awardSelect": "Award Select",
   "app.containers.ProfilePage.commentCount": "Comment Count",

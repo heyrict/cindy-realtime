@@ -13,6 +13,8 @@ from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
 from graphql_relay import from_global_id
 
+from awards import judgers
+
 from .models import *
 
 
@@ -325,6 +327,9 @@ class CreatePuzzle(relay.ClientIDMutation):
         if len(existingChatRooms) != 0:
             existingChatRooms.delete()
         ChatRoom.objects.create(name=crName, user=user)
+
+        # Judge soup count and grant awards
+        judgers["soup"].execute(user)
 
         return CreatePuzzle(puzzle=puzzle)
 

@@ -65,6 +65,7 @@
   "app.containers.Notifier.directMessageReceived": "{nickname}さんはあなたにメッセージを送りました。",
   "app.containers.Notifier.open": "開く",
   "app.containers.Notifier.puzzleAdded": "{nickname} さんが新しい問題「{title}」を出題しました！",
+  "app.containers.Notifier.userawardAdded": "{nickname} さんが称号 {award} を獲得しました！おめでとうございます！",
   "app.containers.Notifier.wsConnect": "サーバーに接続しました",
   "app.containers.ProfilePage.awardSelect": "称号選択",
   "app.containers.ProfilePage.commentCount": "コメント数",
