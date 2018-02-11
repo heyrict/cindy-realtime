@@ -68,8 +68,8 @@ export class LoginForm extends React.Component {
           const user = response.login.user;
           // TODO: Update Global User Interface here
           this.props.updateCurrentUser({
+            ...user,
             userId: user.rowid,
-            nickname: user.nickname,
           });
         }
       },

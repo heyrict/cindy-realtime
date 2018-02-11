@@ -7,7 +7,6 @@ import django
 django.setup()
 from django.utils import timezone
 
-from scoring import update_user_exp
 from awards import judgers, granters
 from sui_hei.models import Award, ChatMessage, ChatRoom, Puzzle, User
 
@@ -96,7 +95,7 @@ if __name__ == "__main__":
     #        returned.split('\n')) + '\n'
 
     # grant awards to users
-    returned = grant_awards_to_users(recent=timedelta(days=1))
+    returned = grant_awards_to_users(recent=timedelta(days=3))
     #if returned:
     #    daily_message += "## Awards :crown:\n" + returned + '\n'
 

@@ -248,6 +248,19 @@ class BookmarkNode(DjangoObjectType):
         return self.id
 
 
+# {{{2 FavoriteChatRoomNode
+class FavoriteChatRoomNode(DjangoObjectType):
+    class Meta:
+        model = FavoriteChatRoom
+        filter_fields = ["user"]
+        interfaces = (relay.Node, )
+
+    rowid = graphene.Int()
+
+    def resolve_rowid(self, info):
+        return self.id
+
+
 # {{{1 FilterSets
 # {{{2 PuzzleNodeFilterSet
 class PuzzleNodeFilterSet(FilterSet):
@@ -469,9 +482,30 @@ class CreateChatRoom(graphene.ClientIDMutation):
 
         chatroom = ChatRoom.objects.create(
             user=user, name=name, description=description)
-        chatroom.save()
 
         return CreateChatRoom(chatroom=chatroom)
+
+
+# {{{2 CreateFavoriteChatRoom
+class CreateFavoriteChatRoom(graphene.ClientIDMutation):
+    favchatroom = graphene.Field(FavoriteChatRoomNode)
+
+    class Input:
+        chatroomName = graphene.String()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        chatroomName = input["chatroomName"]
+        chatroom = ChatRoom.objects.get(name=chatroomName)
+
+        ind, favchatroom = FavoriteChatRoom.objects.get_or_create(
+            user=user, chatroom=chatroom)
+
+        return CreateFavoriteChatRoom(favchatroom=favchatroom)
 
 
 # {{{2 UpdateAnswer
@@ -990,6 +1024,7 @@ class Mutation(graphene.ObjectType):
     create_chatmessage = CreateChatMessage.Field()
     create_bookmark = CreateBookmark.Field()
     create_chatroom = CreateChatRoom.Field()
+    create_favorite_chatroom = CreateFavoriteChatRoom.Field()
     update_answer = UpdateAnswer.Field()
     update_question = UpdateQuestion.Field()
     update_puzzle = UpdatePuzzle.Field()

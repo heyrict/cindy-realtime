@@ -6,6 +6,15 @@ const LoginFormMutation = graphql`
       user {
         rowid
         nickname
+        favoritechatroomSet {
+          edges {
+            node {
+              chatroom {
+                name
+              }
+            }
+          }
+        }
       }
     }
   }

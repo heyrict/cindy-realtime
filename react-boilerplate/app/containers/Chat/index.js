@@ -75,12 +75,15 @@ export function Chat(props) {
           chatMessages={props.chat.chatMessages}
           channel={props.chat.currentChannel}
           channelInfo={props.chat.channelInfo}
+          favChannels={props.chat.favChannels}
           currentUserId={props.currentUser.user.userId}
           hasPreviousPage={props.chat.hasPreviousPage}
           height={props.height - 50}
         />
       )}
-      {props.chat.activeTab === TAB_CHANNEL && <Channels tune={tune} />}
+      {props.chat.activeTab === TAB_CHANNEL && (
+        <Channels tune={tune} favChannels={props.chat.favChannels} />
+      )}
       {props.chat.activeTab === TAB_DIRECTCHAT && (
         <Direct
           currentUser={props.currentUser.user}

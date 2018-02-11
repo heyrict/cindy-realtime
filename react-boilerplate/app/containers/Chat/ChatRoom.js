@@ -74,6 +74,7 @@ class ChatRoom extends React.Component {
           name={this.props.channel}
           channel={this.props.channelInfo[this.props.channel]}
           currentUserId={this.props.currentUserId}
+          favChannels={this.props.favChannels}
         />
         <MessageWrapper
           height={
@@ -119,6 +120,7 @@ ChatRoom.propTypes = {
   channelInfo: PropTypes.object.isRequired,
   height: PropTypes.number.isRequired,
   currentUserId: PropTypes.number,
+  favChannels: PropTypes.array.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({

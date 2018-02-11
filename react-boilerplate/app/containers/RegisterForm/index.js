@@ -130,8 +130,8 @@ export class RegisterForm extends React.Component {
         } else if (response) {
           const user = response.register.user;
           this.props.updateCurrentUser({
+            ...user,
             userId: user.rowid,
-            nickname: user.nickname,
           });
           this.props.dispatch(registerSucceeded());
         }

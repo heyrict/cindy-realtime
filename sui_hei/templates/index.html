@@ -10,12 +10,18 @@
     <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <title>{% trans 'Cindy -- the best place for lateral thinking' %}</title>
+    <meta name="description" content={% trans 'Play situation puzzles realtime!' %}>
     {% get_current_language as LANGUAGE_CODE %}
     <script type="text/javascript">
         window.django = {
           {% if request.user.is_authenticated %}
           user_id: {{ request.user.id }},
           user_nickname: "{{ request.user.nickname }}",
+          user_favChannels: [
+            {% for favchan in request.user.favoritechatroom_set.all %}
+            "{{ favchan.chatroom.name }}",
+            {% endfor %}
+          ],
           {% endif %}
           LANGUAGE_CODE: "{{ LANGUAGE_CODE }}",
         };

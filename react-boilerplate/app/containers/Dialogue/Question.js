@@ -57,6 +57,8 @@ class Question extends React.PureComponent {
   }
 
   handleSubmit() {
+    if (this.state.question === this.props.question) return;
+
     const id = parseInt(f(this.props.id)[1], 10);
     commitMutation(environment, {
       mutation: updateQuestionMutation,

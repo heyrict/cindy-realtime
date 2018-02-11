@@ -25,6 +25,8 @@ import {
   SEND_DIRECTCHAT,
   DIRECTCHAT_RECEIVED,
   GOTID_MINICHAT,
+  ADD_FAVCHAN,
+  REMOVE_FAVCHAN,
   chatmessageQuery,
   chatmessageMoreQuery,
   chatmessageUpdateQuery,
@@ -178,6 +180,11 @@ function* handleOpenChat(action) {
   yield put(changeChannel(action.channel));
 }
 
+function* syncFavChannels() {
+  const chat = yield select(selectChatDomain);
+  window.django.user_favChannels = chat.get('favChannels');
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   yield [
@@ -191,5 +198,6 @@ export default function* defaultSaga() {
     takeLatest(MINICHAT_MORE, fetchMoreMinichats),
     takeEvery(CHATMESSAGE_ADDED, fetchMinichatUpdate),
     takeLatest(OPEN_CHAT, handleOpenChat),
+    takeEvery([ADD_FAVCHAN, REMOVE_FAVCHAN], syncFavChannels),
   ];
 }

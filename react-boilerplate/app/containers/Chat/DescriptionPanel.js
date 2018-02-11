@@ -20,6 +20,7 @@ import tick from 'images/tick.svg';
 import cross from 'images/cross.svg';
 import UpdateChatroomMutation from 'graphql/UpdateChatroomMutation';
 import Wrapper from './Wrapper';
+import AddToFavBtn from './AddToFavBtn';
 import { updateChannel } from './actions';
 import messages from './messages';
 
@@ -107,6 +108,14 @@ class DescriptionPanel extends React.Component {
   render() {
     if (!this.props.name || !this.props.channel) return null;
     if (this.props.name.match(/^puzzle-\d+$/g)) return null;
+
+    let inFavorite = false;
+    this.props.favChannels.forEach((cn) => {
+      if (cn === this.props.name) {
+        inFavorite = true;
+      }
+    });
+
     if (this.state.show) {
       return (
         <DescriptionWrapper height={this.props.height}>
@@ -115,10 +124,17 @@ class DescriptionPanel extends React.Component {
           </DescriptionBtn>
           {this.state.editMode === false && (
             <div>
-              <span style={{ fontSize: '0.9em' }}>
-                <FormattedMessage {...messages.owner} />:{' '}
-                <UserLabel user={this.props.channel.user} />
-              </span>
+              <Flex style={{ fontSize: '0.9em' }}>
+                <Box mr="auto">
+                  <FormattedMessage {...messages.owner} />:{' '}
+                  <UserLabel user={this.props.channel.user} />
+                </Box>
+                {!inFavorite && (
+                  <Box ml="auto">
+                    <AddToFavBtn chatroomName={this.props.name} />
+                  </Box>
+                )}
+              </Flex>
               <hr style={{ margin: '3px 0 7px 0' }} />
               <span
                 style={{ overflow: 'auto' }}
@@ -175,6 +191,7 @@ DescriptionPanel.propTypes = {
   height: PropTypes.number.isRequired,
   changeHeight: PropTypes.func.isRequired,
   currentUserId: PropTypes.number,
+  favChannels: PropTypes.array.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({

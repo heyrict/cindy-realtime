@@ -45,6 +45,9 @@ export const OPEN_DIRECTCHAT = 'app/Chat/OPEN_DIRECTCHAT';
 export const GOTID_MINICHAT = 'app/Chat/GOTID_MINICHAT';
 export const MINICHAT_GETID = 'app/Chat/MINICHAT_GETID';
 
+export const ADD_FAVCHAN = 'app/Chat/ADD_FAVCHAN';
+export const REMOVE_FAVCHAN = 'app/Chat/REMOVE_FAVCHAN';
+
 export const PublicChannels = ['lobby', 'sp', 'yokoku', '5-7-5'];
 
 // {{{ const chatmessageFragment

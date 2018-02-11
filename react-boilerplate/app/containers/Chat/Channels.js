@@ -19,7 +19,8 @@ class Channels extends React.PureComponent {
 
     this.state = {
       content: '',
-      publicShown: true,
+      publicShown: false,
+      favShown: false,
       createModalShown: false,
     };
     this.handleChange = (e) => this.setState({ content: e.target.value });
@@ -29,6 +30,8 @@ class Channels extends React.PureComponent {
     this.toggleCreateModalShow = (s) => this.setState({ createModalShown: s });
     this.togglePublicShown = () =>
       this.setState((p) => ({ publicShown: !p.publicShown }));
+    this.toggleFavShown = () =>
+      this.setState((p) => ({ favShown: !p.favShown }));
   }
   render() {
     return (
@@ -46,6 +49,21 @@ class Channels extends React.PureComponent {
         </Bar>
         {this.state.publicShown &&
           PublicChannels.map((c) => (
+            <StyledButton
+              w={1}
+              py={20}
+              my={5}
+              onClick={() => this.props.tune(c)}
+              key={c}
+            >
+              {c}
+            </StyledButton>
+          ))}
+        <Bar open={this.state.favShown} onClick={this.toggleFavShown}>
+          favorite channels
+        </Bar>
+        {this.state.favShown &&
+          this.props.favChannels.map((c) => (
             <StyledButton
               w={1}
               py={20}
@@ -96,6 +114,7 @@ class Channels extends React.PureComponent {
 
 Channels.propTypes = {
   tune: PropTypes.func.isRequired,
+  favChannels: PropTypes.array.isRequired,
 };
 
 export default Channels;
