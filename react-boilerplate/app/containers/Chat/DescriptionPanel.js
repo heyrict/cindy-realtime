@@ -21,6 +21,7 @@ import cross from 'images/cross.svg';
 import UpdateChatroomMutation from 'graphql/UpdateChatroomMutation';
 import Wrapper from './Wrapper';
 import AddToFavBtn from './AddToFavBtn';
+import DeleteFromFavBtn from './DeleteFromFavBtn';
 import { updateChannel } from './actions';
 import messages from './messages';
 
@@ -129,11 +130,13 @@ class DescriptionPanel extends React.Component {
                   <FormattedMessage {...messages.owner} />:{' '}
                   <UserLabel user={this.props.channel.user} />
                 </Box>
-                {!inFavorite && (
-                  <Box ml="auto">
+                <Box ml="auto">
+                  {inFavorite ? (
+                    <DeleteFromFavBtn chatroomName={this.props.name} />
+                  ) : (
                     <AddToFavBtn chatroomName={this.props.name} />
-                  </Box>
-                )}
+                  )}
+                </Box>
               </Flex>
               <hr style={{ margin: '3px 0 7px 0' }} />
               <span

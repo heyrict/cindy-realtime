@@ -63,17 +63,20 @@ class Channels extends React.PureComponent {
           favorite channels
         </Bar>
         {this.state.favShown &&
-          this.props.favChannels.map((c) => (
-            <StyledButton
-              w={1}
-              py={20}
-              my={5}
-              onClick={() => this.props.tune(c)}
-              key={c}
-            >
-              {c}
-            </StyledButton>
-          ))}
+          this.props.favChannels.map((c) => {
+            if (!c) return null;
+            return (
+              <StyledButton
+                w={1}
+                py={20}
+                my={5}
+                onClick={() => this.props.tune(c)}
+                key={c}
+              >
+                {c}
+              </StyledButton>
+            );
+          })}
         <Flex mx={1} mt={1} w={1}>
           <FormattedMessage {...messages.channelName}>
             {(msg) => (

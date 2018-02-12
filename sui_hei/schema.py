@@ -845,6 +845,24 @@ class DeleteBookmark(graphene.ClientIDMutation):
         return DeleteBookmark()
 
 
+# {{{2 DeleteFavoriteChatRoom
+class DeleteFavoriteChatRoom(graphene.ClientIDMutation):
+    class Input:
+        chatroomName = graphene.String()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        chatroomName = input["chatroomName"]
+        chatroom = ChatRoom.objects.get(name=chatroomName)
+        FavoriteChatRoom.objects.filter(chatroom=chatroom, user=user).delete()
+
+        return DeleteFavoriteChatRoom()
+
+
 # {{{2 Login
 class UserLogin(relay.ClientIDMutation):
     class Input:
@@ -1036,6 +1054,7 @@ class Mutation(graphene.ObjectType):
     update_current_award = UpdateCurrentAward.Field()
     update_user = UpdateUser.Field()
     delete_bookmark = DeleteBookmark.Field()
+    delete_favorite_chatroom = DeleteFavoriteChatRoom.Field()
     login = UserLogin.Field()
     logout = UserLogout.Field()
     register = UserRegister.Field()

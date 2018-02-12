@@ -6,19 +6,19 @@ import { commitMutation } from 'react-relay';
 import { Glyphicon } from 'react-bootstrap';
 import environment from 'Environment';
 import bootbox from 'bootbox';
-import createFavoriteChatRoomMutation from 'graphql/CreateFavoriteChatRoomMutation';
+import deleteFavoriteChatRoomMutation from 'graphql/DeleteFavoriteChatRoomMutation';
 
-import { addFavoriteChatRoom } from './actions';
+import { removeFavoriteChatRoom } from './actions';
 
 const FavBtn = styled.button`
   padding: 0;
   color: darkgoldenrod;
 `;
 
-function AddToFavBtn(props) {
+function DeleteFromFavBtn(props) {
   const handleSubmit = (dispatch) => {
     commitMutation(environment, {
-      mutation: createFavoriteChatRoomMutation,
+      mutation: deleteFavoriteChatRoomMutation,
       variables: {
         input: {
           chatroomName: props.chatroomName,
@@ -29,19 +29,19 @@ function AddToFavBtn(props) {
           bootbox.alert(errors.map((e) => e.message).join(','));
           return;
         }
-        dispatch(addFavoriteChatRoom(props.chatroomName));
+        dispatch(removeFavoriteChatRoom(props.chatroomName));
       },
     });
   };
 
   return (
     <FavBtn onClick={() => handleSubmit(props.dispatch)}>
-      <Glyphicon glyph="star-empty" />
+      <Glyphicon glyph="star" />
     </FavBtn>
   );
 }
 
-AddToFavBtn.propTypes = {
+DeleteFromFavBtn.propTypes = {
   chatroomName: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
@@ -50,4 +50,4 @@ const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
 
-export default connect(mapDispatchToProps)(AddToFavBtn);
+export default connect(mapDispatchToProps)(DeleteFromFavBtn);
