@@ -18,6 +18,8 @@ import Wrapper from './Wrapper';
 import { loadMore } from './actions';
 import messages from './messages';
 
+import { ADD_CHATMESSAGE } from './constants';
+
 const LoadMoreBtn = ButtonOutline.extend`
   border-radius: 10px;
   padding: 5px;
@@ -60,6 +62,10 @@ class ChatRoom extends React.Component {
         if (errors) {
           bootbox.alert(errors.map((e) => e.message).join(','));
         }
+        this.props.dispatch({
+          type: ADD_CHATMESSAGE,
+          data: { data: response.createChatmessage },
+        });
         this.setState({ content: '' });
       },
     });

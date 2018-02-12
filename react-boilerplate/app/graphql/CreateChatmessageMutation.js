@@ -3,7 +3,25 @@ import { graphql } from 'react-relay';
 export const CreateChatmessageMutation = graphql`
   mutation CreateChatmessageMutation($input: CreateChatMessageInput!) {
     createChatmessage(input: $input) {
-      clientMutationId
+      chatmessage {
+        id
+        content
+        created
+        editTimes
+        user {
+          rowid
+          nickname
+          currentAward {
+            id
+            created
+            award {
+              id
+              name
+              description
+            }
+          }
+        }
+      }
     }
   }
 `;

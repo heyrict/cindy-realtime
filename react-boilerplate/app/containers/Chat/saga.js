@@ -153,6 +153,14 @@ function* fetchMoreMinichats() {
 }
 
 function* fetchMinichatUpdate(action) {
+  const chat = yield select(selectChatDomain);
+  const chatMessageIds = chat.get('chatMessages').map((edge) => edge.node.id);
+  for (let i = 0; i < chatMessageIds.length; i += 1) {
+    const id = chatMessageIds[i];
+    if (id === action.data.id) {
+      return;
+    }
+  }
   const data = yield call(
     gqlQuery,
     { text: chatmessageUpdateQuery },

@@ -48,7 +48,7 @@ export const MINICHAT_GETID = 'app/Chat/MINICHAT_GETID';
 export const ADD_FAVCHAN = 'app/Chat/ADD_FAVCHAN';
 export const REMOVE_FAVCHAN = 'app/Chat/REMOVE_FAVCHAN';
 
-export const PublicChannels = ['lobby', 'sp', 'yokoku', '5-7-5'];
+export const PublicChannels = ['lobby', 'sp', 'yokoku'];
 
 // {{{ const chatmessageFragment
 const chatmessageFragment = `

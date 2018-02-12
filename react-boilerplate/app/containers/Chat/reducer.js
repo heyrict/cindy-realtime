@@ -95,12 +95,21 @@ function chatReducer(state = initialState, action) {
             state.get('chatMessages')
           )
         );
-    case ADD_CHATMESSAGE:
+    case ADD_CHATMESSAGE: {
+      const chatMessageIds = state
+        .get('chatMessages')
+        .map((edge) => edge.node.id);
+      for (let i = 0; i < chatMessageIds.length; i += 1) {
+        if (action.data.data.chatmessage.id === chatMessageIds[i]) {
+          return state;
+        }
+      }
       return state.updateIn(['chatMessages'], () =>
         Array.concat(state.get('chatMessages'), [
           { node: action.data.data.chatmessage },
         ])
       );
+    }
     case UPDATE_ONLINE_VIEWER_COUNT:
       return state.setIn(['onlineUsers'], action.data.onlineUsers);
     case CHANGE_DIRECTCHAT:
