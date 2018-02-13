@@ -29,6 +29,7 @@ import PuzzleAddPage from 'containers/PuzzleAddPage/Loadable';
 import PuzzleShowPage from 'containers/PuzzleShowPage/Loadable';
 import ProfilePage from 'containers/ProfilePage/Loadable';
 import UserListPage from 'containers/UserListPage/Loadable';
+import AwardApplicationPage from 'containers/AwardApplicationPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Chat from 'containers/Chat';
 import makeSelectChat from 'containers/Chat/selectors';
@@ -90,8 +91,13 @@ class App extends React.Component {
               <Route exact path="/puzzle" component={PuzzlePage} />
               <Route exact path="/puzzle/add" component={PuzzleAddPage} />
               <Route path="/puzzle/show/:id" component={PuzzleShowPage} />
+              <Route exact path="/profile" component={UserListPage} />
+              <Route
+                exact
+                path="/profile/award"
+                component={AwardApplicationPage}
+              />
               <Route path="/profile/show/:id" component={ProfilePage} />
-              <Route path="/profile" component={UserListPage} />
               <Route component={NotFoundPage} />
             </Switch>
           </EasingBox>

@@ -20,6 +20,21 @@ class Award(models.Model):
         return self.name
 
 
+class AwardApplication(models.Model):
+    award = models.ForeignKey(Award, on_delete=CASCADE)
+    applier = models.ForeignKey("User", related_name="applier", on_delete=CASCADE)
+    status = models.IntegerField(_("status"), default=0, null=False)
+    reviewer = models.ForeignKey("User", related_name="reviewer", on_delete=CASCADE, null=True)
+    created = models.DateTimeField(_("created"), default=timezone.now)
+    reviewed = models.DateTimeField(_("reviewed"), null=True)
+
+    class Meta:
+        verbose_name = _("Award Application")
+
+    def __str__(self):
+        return "[%s]: %s" % (str(this.applier), str(this.award))
+
+
 class User(AbstractUser):
     nickname = models.CharField(
         _('nick_name'), max_length=255, null=False, unique=True)

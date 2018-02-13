@@ -42,7 +42,7 @@ class PuzzleModifyBox extends React.Component {
       memo: props.puzzle.memo,
       solutionEditMode: false,
       memoEditMode: props.puzzle.memo === '',
-      solve: props.puzzle.status !== 0,
+      solve: props.puzzle.status === 3,
       yami: props.puzzle.yami,
       hidden: props.puzzle.status === 3,
       hint: '',
@@ -66,7 +66,10 @@ class PuzzleModifyBox extends React.Component {
       this.setState({ hint: e.target.value });
     };
     this.handleSolveChange = () => {
-      this.setState((p) => ({ solve: !p.solve }));
+      this.setState((p) => ({
+        solve: !p.solve,
+        hidden: p.solve ? false : p.hidden,
+      }));
     };
     this.handleYamiChange = () => {
       this.setState((p) => ({ yami: !p.yami }));
@@ -133,14 +136,16 @@ class PuzzleModifyBox extends React.Component {
   }
 
   handleSaveControl() {
+    let status;
+    if (this.state.solve) status = 1;
+    if (this.state.hidden) status = 3;
     commitMutation(environment, {
       mutation: puzzleUpdateMutation,
       variables: {
         input: {
           puzzleId: this.props.puzzleId,
-          solve: this.state.solve,
           yami: this.state.yami,
-          hidden: this.state.hidden,
+          status,
         },
       },
       onCompleted: (response, errors) => {
@@ -307,7 +312,9 @@ class PuzzleModifyBox extends React.Component {
                   w={1 / 3}
                   hidden={
                     this.props.puzzle.status !== 1 &&
-                    this.props.puzzle.status !== 3
+                    this.props.puzzle.status !== 3 &&
+                    (this.props.puzzle.status === 0 &&
+                      this.state.solve === false)
                   }
                 >
                   <FormattedMessage {...messages.toggleHidden} />
