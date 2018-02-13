@@ -585,8 +585,7 @@ class UpdatePuzzle(graphene.ClientIDMutation):
         yami = graphene.Boolean()
         solution = graphene.String()
         memo = graphene.String()
-        solve = graphene.Boolean()
-        hidden = graphene.Boolean()
+        status = graphene.Int()
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -598,8 +597,7 @@ class UpdatePuzzle(graphene.ClientIDMutation):
         yami = input.get('yami')
         solution = input.get('solution')
         memo = input.get('memo')
-        solve = input.get('solve')
-        hidden = input.get('hidden')
+        status = input.get('status')
 
         if solution == '':
             raise ValidationError(_("Solution cannot be empty!"))
@@ -615,13 +613,10 @@ class UpdatePuzzle(graphene.ClientIDMutation):
         if memo is not None:
             puzzle.memo = memo
 
-        if solve:
-            puzzle.status = 1
-            puzzle.modified = timezone.now()
-
-        if hidden is not None and puzzle.status != 4 and puzzle.status != 0:
-            if hidden: puzzle.status = 3
-            else: puzzle.status = 1
+        if status:
+            if status == 1 and puzzle.status == 0:
+                puzzle.modified = timezone.now()
+            puzzle.status = status
 
         puzzle.save()
         return UpdatePuzzle(puzzle=puzzle)
