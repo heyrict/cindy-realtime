@@ -15,8 +15,9 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Heading } from 'style-store';
 import Constrained from 'components/Constrained';
+import FilterableList from 'components/FilterableList';
+import PuzzleList from 'components/PuzzleList';
 import PuzzleActiveList from 'containers/PuzzleActiveList';
-import PuzzleFilterableList from 'containers/PuzzleFilterableList';
 import AddPuzzleBtn from './AddPuzzleBtn';
 
 import makeSelectPuzzlePage from './selectors';
@@ -37,7 +38,8 @@ function PuzzlePage(props, context) {
         <AddPuzzleBtn />
       </Heading>
       <PuzzleActiveList />
-      <PuzzleFilterableList
+      <FilterableList
+        component={PuzzleList}
         variables={{ status__gt: 0 }}
         order={[{ key: 'modified', asc: false }]}
         orderList={['modified', 'starCount', 'starSum']}

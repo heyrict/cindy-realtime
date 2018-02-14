@@ -12,8 +12,9 @@ import { FormattedMessage, intlShape } from 'react-intl';
 import { compose } from 'redux';
 import { Heading } from 'style-store';
 import Constrained from 'components/Constrained';
+import UserList from 'components/UserList';
 
-import UserFilterableList from './UserFilterableList';
+import FilterableList from 'components/FilterableList';
 import messages from './messages';
 
 function UserListPage(props, context) {
@@ -28,7 +29,8 @@ function UserListPage(props, context) {
         <FormattedMessage {...messages.header} />
         <span style={{ padding: '0 10px' }} />
       </Heading>
-      <UserFilterableList
+      <FilterableList
+        component={UserList}
         order={[{ key: 'date_joined', asc: false }]}
         orderList={['date_joined']}
       />

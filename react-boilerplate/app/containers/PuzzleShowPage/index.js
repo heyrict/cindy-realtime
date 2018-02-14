@@ -146,7 +146,6 @@ export class PuzzleShowPage extends React.Component {
           )}
         {U === P.user.rowid && (
           <PuzzleModifyBox
-            currentUserId={this.props.user.userId}
             puzzle={P}
             puzzleId={parseInt(this.puzzleId, 10)}
           />

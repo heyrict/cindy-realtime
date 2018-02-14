@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { commitMutation } from 'react-relay';
-import environment from 'Environment';
 import moment from 'moment';
 import bootbox from 'bootbox';
 import { line2md, from_global_id as f } from 'common';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector, createSelector } from 'reselect';
+import { graphql } from 'react-apollo';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
 import { selectPuzzleShowPageDomain } from 'containers/PuzzleShowPage/selectors';
 import answerMutation from 'graphql/UpdateAnswerMutation';
@@ -99,23 +99,23 @@ class Answer extends React.PureComponent {
     }
 
     const id = parseInt(f(this.props.id)[1], 10);
-    commitMutation(environment, {
-      mutation: answerMutation,
-      variables: {
-        input: {
-          dialogueId: id,
-          content: this.state.content,
-          good: this.state.good,
-          true: this.state.true,
+    this.props
+      .mutate({
+        variables: {
+          input: {
+            dialogueId: id,
+            content: this.state.content,
+            good: this.state.good,
+            true: this.state.true,
+          },
         },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-        }
-      },
-    });
-    this.setState({ editMode: false });
+      })
+      .then(() => {
+        this.setState({ editMode: false });
+      })
+      .catch((error) => {
+        bootbox.alert(error.message);
+      });
   }
 
   render() {
@@ -209,7 +209,7 @@ class Answer extends React.PureComponent {
 }
 
 Answer.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  mutate: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   good: PropTypes.bool.isRequired,
   true: PropTypes.bool.isRequired,
@@ -239,4 +239,8 @@ const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Answer);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
+
+const withMutation = graphql(answerMutation);
+
+export default compose(withConnect, withMutation)(Answer);

@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import bootbox from 'bootbox';
 import { FormattedMessage } from 'react-intl';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Box, Flex } from 'rebass';
 import Constrained from 'components/Constrained';
 import { ButtonOutline, Input } from 'style-store';
 
-import { commitMutation } from 'react-relay';
+import { graphql } from 'react-apollo';
 import putQuestionMutation from 'graphql/CreateQuestionMutation';
-import environment from 'Environment';
 
 import messages from './messages';
 
@@ -33,20 +34,19 @@ class QuestionPutBox extends React.PureComponent {
   handleSubmit() {
     if (this.state.content === '') return;
 
-    commitMutation(environment, {
-      mutation: putQuestionMutation,
-      variables: {
-        input: {
-          content: this.state.content,
-          puzzleId: this.props.puzzleId,
+    this.props
+      .mutate({
+        variables: {
+          input: {
+            content: this.state.content,
+            puzzleId: this.props.puzzleId,
+          },
         },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          console.log(errors);
-        }
-      },
-    });
+      })
+      .then(() => {})
+      .catch((error) => {
+        bootbox.alert(error.message);
+      });
     this.setState({ content: '' });
   }
 
@@ -89,7 +89,7 @@ class QuestionPutBox extends React.PureComponent {
 }
 
 QuestionPutBox.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  mutate: PropTypes.func.isRequired,
   puzzleId: PropTypes.number.isRequired,
   currentUserId: PropTypes.number,
 };
@@ -98,4 +98,8 @@ const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
 
-export default connect(null, mapDispatchToProps)(QuestionPutBox);
+const withConnect = connect(null, mapDispatchToProps);
+
+const withMutation = graphql(putQuestionMutation);
+
+export default compose(withConnect, withMutation)(QuestionPutBox);

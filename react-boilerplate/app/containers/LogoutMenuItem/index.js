@@ -6,11 +6,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import environment from 'Environment';
 import bootbox from 'bootbox';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { commitMutation } from 'react-relay';
+import { graphql } from 'react-apollo';
 
 import { Panel, PanelHeader, NavLink } from 'rebass';
 
@@ -25,24 +24,20 @@ export class LogoutMenuItem extends React.PureComponent {
   }
 
   confirm() {
-    commitMutation(environment, {
-      mutation: LogoutMenuItemMutation,
-      variables: { input: {} },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(
-            errors.map((e) => (
-              <Panel key={e.message} color="tomato">
-                <PanelHeader>{e.message}</PanelHeader>
-              </Panel>
-            ))
-          );
-        } else if (response) {
-          // TODO: Update Global User Interface here
-          this.props.updateCurrentUser();
-        }
-      },
-    });
+    this.props
+      .mutate({
+        variables: { input: {} },
+      })
+      .then(() => {
+        this.props.updateCurrentUser();
+      })
+      .catch((error) => {
+        bootbox.alert(
+          <Panel key={error.message} color="tomato">
+            <PanelHeader>{error.message}</PanelHeader>
+          </Panel>
+        );
+      });
   }
 
   render() {
@@ -57,6 +52,7 @@ export class LogoutMenuItem extends React.PureComponent {
 LogoutMenuItem.propTypes = {
   children: PropTypes.node,
   updateCurrentUser: PropTypes.func.isRequired,
+  mutate: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -74,4 +70,6 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(null, mapDispatchToProps);
 
-export default compose(withConnect)(LogoutMenuItem);
+const withLogout = graphql(LogoutMenuItemMutation);
+
+export default compose(withLogout, withConnect)(LogoutMenuItem);

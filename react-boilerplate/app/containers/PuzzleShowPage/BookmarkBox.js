@@ -8,8 +8,7 @@ import Slider from 'components/Slider';
 import { PuzzleFrame, ButtonOutline, ImgXs } from 'style-store';
 import tag from 'images/tag.svg';
 
-import { commitMutation } from 'react-relay';
-import environment from 'Environment';
+import { graphql } from 'react-apollo';
 import CreateBookmarkMutation from 'graphql/CreateBookmarkMutation';
 
 import messages from './messages';
@@ -30,21 +29,24 @@ class BookmarkBox extends React.PureComponent {
     this.handleSaveBookmark = this.handleSaveBookmark.bind(this);
   }
   handleSaveBookmark() {
-    commitMutation(environment, {
-      mutation: CreateBookmarkMutation,
-      variables: {
-        input: {
-          puzzleId: this.props.puzzleId,
-          value: this.state.value,
+    this.props
+      .mutate({
+        variables: {
+          input: {
+            puzzleId: this.props.puzzleId,
+            value: this.state.value,
+          },
         },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-        }
+      })
+      .then(() => {
         bootbox.alert('Save Succeeded');
-      },
-    });
+      })
+      .catch((error) => {
+        bootbox.alert({
+          title: 'Error',
+          message: error.message,
+        });
+      });
   }
   render() {
     if (this.props.existingBookmark.length !== 0) return null;
@@ -81,6 +83,9 @@ class BookmarkBox extends React.PureComponent {
 BookmarkBox.propTypes = {
   puzzleId: PropTypes.number.isRequired,
   existingBookmark: PropTypes.array.isRequired,
+  mutate: PropTypes.func.isRequired,
 };
 
-export default BookmarkBox;
+const withMutation = graphql(CreateBookmarkMutation);
+
+export default withMutation(BookmarkBox);

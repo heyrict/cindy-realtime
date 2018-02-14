@@ -1,6 +1,6 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
 
-const LoginFormMutation = graphql`
+const LoginFormMutation = gql`
   mutation LoginFormMutation($input: UserLoginInput!) {
     login(input: $input) {
       user {

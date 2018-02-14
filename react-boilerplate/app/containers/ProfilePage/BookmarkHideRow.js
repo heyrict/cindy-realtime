@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Switch } from 'style-store';
 import { Flex } from 'rebass';
-import { commitMutation } from 'react-relay';
-import environment from 'Environment';
 import bootbox from 'bootbox';
+import { graphql } from 'react-apollo';
 import UpdateUserMutation from 'graphql/UpdateUserMutation';
 
 import ProfRow from './ProfRow';
@@ -25,19 +24,17 @@ class AwardSwitch extends React.PureComponent {
     if (this.state.hideBookmark === this.props.hideBookmark) {
       return;
     }
-    commitMutation(environment, {
-      mutation: UpdateUserMutation,
-      variables: { input: { hideBookmark: this.state.hideBookmark } },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert({
-            title: 'Error',
-            message: errors.map((error) => error.message).join(','),
-          });
-        }
-      },
-      onError: (err) => console.error(err),
-    });
+    this.props
+      .mutate({
+        variables: { input: { hideBookmark: this.state.hideBookmark } },
+      })
+      .then(() => {})
+      .catch((error) => {
+        bootbox.alert({
+          title: 'Error',
+          message: error.message,
+        });
+      });
   }
 
   render() {
@@ -59,6 +56,9 @@ class AwardSwitch extends React.PureComponent {
 
 AwardSwitch.propTypes = {
   hideBookmark: PropTypes.bool.isRequired,
+  mutate: PropTypes.func.isRequired,
 };
 
-export default AwardSwitch;
+const withMutate = graphql(UpdateUserMutation);
+
+export default withMutate(AwardSwitch);

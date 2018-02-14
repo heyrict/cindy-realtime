@@ -10,14 +10,13 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { commitMutation } from 'react-relay';
 import bootbox from 'bootbox';
 
 import { Button, Form, FormControl } from 'react-bootstrap';
 import FieldGroup from 'components/FieldGroup';
 import PreviewEdit from 'components/PreviewEdit';
-import environment from 'Environment';
 import genreMessages from 'components/TitleLabel/messages';
+import { graphql } from 'react-apollo';
 import PuzzleAddFormMutation from 'graphql/PuzzleAddFormMutation';
 
 import makeSelectPuzzleAddForm from './selectors';
@@ -63,23 +62,21 @@ export class PuzzleAddForm extends React.Component {
     const { loading, ...input } = this.state;
     if (loading) return;
     this.setState({ loading: true });
-    commitMutation(environment, {
-      mutation: PuzzleAddFormMutation,
-      variables: { input: { ...input } },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert({
-            title: 'Error',
-            message: errors.map((error) => error.message).join(','),
-          });
-          this.setState({ loading: false });
-        } else if (response) {
-          const puzzleId = response.createPuzzle.puzzle.rowid;
-          this.props.history.push(`/puzzle/show/${puzzleId}`);
-        }
-      },
-      onError: (err) => console.error(err),
-    });
+    this.props
+      .mutate({
+        variables: { input: { ...input } },
+      })
+      .then(({ data }) => {
+        const puzzleId = data.createPuzzle.puzzle.rowid;
+        this.props.history.push(`/puzzle/show/${puzzleId}`);
+      })
+      .catch((error) => {
+        bootbox.alert({
+          title: 'Error',
+          message: error.message,
+        });
+        this.setState({ loading: false });
+      });
   }
   // }}}
   // {{{ render
@@ -169,6 +166,7 @@ export class PuzzleAddForm extends React.Component {
 
 PuzzleAddForm.propTypes = {
   history: PropTypes.any,
+  mutate: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -183,4 +181,6 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(withConnect)(PuzzleAddForm);
+const withMutation = graphql(PuzzleAddFormMutation);
+
+export default compose(withConnect, withMutation)(PuzzleAddForm);

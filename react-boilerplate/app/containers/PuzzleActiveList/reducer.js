@@ -19,12 +19,14 @@ function puzzleActiveListReducer(state = initialState, action) {
       return state.setIn(['allPuzzles', 'edges'], action.data.allPuzzles.edges);
     case UPDATE_PUZZLE:
       return state.updateIn(['allPuzzles', 'edges'], (e) =>
-        e.map(
-          (edge) =>
-            edge.node.id === action.data.puzzle.id
-              ? { ...edge, node: { ...edge.node, ...action.data.puzzle } }
-              : edge
-        )
+        e
+          .map(
+            (edge) =>
+              edge.node.id === action.data.puzzle.id
+                ? { ...edge, node: { ...edge.node, ...action.data.puzzle } }
+                : edge
+          )
+          .sort((a, b) => a.node.status - b.node.status)
       );
     case ADD_PUZZLE:
       return state.updateIn(['allPuzzles', 'edges'], (e) =>

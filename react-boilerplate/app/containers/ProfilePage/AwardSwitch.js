@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Button, ButtonOutline } from 'style-store';
 import { Flex } from 'rebass';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { commitMutation } from 'react-relay';
-import environment from 'Environment';
 import bootbox from 'bootbox';
 import { from_global_id as f } from 'common';
 import { createStructuredSelector } from 'reselect';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
+import { graphql } from 'react-apollo';
+import ProfileShowQuery from 'graphql/ProfileShowQuery';
 import UpdateCurrentAwardMutation from 'graphql/UpdateCurrentAwardMutation';
 
 import ProfRow from './ProfRow';
@@ -37,19 +38,29 @@ class AwardSwitch extends React.PureComponent {
 
   handleSubmit() {
     if (this.state.selectedAward === this.props.currentAwardId) return;
-    commitMutation(environment, {
-      mutation: UpdateCurrentAwardMutation,
-      variables: { input: { userawardId: f(this.state.selectedAward)[1] } },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert({
-            title: 'Error',
-            message: errors.map((error) => error.message).join(','),
+    this.props
+      .mutate({
+        variables: { input: { userawardId: f(this.state.selectedAward)[1] } },
+        update: (proxy) => {
+          const data = proxy.readQuery({
+            query: ProfileShowQuery,
+            variables: { id: this.props.userId },
           });
-        }
-      },
-      onError: (err) => console.error(err),
-    });
+          data.user.currentAward.id = this.state.selectedAward;
+          proxy.writeQuery({
+            query: ProfileShowQuery,
+            variables: { id: this.props.userId },
+            data,
+          });
+        },
+      })
+      .then(() => {})
+      .catch((error) => {
+        bootbox.alert({
+          title: 'Error',
+          message: error.message,
+        });
+      });
   }
 
   render() {
@@ -91,14 +102,20 @@ class AwardSwitch extends React.PureComponent {
 
 AwardSwitch.propTypes = {
   currentUser: PropTypes.object.isRequired,
+  userId: PropTypes.string.isRequired,
   currentAwardId: PropTypes.string,
   userawardSet: PropTypes.shape({
     edges: PropTypes.array.isRequired,
   }),
+  mutate: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentUser: makeSelectUserNavbar(),
 });
 
-export default connect(mapStateToProps)(AwardSwitch);
+const withConnect = connect(mapStateToProps);
+
+const withMutation = graphql(UpdateCurrentAwardMutation);
+
+export default compose(withConnect, withMutation)(AwardSwitch);

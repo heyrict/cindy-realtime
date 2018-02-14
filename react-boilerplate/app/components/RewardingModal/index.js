@@ -10,8 +10,6 @@ import PropTypes from 'prop-types';
 import LoadingDots from 'components/LoadingDots';
 import { withModal } from 'components/withModal';
 
-import { QueryRenderer } from 'react-relay';
-import environment from 'Environment';
 import RewardingModalQuery from 'graphql/RewardingModalQuery';
 import RewardingModalComponent from './RewardingModalComponent';
 

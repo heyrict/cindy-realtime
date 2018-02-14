@@ -1,6 +1,6 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
 
-export const DeleteBookmarkMutation = graphql`
+export const DeleteBookmarkMutation = gql`
   mutation DeleteBookmarkMutation($input: DeleteBookmarkInput!) {
     deleteBookmark(input: $input) {
       clientMutationId

@@ -41,7 +41,7 @@ const puzzleAddedMsg = (context) => ({
 
 const directMessageReceivedMsg = (context) => ({
   ...defaultMessageStyle,
-  autoDismiss: 30,
+  autoDismiss: 0,
   action: {
     label: <FormattedMessage {...messages.open} />,
     callback: context.callback,
@@ -56,7 +56,7 @@ const directMessageReceivedMsg = (context) => ({
 
 const userawardAddedMsg = (context) => ({
   ...defaultMessageStyle,
-  autoDismiss: 30,
+  autoDismiss: 60,
   message: (
     <span style={{ fontSize: '1.1em' }}>
       <FormattedMessage {...messages.userawardAdded} values={{ ...context }} />

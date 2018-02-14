@@ -37,11 +37,12 @@ class LoadingDots extends React.PureComponent {
   }
 
   render() {
+    const { size, ...others } = this.props;
     return (
-      <Flex justify="center">
-        <Dot active={this.state.active === 0} />
-        <Dot active={this.state.active === 1} />
-        <Dot active={this.state.active === 2} />
+      <Flex justify="center" {...others}>
+        <Dot active={this.state.active === 0} size={size} />
+        <Dot active={this.state.active === 1} size={size} />
+        <Dot active={this.state.active === 2} size={size} />
       </Flex>
     );
   }

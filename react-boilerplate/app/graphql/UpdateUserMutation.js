@@ -1,6 +1,6 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
 
-export const UpdateUserMutation = graphql`
+export const UpdateUserMutation = gql`
   mutation UpdateUserMutation($input: UpdateUserInput!) {
     updateUser(input: $input) {
       clientMutationId

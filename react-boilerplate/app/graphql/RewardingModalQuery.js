@@ -1,6 +1,6 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
 
-const RewardingModalQuery = graphql`
+const RewardingModalQuery = gql`
   query RewardingModalQuery($id: ID!) {
     puzzle(id: $id) {
       content

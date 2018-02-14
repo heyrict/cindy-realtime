@@ -63,26 +63,26 @@ function ProfileDisplay(props, context) {
           <div>{moment(props.user.lastLogin).format('YYYY-MM-DD HH:mm')}</div>
         }
       />
-      {props.user.userId === props.currentUserId && (
+      {props.userId === props.currentUserId && (
         <AwardSwitch
+          userId={props.userId}
           currentAwardId={
             props.user.currentAward ? props.user.currentAward.id : null
           }
           userawardSet={props.user.userawardSet}
         />
       )}
-      {props.user.userId === props.currentUserId && (
-        <BookmarkHideRow
-          hideBookmark={props.user.hideBookmark}
-        />
+      {props.userId === props.currentUserId && (
+        <BookmarkHideRow hideBookmark={props.user.hideBookmark} />
       )}
-      <ProfileRow userId={props.user.userId} profile={props.user.profile} />
+      <ProfileRow userId={props.userId} profile={props.user.profile} />
     </Flex>
   );
 }
 
 ProfileDisplay.propTypes = {
   user: PropTypes.object.isRequired,
+  userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
 };
 

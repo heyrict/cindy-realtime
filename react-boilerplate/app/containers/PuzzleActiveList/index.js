@@ -18,7 +18,9 @@ import { loadAllPuzzles } from './actions';
 
 export class PuzzleActiveList extends React.Component {
   componentDidMount() {
-    this.props.dispatch(loadAllPuzzles());
+    if (this.props.puzzleactivelist.allPuzzles.edges.length === 0) {
+      this.props.dispatch(loadAllPuzzles());
+    }
   }
 
   render() {

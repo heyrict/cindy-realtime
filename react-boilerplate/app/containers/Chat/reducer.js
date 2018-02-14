@@ -122,14 +122,13 @@ function chatReducer(state = initialState, action) {
       return state.setIn(['channelInfo', action.name], action.chatroom);
     case ADD_FAVCHAN:
       return state.updateIn(['favChannels'], (prev) =>
-        Array.concat([], prev.toJS(), [action.chatroomName])
+        prev.concat([action.chatroomName])
       );
     case REMOVE_FAVCHAN:
       return state.updateIn(['favChannels'], (prev) =>
-        prev.map((cn) => cn !== action.chatroomName && cn)
+        prev.map((cn) => (cn === action.chatroomName ? null : cn))
       );
     case SET_CURRENT_USER:
-      console.log(action.currentUser);
       if (!action.currentUser.favoritechatroomSet) {
         return state.setIn(['favChannels'], []);
       }

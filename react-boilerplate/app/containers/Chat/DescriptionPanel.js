@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import bootbox from 'bootbox';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import {
   Button,
@@ -12,9 +13,8 @@ import {
 import { Flex, Box } from 'rebass';
 import { line2md, from_global_id as f } from 'common';
 import { FormattedMessage } from 'react-intl';
+import { graphql } from 'react-apollo';
 import { UserLabel } from 'components/UserLabel';
-import { commitMutation } from 'react-relay';
-import environment from 'Environment';
 import dialogueMessages from 'containers/Dialogue/messages';
 import tick from 'images/tick.svg';
 import cross from 'images/cross.svg';
@@ -84,18 +84,16 @@ class DescriptionPanel extends React.Component {
   }
   handleSubmit() {
     const id = parseInt(f(this.props.channel.id)[1], 10);
-    commitMutation(environment, {
-      mutation: UpdateChatroomMutation,
-      variables: {
-        input: {
-          description: this.state.description,
-          chatroomId: id,
+    this.props
+      .mutate({
+        variables: {
+          input: {
+            description: this.state.description,
+            chatroomId: id,
+          },
         },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-        }
+      })
+      .then(() => {
         this.props.dispatch(
           updateChannel(this.props.name, {
             ...this.props.channel,
@@ -103,8 +101,11 @@ class DescriptionPanel extends React.Component {
           })
         );
         this.toggleEditMode();
-      },
-    });
+      })
+      .catch((error) => {
+        this.setState({ loading: false });
+        bootbox.alert(error.message);
+      });
   }
   render() {
     if (!this.props.name || !this.props.channel) return null;
@@ -189,6 +190,7 @@ class DescriptionPanel extends React.Component {
 
 DescriptionPanel.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  mutate: PropTypes.func.isRequired,
   name: PropTypes.string,
   channel: PropTypes.object,
   height: PropTypes.number.isRequired,
@@ -201,4 +203,8 @@ const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
 
-export default connect(null, mapDispatchToProps)(DescriptionPanel);
+const withConnect = connect(null, mapDispatchToProps);
+
+const withMutation = graphql(UpdateChatroomMutation);
+
+export default compose(withConnect, withMutation)(DescriptionPanel);
