@@ -162,9 +162,13 @@ RewardingBox.propTypes = {
   mutateCommentUpdate: PropTypes.func.isRequired,
 };
 
-const withStarUpdateMutation = graphql(UpdateStarMutation);
+const withStarUpdateMutation = graphql(UpdateStarMutation, {
+  name: 'mutateStarUpdate',
+});
 
-const withCommentUpdateMutation = graphql(UpdateCommentMutation);
+const withCommentUpdateMutation = graphql(UpdateCommentMutation, {
+  name: 'mutateCommentUpdate',
+});
 
 export default compose(withStarUpdateMutation, withCommentUpdateMutation)(
   RewardingBox

@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 export const ProfileShowQuery = gql`
   query ProfileShowQuery($id: ID!) {
     user(id: $id) {
+      id
       nickname
       puzzleCount
       quesCount

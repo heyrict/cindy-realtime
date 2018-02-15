@@ -147,9 +147,13 @@ BookmarkLabel.propTypes = {
   mutateBookmarkUpdate: PropTypes.func.isRequired,
 };
 
-const withUpdateBookmarkMutation = graphql(UpdateBookmarkMutation);
+const withUpdateBookmarkMutation = graphql(UpdateBookmarkMutation, {
+  name: 'mutateBookmarkUpdate',
+});
 
-const withDeleteBookmarkMutation = graphql(DeleteBookmarkMutation);
+const withDeleteBookmarkMutation = graphql(DeleteBookmarkMutation, {
+  name: 'mutateBookmarkDelete',
+});
 
 export default compose(withUpdateBookmarkMutation, withDeleteBookmarkMutation)(
   BookmarkLabel
