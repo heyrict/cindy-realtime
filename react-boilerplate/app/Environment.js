@@ -21,7 +21,6 @@ const httpLink = new HttpLink({
   credentials: 'same-origin',
   headers: {
     Accept: 'application/json',
-    'Content-Type': 'application/json',
     'X-CSRFToken': getCookie('csrftoken'),
   },
   fetchOptions: {
