@@ -127,8 +127,8 @@ def ws_connect(message):
             str(message.reply_channel): (message.user.id,
                                          message.user.nickname)
         })
-        cache.set("onlineUsers", onlineUsers, 3600)
-        cache.set("onlineUserCount", onlineUserCount + 1, 3600)
+        cache.set("onlineUsers", onlineUsers, None)
+        cache.set("onlineUserCount", onlineUserCount + 1, None)
 
 
 def ws_disconnect(message):
@@ -140,9 +140,9 @@ def ws_disconnect(message):
         Group("User-%s" % onlineUsers[str(message.reply_channel)][0]).discard(
             message.reply_channel)
         onlineUsers.pop(str(message.reply_channel))
-        cache.set('onlineUsers', onlineUsers, 3600)
+        cache.set('onlineUsers', onlineUsers, None)
         onlineUserCount = cache.get("onlineUserCount", 1)
-        cache.set("onlineUserCount", onlineUserCount - 1, 3600)
+        cache.set("onlineUserCount", onlineUserCount - 1, None)
 
     broadcast_status()
 
