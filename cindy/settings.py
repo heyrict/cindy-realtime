@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 from django.utils.translation import ugettext_lazy as _
-from .security import SECRET_KEY, POSTGREDB_SETTINGS, HOSTS
+
+from .security import HOSTS, POSTGREDB_SETTINGS, SECRET_KEY
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -130,7 +131,6 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "collected_static")
 
-
 # Don't append `_id` to foreign keys
 FK_AUTO_ID = ''
 
@@ -171,6 +171,10 @@ GRAPHENE = {
     'SCHEMA': 'schema.schema',
     'SCHEMA_OUTPUT': 'react-boilerplate/schema.json'
 }
+
+CHANNELS_WS_PROTOCOLS = [
+    "graphql-ws",
+]
 
 # Channels
 CHANNEL_LAYERS = {
