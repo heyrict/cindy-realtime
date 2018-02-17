@@ -512,7 +512,7 @@ class CreateChatMessage(graphene.ClientIDMutation):
         chatroom = ChatRoom.objects.get(name=chatroomName)
 
         if not content:
-            raise ValidationError(_("Chatroom content cannot be empty!"))
+            raise ValidationError(_("ChatMessage cannot be empty!"))
 
         chatmessage = ChatMessage.objects.create(
             content=content, user=user, chatroom=chatroom)
@@ -840,7 +840,7 @@ class UpdateHint(relay.ClientIDMutation):
 
         if hint.puzzle.user != user:
             raise ValidationError(
-                _("Only puzzle's creator can edit this hint"))
+                _("You are not the creator of this hint"))
 
         hint.content = content
         hint.save()
@@ -866,7 +866,7 @@ class UpdateCurrentAward(relay.ClientIDMutation):
         else:
             useraward = UserAward.objects.get(id=userawardId)
             if useraward.user != user:
-                raise ValidationError(_("Only award owner can set this award"))
+                raise ValidationError(_("You are not the owner of this award"))
             user.current_award = useraward
 
         user.save()

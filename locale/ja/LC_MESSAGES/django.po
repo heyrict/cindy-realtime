@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-29 18:11+0900\n"
+"POT-Creation-Date: 2018-02-17 17:04+0900\n"
 "PO-Revision-Date: 2017-09-27 20:05+0800\n"
 "Last-Translator: heyrict <xiezh0831@yahoo.co.jp>\n"
 "Language: ja\n"
@@ -16,19 +16,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: cindy/settings.py:145
+#: cindy/settings.py:144
 msgid "Japanese"
 msgstr "日本語"
 
-#: cindy/settings.py:146
+#: cindy/settings.py:145
 msgid "English"
 msgstr "英語"
 
-#: cindy/settings.py:147
-msgid "Chinese"
-msgstr "中国語"
-
-#: cindy/settings.py:148
+#: cindy/settings.py:146
 msgid "French"
 msgstr "フランス語"
 
@@ -44,174 +40,269 @@ msgstr "ニックネーム"
 msgid "profile"
 msgstr "プロフィール"
 
-#: sui_hei/models.py:28
-msgid "experience"
-msgstr "経験値"
+#: sui_hei/models.py:32
+msgid "credit"
+msgstr "クレジット"
 
-#: sui_hei/models.py:29
-msgid "snipe"
-msgstr "スナイプ"
+#: sui_hei/models.py:33
+msgid "hide bookmark"
+msgstr "ブクマを非公開にする"
 
-#: sui_hei/models.py:30
-msgid "sniped"
-msgstr "被スナイプ"
-
-#: sui_hei/models.py:47 sui_hei/models.py:71
+#: sui_hei/models.py:50 sui_hei/models.py:74 sui_hei/models.py:115
+#: sui_hei/models.py:131 sui_hei/models.py:146 sui_hei/models.py:163
 msgid "created"
 msgstr "作った時間"
 
-#: sui_hei/models.py:50
+#: sui_hei/models.py:53
 msgid "User-Award"
 msgstr "ユーザー称号"
 
-#: sui_hei/models.py:66
+#: sui_hei/models.py:69
 msgid "title"
 msgstr "タイトル"
 
-#: sui_hei/models.py:67
+#: sui_hei/models.py:70
 msgid "yami"
 msgstr "闇スープ"
 
-#: sui_hei/models.py:68
+#: sui_hei/models.py:71
 msgid "genre"
 msgstr "ジャンル"
 
-#: sui_hei/models.py:69 sui_hei/models.py:123 sui_hei/models.py:141
+#: sui_hei/models.py:72 sui_hei/models.py:129 sui_hei/models.py:144
+#: sui_hei/models.py:181
 msgid "content"
 msgstr "コンテンツ"
 
-#: sui_hei/models.py:70
-msgid "kaisetu"
+#: sui_hei/models.py:73
+msgid "solution"
 msgstr "解説"
 
-#: sui_hei/models.py:72
+#: sui_hei/models.py:75
 msgid "modified"
 msgstr "最後変更時間"
 
-#: sui_hei/models.py:73
+#: sui_hei/models.py:76
 msgid "status"
 msgstr "ステータス"
 
-#: sui_hei/models.py:74
+#: sui_hei/models.py:77
 msgid "memo"
 msgstr "メモ"
 
-#: sui_hei/models.py:75
+#: sui_hei/models.py:78
 msgid "score"
 msgstr "スコア"
 
-#: sui_hei/models.py:78
-msgid "Soup"
+#: sui_hei/models.py:81
+msgid "Puzzle"
 msgstr "問題"
 
-#: sui_hei/models.py:85
+#: sui_hei/models.py:88
 msgid "Albatross"
 msgstr "ウミガメのスープ"
 
-#: sui_hei/models.py:86
+#: sui_hei/models.py:89
 msgid "20th-Door"
 msgstr "２０の扉"
 
-#: sui_hei/models.py:87
+#: sui_hei/models.py:90
 msgid "Little Albat"
 msgstr "亀夫君"
 
-#: sui_hei/models.py:88
+#: sui_hei/models.py:91
 msgid "Others & Formal"
 msgstr "新・形式"
 
-#: sui_hei/models.py:92
+#: sui_hei/models.py:95
 msgid "Unsolved"
 msgstr "未解決"
 
-#: sui_hei/models.py:93
+#: sui_hei/models.py:96
 msgid "Solved"
 msgstr "解決済み"
 
-#: sui_hei/models.py:94
+#: sui_hei/models.py:97
 msgid "Dazed"
 msgstr "迷宮入り"
 
-#: sui_hei/models.py:95
+#: sui_hei/models.py:98
 msgid "Hidden"
 msgstr "非公開"
 
-#: sui_hei/models.py:96
+#: sui_hei/models.py:99
 msgid "Forced Hidden"
 msgstr "強制非公開"
 
-#: sui_hei/models.py:104
-msgid "shitumon"
+#: sui_hei/models.py:107
+msgid "question"
 msgstr "質問"
 
-#: sui_hei/models.py:105
-msgid "kaitou"
+#: sui_hei/models.py:109
+msgid "question edit times"
+msgstr "質問編集回数"
+
+#: sui_hei/models.py:110
+msgid "answer"
 msgstr "回答"
 
-#: sui_hei/models.py:106
+#: sui_hei/models.py:112
+msgid "answer edit times"
+msgstr "回答編集回数"
+
+#: sui_hei/models.py:113
 msgid "good_ques"
 msgstr "良い質問"
 
-#: sui_hei/models.py:107
+#: sui_hei/models.py:114
 msgid "true_ques"
 msgstr "正解"
 
-#: sui_hei/models.py:108
-msgid "askedtime"
-msgstr "質問時間"
-
-#: sui_hei/models.py:109
+#: sui_hei/models.py:116
 msgid "answeredtime"
 msgstr "回答時間"
 
-#: sui_hei/models.py:112
+#: sui_hei/models.py:119
 msgid "Question"
 msgstr "質問"
 
-#: sui_hei/models.py:122
+#: sui_hei/models.py:134
+msgid "Hint"
+msgstr "ヒント"
+
+#: sui_hei/models.py:147
+msgid "edit times"
+msgstr "編集回数"
+
+#: sui_hei/models.py:150
+msgid "ChatMessage"
+msgstr "チャットメッセージ"
+
+#: sui_hei/models.py:161
 msgid "channel"
 msgstr "チャンネル"
 
-#: sui_hei/models.py:129
-msgid "Can add homepage info"
-msgstr "ホームページインフォメーションを編集できる"
+#: sui_hei/models.py:162
+msgid "description"
+msgstr "説明"
 
-#: sui_hei/models.py:130
-msgid "Can grant awards to users"
-msgstr "称号付与権"
+#: sui_hei/models.py:166
+msgid "ChatRoom"
+msgstr "チャットルーム"
 
-#: sui_hei/models.py:131
-msgid "Lobby"
-msgstr "ロビー"
-
-#: sui_hei/models.py:142
+#: sui_hei/models.py:182
 msgid "spoiler"
 msgstr "ネタバレ"
 
-#: sui_hei/models.py:145
+#: sui_hei/models.py:185
 msgid "Comment"
 msgstr "評価・コメント"
 
-#: sui_hei/models.py:154
+#: sui_hei/models.py:194 sui_hei/models.py:206
 msgid "Value"
-msgstr ""
+msgstr "数値"
 
-#: sui_hei/models.py:157
+#: sui_hei/models.py:197
+msgid "Bookmark"
+msgstr "ブクマ"
+
+#: sui_hei/models.py:209
 msgid "Star"
 msgstr "スター"
 
-#: sui_hei/schema.py:147
+#: sui_hei/schema.py:395 sui_hei/schema.py:447 sui_hei/schema.py:476
+#: sui_hei/schema.py:508 sui_hei/schema.py:535 sui_hei/schema.py:560
+#: sui_hei/schema.py:585 sui_hei/schema.py:610 sui_hei/schema.py:647
+#: sui_hei/schema.py:679 sui_hei/schema.py:722 sui_hei/schema.py:748
+#: sui_hei/schema.py:775 sui_hei/schema.py:803 sui_hei/schema.py:831
+#: sui_hei/schema.py:860 sui_hei/schema.py:888 sui_hei/schema.py:913
+#: sui_hei/schema.py:936
 msgid "Please login!"
 msgstr "ログインしてください"
 
-#: sui_hei/schema.py:186
+#: sui_hei/schema.py:453 sui_hei/schema.py:618 sui_hei/schema.py:653
+msgid "Question content cannot be empty!"
+msgstr "質問を入力してください！"
+
+#: sui_hei/schema.py:482 sui_hei/schema.py:837
+msgid "Hint content cannot be empty!"
+msgstr "ヒントを入力してください！"
+
+#: sui_hei/schema.py:488
+msgid "You are not the creator of this puzzle"
+msgstr "あなたはこの問題の作成者ではありません"
+
+#: sui_hei/schema.py:515
+msgid "ChatMessage cannot be empty!"
+msgstr "チャットメッセージを入力してください！"
+
+#: sui_hei/schema.py:688
+msgid "Solution cannot be empty!"
+msgstr "解説を入力してください！"
+
+#: sui_hei/schema.py:783 sui_hei/schema.py:920
+msgid "You are not the creator of this bookmark"
+msgstr "あなたはこのブクマの作成者ではありません"
+
+#: sui_hei/schema.py:811
+msgid "You are not the creator of this chatroom"
+msgstr "あなたはこのチャットルームの作成者ではありません"
+
+#: sui_hei/schema.py:843
+msgid "You are not the creator of this hint"
+msgstr "あなたはこの問題の作成者ではありません"
+
+#: sui_hei/schema.py:869
+msgid "You are not the owner of this award"
+msgstr "あなたはこの称号の所有者ではありません"
+
+#: sui_hei/schema.py:961
 msgid "Login incorrect!"
 msgstr "ログインに失敗しました"
 
-#: sui_hei/templates/main.html:9
-msgid "A website for playing situation puzzles"
-msgstr "ウミガメのスープ出題サイト"
+#: sui_hei/templates/index.html:12
+msgid "Cindy -- the best place for lateral thinking"
+msgstr "シンディ——水平思考ゲーム「ウミガメのスープ」の出題サイト"
 
-#: sui_hei/templates/main.html:9
-msgid "Chat With Lateral Thinking!"
-msgstr "ラテラルシンキングでチャットしよう！"
+#: sui_hei/templates/index.html:13
+msgid "Play situation puzzles realtime!"
+msgstr "リアルタイムで水平思考ゲームを遊びましょう！"
+
+#~ msgid "Chinese"
+#~ msgstr "中国語"
+
+#~ msgid "experience"
+#~ msgstr "経験値"
+
+#~ msgid "snipe"
+#~ msgstr "スナイプ"
+
+#~ msgid "sniped"
+#~ msgstr "被スナイプ"
+
+#~ msgid "kaisetu"
+#~ msgstr "解説"
+
+#~ msgid "Soup"
+#~ msgstr "問題"
+
+#~ msgid "shitumon"
+#~ msgstr "質問"
+
+#~ msgid "kaitou"
+#~ msgstr "回答"
+
+#~ msgid "Can add homepage info"
+#~ msgstr "ホームページインフォメーションを編集できる"
+
+#~ msgid "Can grant awards to users"
+#~ msgstr "称号付与権"
+
+#~ msgid "Lobby"
+#~ msgstr "ロビー"
+
+#~ msgid "A website for playing situation puzzles"
+#~ msgstr "ウミガメのスープ出題サイト"
+
+#~ msgid "Chat With Lateral Thinking!"
+#~ msgstr "ラテラルシンキングでチャットしよう！"
