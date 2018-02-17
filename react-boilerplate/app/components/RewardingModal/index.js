@@ -6,38 +6,30 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 
 import LoadingDots from 'components/LoadingDots';
 import { withModal } from 'components/withModal';
+
+import { graphql } from 'react-apollo';
 
 import RewardingModalQuery from 'graphql/RewardingModalQuery';
 import RewardingModalComponent from './RewardingModalComponent';
 
 export function RewardingModal(props) {
+  const { loading, error, puzzle } = props;
+  if (error) {
+    return <div>{error.message}</div>;
+  } else if (loading) {
+    return <LoadingDots />;
+  }
   return (
-    <QueryRenderer
-      environment={environment}
-      component={RewardingModalComponent}
-      query={RewardingModalQuery}
-      variables={{ id: props.id }}
-      render={(raw) => {
-        const error = raw.error;
-        const p = raw.props;
-        if (error) {
-          return <div>{error.message}</div>;
-        } else if (p) {
-          return (
-            <RewardingModalComponent
-              title={props.title}
-              genre={props.genre}
-              yami={props.yami}
-              id={props.id}
-              {...p.puzzle}
-            />
-          );
-        }
-        return <LoadingDots />;
-      }}
+    <RewardingModalComponent
+      title={props.title}
+      genre={props.genre}
+      yami={props.yami}
+      id={props.id}
+      {...puzzle}
     />
   );
 }
@@ -47,6 +39,27 @@ RewardingModal.propTypes = {
   title: PropTypes.string.isRequired,
   genre: PropTypes.number.isRequired,
   yami: PropTypes.bool.isRequired,
+  puzzle: PropTypes.object,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.shape({
+    message: PropTypes.string.isRequired,
+  }),
 };
 
-export default withModal({})(RewardingModal);
+const withData = graphql(RewardingModalQuery, {
+  options: ({ id }) => ({
+    variables: {
+      id,
+    },
+  }),
+  props({ data }) {
+    const { puzzle, loading, error } = data;
+    return {
+      puzzle,
+      loading,
+      error,
+    };
+  },
+});
+
+export default compose(withModal({}), withData)(RewardingModal);

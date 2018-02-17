@@ -76,14 +76,13 @@ UPDATE_ONLINE_VIEWER_COUNT = "ws/UPDATE_ONLINE_VIEWER_COUNT"
 
 def broadcast_status():
     onlineUsers = cache.get("onlineUsers", {})
+    onlineUserCount = cache.get("onlineUserCount", 0)
     onlineUserList = dict(set(onlineUsers.values()))
     text = json.dumps({
         "type": UPDATE_ONLINE_VIEWER_COUNT,
         "data": {
-            "onlineViewerCount":
-            len(Group('viewer').channel_layer.group_channels('viewer')),
-            "onlineUsers":
-            onlineUserList
+            "onlineViewerCount": onlineUserCount,
+            "onlineUsers": onlineUserList,
         }
     })
     Group("viewer").send({"text": text})
@@ -121,13 +120,15 @@ def ws_connect(message):
     Group("viewer").add(message.reply_channel)
 
     onlineUsers = cache.get("onlineUsers", {})
+    onlineUserCount = cache.get("onlineUserCount", 0)
     if not message.user.is_anonymous:
         Group("User-%s" % message.user.id).add(message.reply_channel)
         onlineUsers.update({
             str(message.reply_channel): (message.user.id,
                                          message.user.nickname)
         })
-        cache.set("onlineUsers", onlineUsers, None)
+        cache.set("onlineUsers", onlineUsers, 3600)
+        cache.set("onlineUserCount", onlineUserCount + 1, 3600)
 
 
 def ws_disconnect(message):
@@ -139,7 +140,9 @@ def ws_disconnect(message):
         Group("User-%s" % onlineUsers[str(message.reply_channel)][0]).discard(
             message.reply_channel)
         onlineUsers.pop(str(message.reply_channel))
-        cache.set('onlineUsers', onlineUsers, None)
+        cache.set('onlineUsers', onlineUsers, 3600)
+        onlineUserCount = cache.get("onlineUserCount", 1)
+        cache.set("onlineUserCount", onlineUserCount - 1, 3600)
 
     broadcast_status()
 

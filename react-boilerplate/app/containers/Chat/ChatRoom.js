@@ -54,13 +54,6 @@ class ChatRoom extends React.Component {
     this.props.subscribeChatUpdates();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.channel !== nextProps.channel) {
-      this.props.refetch();
-      this.props.subscribeChatUpdates();
-    }
-  }
-
   handleSubmit() {
     if (this.state.loading) return;
     this.setState({ loading: true });
@@ -137,7 +130,6 @@ ChatRoom.propTypes = {
     edges: PropTypes.array.isRequired,
   }),
   loading: PropTypes.bool.isRequired,
-  refetch: PropTypes.func.isRequired,
   loadMore: PropTypes.func.isRequired,
   subscribeChatUpdates: PropTypes.func.isRequired,
   hasPreviousPage: PropTypes.bool,
@@ -166,14 +158,12 @@ const withChat = graphql(ChatQuery, {
       loading,
       fetchMore,
       subscribeToMore,
-      refetch,
     } = data;
     const { channel, pathname } = ownProps;
     const chatroomName = channel || defaultChannel(pathname);
     return {
       allChatmessages,
       loading,
-      refetch,
       hasPreviousPage:
         allChatmessages && allChatmessages.pageInfo.hasPreviousPage,
       loadMore: () =>

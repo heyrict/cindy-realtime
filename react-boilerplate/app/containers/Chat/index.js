@@ -29,7 +29,7 @@ import makeSelectChat from './selectors';
 import saga from './saga';
 import messages from './messages';
 import { changeChannel, changeTab } from './actions';
-import { TABS } from './constants';
+import { defaultChannel, TABS } from './constants';
 
 const { TAB_CHAT, TAB_CHANNEL, TAB_DIRECTCHAT } = TABS;
 
@@ -76,6 +76,7 @@ export function Chat(props) {
       </StyledToolbar>
       {props.chat.activeTab === TAB_CHAT && (
         <ChatRoom
+          key={props.chat.channel || defaultChannel(props.location.pathname)}
           channel={props.chat.channel}
           favChannels={props.allFavoriteChatrooms}
           currentUserId={props.currentUser.user.userId}

@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import UserLabel from './UserLabel';
 
 const RewardingModalQuery = gql`
   query RewardingModalQuery($id: ID!) {
@@ -18,6 +19,7 @@ const RewardingModalQuery = gql`
       }
     }
   }
+  ${UserLabel}
 `;
 
 export default RewardingModalQuery;
