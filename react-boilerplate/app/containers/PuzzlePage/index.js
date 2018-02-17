@@ -10,7 +10,6 @@ import injectSaga from 'utils/injectSaga';
 
 import { Helmet } from 'react-helmet';
 import { FormattedMessage, intlShape } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Heading } from 'style-store';
@@ -20,7 +19,6 @@ import PuzzleList from 'components/PuzzleList';
 import PuzzleActiveList from 'containers/PuzzleActiveList';
 import AddPuzzleBtn from './AddPuzzleBtn';
 
-import makeSelectPuzzlePage from './selectors';
 import saga from './saga';
 import messages from './messages';
 
@@ -56,17 +54,13 @@ PuzzlePage.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = createStructuredSelector({
-  puzzlepage: makeSelectPuzzlePage(),
-});
-
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
   };
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(null, mapDispatchToProps);
 
 const withSaga = injectSaga({ key: 'puzzlePage', saga });
 

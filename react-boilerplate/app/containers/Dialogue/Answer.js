@@ -9,7 +9,6 @@ import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector, createSelector } from 'reselect';
 import { graphql } from 'react-apollo';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
-import { selectPuzzleShowPageDomain } from 'containers/PuzzleShowPage/selectors';
 import answerMutation from 'graphql/UpdateAnswerMutation';
 
 import tick from 'images/tick.svg';
@@ -190,7 +189,7 @@ class Answer extends React.PureComponent {
             </Time>
           )}
           {this.props.owner.rowid === this.props.user.userId &&
-            this.props.puzzleStatus === 0 && (
+            this.props.status === 0 && (
               <FormattedMessage {...messages.edit}>
                 {(msg) => (
                   <EditButton onClick={this.toggleEditMode}>{msg}</EditButton>
@@ -218,18 +217,10 @@ Answer.propTypes = {
   answerEditTimes: PropTypes.number.isRequired,
   owner: PropTypes.object.isRequired,
   user: PropTypes.object,
-  puzzleStatus: PropTypes.number.isRequired,
+  status: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  owner: createSelector(
-    selectPuzzleShowPageDomain,
-    (substate) => substate.get('puzzle').user
-  ),
-  puzzleStatus: createSelector(
-    selectPuzzleShowPageDomain,
-    (substate) => substate.get('puzzle').status
-  ),
   user: createSelector(selectUserNavbarDomain, (substate) =>
     substate.get('user').toJS()
   ),

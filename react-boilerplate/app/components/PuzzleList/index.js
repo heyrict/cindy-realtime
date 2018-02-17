@@ -52,7 +52,7 @@ PuzzleList.propTypes = {
 };
 
 const withPuzzleList = graphql(PuzzleListQuery, {
-  options: ({ variables }) => ({ variables }),
+  options: ({ variables, fetchPolicy }) => ({ variables, fetchPolicy }),
   props({ data, ownProps }) {
     const { loading, allPuzzles, fetchMore, refetch } = data;
     return {

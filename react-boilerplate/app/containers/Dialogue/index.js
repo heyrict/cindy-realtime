@@ -29,6 +29,7 @@ const Dialogue = (props) => (
           answerEditTimes={props.node.answerEditTimes}
           good={props.node.good}
           true={props.node.true}
+          owner={props.owner}
           status={props.status}
         />
       </Box>
@@ -51,6 +52,7 @@ Dialogue.propTypes = {
     answerEditTimes: PropTypes.number.isRequired,
     questionEditTimes: PropTypes.number.isRequired,
   }),
+  owner: PropTypes.object.isRequired,
 };
 
 export default Dialogue;

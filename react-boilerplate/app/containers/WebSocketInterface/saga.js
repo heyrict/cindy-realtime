@@ -57,7 +57,7 @@ export default function* websocketSagas() {
   while (true) {
     const data = yield take(WS_CONNECT);
     const socket = new WebSocketBridge();
-    socket.connect('/ws/');
+    socket.connect('/direct/');
     const socketChannel = yield call(websocketWatch, socket);
 
     const { cancel } = yield race({

@@ -9,8 +9,8 @@ import { UPDATE_ONLINE_VIEWER_COUNT, SET_CURRENT_USER } from './constants';
 
 const initialState = fromJS({
   user: {
-    userId: window.django.user_id,
-    nickname: window.django.user_nickname,
+    userId: window.django.user_id || null,
+    nickname: window.django.user_nickname || null,
   },
   onlineViewerCount: 0,
 });

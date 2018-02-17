@@ -1,15 +1,23 @@
+import { getMainDefinition } from 'apollo-utilities';
 import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
-import { ApolloLink } from 'apollo-link';
+import { ApolloLink, split } from 'apollo-link';
+import { WebSocketLink } from 'apollo-link-ws';
 import { onError } from 'apollo-link-error';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import {
+  InMemoryCache,
+  IntrospectionFragmentMatcher,
+} from 'apollo-cache-inmemory';
+import introspectionQueryResultData from '../fragmentTypes.json';
 import { getCookie } from './common';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.map(({ message, locations, path }) =>
       console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+        `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+          locations
+        )}, Path: ${path}`
       )
     );
   }
@@ -49,10 +57,33 @@ const headerLink = new ApolloLink((operation, forward) => {
   return forward(operation);
 });
 
+const wsLink = new WebSocketLink({
+  uri: `ws://${window.location.host}/ws/`,
+  options: {
+    reconnect: true,
+  },
+});
+
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData,
+});
+
 export const client = new ApolloClient({
-  link: ApolloLink.from([errorLink, headerLink, httpLink]),
+  link: ApolloLink.from([
+    errorLink,
+    headerLink,
+    split(
+      ({ query }) => {
+        const { kind, operation } = getMainDefinition(query);
+        return kind === 'OperationDefinition' && operation === 'subscription';
+      },
+      wsLink,
+      httpLink
+    ),
+  ]),
   cache: new InMemoryCache({
     dataIdFromObject: (object) => object.id,
+    fragmentMatcher,
   }),
 });
 

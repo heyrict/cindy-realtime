@@ -1,23 +1,28 @@
 /* eslint-disable no-underscore-dangle */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable indent */
 
 import React from 'react';
 import PropTypes from 'prop-types';
 import bootbox from 'bootbox';
-import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { from_global_id as f } from 'common';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
 import { ButtonOutline } from 'style-store';
+
 import { graphql } from 'react-apollo';
-import { CreateChatmessageMutation } from 'graphql/CreateChatmessageMutation';
+import ChatQuery from 'graphql/ChatQuery';
+import CreateChatmessageMutation from 'graphql/CreateChatmessageMutation';
+import ChatMessageSubscription from 'graphql/ChatMessageSubscription';
+
 import ChatMessage from './ChatMessage';
 import DescriptionPanel from './DescriptionPanel';
 import MessageInput from './MessageInput';
 import Wrapper from './Wrapper';
-import { loadMore } from './actions';
 import messages from './messages';
 
-import { ADD_CHATMESSAGE } from './constants';
+import { defaultChannel } from './constants';
 
 const LoadMoreBtn = ButtonOutline.extend`
   border-radius: 10px;
@@ -45,6 +50,17 @@ class ChatRoom extends React.Component {
     this.handleDPHeightChange = (h) => this.setState({ dpHeight: h });
   }
 
+  componentDidMount() {
+    this.props.subscribeChatUpdates();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.channel !== nextProps.channel) {
+      this.props.refetch();
+      this.props.subscribeChatUpdates();
+    }
+  }
+
   handleSubmit() {
     if (this.state.loading) return;
     this.setState({ loading: true });
@@ -53,16 +69,13 @@ class ChatRoom extends React.Component {
         variables: {
           input: {
             content: this.state.content,
-            chatroom: this.props.channelInfo[this.props.channel].id,
+            chatroomName:
+              this.props.channel || defaultChannel(this.props.pathname),
           },
         },
       })
-      .then(({ data }) => {
+      .then(() => {
         this.setState({ loading: false });
-        this.props.dispatch({
-          type: ADD_CHATMESSAGE,
-          data: { data: data.createChatmessage },
-        });
         this.setState({ content: '' });
       })
       .catch((error) => {
@@ -77,8 +90,7 @@ class ChatRoom extends React.Component {
         <DescriptionPanel
           height={this.state.dpHeight}
           changeHeight={this.handleDPHeightChange}
-          name={this.props.channel}
-          channel={this.props.channelInfo[this.props.channel]}
+          name={this.props.channel || defaultChannel(this.props.pathname)}
           currentUserId={this.props.currentUserId}
           favChannels={this.props.favChannels}
         />
@@ -87,15 +99,16 @@ class ChatRoom extends React.Component {
             this.props.height - this.state.taHeight - this.state.dpHeight - 14
           }
         >
-          <LoadMoreBtn
-            onClick={() => this.props.dispatch(loadMore())}
-            hidden={!this.props.hasPreviousPage}
-          >
-            <FormattedMessage {...messages.loadMore} />
-          </LoadMoreBtn>
-          {this.props.chatMessages.map((msg) => (
-            <ChatMessage key={msg.node.id} {...msg.node} />
-          ))}
+          {this.props.hasPreviousPage && (
+            <LoadMoreBtn onClick={this.props.loadMore}>
+              <FormattedMessage {...messages.loadMore} />
+            </LoadMoreBtn>
+          )}
+          {this.props.loading || !this.props.allChatmessages
+            ? null
+            : this.props.allChatmessages.edges.map((edge) => (
+                <ChatMessage key={edge.node.id} {...edge.node} />
+              ))}
         </MessageWrapper>
         <Flex mx={1} w={1} hidden={this.props.currentUserId === null}>
           <MessageInput
@@ -119,23 +132,124 @@ class ChatRoom extends React.Component {
 }
 
 ChatRoom.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   mutate: PropTypes.func.isRequired,
-  chatMessages: PropTypes.array.isRequired,
+  allChatmessages: PropTypes.shape({
+    edges: PropTypes.array.isRequired,
+  }),
+  loading: PropTypes.bool.isRequired,
+  refetch: PropTypes.func.isRequired,
+  loadMore: PropTypes.func.isRequired,
+  subscribeChatUpdates: PropTypes.func.isRequired,
   hasPreviousPage: PropTypes.bool,
   channel: PropTypes.string,
-  channelInfo: PropTypes.object.isRequired,
   height: PropTypes.number.isRequired,
   currentUserId: PropTypes.number,
-  favChannels: PropTypes.array.isRequired,
+  favChannels: PropTypes.shape({
+    edges: PropTypes.array.isRequired,
+  }),
+  // eslint-disable-next-line react/no-unused-prop-types
+  pathname: PropTypes.string.isRequired,
 };
-
-const mapDispatchToProps = (dispatch) => ({
-  dispatch,
-});
-
-const withConnect = connect(null, mapDispatchToProps);
 
 const withMutation = graphql(CreateChatmessageMutation);
 
-export default compose(withMutation, withConnect)(ChatRoom);
+const withChat = graphql(ChatQuery, {
+  options: ({ channel, pathname }) => {
+    const chatroomName = channel || defaultChannel(pathname);
+    return {
+      variables: { chatroomName },
+    };
+  },
+  props({ data, ownProps }) {
+    const {
+      allChatmessages,
+      loading,
+      fetchMore,
+      subscribeToMore,
+      refetch,
+    } = data;
+    const { channel, pathname } = ownProps;
+    const chatroomName = channel || defaultChannel(pathname);
+    return {
+      allChatmessages,
+      loading,
+      refetch,
+      hasPreviousPage:
+        allChatmessages && allChatmessages.pageInfo.hasPreviousPage,
+      loadMore: () =>
+        fetchMore({
+          query: ChatQuery,
+          variables: {
+            chatroomName,
+            before: allChatmessages.pageInfo.startCursor,
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            const newEdges = fetchMoreResult.allChatmessages.edges;
+            const pageInfo = fetchMoreResult.allChatmessages.pageInfo;
+
+            return newEdges.length
+              ? {
+                  allChatmessages: {
+                    __typename: previousResult.allChatmessages.__typename,
+                    edges: [
+                      ...newEdges,
+                      ...previousResult.allChatmessages.edges,
+                    ],
+                    pageInfo,
+                  },
+                }
+              : previousResult;
+          },
+        }),
+      subscribeChatUpdates: () =>
+        subscribeToMore({
+          document: ChatMessageSubscription,
+          variables: { chatroomName },
+          updateQuery: (prev, { subscriptionData }) => {
+            if (!subscriptionData.data) {
+              return prev;
+            }
+
+            const newNode = subscriptionData.data.chatmessageSub;
+            if (!newNode) return prev;
+
+            let update = false;
+            const prevEdges = prev.allChatmessages.edges.map((edge) => {
+              if (edge.node.id === newNode.id) {
+                update = true;
+                return { ...edge, node: newNode };
+              }
+              const pk = (id) => parseInt(f(id)[1], 10);
+              if (pk(edge.node.id) > pk(newNode.id)) {
+                update = true;
+              }
+              return edge;
+            });
+
+            if (update) {
+              return {
+                ...prev,
+                allChatmessages: {
+                  ...prev.allChatmessages,
+                  edges: prevEdges,
+                },
+              };
+            }
+
+            return {
+              ...prev,
+              allChatmessages: {
+                ...prev.allChatmessages,
+                edges: [
+                  ...prev.allChatmessages.edges,
+                  { __typename: 'ChatMessageNodeEdge', node: newNode },
+                ],
+              },
+            };
+          },
+        }),
+    };
+  },
+});
+
+export default compose(withChat, withMutation)(ChatRoom);

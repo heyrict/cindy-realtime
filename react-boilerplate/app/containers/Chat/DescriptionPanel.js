@@ -19,6 +19,7 @@ import dialogueMessages from 'containers/Dialogue/messages';
 import tick from 'images/tick.svg';
 import cross from 'images/cross.svg';
 import UpdateChatroomMutation from 'graphql/UpdateChatroomMutation';
+import ChatRoomQuery from 'graphql/ChatRoomQuery';
 import Wrapper from './Wrapper';
 import AddToFavBtn from './AddToFavBtn';
 import DeleteFromFavBtn from './DeleteFromFavBtn';
@@ -112,11 +113,13 @@ class DescriptionPanel extends React.Component {
     if (this.props.name.match(/^puzzle-\d+$/g)) return null;
 
     let inFavorite = false;
-    this.props.favChannels.forEach((cn) => {
-      if (cn === this.props.name) {
-        inFavorite = true;
-      }
-    });
+    if (this.props.favChannels) {
+      this.props.favChannels.edges.forEach((edge) => {
+        if (edge.node.chatroom.name === this.props.name) {
+          inFavorite = true;
+        }
+      });
+    }
 
     if (this.state.show) {
       return (
@@ -196,7 +199,9 @@ DescriptionPanel.propTypes = {
   height: PropTypes.number.isRequired,
   changeHeight: PropTypes.func.isRequired,
   currentUserId: PropTypes.number,
-  favChannels: PropTypes.array.isRequired,
+  favChannels: PropTypes.shape({
+    edges: PropTypes.array.isRequired,
+  }),
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -207,4 +212,17 @@ const withConnect = connect(null, mapDispatchToProps);
 
 const withMutation = graphql(UpdateChatroomMutation);
 
-export default compose(withConnect, withMutation)(DescriptionPanel);
+const withData = graphql(ChatRoomQuery, {
+  options: ({ name }) => ({
+    variables: { chatroomName: name },
+  }),
+  props({ data }) {
+    const { allChatrooms } = data;
+    if (!allChatrooms || allChatrooms.edges.length === 0) return {};
+    return {
+      channel: allChatrooms.edges[0].node,
+    };
+  },
+});
+
+export default compose(withData, withConnect, withMutation)(DescriptionPanel);

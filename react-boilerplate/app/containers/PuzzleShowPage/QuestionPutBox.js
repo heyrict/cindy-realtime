@@ -33,6 +33,7 @@ class QuestionPutBox extends React.PureComponent {
 
   handleSubmit() {
     if (this.state.content === '') return;
+    if (!this.props.currentUserId) return;
 
     this.props
       .mutate({
@@ -55,9 +56,7 @@ class QuestionPutBox extends React.PureComponent {
       <Constrained level={3}>
         <Flex mx={-1}>
           <FormattedMessage
-            {...messages[
-              this.props.currentUserId === undefined ? 'disableInput' : 'input'
-            ]}
+            {...messages[this.props.currentUserId ? 'input' : 'disableInput']}
           >
             {(msg) => (
               <Input
@@ -74,7 +73,7 @@ class QuestionPutBox extends React.PureComponent {
               {(msg) => (
                 <ButtonOutline
                   onClick={this.handleSubmit}
-                  disabled={this.props.currentUserId === undefined}
+                  disabled={!this.props.currentUserId}
                   style={{ wordBreak: 'keep-all' }}
                 >
                   {msg}

@@ -26,9 +26,10 @@ import json
 import logging
 
 from channels import Channel, Group
-from channels.auth import channel_session_user_from_http
+from channels.auth import channel_session_user, channel_session_user_from_http
 from channels.generic.websockets import JsonWebsocketConsumer
 from channels.handler import AsgiHandler
+from django.apps import apps
 from django.contrib.auth.models import AnonymousUser
 from django.core.cache import cache
 from django.db.models.signals import post_save
@@ -38,8 +39,11 @@ from graphql_relay import from_global_id, to_global_id
 from schema import schema
 
 from .models import ChatMessage, Dialogue, Hint, Puzzle, User, UserAward
+from .subscription import GraphQLObserver, GraphQLSubscriptionStore
 
 logger = logging.getLogger(__name__)
+
+subscription_store = GraphQLSubscriptionStore()
 
 # {{{1 Constants
 PUZZLE_CONNECT = "app/containers/PuzzleShowPage/PUZZLE_SHOWN"
@@ -66,122 +70,8 @@ SEND_DIRECTCHAT = "ws/SEND_DIRECTCHAT"
 DIRECTCHAT_RECEIVED = "ws/DIRECTCHAT_RECEIVED"
 
 UPDATE_ONLINE_VIEWER_COUNT = "ws/UPDATE_ONLINE_VIEWER_COUNT"
+
 # }}}
-
-
-@receiver(post_save, sender=Dialogue)
-def send_dialogue_update(sender, instance, created, *args, **kwargs):
-    dialogueId = instance.id
-    puzzleId = instance.puzzle.id
-    if created:
-        text = json.dumps({
-            "type": DIALOGUE_ADDED,
-            "data": {
-                "id": to_global_id('DialogueNode', dialogueId),
-                "puzzleId": puzzleId,
-            }
-        })
-        logger.debug("Send %s", text)
-        Group("viewer").send({"text": text})
-    else:
-        text = json.dumps({
-            "type": DIALOGUE_UPDATED,
-            "data": {
-                "id": to_global_id('DialogueNode', dialogueId),
-                "puzzleId": puzzleId,
-            }
-        })
-        logger.debug("Send %s", text)
-        Group("puzzle-%d" % instance.puzzle.id).send({"text": text})
-
-
-@receiver(post_save, sender=Puzzle)
-def send_puzzle_update(sender, instance, created, *args, **kwargs):
-    puzzleId = instance.id
-    if created:
-        text = json.dumps({
-            "type": PUZZLE_ADDED,
-            "data": {
-                "id": to_global_id('PuzzleNode', puzzleId),
-                "title": instance.title,
-                "nickname": instance.user.nickname
-            }
-        })
-        logger.debug("Send %s", text)
-        Group("viewer").send({"text": text})
-    else:
-        text = json.dumps({
-            "type": PUZZLE_UPDATED,
-            "data": {
-                "id": to_global_id('PuzzleNode', puzzleId)
-            }
-        })
-        logger.debug("Send %s", text)
-        Group("viewer").send({"text": text})
-
-
-@receiver(post_save, sender=Hint)
-def send_hint_update(sender, instance, created, *args, **kwargs):
-    hintId = instance.id
-    puzzleId = instance.puzzle.id
-    if created:
-        text = json.dumps({
-            "type": HINT_ADDED,
-            "data": {
-                "id": to_global_id('HintNode', hintId),
-            }
-        })
-        logger.debug("Send %s", text)
-        Group("puzzle-%s" % puzzleId).send({"text": text})
-    else:
-        text = json.dumps({
-            "type": HINT_UPDATED,
-            "data": {
-                "id": to_global_id('HintNode', hintId),
-            }
-        })
-        logger.debug("Send %s", text)
-        Group("puzzle-%s" % puzzleId).send({"text": text})
-
-
-@receiver(post_save, sender=ChatMessage)
-def send_chatmessage_update(sender, instance, created, *args, **kwargs):
-    chatmessageId = instance.id
-    channel = instance.chatroom.name
-    if created:
-        text = json.dumps({
-            "type": CHATMESSAGE_ADDED,
-            "data": {
-                "id": to_global_id('ChatMessageNode', chatmessageId),
-            }
-        })
-        logger.debug("Send %s", text)
-        Group("chatroom-%s" % channel).send({"text": text})
-    else:
-        text = json.dumps({
-            "type": CHATMESSAGE_UPDATED,
-            "data": {
-                "id": to_global_id('ChatMessageNode', chatmessageId),
-            }
-        })
-        logger.debug("Send %s", text)
-        Group("chatroom-%s" % channel).send({"text": text})
-
-
-@receiver(post_save, sender=UserAward)
-def send_useraward_update(sender, instance, created, *args, **kwargs):
-    user = instance.user
-    award = instance.award
-    if created:
-        text = json.dumps({
-            "type": USERAWARD_ADDED,
-            "data": {
-                "nickname": user.nickname,
-                "award": award.name,
-            }
-        })
-        logger.debug("Send %s", text)
-        Group("viewer").send({"text": text})
 
 
 def broadcast_status():
@@ -242,6 +132,7 @@ def ws_connect(message):
 
 def ws_disconnect(message):
     Group("viewer").discard(message.reply_channel)
+    subscription_store.unsubscribe(message.reply_channel.name)
 
     onlineUsers = cache.get("onlineUsers", {})
     if str(message.reply_channel) in onlineUsers.keys():
@@ -278,3 +169,111 @@ def ws_message(message):
     elif data.get("type") == SEND_DIRECTCHAT:
         data["type"] = DIRECTCHAT_RECEIVED
         Group("User-%s" % data["data"]["to"]).send({"text": json.dumps(data)})
+
+
+# Graphql Subscription
+
+
+def notify_on_model_changes(model):
+    """
+    Listen for post_save signal and send model lable with pk to `django.model_changed`
+    when model is created or updated.
+    """
+
+    from django.contrib.contenttypes.models import ContentType
+
+    def receiver(sender, instance, **kwargs):
+        ct = ContentType.objects.get_for_model(sender)
+        model = '.'.join([ct.app_label, ct.model])
+
+        Channel('django.model_changed').send({
+            'pk': instance.pk,
+            'model': model,
+        })
+
+    post_save.connect(
+        receiver,
+        sender=model,
+        weak=False,
+        dispatch_uid='channel_model_changed')
+
+
+notify_on_model_changes(Puzzle)
+notify_on_model_changes(Dialogue)
+notify_on_model_changes(Hint)
+notify_on_model_changes(ChatMessage)
+
+
+def model_changed(message):
+    pk = message.content['pk']
+    model = message.content['model']
+
+    channels = subscription_store.get_subscriptions(model)
+    for channel, subscriptions in channels.items():
+        for subscription_id, subscriber in subscriptions.items():
+            Channel('graphql.subscription').send({
+                'pk':
+                pk,
+                'model':
+                model,
+                'payload':
+                subscriber['payload'],
+                'subscription_id':
+                subscription_id,
+                'reply_channel':
+                channel,
+            })
+
+
+@channel_session_user
+def graphql_subscription(message):
+    model = message.content['model']
+    pk = message.content['pk']
+
+    instance = apps.get_model(model).objects.get(pk=pk)
+
+    subscription_id = message.content['subscription_id']
+    payload = message.content['payload']
+
+    result = schema.execute(
+        payload['query'],
+        operation_name=payload['operationName'],
+        variable_values=payload['variables'],
+        root_value=instance,
+        context_value=message,  # message.user is the same as request.user
+        allow_subscriptions=True,
+    )
+
+    observer = GraphQLObserver(message.reply_channel, subscription_id)
+    if (hasattr(result, 'subscribe')):
+        result.subscribe(observer)
+
+
+@channel_session_user_from_http
+def sub_connect(message):
+    # Accept the connection
+    message.reply_channel.send({"accept": True})
+
+
+# Connected to websocket.receive
+@channel_session_user
+def sub_message(message):
+    request = json.loads(message.content['text'])
+
+    if request['type'] == 'connection_init':
+        return
+
+    elif request['type'] == 'start':
+        subscription_store.subscribe(message.reply_channel.name, request['id'],
+                                     request['payload'])
+
+    elif request['type'] == 'stop':
+        subscription_store.unsubscribe(
+            message.reply_channel.name,
+            request['id'],
+        )
+
+
+# Connected to websocket.disconnect
+def sub_disconnect(message):
+    subscription_store.unsubscribe(message.reply_channel.name)

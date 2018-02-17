@@ -8,7 +8,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import bootbox from 'bootbox';
 
@@ -19,7 +18,6 @@ import genreMessages from 'components/TitleLabel/messages';
 import { graphql } from 'react-apollo';
 import PuzzleAddFormMutation from 'graphql/PuzzleAddFormMutation';
 
-import makeSelectPuzzleAddForm from './selectors';
 import messages from './messages';
 
 export class PuzzleAddForm extends React.Component {
@@ -169,17 +167,13 @@ PuzzleAddForm.propTypes = {
   mutate: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = createStructuredSelector({
-  puzzleaddform: makeSelectPuzzleAddForm(),
-});
-
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
   };
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(null, mapDispatchToProps);
 
 const withMutation = graphql(PuzzleAddFormMutation);
 

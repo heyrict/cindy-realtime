@@ -8,14 +8,20 @@ from django.db.models import Count, F, Q, Sum
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django_filters import FilterSet
-from graphene import relay, resolve_only_args
+from graphene import Field, relay, resolve_only_args
+from graphene.types.objecttype import ObjectTypeOptions
+from graphene.types.utils import yank_fields_from_attrs
+from graphene.utils.props import props
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
-from graphql_relay import from_global_id
+from graphql_relay import from_global_id, to_global_id
+from rx import Observable, Observer
+from six import get_unbound_function
 
 from awards import judgers
 
 from .models import *
+from .subscription import Subscription as SubscriptionType
 
 
 # {{{1 resolveOrderBy
@@ -209,6 +215,19 @@ class ChatRoomNode(DjangoObjectType):
         return self.id
 
 
+# {{{2 FavoriteChatRoomNode
+class FavoriteChatRoomNode(DjangoObjectType):
+    class Meta:
+        model = FavoriteChatRoom
+        filter_fields = ['user']
+        interfaces = (relay.Node, )
+
+    rowid = graphene.Int()
+
+    def resolve_rowid(self, info):
+        return self.id
+
+
 # {{{2 CommentNode
 class CommentNode(DjangoObjectType):
     class Meta:
@@ -289,6 +308,72 @@ class PuzzleShowUnion(graphene.Union):
 class PuzzleShowUnionConnection(relay.Connection):
     class Meta:
         node = PuzzleShowUnion
+
+
+# {{{1 Subscriptions
+# {{{2 PuzzleSubscription
+class PuzzleSubscription(SubscriptionType):
+    class Meta:
+        output = PuzzleNode
+
+    class Arguments:
+        id = graphene.String()
+
+    @classmethod
+    def next(cls, obj, info, *, id=None):
+        if isinstance(obj, Puzzle):
+            if id:
+                if id == to_global_id('PuzzleNode', obj.id):
+                    return obj
+                return
+            return obj
+
+
+# {{{2 DialogueSubscription
+class DialogueSubscription(SubscriptionType):
+    class Meta:
+        output = DialogueNode
+
+    @classmethod
+    def next(cls, obj, info):
+        if isinstance(obj, Dialogue):
+            return obj
+
+
+# {{{2 PuzzleShowUnionSubscription
+class PuzzleShowUnionSubscription(SubscriptionType):
+    class Meta:
+        output = PuzzleShowUnion
+
+    class Arguments:
+        id = graphene.String()
+
+    @classmethod
+    def next(cls, obj, info, *, id=None):
+        if isinstance(obj, (Hint, Dialogue)):
+            if id:
+                if id == to_global_id('PuzzleNode', obj.puzzle.id):
+                    return obj
+                return
+            return obj
+
+
+# {{{2 ChatMessageSubscription
+class ChatMessageSubscription(SubscriptionType):
+    class Meta:
+        output = ChatMessageNode
+
+    class Arguments:
+        chatroomName = graphene.String()
+
+    @classmethod
+    def next(cls, obj, info, *, chatroomName=None):
+        if isinstance(obj, ChatMessage):
+            if chatroomName:
+                if chatroomName == obj.chatroom.name:
+                    return obj
+                return
+            return obj
 
 
 # {{{1 Mutations
@@ -414,7 +499,7 @@ class CreateChatMessage(graphene.ClientIDMutation):
 
     class Input:
         content = graphene.String()
-        chatroom = graphene.String()
+        chatroomName = graphene.String()
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -423,8 +508,8 @@ class CreateChatMessage(graphene.ClientIDMutation):
             raise ValidationError(_("Please login!"))
 
         content = input['content']
-        chatroom = ChatRoom.objects.get(
-            id=from_global_id(input['chatroom'])[1])
+        chatroomName = input['chatroomName']
+        chatroom = ChatRoom.objects.get(name=chatroomName)
 
         if not content:
             raise ValidationError(_("Chatroom content cannot be empty!"))
@@ -632,7 +717,6 @@ class UpdateStar(graphene.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        print(input)
         user = info.context.user
         if (not user.is_authenticated):
             raise ValidationError(_("Please login!"))
@@ -956,9 +1040,11 @@ class Query(object):
     all_dialogues = DjangoFilterConnectionField(
         DialogueNode, orderBy=graphene.List(of_type=graphene.String))
     all_chatmessages = DjangoFilterConnectionField(
-        ChatMessageNode, orderBy=graphene.List(of_type=graphene.String))
-    all_chatrooms = DjangoFilterConnectionField(
-        ChatRoomNode, orderBy=graphene.List(of_type=graphene.String))
+        ChatMessageNode,
+        orderBy=graphene.List(of_type=graphene.String),
+        chatroomName=graphene.String())
+    all_chatrooms = DjangoFilterConnectionField(ChatRoomNode)
+    all_favorite_chatrooms = DjangoFilterConnectionField(FavoriteChatRoomNode)
     all_comments = DjangoFilterConnectionField(
         CommentNode, orderBy=graphene.List(of_type=graphene.String))
     all_stars = DjangoFilterConnectionField(
@@ -1006,7 +1092,12 @@ class Query(object):
 
     def resolve_all_chatmessages(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(ChatMessage, orderBy)
+        chatroomName = kwargs.get("chatroomName", None)
+        qs = resolveOrderBy(ChatMessage, orderBy)
+        if chatroomName:
+            chatroom = ChatRoom.objects.get(name=chatroomName)
+            return qs.filter(chatroom=chatroom)
+        return qs
 
     def resolve_all_comments(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
@@ -1053,3 +1144,11 @@ class Mutation(graphene.ObjectType):
     login = UserLogin.Field()
     logout = UserLogout.Field()
     register = UserRegister.Field()
+
+
+# {{{1 Subscription
+class Subscription(graphene.ObjectType):
+    puzzle_sub = PuzzleSubscription.Field()
+    dialogue_sub = DialogueSubscription.Field()
+    puzzle_show_union_sub = PuzzleShowUnionSubscription.Field()
+    chatmessage_sub = ChatMessageSubscription.Field()

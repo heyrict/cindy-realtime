@@ -63,8 +63,9 @@ class Channels extends React.PureComponent {
           favorite channels
         </Bar>
         {this.state.favShown &&
-          this.props.favChannels.map((c) => {
-            if (!c) return null;
+          this.props.favChannels.edges.map((edge) => {
+            if (!edge) return null;
+            const c = edge.node.chatroom.name;
             return (
               <StyledButton
                 w={1}
@@ -117,7 +118,7 @@ class Channels extends React.PureComponent {
 
 Channels.propTypes = {
   tune: PropTypes.func.isRequired,
-  favChannels: PropTypes.array.isRequired,
+  favChannels: PropTypes.object,
 };
 
 export default Channels;

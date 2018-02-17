@@ -27,7 +27,6 @@ import StarList from 'components/StarList';
 import injectSaga from 'utils/injectSaga';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
 import ProfileDisplay from './ProfileDisplay';
-import makeSelectProfilePage from './selectors';
 import saga from './saga';
 import messages from './messages';
 
@@ -140,7 +139,6 @@ ProfilePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  profilepage: makeSelectProfilePage(),
   usernavbar: makeSelectUserNavbar(),
 });
 

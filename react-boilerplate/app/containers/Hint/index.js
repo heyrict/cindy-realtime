@@ -123,7 +123,7 @@ export class Hint extends React.Component {
             }}
           />
           {this.props.owner.rowid === this.props.user.userId &&
-            this.props.puzzleStatus === 0 && (
+            this.props.status === 0 && (
               <FormattedMessage {...dialogueMessages.edit}>
                 {(msg) => (
                   <EditButton onClick={this.toggleEditMode}>{msg}</EditButton>
@@ -149,19 +149,11 @@ Hint.propTypes = {
   }),
   owner: PropTypes.object.isRequired,
   user: PropTypes.object,
-  puzzleStatus: PropTypes.number.isRequired,
+  status: PropTypes.number.isRequired,
   mutate: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  owner: createSelector(
-    selectPuzzleShowPageDomain,
-    (substate) => substate.get('puzzle').user
-  ),
-  puzzleStatus: createSelector(
-    selectPuzzleShowPageDomain,
-    (substate) => substate.get('puzzle').status
-  ),
   user: createSelector(selectUserNavbarDomain, (substate) =>
     substate.get('user').toJS()
   ),
