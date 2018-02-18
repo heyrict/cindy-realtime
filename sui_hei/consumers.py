@@ -47,8 +47,7 @@ from .subscription import GraphQLObserver, GraphQLSubscriptionStore
 logger = logging.getLogger(__name__)
 
 rediscon = redis.Redis(host=REDIS_HOST["host"], port=REDIS_HOST["port"])
-pipe = rediscon.pipeline()
-pipe.set("onlineUsers", b'\x80\x03}q\x00.').set("onlineUserCount", 0).execute()
+rediscon.set("onlineUsers", b'\x80\x03}q\x00.')
 
 subscription_store = GraphQLSubscriptionStore()
 
@@ -82,16 +81,14 @@ UPDATE_ONLINE_VIEWER_COUNT = "ws/UPDATE_ONLINE_VIEWER_COUNT"
 
 
 def broadcast_status():
-    onlineUsers, onlineUserCount = pipe.get("onlineUsers").get(
-        "onlineUserCount").execute()
+    onlineUsers = rediscon.get("onlineUsers")
     onlineUsers = pickle.loads(onlineUsers) if onlineUsers else {}
-    onlineUserCount = int(onlineUserCount)
 
     onlineUserList = dict(set(onlineUsers.values()))
     text = json.dumps({
         "type": UPDATE_ONLINE_VIEWER_COUNT,
         "data": {
-            "onlineViewerCount": onlineUserCount,
+            "onlineViewerCount": len(onlineUsers),
             "onlineUsers": onlineUserList,
         }
     })
@@ -129,7 +126,7 @@ def ws_connect(message):
     message.reply_channel.send({"accept": True})
     Group("viewer").add(message.reply_channel)
 
-    _, onlineUsers = pipe.incr("onlineUserCount").get("onlineUsers").execute()
+    onlineUsers = rediscon.get("onlineUsers")
     onlineUsers = pickle.loads(onlineUsers) if onlineUsers else {}
     if not message.user.is_anonymous:
         Group("User-%s" % message.user.id).add(message.reply_channel)
@@ -144,7 +141,7 @@ def ws_disconnect(message):
     Group("viewer").discard(message.reply_channel)
     subscription_store.unsubscribe(message.reply_channel.name)
 
-    _, onlineUsers = pipe.decr("onlineUserCount").get("onlineUsers").execute()
+    onlineUsers = rediscon.get("onlineUsers")
     onlineUsers = pickle.loads(onlineUsers) if onlineUsers else {}
     if str(message.reply_channel) in onlineUsers.keys():
         Group("User-%s" % onlineUsers[str(message.reply_channel)][0]).discard(
@@ -256,7 +253,7 @@ def graphql_subscription(message):
     )
 
     observer = GraphQLObserver(message.reply_channel, subscription_id)
-    if (hasattr(result, 'subscribe')):
+    if hasattr(result, 'subscribe'):
         result.subscribe(observer)
 
 
