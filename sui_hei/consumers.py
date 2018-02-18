@@ -24,7 +24,9 @@ The required returned form is:
 
 import json
 import logging
+import pickle
 
+import redis
 from channels import Channel, Group
 from channels.auth import channel_session_user, channel_session_user_from_http
 from channels.generic.websockets import JsonWebsocketConsumer
@@ -36,12 +38,17 @@ from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from graphql_relay import from_global_id, to_global_id
 
+from cindy.settings import REDIS_HOST
 from schema import schema
 
 from .models import ChatMessage, Dialogue, Hint, Puzzle, User, UserAward
 from .subscription import GraphQLObserver, GraphQLSubscriptionStore
 
 logger = logging.getLogger(__name__)
+
+rediscon = redis.Redis(host=REDIS_HOST["host"], port=REDIS_HOST["port"])
+pipe = rediscon.pipeline()
+pipe.set("onlineUsers", b'\x80\x03}q\x00.').set("onlineUserCount", 0).execute()
 
 subscription_store = GraphQLSubscriptionStore()
 
@@ -75,8 +82,11 @@ UPDATE_ONLINE_VIEWER_COUNT = "ws/UPDATE_ONLINE_VIEWER_COUNT"
 
 
 def broadcast_status():
-    onlineUsers = cache.get("onlineUsers", {})
-    onlineUserCount = cache.get("onlineUserCount", 0)
+    onlineUsers, onlineUserCount = pipe.get("onlineUsers").get(
+        "onlineUserCount").execute()
+    onlineUsers = pickle.loads(onlineUsers) if onlineUsers else {}
+    onlineUserCount = int(onlineUserCount)
+
     onlineUserList = dict(set(onlineUsers.values()))
     text = json.dumps({
         "type": UPDATE_ONLINE_VIEWER_COUNT,
@@ -89,7 +99,7 @@ def broadcast_status():
 
 
 def user_change(message):
-    onlineUsers = cache.get("onlineUsers")
+    onlineUsers = pickle.loads(rediscon.get("onlineUsers"))
     onlineUsers = onlineUsers if onlineUsers else {}
     data = json.loads(message.content["text"])
     update = False
@@ -110,8 +120,8 @@ def user_change(message):
         update = True
 
     if update:
-        cache.set("onlineUsers", onlineUsers, None)
-    broadcast_status()
+        rediscon.set("onlineUsers", pickle.dumps(onlineUsers))
+        broadcast_status()
 
 
 @channel_session_user_from_http
@@ -119,30 +129,28 @@ def ws_connect(message):
     message.reply_channel.send({"accept": True})
     Group("viewer").add(message.reply_channel)
 
-    onlineUsers = cache.get("onlineUsers", {})
-    onlineUserCount = cache.get("onlineUserCount", 0)
+    _, onlineUsers = pipe.incr("onlineUserCount").get("onlineUsers").execute()
+    onlineUsers = pickle.loads(onlineUsers) if onlineUsers else {}
     if not message.user.is_anonymous:
         Group("User-%s" % message.user.id).add(message.reply_channel)
         onlineUsers.update({
             str(message.reply_channel): (message.user.id,
                                          message.user.nickname)
         })
-        cache.set("onlineUsers", onlineUsers, None)
-        cache.set("onlineUserCount", onlineUserCount + 1, None)
+        rediscon.set("onlineUsers", pickle.dumps(onlineUsers))
 
 
 def ws_disconnect(message):
     Group("viewer").discard(message.reply_channel)
     subscription_store.unsubscribe(message.reply_channel.name)
 
-    onlineUsers = cache.get("onlineUsers", {})
+    _, onlineUsers = pipe.decr("onlineUserCount").get("onlineUsers").execute()
+    onlineUsers = pickle.loads(onlineUsers) if onlineUsers else {}
     if str(message.reply_channel) in onlineUsers.keys():
         Group("User-%s" % onlineUsers[str(message.reply_channel)][0]).discard(
             message.reply_channel)
         onlineUsers.pop(str(message.reply_channel))
-        cache.set('onlineUsers', onlineUsers, None)
-        onlineUserCount = cache.get("onlineUserCount", 1)
-        cache.set("onlineUserCount", onlineUserCount - 1, None)
+        cache.set('onlineUsers', pickle.dumps(onlineUsers))
 
     broadcast_status()
 

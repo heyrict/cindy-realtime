@@ -1,4 +1,5 @@
 import json
+import pickle
 from collections import OrderedDict
 
 import graphene
@@ -6,8 +7,11 @@ from graphene import Field
 from graphene.types.objecttype import ObjectTypeOptions
 from graphene.types.utils import yank_fields_from_attrs
 from graphene.utils.props import props
+from redis import Redis
 from rx import Observable, Observer
 from six import get_unbound_function
+
+from cindy.settings import REDIS_HOST
 
 
 class GraphQLObserver(Observer):
@@ -110,25 +114,36 @@ class GraphQLSubscriptionStore:
     workers in separate processes.
     """
 
-    subscriptions = {}
+    def __init__(self, key="GraphQLSubscriptionStore"):
+        self.key = key
+        self.rediscon = Redis(host=REDIS_HOST["host"], port=REDIS_HOST["port"])
+
+        self.rediscon.set(key, b'\x80\x03}q\x00.')  # pickled `{}`
 
     # Each client has unique channel and each client can have more than one subscription
     # on the same channel.
     def subscribe(self, channel, subscription_id, payload):
-        self.subscriptions.setdefault(channel, {})
-        self.subscriptions[channel][subscription_id] = {
+        subscriptions = pickle.loads(self.rediscon.get(self.key))
+
+        subscriptions.setdefault(channel, {})
+        subscriptions[channel][subscription_id] = {
             'payload': payload,
         }
 
+        self.rediscon.set(self.key, pickle.dumps(subscriptions))
+
     def unsubscribe(self, channel, subscription_id=None):
-        if channel not in self.subscriptions:
+        subscriptions = pickle.loads(self.rediscon.get(self.key))
+        if channel not in subscriptions:
             return
         if subscription_id:
-            if subscription_id not in self.subscriptions[channel]:
+            if subscription_id not in subscriptions[channel]:
                 return
-            del self.subscriptions[channel][subscription_id]
+            del subscriptions[channel][subscription_id]
         else:
-            del self.subscriptions[channel]
+            del subscriptions[channel]
+
+        self.rediscon.set(self.key, pickle.dumps(subscriptions))
 
     def get_subscriptions(self, model):
-        return self.subscriptions
+        return pickle.loads(self.rediscon.get(self.key))

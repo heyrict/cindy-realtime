@@ -177,11 +177,20 @@ CHANNELS_WS_PROTOCOLS = [
 ]
 
 # Channels
+REDIS_HOST = {
+    "host": "localhost",
+    "port": "6379",
+}
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [os.environ.get("REDIS_URL", "redis://localhost:6379")],
+            "hosts": [
+                os.environ.get(
+                    "REDIS_URL",
+                    "redis://" + REDIS_HOST["host"] + ":" + REDIS_HOST["port"])
+            ],
         },
         "ROUTING": "sui_hei.routing.channel_routing"
     },
