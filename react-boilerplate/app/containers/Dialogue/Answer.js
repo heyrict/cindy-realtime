@@ -2,13 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import bootbox from 'bootbox';
-import { line2md, from_global_id as f } from 'common';
+import { line2md, from_global_id as f, to_global_id as t } from 'common';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector, createSelector } from 'reselect';
-import { graphql } from 'react-apollo';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
+
+import { graphql } from 'react-apollo';
+import DialoguePanel from 'graphql/DialoguePanel';
 import answerMutation from 'graphql/UpdateAnswerMutation';
 
 import tick from 'images/tick.svg';
@@ -97,15 +99,43 @@ class Answer extends React.PureComponent {
       return;
     }
 
-    const id = parseInt(f(this.props.id)[1], 10);
+    const id = this.props.id;
+    const { content, good, true: istrue } = this.state;
+
     this.props
       .mutate({
         variables: {
           input: {
-            dialogueId: id,
-            content: this.state.content,
-            good: this.state.good,
-            true: this.state.true,
+            dialogueId: parseInt(f(id)[1], 10),
+            content,
+            good,
+            true: istrue,
+          },
+        },
+        update(proxy) {
+          const data = proxy.readFragment({
+            id,
+            fragment: DialoguePanel,
+            fragmentName: 'DialoguePanel',
+          });
+          const nextData = {
+            ...data,
+            answer: content,
+            good,
+            true: istrue,
+            answerEditTimes: data.answerEditTimes + 1,
+          };
+          proxy.writeFragment({
+            id,
+            fragment: DialoguePanel,
+            fragmentName: 'DialoguePanel',
+            data: nextData,
+          });
+        },
+        optimisticResponse: {
+          updateAnswer: {
+            __typename: 'UpdateAnswerPayload',
+            clientMutationId: null,
           },
         },
       })

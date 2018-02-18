@@ -6,13 +6,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import bootbox from 'bootbox';
 import { compose } from 'redux';
-import { from_global_id as f } from 'common';
+import { from_global_id as f, to_global_id as t } from 'common';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
 import { ButtonOutline } from 'style-store';
 
 import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import ChatQuery from 'graphql/ChatQuery';
+import UserLabel from 'graphql/UserLabel';
 import CreateChatmessageMutation from 'graphql/CreateChatmessageMutation';
 import ChatMessageSubscription from 'graphql/ChatMessageSubscription';
 
@@ -57,24 +59,57 @@ class ChatRoom extends React.Component {
   handleSubmit() {
     if (this.state.loading) return;
     this.setState({ loading: true });
+    const { channel, currentUser, pathname } = this.props;
+    const content = this.state.content;
+    const now = new Date();
+    const chatroomName = channel || defaultChannel(pathname);
+
     this.props
       .mutate({
         variables: {
           input: {
-            content: this.state.content,
-            chatroomName:
-              this.props.channel || defaultChannel(this.props.pathname),
+            content,
+            chatroomName,
+          },
+        },
+        update(proxy, { data: { createChatmessage: { chatmessage } } }) {
+          const data = proxy.readQuery({
+            query: ChatQuery,
+            variables: { chatroomName },
+          });
+          data.allChatmessages.edges.push({
+            __typename: 'ChatMessageNodeEdge',
+            node: {
+              content,
+              editTimes: 0,
+              user: currentUser,
+              ...chatmessage,
+            },
+          });
+          proxy.writeQuery({
+            query: ChatQuery,
+            variables: { chatroomName },
+            data,
+          });
+        },
+        optimisticResponse: {
+          createChatmessage: {
+            __typename: 'CreateChatMessagePayload',
+            chatmessage: {
+              __typename: 'ChatMessageNode',
+              id: '-1',
+              created: now.toISOString(),
+            },
           },
         },
       })
       .then(() => {
-        this.setState({ loading: false });
         this.setState({ content: '' });
       })
       .catch((error) => {
-        this.setState({ loading: false });
         bootbox.alert(error.message);
       });
+    this.setState({ loading: false });
   }
 
   render() {
@@ -136,6 +171,7 @@ ChatRoom.propTypes = {
   channel: PropTypes.string,
   height: PropTypes.number.isRequired,
   currentUserId: PropTypes.number,
+  currentUser: PropTypes.object,
   favChannels: PropTypes.shape({
     edges: PropTypes.array.isRequired,
   }),
@@ -153,12 +189,7 @@ const withChat = graphql(ChatQuery, {
     };
   },
   props({ data, ownProps }) {
-    const {
-      allChatmessages,
-      loading,
-      fetchMore,
-      subscribeToMore,
-    } = data;
+    const { allChatmessages, loading, fetchMore, subscribeToMore } = data;
     const { channel, pathname } = ownProps;
     const chatroomName = channel || defaultChannel(pathname);
     return {
@@ -242,4 +273,26 @@ const withChat = graphql(ChatQuery, {
   },
 });
 
-export default compose(withChat, withMutation)(ChatRoom);
+const withCurrentUser = graphql(
+  gql`
+    query($id: ID!) {
+      user(id: $id) {
+        ...UserLabel_user
+      }
+    }
+    ${UserLabel}
+  `,
+  {
+    options: ({ currentUserId }) => ({
+      variables: {
+        id: t('UserNode', currentUserId || '-1'),
+      },
+    }),
+    props({ data }) {
+      const { user: currentUser } = data;
+      return { currentUser };
+    },
+  }
+);
+
+export default compose(withCurrentUser, withChat, withMutation)(ChatRoom);

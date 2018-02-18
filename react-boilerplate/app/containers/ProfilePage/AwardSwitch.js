@@ -10,6 +10,7 @@ import { from_global_id as f } from 'common';
 import { createStructuredSelector } from 'reselect';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
 import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import ProfileShowQuery from 'graphql/ProfileShowQuery';
 import UpdateCurrentAwardMutation from 'graphql/UpdateCurrentAwardMutation';
 
@@ -46,12 +47,25 @@ class AwardSwitch extends React.PureComponent {
             query: ProfileShowQuery,
             variables: { id: this.props.userId },
           });
-          data.user.currentAward.id = this.state.selectedAward;
+          if (this.state.selectedAward === null) {
+            data.user.currentAward = null;
+          } else {
+            data.user.currentAward = {
+              id: this.state.selectedAward,
+              __typename: 'UserAwardNode',
+            };
+          }
           proxy.writeQuery({
             query: ProfileShowQuery,
             variables: { id: this.props.userId },
             data,
           });
+        },
+        optimisticResponse: {
+          updateCurrentAward: {
+            clientMutationId: null,
+            __typename: 'UpdateCurrentAwardPayload',
+          },
         },
       })
       .then(() => {})

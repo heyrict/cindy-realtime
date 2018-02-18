@@ -3,7 +3,8 @@ import DialoguePanel from './DialoguePanel';
 
 const PuzzleShow = gql`
   query($id: ID!, $userId: ID!) {
-    puzzleShowUnion(id: $id) {
+    puzzleShowUnion(id: $id)
+      @connection(key: "PuzzleShowUnion_PuzzleShowUnion", filter: ["id"]) {
       edges {
         node {
           ... on DialogueNode {
