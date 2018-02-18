@@ -58,11 +58,11 @@ class ChatRoom extends React.Component {
 
   handleSubmit() {
     if (this.state.loading) return;
-    this.setState({ loading: true });
     const { channel, currentUser, pathname } = this.props;
     const content = this.state.content;
     const now = new Date();
     const chatroomName = channel || defaultChannel(pathname);
+    this.setState({ loading: true, content: '' });
 
     this.props
       .mutate({
@@ -103,10 +103,9 @@ class ChatRoom extends React.Component {
           },
         },
       })
-      .then(() => {
-        this.setState({ content: '' });
-      })
+      .then(() => {})
       .catch((error) => {
+        this.setState({ content });
         bootbox.alert(error.message);
       });
     this.setState({ loading: false });

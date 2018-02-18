@@ -22,6 +22,7 @@ class QuestionPutBox extends React.PureComponent {
 
     this.state = {
       content: '',
+      loading: false,
     };
     this.handleKeyDown = (e) => {
       if (e.key === 'Enter') this.handleSubmit();
@@ -36,10 +37,13 @@ class QuestionPutBox extends React.PureComponent {
 
   handleSubmit() {
     if (this.state.content === '') return;
+    if (this.state.loading) return;
     if (!this.props.currentUserId) return;
     const { puzzleId, currentUser } = this.props;
     const content = this.state.content;
     const now = new Date();
+    this.setState({ content: '', loading: true });
+
     const query = gql`
       query {
         puzzleShowUnion(id: $id)
@@ -105,9 +109,10 @@ class QuestionPutBox extends React.PureComponent {
       })
       .then(() => {})
       .catch((error) => {
+        this.setState({ content });
         bootbox.alert(error.message);
       });
-    this.setState({ content: '' });
+    this.setState({ loading: false });
   }
 
   render() {
