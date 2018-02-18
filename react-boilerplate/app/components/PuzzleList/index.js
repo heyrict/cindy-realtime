@@ -17,71 +17,74 @@ import { ButtonOutline } from 'style-store';
 import PuzzlePanel from 'components/PuzzlePanel';
 import PuzzleListQuery from 'graphql/PuzzleList';
 import LoadingDots from 'components/LoadingDots';
-import chatMessages from 'containers/Chat/messages';
 
 const StyledButtonOutline = ButtonOutline.extend`
   border-radius: 10px;
   padding: 10px 0;
 `;
 
-function PuzzleList(props) {
-  if (props.loading || !props.allPuzzles) {
-    return <LoadingDots py={50} size={8} />;
+class PuzzleList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.page || 1,
+    };
+    this.handleChange = (e) => this.setState({ value: e.target.value });
+    this.handleSubmit = () => props.changePage(this.state.value);
   }
-  return (
-    <div>
-      {props.allPuzzles.edges.map((edge) => (
-        <PuzzlePanel node={edge.node} key={edge.node.id} />
-      ))}
-      {props.hasMore() && (
-        <StyledButtonOutline onClick={props.loadMore} w={1}>
-          <FormattedMessage {...chatMessages.loadMore} />
-        </StyledButtonOutline>
-      )}
-    </div>
-  );
+  render() {
+    if (this.props.loading || !this.props.allPuzzles) {
+      return <LoadingDots py={50} size={8} />;
+    }
+    return (
+      <div>
+        {this.props.allPuzzles.edges.map((edge) => (
+          <PuzzlePanel node={edge.node} key={edge.node.id} />
+        ))}
+        <input value={this.state.value} onChange={this.handleChange} />
+        <button onClick={this.handleSubmit}>jump</button>
+      </div>
+    );
+  }
 }
 
 PuzzleList.propTypes = {
   loading: PropTypes.bool.isRequired,
-  loadMore: PropTypes.func.isRequired,
-  hasMore: PropTypes.func.isRequired,
   allPuzzles: PropTypes.shape({
     edges: PropTypes.array.isRequired,
   }),
+  page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  itemsPerPage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  changePage: PropTypes.func,
 };
 
 const withPuzzleList = graphql(PuzzleListQuery, {
-  options: ({ variables, fetchPolicy }) => ({ variables, fetchPolicy }),
+  options: ({ variables, fetchPolicy, page = 1, itemsPerPage = 10 }) => ({
+    variables: {
+      limit: itemsPerPage,
+      offset: itemsPerPage * (page - 1),
+      ...variables,
+    },
+    fetchPolicy,
+  }),
   props({ data, ownProps }) {
     const { loading, allPuzzles, fetchMore, refetch } = data;
     return {
       loading,
       allPuzzles,
       refetch,
-      hasMore: () => allPuzzles.pageInfo.hasNextPage,
-      loadMore: () =>
+      loadPage: (page, itemsPerPage = 10) =>
         fetchMore({
           query: PuzzleListQuery,
           variables: {
             ...ownProps.variables,
-            count: 10,
-            cursor: allPuzzles.pageInfo.endCursor,
+            limit: itemsPerPage,
+            offset: itemsPerPage * (page - 1),
           },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            const newEdges = fetchMoreResult.allPuzzles.edges;
-            const pageInfo = fetchMoreResult.allPuzzles.pageInfo;
-
-            return newEdges.length
-              ? {
-                  allPuzzles: {
-                    __typename: previousResult.allPuzzles.__typename,
-                    edges: [...previousResult.allPuzzles.edges, ...newEdges],
-                    pageInfo,
-                  },
-                }
-              : previousResult;
-          },
+          updateQuery: (previousResult, { fetchMoreResult }) =>
+            fetchMoreResult.allPuzzles.edges.length
+              ? fetchMoreResult
+              : previousResult,
         }),
     };
   },

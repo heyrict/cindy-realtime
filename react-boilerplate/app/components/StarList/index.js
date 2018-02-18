@@ -65,7 +65,7 @@ StarList.propTypes = {
 };
 
 const withStarList = graphql(StarListQuery, {
-  options: ({ variables }) => ({ variables }),
+  options: ({ variables }) => ({ variables: { ...variables, count: 10 } }),
   props({ data, ownProps }) {
     const { loading, allStars, fetchMore, refetch } = data;
     return {

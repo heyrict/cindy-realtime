@@ -87,7 +87,6 @@ class FilterableList extends React.PureComponent {
         <QueryList
           variables={{
             orderBy: this.getOrder(),
-            count: 10,
             ...variables,
           }}
           {...others}

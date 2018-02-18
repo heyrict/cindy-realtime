@@ -13,6 +13,7 @@ from graphene.types.objecttype import ObjectTypeOptions
 from graphene.types.utils import yank_fields_from_attrs
 from graphene.utils.props import props
 from graphene_django.filter import DjangoFilterConnectionField
+from graphene_django import DjangoConnectionField
 from graphene_django.types import DjangoObjectType
 from graphql_relay import from_global_id, to_global_id
 from rx import Observable, Observer
@@ -24,8 +25,37 @@ from .models import *
 from .subscription import Subscription as SubscriptionType
 
 
+# {{{1 resolveLimitOffset
+def resolveLimitOffset(qs, limit, offset):
+    if isinstance(limit, int) and isinstance(offset, int):
+        end = offset + limit
+    elif isinstance(limit, int):
+        end = limit
+    else:
+        end = None
+    return qs[offset:end]
+
+
+# {{{1 resolveFilter
+def resolveFilter(qs, args, filters = [], filter_fields = []):
+    filters = {f:args[f] for f in filters if f in args}
+    for filterName, className in filter_fields.items():
+        filterValue = args.get(filterName)
+        if filterValue is None:
+            continue
+        try:
+            filters[filterName] = className.objects.get(pk=from_global_id(filterValue))
+        except:
+            continue
+
+    if len(filters) > 0:
+        qs = qs.filter(**filters)
+
+    return qs
+
+
 # {{{1 resolveOrderBy
-def resolveOrderBy(instance, order_by):
+def resolveOrderBy(qs, order_by):
     '''
     resolve order_by operation with nulls put at last.
 
@@ -45,9 +75,9 @@ def resolveOrderBy(instance, order_by):
             fieldQueries.append(
                 F(fieldName).desc(nulls_last=True)
                 if desc else F(fieldName).asc(nulls_last=True))
-        return instance.objects.order_by(*fieldQueries)
+        return qs.order_by(*fieldQueries)
     else:
-        return instance.objects.all()
+        return qs.all()
 
 
 # {{{1 Nodes
@@ -97,27 +127,11 @@ class AwardNode(DjangoObjectType):
         return self.id
 
 
-# {{{2 UserAwardNode
-class UserAwardNode(DjangoObjectType):
-    class Meta:
-        model = UserAward
-        filter_fields = []
-        interfaces = (relay.Node, )
-
-    rowid = graphene.Int()
-
-    def resolve_rowid(self, info):
-        return self.id
-
-
 # {{{2 PuzzleNode
 class PuzzleNode(DjangoObjectType):
     class Meta:
         model = Puzzle
-        filter_fields = {
-            "status": ["exact", "gt"],
-            "user": ["exact"],
-        }
+        filter_fields = []
         interfaces = (relay.Node, )
 
     rowid = graphene.Int()
@@ -161,6 +175,19 @@ class PuzzleNode(DjangoObjectType):
             return self.bookmarkCount
         except:
             return self.bookmark_set.count()
+
+
+# {{{2 UserAwardNode
+class UserAwardNode(DjangoObjectType):
+    class Meta:
+        model = UserAward
+        filter_fields = []
+        interfaces = (relay.Node, )
+
+    rowid = graphene.Int()
+
+    def resolve_rowid(self, info):
+        return self.id
 
 
 # {{{2 DialogueNode
@@ -280,22 +307,12 @@ class FavoriteChatRoomNode(DjangoObjectType):
         return self.id
 
 
-# {{{1 FilterSets
-# {{{2 PuzzleNodeFilterSet
-class PuzzleNodeFilterSet(FilterSet):
-    name = django_filters.CharFilter()
-
+# {{{1 Connections
+# {{{2 PuzzleConnection
+class PuzzleConnection(graphene.Connection):
+    total_count = graphene.Int()
     class Meta:
-        model = Puzzle
-        fields = {
-            "status": ["exact", "gt"],
-            "user": ["exact"],
-        }
-
-    @property
-    def qs(self):
-        return super(PuzzleNodeFilterSet, self).qs.annotate(
-            starCount=Count("star__value"), starSum=Sum("star__value"))
+        node = PuzzleNode
 
 
 # {{{1 Unions
@@ -1033,10 +1050,14 @@ class Query(object):
         AwardNode, orderBy=graphene.List(of_type=graphene.String))
     all_userawards = DjangoFilterConnectionField(
         UserAwardNode, orderBy=graphene.List(of_type=graphene.String))
-    all_puzzles = DjangoFilterConnectionField(
-        PuzzleNode,
-        filterset_class=PuzzleNodeFilterSet,
-        orderBy=graphene.List(of_type=graphene.String))
+    all_puzzles = graphene.ConnectionField(
+        PuzzleConnection,
+        orderBy=graphene.List(of_type=graphene.String),
+        user=graphene.ID(),
+        status=graphene.Float(),
+        status__gt=graphene.Float(),
+        limit=graphene.Int(),
+        offset=graphene.Int())
     all_dialogues = DjangoFilterConnectionField(
         DialogueNode, orderBy=graphene.List(of_type=graphene.String))
     all_chatmessages = DjangoFilterConnectionField(
@@ -1072,28 +1093,44 @@ class Query(object):
     # {{{3 resolve all
     def resolve_all_users(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(User, orderBy)
+        return resolveOrderBy(User.objects, orderBy)
 
     def resolve_all_awards(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Award, orderBy)
+        return resolveOrderBy(Award.objects, orderBy)
 
     def resolve_all_userawards(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(UserAward, orderBy)
+        return resolveOrderBy(UserAward.objects, orderBy)
 
     def resolve_all_puzzles(self, info, **kwargs):
-        orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Puzzle, orderBy)
+        orderBy = kwargs.get("orderBy", [])
+        limit = kwargs.get("limit", None)
+        offset = kwargs.get("offset", None)
+        qs = Puzzle.objects.all()
+        if "starCount" in orderBy or "-starCount" in orderBy:
+            qs = qs.annotate(starCount=Count("star__value"))
+        if "starSum" in orderBy or "-starSum" in orderBy:
+            qs = qs.annotate(starSum=Suj("star__value"))
+        qs = resolveOrderBy(qs, orderBy)
+        qs = resolveFilter(qs, kwargs, filters=["status", "status__gt"], filter_fields={"user": User})
+        total_count = qs.count()
+        qs = resolveLimitOffset(qs, limit, offset)
+        count = qs.count()
+        return PuzzleConnection(total_count=total_count, edges=[
+            PuzzleConnection.Edge(
+                node=qs[i],
+            ) for i in range(count)
+        ])
 
     def resolve_all_dialogues(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Dialogue, orderBy)
+        return resolveOrderBy(Dialogue.objects, orderBy)
 
     def resolve_all_chatmessages(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
         chatroomName = kwargs.get("chatroomName", None)
-        qs = resolveOrderBy(ChatMessage, orderBy)
+        qs = resolveOrderBy(ChatMessage.objects, orderBy)
         if chatroomName:
             chatroom = ChatRoom.objects.get(name=chatroomName)
             return qs.filter(chatroom=chatroom)
@@ -1101,15 +1138,15 @@ class Query(object):
 
     def resolve_all_comments(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Comment, orderBy)
+        return resolveOrderBy(Comment.objects, orderBy)
 
     def resolve_all_stars(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Star, orderBy)
+        return resolveOrderBy(Star.objects, orderBy)
 
     def resolve_all_bookmarks(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Bookmark, orderBy)
+        return resolveOrderBy(Bookmark.objects, orderBy)
 
     # {{{3 resolve union
     def resolve_puzzle_show_union(self, info, **kwargs):

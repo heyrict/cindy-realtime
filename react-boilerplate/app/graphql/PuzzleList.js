@@ -3,31 +3,32 @@ import PuzzlePanel from './PuzzlePanel';
 
 export const PuzzleList = gql`
   query PuzzleListInitQuery(
-    $count: Int
-    $cursor: String
     $orderBy: [String]
+    $offset: Int
+    $limit: Int
     $status: Float
     $status__gt: Float
     $user: ID
   ) {
     allPuzzles(
-      first: $count
-      after: $cursor
+      offset: $offset
+      limit: $limit
       orderBy: $orderBy
       status: $status
       status_Gt: $status__gt
       user: $user
-    ) @connection(key: "PuzzleNode_allPuzzles", filter: ["orderBy", "user"]) {
+    )
+      @connection(
+        key: "PuzzleNode_allPuzzles"
+        filter: ["orderBy", "user", "offset"]
+      ) {
       edges {
         node {
           id
           ...PuzzlePanel_node
         }
       }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
+      totalCount
     }
   }
   ${PuzzlePanel}

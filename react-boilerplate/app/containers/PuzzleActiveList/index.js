@@ -65,6 +65,7 @@ const withPuzzleActiveList = graphql(PuzzleListQuery, {
       status: 0,
       orderBy: '-modified',
     },
+    fetchPolicy: 'cache-and-network',
   },
   props({ data, ownProps }) {
     const { allPuzzles, loading, subscribeToMore } = data;

@@ -70,7 +70,7 @@ BookmarkList.propTypes = {
 };
 
 const withBookmarkList = graphql(BookmarkListQuery, {
-  options: ({ variables }) => ({ variables }),
+  options: ({ variables }) => ({ variables: { ...variables, count: 10 } }),
   props({ data, ownProps }) {
     const { loading, allBookmarks, fetchMore, refetch } = data;
     return {
