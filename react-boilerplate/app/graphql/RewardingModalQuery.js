@@ -4,6 +4,7 @@ import UserLabel from './UserLabel';
 const RewardingModalQuery = gql`
   query RewardingModalQuery($id: ID!) {
     puzzle(id: $id) {
+      id
       content
       commentSet {
         edges {
