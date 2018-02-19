@@ -97,16 +97,16 @@ class ProfilePage extends React.Component {
           <FilterableList
             component={StarList}
             variables={{ user: userId }}
-            order={[{ key: 'id', asc: false }]}
-            orderList={['id']}
+            order={[{ key: 'value', asc: false }]}
+            orderList={['id', 'value']}
           />
         )}
         {this.state.tabIndex === 3 && (
           <FilterableList
             component={BookmarkList}
             variables={{ user: userId }}
-            order={[{ key: 'id', asc: false }]}
-            orderList={['id']}
+            order={[{ key: 'value', asc: false }]}
+            orderList={['id', 'value']}
             userId={userId}
             currentUserId={t('UserNode', this.props.usernavbar.user.userId)}
           />

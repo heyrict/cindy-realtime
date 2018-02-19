@@ -57,6 +57,7 @@
   "app.containers.FilterableList.star": "Star",
   "app.containers.FilterableList.starCount": "Star Count",
   "app.containers.FilterableList.starSum": "Star Sum",
+  "app.containers.FilterableList.value": "Value",
   "app.containers.HomePage.body": "Cindy is an active community for chatting lateral thinking problems.",
   "app.containers.HomePage.description": "Find interesting lateral thinking puzzles here, share with your friends, and even create your own lateral thinking puzzle in minites!",
   "app.containers.HomePage.header": "Welcome to {cindy}!",

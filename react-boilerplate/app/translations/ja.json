@@ -57,6 +57,7 @@
   "app.containers.FilterableList.star": "スター",
   "app.containers.FilterableList.starCount": "スター投票数",
   "app.containers.FilterableList.starSum": "スター総計数",
+  "app.containers.FilterableList.value": "数値",
   "app.containers.HomePage.body": "Cindy は「ウミガメのスープ」出題サイト。\n複数ユーザーでプレイする水平思考型推理ゲームです。\nYES/NOで答えることのできる質問をして不可解な謎を一緒に解き明かして行きましょう。",
   "app.containers.HomePage.description": "水平思考パズルをリアルタイムでプレイするなり、友達と楽しく遊ぶなり、自分のパズルも作ってみんなに解かせて遊びましょう！",
   "app.containers.HomePage.header": "{cindy} へようこそ！",
