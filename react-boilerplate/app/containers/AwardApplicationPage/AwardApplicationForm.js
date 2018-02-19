@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import bootbox from 'bootbox';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { Flex, Box } from 'rebass';
@@ -34,6 +35,10 @@ class AwardApplicationForm extends React.Component {
   }
   handleSubmit() {
     const { awardId, comment } = this.state;
+    if (!awardId || !comment) {
+      bootbox.alert('Please fill in the form.');
+      return;
+    }
     this.props.mutate({
       variables: {
         input: { awardId, comment },
