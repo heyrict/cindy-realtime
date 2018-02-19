@@ -5,16 +5,26 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
+import { to_global_id as t } from 'common';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage, intlShape } from 'react-intl';
 import { Heading } from 'style-store';
 
+import AwardApplicationList from 'components/AwardApplicationList';
+import Constrained from 'components/Constrained';
+import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
+
+import AwardApplicationForm from './AwardApplicationForm';
 import messages from './messages';
 
 function AwardApplicationPage(props, context) {
   const _ = context.intl.formatMessage;
   return (
-    <div>
+    <Constrained level={4}>
       <Helmet>
         <title>{_(messages.title)}</title>
         <meta name="description" content={_(messages.description)} />
@@ -22,12 +32,31 @@ function AwardApplicationPage(props, context) {
       <Heading>
         <FormattedMessage {...messages.header} />
       </Heading>
-    </div>
+      <AwardApplicationForm />
+      <AwardApplicationList
+        variables={{ orderBy: ['status', '-id'] }}
+        currentUserId={t('UserNode', props.currentUser.user.userId)}
+      />
+    </Constrained>
   );
 }
+
+AwardApplicationPage.propTypes = {
+  currentUser: PropTypes.shape({
+    user: PropTypes.shape({
+      userId: PropTypes.number.isRequired,
+    }),
+  }),
+};
 
 AwardApplicationPage.contextTypes = {
   intl: intlShape,
 };
 
-export default AwardApplicationPage;
+const mapStateToProps = createStructuredSelector({
+  currentUser: makeSelectUserNavbar(),
+});
+
+const withConnect = connect(mapStateToProps);
+
+export default compose(withConnect)(AwardApplicationPage);

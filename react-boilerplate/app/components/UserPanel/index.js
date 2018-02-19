@@ -8,7 +8,6 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Box, Row } from 'rebass';
-import { RoundedPanel } from 'style-store';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 

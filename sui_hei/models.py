@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 # Create your models here.
 class Award(models.Model):
     name = models.CharField(max_length=255, null=False)
+    groupName = models.CharField(max_length=255, null=False, default="default")
     description = models.TextField(default="")
 
     class Meta:
@@ -24,15 +25,25 @@ class AwardApplication(models.Model):
     award = models.ForeignKey(Award, on_delete=CASCADE)
     applier = models.ForeignKey("User", related_name="applier", on_delete=CASCADE)
     status = models.IntegerField(_("status"), default=0, null=False)
+    comment = models.TextField(_("comment"), null=True)
     reviewer = models.ForeignKey("User", related_name="reviewer", on_delete=CASCADE, null=True)
     created = models.DateTimeField(_("created"), default=timezone.now)
     reviewed = models.DateTimeField(_("reviewed"), null=True)
 
     class Meta:
         verbose_name = _("Award Application")
+        permissions = (
+            ("can_review_award_application", _("Can review award application")),
+        )
 
     def __str__(self):
-        return "[%s]: %s" % (str(this.applier), str(this.award))
+        return "[%s]: %s" % (str(self.applier), str(self.award))
+
+awardapplication_status_enum = {
+    0: _("Waiting"),
+    1: _("Accepted"),
+    2: _("Denied"),
+}
 
 
 class User(AbstractUser):

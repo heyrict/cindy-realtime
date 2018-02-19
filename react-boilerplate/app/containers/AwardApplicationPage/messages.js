@@ -18,4 +18,16 @@ export default defineMessages({
     id: 'app.containers.AwardApplicationPage.header',
     defaultMessage: 'Award Application Center',
   },
+  apply: {
+    id: 'app.containers.AwardApplicationPage.apply',
+    defaultMessage: 'Apply',
+  },
+  selectPlaceholder: {
+    id: 'app.containers.AwardApplicationPage.selectPlaceholder',
+    defaultMessage: 'Select the award you want to apply...',
+  },
+  commentPlaceholder: {
+    id: 'app.containers.AwardApplicationPage.commentPlaceholder',
+    defaultMessage: 'Add some comment...',
+  },
 });

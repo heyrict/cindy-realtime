@@ -97,6 +97,8 @@ class UserNode(DjangoObjectType):
     trueQuesCount = graphene.Int()
     commentCount = graphene.Int()
 
+    can_review_award_application = graphene.Boolean()
+
     def resolve_rowid(self, info):
         return self.id
 
@@ -115,11 +117,27 @@ class UserNode(DjangoObjectType):
     def resolve_commentCount(self, info):
         return self.comment_set.count()
 
+    def resolve_can_review_award_application(self, info):
+        return self.has_perm("sui_hei.can_review_award_application")
+
 
 # {{{2 AwardNode
 class AwardNode(DjangoObjectType):
     class Meta:
         model = Award
+        filter_fields = ["groupName"]
+        interfaces = (relay.Node, )
+
+    rowid = graphene.Int()
+
+    def resolve_rowid(self, info):
+        return self.id
+
+
+# {{{2 AwardApplicationNode
+class AwardApplicationNode(DjangoObjectType):
+    class Meta:
+        model = AwardApplication
         filter_fields = []
         interfaces = (relay.Node, )
 
@@ -613,6 +631,31 @@ class CreateFavoriteChatRoom(graphene.ClientIDMutation):
         return CreateFavoriteChatRoom(favchatroom=favchatroom)
 
 
+# {{{2 CreateAwardApplication
+class CreateAwardApplication(graphene.ClientIDMutation):
+    award_application = graphene.Field(AwardApplicationNode)
+
+    class Input:
+        awardId = graphene.String()
+        comment = graphene.String()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        className, awardId = from_global_id(input["awardId"])
+        comment = input["comment"]
+        assert className == 'AwardNode'
+
+        award = Award.objects.get(pk=awardId)
+
+        awardapp = AwardApplication.objects.create(applier=user, comment=comment, award=award)
+
+        return CreateAwardApplication(award_application=awardapp)
+
+
 # {{{2 UpdateAnswer
 class UpdateAnswer(graphene.ClientIDMutation):
     dialogue = graphene.Field(DialogueNode)
@@ -920,6 +963,37 @@ class UpdateUser(relay.ClientIDMutation):
         return UpdateUser(user=user)
 
 
+# {{{2 UpdateAwardApplication
+class UpdateAwardApplication(relay.ClientIDMutation):
+    award_application = graphene.Field(AwardApplicationNode)
+
+    class Input:
+        awardApplicationId = graphene.String()
+        status = graphene.Int()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated or not user.has_perm('sui_hei.can_review_award_application')):
+            raise ValidationError(_("You are not authenticated to do this!"))
+
+        nodeName, awardApplicationId = from_global_id(input['awardApplicationId'])
+        status = input.get('status')
+
+        assert nodeName == 'AwardApplicationNode'
+
+        application = AwardApplication.objects.get(id=awardApplicationId)
+        if status and application.status == 0:
+            application.status = status
+            application.reviewer = user
+            application.reviewed = timezone.now()
+            if status == 1:
+                UserAward.objects.get_or_create(user=application.applier, award=application.award)
+
+        application.save()
+        return UpdateAwardApplication(award_application=application)
+
+
 # {{{2 DeleteBookmark
 class DeleteBookmark(graphene.ClientIDMutation):
     class Input:
@@ -1050,6 +1124,8 @@ class Query(object):
         UserNode, orderBy=graphene.List(of_type=graphene.String))
     all_awards = DjangoFilterConnectionField(
         AwardNode, orderBy=graphene.List(of_type=graphene.String))
+    all_award_applications = DjangoFilterConnectionField(
+        AwardApplicationNode, orderBy=graphene.List(of_type=graphene.String))
     all_userawards = DjangoFilterConnectionField(
         UserAwardNode, orderBy=graphene.List(of_type=graphene.String))
     all_puzzles = graphene.ConnectionField(
@@ -1100,6 +1176,10 @@ class Query(object):
     def resolve_all_awards(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
         return resolveOrderBy(Award.objects, orderBy)
+
+    def resolve_all_award_applications(self, info, **kwargs):
+        orderBy = kwargs.get("orderBy", None)
+        return resolveOrderBy(AwardApplication.objects, orderBy)
 
     def resolve_all_userawards(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
@@ -1156,6 +1236,10 @@ class Query(object):
         orderBy = kwargs.get("orderBy", None)
         return resolveOrderBy(Bookmark.objects, orderBy)
 
+    def resolve_all_award_applications(self, info, **kwargs):
+        orderBy = kwargs.get("orderBy", None)
+        return resolveOrderBy(AwardApplication.objects, orderBy)
+
     # {{{3 resolve union
     def resolve_puzzle_show_union(self, info, **kwargs):
         _, puzzleId = from_global_id(kwargs["id"])
@@ -1174,6 +1258,7 @@ class Mutation(graphene.ObjectType):
     create_bookmark = CreateBookmark.Field()
     create_chatroom = CreateChatRoom.Field()
     create_favorite_chatroom = CreateFavoriteChatRoom.Field()
+    create_award_application = CreateAwardApplication.Field()
     update_answer = UpdateAnswer.Field()
     update_question = UpdateQuestion.Field()
     update_puzzle = UpdatePuzzle.Field()
@@ -1184,6 +1269,7 @@ class Mutation(graphene.ObjectType):
     update_hint = UpdateHint.Field()
     update_current_award = UpdateCurrentAward.Field()
     update_user = UpdateUser.Field()
+    update_award_application = UpdateAwardApplication.Field()
     delete_bookmark = DeleteBookmark.Field()
     delete_favorite_chatroom = DeleteFavoriteChatRoom.Field()
     login = UserLogin.Field()

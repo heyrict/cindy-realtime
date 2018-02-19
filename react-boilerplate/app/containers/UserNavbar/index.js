@@ -71,6 +71,11 @@ export class UserNavbar extends React.Component {
               <FormattedMessage {...messages.userlist} />
             </NavLink>
           </RouterLink>
+          <RouterLink to="/profile/award" tabIndex="0">
+            <NavLink is="span">
+              <FormattedMessage {...messages.awardApplication} />
+            </NavLink>
+          </RouterLink>
           <LogoutMenuItem>
             <FormattedMessage {...messages.logout} />
           </LogoutMenuItem>
