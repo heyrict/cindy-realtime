@@ -40,7 +40,7 @@ function PuzzlePage(props, context) {
         component={PuzzleList}
         variables={{ status__gt: 0 }}
         order={[{ key: 'modified', asc: false }]}
-        orderList={['modified', 'starCount', 'starSum']}
+        orderList={['modified', 'starCount', 'starSum', 'commentCount']}
         fetchPolicy="cache-and-network"
       />
     </Constrained>

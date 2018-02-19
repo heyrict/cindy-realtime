@@ -1111,9 +1111,11 @@ class Query(object):
         offset = kwargs.get("offset", None)
         qs = Puzzle.objects.all()
         if "starCount" in orderBy or "-starCount" in orderBy:
-            qs = qs.annotate(starCount=Count("star__value"))
+            qs = qs.annotate(starCount=Count("star"))
         if "starSum" in orderBy or "-starSum" in orderBy:
-            qs = qs.annotate(starSum=Suj("star__value"))
+            qs = qs.annotate(starSum=Sum("star__value"))
+        if "commentCount" in orderBy or "-commentCount" in orderBy:
+            qs = qs.annotate(commentCount=Count("comment"))
         qs = resolveOrderBy(qs, orderBy)
         qs = resolveFilter(
             qs,
@@ -1122,10 +1124,12 @@ class Query(object):
             filter_fields={"user": User})
         total_count = qs.count()
         qs = resolveLimitOffset(qs, limit, offset)
-        count = qs.count()
+        qs = list(qs)
         return PuzzleConnection(
             total_count=total_count,
-            edges=[PuzzleConnection.Edge(node=qs[i], ) for i in range(count)])
+            edges=[
+                PuzzleConnection.Edge(node=qs[i], ) for i in range(len(qs))
+            ])
 
     def resolve_all_dialogues(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)

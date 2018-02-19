@@ -45,14 +45,13 @@ class FilterableList extends React.PureComponent {
       let exist = false;
       let order = [];
       state.order.forEach((obj) => {
-        if (obj.key !== name) {
-          order = order.concat(obj);
-        } else {
+        if (obj.key === name) {
+          order = [{ key: name, asc: !obj.asc }];
           exist = true;
         }
       });
       if (!exist) {
-        order = order.concat({ key: name, asc: false });
+        order = [{ key: name, asc: false }];
       }
       return { ...state, order };
     });
