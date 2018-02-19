@@ -22,40 +22,29 @@ import AddPuzzleBtn from './AddPuzzleBtn';
 import saga from './saga';
 import messages from './messages';
 
-class PuzzlePage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      page: 1,
-    };
-    this.changePage = (p) => this.setState({ page: p });
-  }
-  render() {
-    const _ = this.context.intl.formatMessage;
-    return (
-      <Constrained level={4}>
-        <Helmet>
-          <title>{_(messages.title)}</title>
-          <meta name="description" content={_(messages.description)} />
-        </Helmet>
-        <Heading>
-          <FormattedMessage {...messages.header} />
-          <span style={{ padding: '0 10px' }} />
-          <AddPuzzleBtn />
-        </Heading>
-        <PuzzleActiveList />
-        <FilterableList
-          component={PuzzleList}
-          variables={{ status__gt: 0 }}
-          order={[{ key: 'modified', asc: false }]}
-          orderList={['modified', 'starCount', 'starSum']}
-          fetchPolicy="cache-and-network"
-          page={this.state.page}
-          changePage={this.changePage}
-        />
-      </Constrained>
-    );
-  }
+function PuzzlePage(props, context) {
+  const _ = context.intl.formatMessage;
+  return (
+    <Constrained level={4}>
+      <Helmet>
+        <title>{_(messages.title)}</title>
+        <meta name="description" content={_(messages.description)} />
+      </Helmet>
+      <Heading>
+        <FormattedMessage {...messages.header} />
+        <span style={{ padding: '0 10px' }} />
+        <AddPuzzleBtn />
+      </Heading>
+      <PuzzleActiveList />
+      <FilterableList
+        component={PuzzleList}
+        variables={{ status__gt: 0 }}
+        order={[{ key: 'modified', asc: false }]}
+        orderList={['modified', 'starCount', 'starSum']}
+        fetchPolicy="cache-and-network"
+      />
+    </Constrained>
+  );
 }
 
 PuzzlePage.contextTypes = {

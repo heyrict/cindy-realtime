@@ -147,7 +147,7 @@ def ws_disconnect(message):
         Group("User-%s" % onlineUsers[str(message.reply_channel)][0]).discard(
             message.reply_channel)
         onlineUsers.pop(str(message.reply_channel))
-        cache.set('onlineUsers', pickle.dumps(onlineUsers))
+        rediscon.set('onlineUsers', pickle.dumps(onlineUsers))
 
     broadcast_status()
 

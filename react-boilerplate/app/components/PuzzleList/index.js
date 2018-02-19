@@ -11,55 +11,51 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { graphql } from 'react-apollo';
-import { FormattedMessage } from 'react-intl';
-import { ButtonOutline } from 'style-store';
 
+import withNumberPaginator from 'components/withNumberPaginator';
 import PuzzlePanel from 'components/PuzzlePanel';
+import PaginatorBar from 'components/PaginatorBar';
 import PuzzleListQuery from 'graphql/PuzzleList';
 import LoadingDots from 'components/LoadingDots';
 
-const StyledButtonOutline = ButtonOutline.extend`
-  border-radius: 10px;
-  padding: 10px 0;
-`;
-
-class PuzzleList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: props.page || 1,
-    };
-    this.handleChange = (e) => this.setState({ value: e.target.value });
-    this.handleSubmit = () => props.changePage(this.state.value);
+function PuzzleList(props) {
+  if (props.loading || !props.allPuzzles) {
+    return <LoadingDots py={50} size={8} />;
   }
-  render() {
-    if (this.props.loading || !this.props.allPuzzles) {
-      return <LoadingDots py={50} size={8} />;
-    }
-    return (
-      <div>
-        {this.props.allPuzzles.edges.map((edge) => (
-          <PuzzlePanel node={edge.node} key={edge.node.id} />
-        ))}
-        <input value={this.state.value} onChange={this.handleChange} />
-        <button onClick={this.handleSubmit}>jump</button>
-      </div>
-    );
-  }
+  return (
+    <div>
+      {props.allPuzzles.edges.map((edge) => (
+        <PuzzlePanel node={edge.node} key={edge.node.id} />
+      ))}
+      <PaginatorBar
+        changePage={props.changePage}
+        numPages={Math.floor(props.allPuzzles.totalCount / props.itemsPerPage)}
+        currentPage={props.page}
+      />
+    </div>
+  );
 }
 
 PuzzleList.propTypes = {
   loading: PropTypes.bool.isRequired,
   allPuzzles: PropTypes.shape({
     edges: PropTypes.array.isRequired,
+    totalCount: PropTypes.number.isRequired,
   }),
   page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  // eslint-disable-next-line react/no-unused-prop-types
   itemsPerPage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   changePage: PropTypes.func,
 };
 
+PuzzleList.defaultProps = {
+  page: 1,
+  itemsPerPage: 10,
+  changePage: () => {},
+};
+
 const withPuzzleList = graphql(PuzzleListQuery, {
-  options: ({ variables, fetchPolicy, page = 1, itemsPerPage = 10 }) => ({
+  options: ({ variables, fetchPolicy, page, itemsPerPage }) => ({
     variables: {
       limit: itemsPerPage,
       offset: itemsPerPage * (page - 1),
@@ -67,27 +63,14 @@ const withPuzzleList = graphql(PuzzleListQuery, {
     },
     fetchPolicy,
   }),
-  props({ data, ownProps }) {
-    const { loading, allPuzzles, fetchMore, refetch } = data;
+  props({ data }) {
+    const { loading, allPuzzles, refetch } = data;
     return {
       loading,
       allPuzzles,
       refetch,
-      loadPage: (page, itemsPerPage = 10) =>
-        fetchMore({
-          query: PuzzleListQuery,
-          variables: {
-            ...ownProps.variables,
-            limit: itemsPerPage,
-            offset: itemsPerPage * (page - 1),
-          },
-          updateQuery: (previousResult, { fetchMoreResult }) =>
-            fetchMoreResult.allPuzzles.edges.length
-              ? fetchMoreResult
-              : previousResult,
-        }),
     };
   },
 });
 
-export default compose(withPuzzleList)(PuzzleList);
+export default compose(withNumberPaginator(), withPuzzleList)(PuzzleList);
