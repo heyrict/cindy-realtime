@@ -12,8 +12,8 @@ from graphene import Field, relay, resolve_only_args
 from graphene.types.objecttype import ObjectTypeOptions
 from graphene.types.utils import yank_fields_from_attrs
 from graphene.utils.props import props
-from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django import DjangoConnectionField
+from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
 from graphql_relay import from_global_id, to_global_id
 from rx import Observable, Observer
@@ -37,15 +37,17 @@ def resolveLimitOffset(qs, limit, offset):
 
 
 # {{{1 resolveFilter
-def resolveFilter(qs, args, filters = [], filter_fields = []):
-    filters = {f:args[f] for f in filters if f in args}
+def resolveFilter(qs, args, filters=[], filter_fields=[]):
+    filters = {f: args[f] for f in filters if f in args}
     for filterName, className in filter_fields.items():
         filterValue = args.get(filterName)
         if filterValue is None:
             continue
         try:
-            filters[filterName] = className.objects.get(pk=from_global_id(filterValue))
-        except:
+            filters[filterName] = className.objects.get(
+                pk=from_global_id(filterValue)[1])
+        except Exception as e:
+            print("resolveFilter:", e)
             continue
 
     if len(filters) > 0:
@@ -311,6 +313,7 @@ class FavoriteChatRoomNode(DjangoObjectType):
 # {{{2 PuzzleConnection
 class PuzzleConnection(graphene.Connection):
     total_count = graphene.Int()
+
     class Meta:
         node = PuzzleNode
 
@@ -856,8 +859,7 @@ class UpdateHint(relay.ClientIDMutation):
         hint = Hint.objects.get(id=hintId)
 
         if hint.puzzle.user != user:
-            raise ValidationError(
-                _("You are not the creator of this hint"))
+            raise ValidationError(_("You are not the creator of this hint"))
 
         hint.content = content
         hint.save()
@@ -1113,15 +1115,17 @@ class Query(object):
         if "starSum" in orderBy or "-starSum" in orderBy:
             qs = qs.annotate(starSum=Suj("star__value"))
         qs = resolveOrderBy(qs, orderBy)
-        qs = resolveFilter(qs, kwargs, filters=["status", "status__gt"], filter_fields={"user": User})
+        qs = resolveFilter(
+            qs,
+            kwargs,
+            filters=["status", "status__gt"],
+            filter_fields={"user": User})
         total_count = qs.count()
         qs = resolveLimitOffset(qs, limit, offset)
         count = qs.count()
-        return PuzzleConnection(total_count=total_count, edges=[
-            PuzzleConnection.Edge(
-                node=qs[i],
-            ) for i in range(count)
-        ])
+        return PuzzleConnection(
+            total_count=total_count,
+            edges=[PuzzleConnection.Edge(node=qs[i], ) for i in range(count)])
 
     def resolve_all_dialogues(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
