@@ -111,12 +111,13 @@ collected_static
 
 # nodejs
 node_modules
-dist
-package-lock.json
 
 # relay stuff
 __generated__/
 schema.json
+
+# apollo client stuff
+fragmentTypes.json
 
 # security
 security.py

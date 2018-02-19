@@ -6,6 +6,12 @@
 
 import { componentsUserFragment } from 'containers/PuzzleActiveList/constants';
 
+export const defaultChannel = (path) => {
+  const match = path.match('/puzzle/show/([0-9]+)');
+  if (match) return `puzzle-${match[1]}`;
+  return 'lobby';
+};
+
 export const TOGGLE_MINICHAT = 'app/Chat/TOGGLE_MINICHAT';
 export const TOGGLE_MEMO = 'app/Chat/TOGGLE_MEMO';
 export const CHANGE_CHANNEL = 'app/Chat/CHANGE_CHANNEL';

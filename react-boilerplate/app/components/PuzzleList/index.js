@@ -4,83 +4,73 @@
  *
  */
 
+/* eslint-disable indent */
+/* eslint-disable no-underscore-dangle */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { FormattedMessage } from 'react-intl';
-import Relay from 'react-relay';
-import { ButtonOutline } from 'style-store';
+import { graphql } from 'react-apollo';
 
+import withNumberPaginator from 'components/withNumberPaginator';
 import PuzzlePanel from 'components/PuzzlePanel';
-import PuzzleListFragment from 'graphql/PuzzleList';
-import PuzzleListInitQuery from 'graphql/PuzzleListInitQuery';
-import chatMessages from 'containers/Chat/messages';
+import PaginatorBar from 'components/PaginatorBar';
+import PuzzleListQuery from 'graphql/PuzzleList';
+import LoadingDots from 'components/LoadingDots';
 
-const StyledButtonOutline = ButtonOutline.extend`
-  border-radius: 10px;
-  padding: 10px 0;
-`;
-
-export class PuzzleList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.loadMore = this.loadMore.bind(this);
+function PuzzleList(props) {
+  if (props.loading || !props.allPuzzles) {
+    return <LoadingDots py={50} size={8} />;
   }
-
-  loadMore() {
-    if (!this.props.relay.hasMore() || this.props.relay.isLoading()) {
-      return;
-    }
-
-    this.props.relay.loadMore(10, (error) => {
-      console.log(error);
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        {this.props.list.allPuzzles.edges.map((edge) => (
-          <PuzzlePanel node={edge.node} key={edge.node.id} />
-        ))}
-        {this.props.relay.hasMore() && (
-          <StyledButtonOutline onClick={this.loadMore} w={1}>
-            <FormattedMessage {...chatMessages.loadMore} />
-          </StyledButtonOutline>
-        )}
-      </div>
-    );
-  }
+  return (
+    <div>
+      {props.allPuzzles.edges.map((edge) => (
+        <PuzzlePanel node={edge.node} key={edge.node.id} />
+      ))}
+      <PaginatorBar
+        changePage={props.changePage}
+        numPages={Math.floor(props.allPuzzles.totalCount / props.itemsPerPage)}
+        currentPage={props.page}
+      />
+    </div>
+  );
 }
 
 PuzzleList.propTypes = {
-  relay: PropTypes.object.isRequired,
-  list: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+  allPuzzles: PropTypes.shape({
+    edges: PropTypes.array.isRequired,
+    totalCount: PropTypes.number.isRequired,
+  }),
+  page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  // eslint-disable-next-line react/no-unused-prop-types
+  itemsPerPage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  changePage: PropTypes.func,
 };
 
-const withPuzzleList = (Component) =>
-  Relay.createPaginationContainer(Component, PuzzleListFragment, {
-    direction: 'forward',
-    getConnectionFromProps(props) {
-      return props.list && props.list.allPuzzles;
-    },
-    getFragmentVariables(prevVars, totalCount) {
-      return {
-        ...prevVars,
-        count: totalCount,
-      };
-    },
-    getVariables(props, { count, cursor }, fragmentVariables) {
-      return {
-        count,
-        cursor,
-        orderBy: fragmentVariables.orderBy,
-        status: fragmentVariables.status,
-        status__gt: fragmentVariables.status__gt,
-        user: fragmentVariables.user,
-      };
-    },
-    query: PuzzleListInitQuery,
-  });
+PuzzleList.defaultProps = {
+  page: 1,
+  itemsPerPage: 10,
+  changePage: () => {},
+};
 
-export default compose(withPuzzleList)(PuzzleList);
+const withPuzzleList = graphql(PuzzleListQuery, {
+  options: ({ variables, fetchPolicy, page, itemsPerPage }) => ({
+    variables: {
+      limit: itemsPerPage,
+      offset: itemsPerPage * (page - 1),
+      ...variables,
+    },
+    fetchPolicy,
+  }),
+  props({ data }) {
+    const { loading, allPuzzles, refetch } = data;
+    return {
+      loading,
+      allPuzzles,
+      refetch,
+    };
+  },
+});
+
+export default compose(withNumberPaginator(), withPuzzleList)(PuzzleList);

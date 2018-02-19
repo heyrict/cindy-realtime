@@ -8,18 +8,56 @@ from django.db.models import Count, F, Q, Sum
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django_filters import FilterSet
-from graphene import relay, resolve_only_args
+from graphene import Field, relay, resolve_only_args
+from graphene.types.objecttype import ObjectTypeOptions
+from graphene.types.utils import yank_fields_from_attrs
+from graphene.utils.props import props
+from graphene_django import DjangoConnectionField
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
-from graphql_relay import from_global_id
+from graphql_relay import from_global_id, to_global_id
+from rx import Observable, Observer
+from six import get_unbound_function
 
 from awards import judgers
 
 from .models import *
+from .subscription import Subscription as SubscriptionType
+
+
+# {{{1 resolveLimitOffset
+def resolveLimitOffset(qs, limit, offset):
+    if isinstance(limit, int) and isinstance(offset, int):
+        end = offset + limit
+    elif isinstance(limit, int):
+        end = limit
+    else:
+        end = None
+    return qs[offset:end]
+
+
+# {{{1 resolveFilter
+def resolveFilter(qs, args, filters=[], filter_fields=[]):
+    filters = {f: args[f] for f in filters if f in args}
+    for filterName, className in filter_fields.items():
+        filterValue = args.get(filterName)
+        if filterValue is None:
+            continue
+        try:
+            filters[filterName] = className.objects.get(
+                pk=from_global_id(filterValue)[1])
+        except Exception as e:
+            print("resolveFilter:", e)
+            continue
+
+    if len(filters) > 0:
+        qs = qs.filter(**filters)
+
+    return qs
 
 
 # {{{1 resolveOrderBy
-def resolveOrderBy(instance, order_by):
+def resolveOrderBy(qs, order_by):
     '''
     resolve order_by operation with nulls put at last.
 
@@ -39,9 +77,9 @@ def resolveOrderBy(instance, order_by):
             fieldQueries.append(
                 F(fieldName).desc(nulls_last=True)
                 if desc else F(fieldName).asc(nulls_last=True))
-        return instance.objects.order_by(*fieldQueries)
+        return qs.order_by(*fieldQueries)
     else:
-        return instance.objects.all()
+        return qs.all()
 
 
 # {{{1 Nodes
@@ -91,27 +129,11 @@ class AwardNode(DjangoObjectType):
         return self.id
 
 
-# {{{2 UserAwardNode
-class UserAwardNode(DjangoObjectType):
-    class Meta:
-        model = UserAward
-        filter_fields = []
-        interfaces = (relay.Node, )
-
-    rowid = graphene.Int()
-
-    def resolve_rowid(self, info):
-        return self.id
-
-
 # {{{2 PuzzleNode
 class PuzzleNode(DjangoObjectType):
     class Meta:
         model = Puzzle
-        filter_fields = {
-            "status": ["exact", "gt"],
-            "user": ["exact"],
-        }
+        filter_fields = []
         interfaces = (relay.Node, )
 
     rowid = graphene.Int()
@@ -155,6 +177,19 @@ class PuzzleNode(DjangoObjectType):
             return self.bookmarkCount
         except:
             return self.bookmark_set.count()
+
+
+# {{{2 UserAwardNode
+class UserAwardNode(DjangoObjectType):
+    class Meta:
+        model = UserAward
+        filter_fields = []
+        interfaces = (relay.Node, )
+
+    rowid = graphene.Int()
+
+    def resolve_rowid(self, info):
+        return self.id
 
 
 # {{{2 DialogueNode
@@ -201,6 +236,19 @@ class ChatRoomNode(DjangoObjectType):
     class Meta:
         model = ChatRoom
         filter_fields = ['name']
+        interfaces = (relay.Node, )
+
+    rowid = graphene.Int()
+
+    def resolve_rowid(self, info):
+        return self.id
+
+
+# {{{2 FavoriteChatRoomNode
+class FavoriteChatRoomNode(DjangoObjectType):
+    class Meta:
+        model = FavoriteChatRoom
+        filter_fields = ['user']
         interfaces = (relay.Node, )
 
     rowid = graphene.Int()
@@ -261,22 +309,13 @@ class FavoriteChatRoomNode(DjangoObjectType):
         return self.id
 
 
-# {{{1 FilterSets
-# {{{2 PuzzleNodeFilterSet
-class PuzzleNodeFilterSet(FilterSet):
-    name = django_filters.CharFilter()
+# {{{1 Connections
+# {{{2 PuzzleConnection
+class PuzzleConnection(graphene.Connection):
+    total_count = graphene.Int()
 
     class Meta:
-        model = Puzzle
-        fields = {
-            "status": ["exact", "gt"],
-            "user": ["exact"],
-        }
-
-    @property
-    def qs(self):
-        return super(PuzzleNodeFilterSet, self).qs.annotate(
-            starCount=Count("star__value"), starSum=Sum("star__value"))
+        node = PuzzleNode
 
 
 # {{{1 Unions
@@ -289,6 +328,72 @@ class PuzzleShowUnion(graphene.Union):
 class PuzzleShowUnionConnection(relay.Connection):
     class Meta:
         node = PuzzleShowUnion
+
+
+# {{{1 Subscriptions
+# {{{2 PuzzleSubscription
+class PuzzleSubscription(SubscriptionType):
+    class Meta:
+        output = PuzzleNode
+
+    class Arguments:
+        id = graphene.String()
+
+    @classmethod
+    def next(cls, obj, info, *, id=None):
+        if isinstance(obj, Puzzle):
+            if id:
+                if id == to_global_id('PuzzleNode', obj.id):
+                    return obj
+                return
+            return obj
+
+
+# {{{2 DialogueSubscription
+class DialogueSubscription(SubscriptionType):
+    class Meta:
+        output = DialogueNode
+
+    @classmethod
+    def next(cls, obj, info):
+        if isinstance(obj, Dialogue):
+            return obj
+
+
+# {{{2 PuzzleShowUnionSubscription
+class PuzzleShowUnionSubscription(SubscriptionType):
+    class Meta:
+        output = PuzzleShowUnion
+
+    class Arguments:
+        id = graphene.String()
+
+    @classmethod
+    def next(cls, obj, info, *, id=None):
+        if isinstance(obj, (Hint, Dialogue)):
+            if id:
+                if id == to_global_id('PuzzleNode', obj.puzzle.id):
+                    return obj
+                return
+            return obj
+
+
+# {{{2 ChatMessageSubscription
+class ChatMessageSubscription(SubscriptionType):
+    class Meta:
+        output = ChatMessageNode
+
+    class Arguments:
+        chatroomName = graphene.String()
+
+    @classmethod
+    def next(cls, obj, info, *, chatroomName=None):
+        if isinstance(obj, ChatMessage):
+            if chatroomName:
+                if chatroomName == obj.chatroom.name:
+                    return obj
+                return
+            return obj
 
 
 # {{{1 Mutations
@@ -414,7 +519,7 @@ class CreateChatMessage(graphene.ClientIDMutation):
 
     class Input:
         content = graphene.String()
-        chatroom = graphene.String()
+        chatroomName = graphene.String()
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -423,11 +528,11 @@ class CreateChatMessage(graphene.ClientIDMutation):
             raise ValidationError(_("Please login!"))
 
         content = input['content']
-        chatroom = ChatRoom.objects.get(
-            id=from_global_id(input['chatroom'])[1])
+        chatroomName = input['chatroomName']
+        chatroom = ChatRoom.objects.get(name=chatroomName)
 
         if not content:
-            raise ValidationError(_("Chatroom content cannot be empty!"))
+            raise ValidationError(_("ChatMessage cannot be empty!"))
 
         chatmessage = ChatMessage.objects.create(
             content=content, user=user, chatroom=chatroom)
@@ -632,7 +737,6 @@ class UpdateStar(graphene.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        print(input)
         user = info.context.user
         if (not user.is_authenticated):
             raise ValidationError(_("Please login!"))
@@ -755,8 +859,7 @@ class UpdateHint(relay.ClientIDMutation):
         hint = Hint.objects.get(id=hintId)
 
         if hint.puzzle.user != user:
-            raise ValidationError(
-                _("Only puzzle's creator can edit this hint"))
+            raise ValidationError(_("You are not the creator of this hint"))
 
         hint.content = content
         hint.save()
@@ -782,7 +885,7 @@ class UpdateCurrentAward(relay.ClientIDMutation):
         else:
             useraward = UserAward.objects.get(id=userawardId)
             if useraward.user != user:
-                raise ValidationError(_("Only award owner can set this award"))
+                raise ValidationError(_("You are not the owner of this award"))
             user.current_award = useraward
 
         user.save()
@@ -949,16 +1052,22 @@ class Query(object):
         AwardNode, orderBy=graphene.List(of_type=graphene.String))
     all_userawards = DjangoFilterConnectionField(
         UserAwardNode, orderBy=graphene.List(of_type=graphene.String))
-    all_puzzles = DjangoFilterConnectionField(
-        PuzzleNode,
-        filterset_class=PuzzleNodeFilterSet,
-        orderBy=graphene.List(of_type=graphene.String))
+    all_puzzles = graphene.ConnectionField(
+        PuzzleConnection,
+        orderBy=graphene.List(of_type=graphene.String),
+        user=graphene.ID(),
+        status=graphene.Float(),
+        status__gt=graphene.Float(),
+        limit=graphene.Int(),
+        offset=graphene.Int())
     all_dialogues = DjangoFilterConnectionField(
         DialogueNode, orderBy=graphene.List(of_type=graphene.String))
     all_chatmessages = DjangoFilterConnectionField(
-        ChatMessageNode, orderBy=graphene.List(of_type=graphene.String))
-    all_chatrooms = DjangoFilterConnectionField(
-        ChatRoomNode, orderBy=graphene.List(of_type=graphene.String))
+        ChatMessageNode,
+        orderBy=graphene.List(of_type=graphene.String),
+        chatroomName=graphene.String())
+    all_chatrooms = DjangoFilterConnectionField(ChatRoomNode)
+    all_favorite_chatrooms = DjangoFilterConnectionField(FavoriteChatRoomNode)
     all_comments = DjangoFilterConnectionField(
         CommentNode, orderBy=graphene.List(of_type=graphene.String))
     all_stars = DjangoFilterConnectionField(
@@ -986,39 +1095,66 @@ class Query(object):
     # {{{3 resolve all
     def resolve_all_users(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(User, orderBy)
+        return resolveOrderBy(User.objects, orderBy)
 
     def resolve_all_awards(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Award, orderBy)
+        return resolveOrderBy(Award.objects, orderBy)
 
     def resolve_all_userawards(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(UserAward, orderBy)
+        return resolveOrderBy(UserAward.objects, orderBy)
 
     def resolve_all_puzzles(self, info, **kwargs):
-        orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Puzzle, orderBy)
+        orderBy = kwargs.get("orderBy", [])
+        limit = kwargs.get("limit", None)
+        offset = kwargs.get("offset", None)
+        qs = Puzzle.objects.all()
+        if "starCount" in orderBy or "-starCount" in orderBy:
+            qs = qs.annotate(starCount=Count("star"))
+        if "starSum" in orderBy or "-starSum" in orderBy:
+            qs = qs.annotate(starSum=Sum("star__value"))
+        if "commentCount" in orderBy or "-commentCount" in orderBy:
+            qs = qs.annotate(commentCount=Count("comment"))
+        qs = resolveOrderBy(qs, orderBy)
+        qs = resolveFilter(
+            qs,
+            kwargs,
+            filters=["status", "status__gt"],
+            filter_fields={"user": User})
+        total_count = qs.count()
+        qs = resolveLimitOffset(qs, limit, offset)
+        qs = list(qs)
+        return PuzzleConnection(
+            total_count=total_count,
+            edges=[
+                PuzzleConnection.Edge(node=qs[i], ) for i in range(len(qs))
+            ])
 
     def resolve_all_dialogues(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Dialogue, orderBy)
+        return resolveOrderBy(Dialogue.objects, orderBy)
 
     def resolve_all_chatmessages(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(ChatMessage, orderBy)
+        chatroomName = kwargs.get("chatroomName", None)
+        qs = resolveOrderBy(ChatMessage.objects, orderBy)
+        if chatroomName:
+            chatroom = ChatRoom.objects.get(name=chatroomName)
+            return qs.filter(chatroom=chatroom)
+        return qs
 
     def resolve_all_comments(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Comment, orderBy)
+        return resolveOrderBy(Comment.objects, orderBy)
 
     def resolve_all_stars(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Star, orderBy)
+        return resolveOrderBy(Star.objects, orderBy)
 
     def resolve_all_bookmarks(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Bookmark, orderBy)
+        return resolveOrderBy(Bookmark.objects, orderBy)
 
     # {{{3 resolve union
     def resolve_puzzle_show_union(self, info, **kwargs):
@@ -1053,3 +1189,11 @@ class Mutation(graphene.ObjectType):
     login = UserLogin.Field()
     logout = UserLogout.Field()
     register = UserRegister.Field()
+
+
+# {{{1 Subscription
+class Subscription(graphene.ObjectType):
+    puzzle_sub = PuzzleSubscription.Field()
+    dialogue_sub = DialogueSubscription.Field()
+    puzzle_show_union_sub = PuzzleShowUnionSubscription.Field()
+    chatmessage_sub = ChatMessageSubscription.Field()

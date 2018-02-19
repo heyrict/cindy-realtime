@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-29 18:11+0900\n"
+"POT-Creation-Date: 2018-02-17 17:04+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,19 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: cindy/settings.py:145
+#: cindy/settings.py:144
 msgid "Japanese"
 msgstr "Japonais"
 
-#: cindy/settings.py:146
+#: cindy/settings.py:145
 msgid "English"
 msgstr "Anglais"
 
-#: cindy/settings.py:147
-msgid "Chinese"
-msgstr "Chinois"
-
-#: cindy/settings.py:148
+#: cindy/settings.py:146
 msgid "French"
 msgstr ""
 
@@ -46,183 +42,280 @@ msgstr "Surnom"
 msgid "profile"
 msgstr "Profile"
 
-#: sui_hei/models.py:28
-msgid "experience"
+#: sui_hei/models.py:32
+#, fuzzy
+#| msgid "edit"
+msgid "credit"
+msgstr "Editer"
+
+#: sui_hei/models.py:33
+msgid "hide bookmark"
 msgstr ""
 
-#: sui_hei/models.py:29
-msgid "snipe"
-msgstr ""
-
-#: sui_hei/models.py:30
-msgid "sniped"
-msgstr ""
-
-#: sui_hei/models.py:47 sui_hei/models.py:71
+#: sui_hei/models.py:50 sui_hei/models.py:74 sui_hei/models.py:115
+#: sui_hei/models.py:131 sui_hei/models.py:146 sui_hei/models.py:163
 msgid "created"
 msgstr "Heure créé"
 
-#: sui_hei/models.py:50
+#: sui_hei/models.py:53
 #, fuzzy
 #| msgid "Award"
 msgid "User-Award"
 msgstr "Titre"
 
-#: sui_hei/models.py:66
+#: sui_hei/models.py:69
 msgid "title"
 msgstr "Titre"
 
-#: sui_hei/models.py:67
+#: sui_hei/models.py:70
 msgid "yami"
 msgstr "Yami"
 
-#: sui_hei/models.py:68
+#: sui_hei/models.py:71
 msgid "genre"
 msgstr "Genre"
 
-#: sui_hei/models.py:69 sui_hei/models.py:123 sui_hei/models.py:141
+#: sui_hei/models.py:72 sui_hei/models.py:129 sui_hei/models.py:144
+#: sui_hei/models.py:181
 msgid "content"
 msgstr "Contenu"
 
-#: sui_hei/models.py:70
-msgid "kaisetu"
-msgstr "Solution"
+#: sui_hei/models.py:73
+#, fuzzy
+#| msgid "Question"
+msgid "solution"
+msgstr "Qustion"
 
-#: sui_hei/models.py:72
+#: sui_hei/models.py:75
 msgid "modified"
 msgstr "Heure modifié"
 
-#: sui_hei/models.py:73
+#: sui_hei/models.py:76
 msgid "status"
 msgstr ""
 
-#: sui_hei/models.py:74
+#: sui_hei/models.py:77
 msgid "memo"
 msgstr ""
 
-#: sui_hei/models.py:75
+#: sui_hei/models.py:78
 msgid "score"
 msgstr "Score"
 
-#: sui_hei/models.py:78
-msgid "Soup"
-msgstr "Soup"
+#: sui_hei/models.py:81
+msgid "Puzzle"
+msgstr ""
 
-#: sui_hei/models.py:85
+#: sui_hei/models.py:88
 msgid "Albatross"
 msgstr "Enigme de situaton"
 
-#: sui_hei/models.py:86
+#: sui_hei/models.py:89
 msgid "20th-Door"
 msgstr "20 questions"
 
-#: sui_hei/models.py:87
+#: sui_hei/models.py:90
 msgid "Little Albat"
 msgstr "Petit énigme de situation"
 
-#: sui_hei/models.py:88
+#: sui_hei/models.py:91
 msgid "Others & Formal"
 msgstr "Autres formes d'énigmes"
 
-#: sui_hei/models.py:92
+#: sui_hei/models.py:95
 msgid "Unsolved"
 msgstr ""
 
-#: sui_hei/models.py:93
+#: sui_hei/models.py:96
 msgid "Solved"
 msgstr ""
 
-#: sui_hei/models.py:94
+#: sui_hei/models.py:97
 msgid "Dazed"
 msgstr ""
 
-#: sui_hei/models.py:95
+#: sui_hei/models.py:98
 msgid "Hidden"
 msgstr ""
 
-#: sui_hei/models.py:96
+#: sui_hei/models.py:99
 msgid "Forced Hidden"
 msgstr ""
 
-#: sui_hei/models.py:104
-msgid "shitumon"
-msgstr "Question"
-
-#: sui_hei/models.py:105
-msgid "kaitou"
-msgstr "Réponse"
-
-#: sui_hei/models.py:106
-msgid "good_ques"
-msgstr "Bonne question"
-
 #: sui_hei/models.py:107
-msgid "true_ques"
-msgstr "Bonne réponse"
-
-#: sui_hei/models.py:108
-msgid "askedtime"
-msgstr "Heure questionné"
+#, fuzzy
+#| msgid "Question"
+msgid "question"
+msgstr "Qustion"
 
 #: sui_hei/models.py:109
-msgid "answeredtime"
+msgid "question edit times"
+msgstr ""
+
+#: sui_hei/models.py:110
+#, fuzzy
+#| msgid "answeredtime"
+msgid "answer"
 msgstr "Heure répondu"
 
 #: sui_hei/models.py:112
+#, fuzzy
+#| msgid "answeredtime"
+msgid "answer edit times"
+msgstr "Heure répondu"
+
+#: sui_hei/models.py:113
+msgid "good_ques"
+msgstr "Bonne question"
+
+#: sui_hei/models.py:114
+msgid "true_ques"
+msgstr "Bonne réponse"
+
+#: sui_hei/models.py:116
+msgid "answeredtime"
+msgstr "Heure répondu"
+
+#: sui_hei/models.py:119
 msgid "Question"
 msgstr "Qustion"
 
-#: sui_hei/models.py:122
+#: sui_hei/models.py:134
+msgid "Hint"
+msgstr ""
+
+#: sui_hei/models.py:147
+#, fuzzy
+#| msgid "Created time"
+msgid "edit times"
+msgstr "Heure crée"
+
+#: sui_hei/models.py:150
+msgid "ChatMessage"
+msgstr ""
+
+#: sui_hei/models.py:161
 msgid "channel"
 msgstr "Chaîne"
 
-#: sui_hei/models.py:129
-msgid "Can add homepage info"
-msgstr "Peut modifié les informations de la page d'acceuil"
+#: sui_hei/models.py:162
+#, fuzzy
+#| msgid "Question"
+msgid "description"
+msgstr "Qustion"
 
-#: sui_hei/models.py:130
-msgid "Can grant awards to users"
+#: sui_hei/models.py:166
+msgid "ChatRoom"
 msgstr ""
 
-#: sui_hei/models.py:131
-msgid "Lobby"
-msgstr "Lobby"
-
-#: sui_hei/models.py:142
+#: sui_hei/models.py:182
 msgid "spoiler"
 msgstr ""
 
-#: sui_hei/models.py:145
+#: sui_hei/models.py:185
 #, fuzzy
 #| msgid "Comments"
 msgid "Comment"
 msgstr "Commentaires"
 
-#: sui_hei/models.py:154
+#: sui_hei/models.py:194 sui_hei/models.py:206
 msgid "Value"
 msgstr ""
 
-#: sui_hei/models.py:157
+#: sui_hei/models.py:197
+msgid "Bookmark"
+msgstr ""
+
+#: sui_hei/models.py:209
 msgid "Star"
 msgstr "Etoile"
 
-#: sui_hei/schema.py:147
+#: sui_hei/schema.py:395 sui_hei/schema.py:447 sui_hei/schema.py:476
+#: sui_hei/schema.py:508 sui_hei/schema.py:535 sui_hei/schema.py:560
+#: sui_hei/schema.py:585 sui_hei/schema.py:610 sui_hei/schema.py:647
+#: sui_hei/schema.py:679 sui_hei/schema.py:722 sui_hei/schema.py:748
+#: sui_hei/schema.py:775 sui_hei/schema.py:803 sui_hei/schema.py:831
+#: sui_hei/schema.py:860 sui_hei/schema.py:888 sui_hei/schema.py:913
+#: sui_hei/schema.py:936
 #, fuzzy
 #| msgid "Last login"
 msgid "Please login!"
 msgstr "Dernier connecte"
 
-#: sui_hei/schema.py:186
+#: sui_hei/schema.py:453 sui_hei/schema.py:618 sui_hei/schema.py:653
+msgid "Question content cannot be empty!"
+msgstr ""
+
+#: sui_hei/schema.py:482 sui_hei/schema.py:837
+msgid "Hint content cannot be empty!"
+msgstr ""
+
+#: sui_hei/schema.py:488
+msgid "You are not the creator of this puzzle"
+msgstr ""
+
+#: sui_hei/schema.py:515
+msgid "ChatMessage cannot be empty!"
+msgstr ""
+
+#: sui_hei/schema.py:688
+msgid "Solution cannot be empty!"
+msgstr ""
+
+#: sui_hei/schema.py:783 sui_hei/schema.py:920
+msgid "You are not the creator of this bookmark"
+msgstr ""
+
+#: sui_hei/schema.py:811
+msgid "You are not the creator of this chatroom"
+msgstr ""
+
+#: sui_hei/schema.py:843
+msgid "You are not the creator of this hint"
+msgstr ""
+
+#: sui_hei/schema.py:869
+msgid "You are not the owner of this award"
+msgstr ""
+
+#: sui_hei/schema.py:961
 msgid "Login incorrect!"
 msgstr ""
 
-#: sui_hei/templates/main.html:9
-msgid "A website for playing situation puzzles"
+#: sui_hei/templates/index.html:12
+#, fuzzy
+#| msgid "Welcome to Cindy, a real-time website for lateral thinking games!"
+msgid "Cindy -- the best place for lateral thinking"
+msgstr ""
+"Bienvenue chez [Cindy], un site qu'on peut jouer des énigmes à situation!"
+
+#: sui_hei/templates/index.html:13
+msgid "Play situation puzzles realtime!"
 msgstr ""
 
-#: sui_hei/templates/main.html:9
-msgid "Chat With Lateral Thinking!"
-msgstr ""
+#~ msgid "Chinese"
+#~ msgstr "Chinois"
+
+#~ msgid "kaisetu"
+#~ msgstr "Solution"
+
+#~ msgid "Soup"
+#~ msgstr "Soup"
+
+#~ msgid "shitumon"
+#~ msgstr "Question"
+
+#~ msgid "kaitou"
+#~ msgstr "Réponse"
+
+#~ msgid "askedtime"
+#~ msgstr "Heure questionné"
+
+#~ msgid "Can add homepage info"
+#~ msgstr "Peut modifié les informations de la page d'acceuil"
+
+#~ msgid "Lobby"
+#~ msgstr "Lobby"
 
 #, fuzzy
 #~| msgid "title"
@@ -285,9 +378,6 @@ msgstr ""
 #~ msgid "Change channel"
 #~ msgstr "Changer de chaîne"
 
-#~ msgid "edit"
-#~ msgstr "Editer"
-
 #~ msgid "Send"
 #~ msgstr "Envoyer"
 
@@ -299,10 +389,6 @@ msgstr ""
 
 #~ msgid "MyStar"
 #~ msgstr "Mes étoiles"
-
-#~ msgid "Welcome to Cindy, a real-time website for lateral thinking games!"
-#~ msgstr ""
-#~ "Bienvenue chez [Cindy], un site qu'on peut jouer des énigmes à situation!"
 
 #~ msgid ""
 #~ "You can register to cindy free and enjoy its contents in one more step!"
@@ -389,9 +475,6 @@ msgstr ""
 
 #~ msgid "Name"
 #~ msgstr "Nom"
-
-#~ msgid "Created time"
-#~ msgstr "Heure crée"
 
 #, fuzzy
 #~| msgid "Question"

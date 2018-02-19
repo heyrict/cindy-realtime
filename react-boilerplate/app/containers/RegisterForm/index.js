@@ -8,13 +8,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import environment from 'Environment';
 import { text2md } from 'common';
 
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
-import { commitMutation } from 'react-relay';
+import { graphql } from 'react-apollo';
 import { Form, FormControl, Panel } from 'react-bootstrap';
 import { ButtonOutline } from 'style-store';
 
@@ -117,26 +116,25 @@ export class RegisterForm extends React.Component {
       return;
     }
     // Commit
-    commitMutation(environment, {
-      mutation: RegisterFormMutation,
-      variables: {
-        input: { username, nickname, password },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          this.setState({
-            errorMsg: errors,
-          });
-        } else if (response) {
-          const user = response.register.user;
-          this.props.updateCurrentUser({
-            ...user,
-            userId: user.rowid,
-          });
-          this.props.dispatch(registerSucceeded());
-        }
-      },
-    });
+    this.props
+      .mutate({
+        variables: {
+          input: { username, nickname, password },
+        },
+      })
+      .then(({ data }) => {
+        const user = data.register.user;
+        this.props.updateCurrentUser({
+          ...user,
+          userId: user.rowid,
+        });
+        this.props.dispatch(registerSucceeded());
+      })
+      .catch((error) => {
+        this.setState({
+          errorMsg: error,
+        });
+      });
   }
   // }}}
   // {{{ render
@@ -162,11 +160,13 @@ export class RegisterForm extends React.Component {
     }
     return (
       <Form horizontal>
-        {this.state.errorMsg
-          ? this.state.errorMsg.map((e) => (
-              <Panel header={e.message} bsStyle="danger" key={e.message} />
-            ))
-          : null}
+        {this.state.errorMsg ? (
+          <Panel
+            header={this.state.errorMsg.message}
+            bsStyle="danger"
+            key={this.state.errorMsg.message}
+          />
+        ) : null}
         <FieldGroup
           id="formRegisterUsername"
           label={<FormattedMessage {...messages.usernameLabel} />}
@@ -222,7 +222,8 @@ export class RegisterForm extends React.Component {
 RegisterForm.propTypes = {
   dispatch: PropTypes.func.isRequired,
   updateCurrentUser: PropTypes.func.isRequired,
-  onHide: PropTypes.func,
+  mutate: PropTypes.func,
+  // onHide: PropTypes.func,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -236,7 +237,10 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(null, mapDispatchToProps);
 
+const withMutation = graphql(RegisterFormMutation);
+
 export default compose(
+  withMutation,
   withConnect,
   withModal({
     header: 'Register',

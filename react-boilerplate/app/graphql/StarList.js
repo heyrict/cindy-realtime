@@ -1,15 +1,10 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
+import PuzzlePanel from './PuzzlePanel';
 
-const StarList = graphql`
-  fragment StarList_list on Query
-    @argumentDefinitions(
-      count: { type: Int, defaultValue: 3 }
-      cursor: { type: String }
-      orderBy: { type: "[String]", defaultValue: "-id" }
-      user: { type: ID, defaultValue: null }
-    ) {
+export const StarList = gql`
+  query StarList($count: Int, $cursor: String, $orderBy: [String], $user: ID) {
     allStars(first: $count, after: $cursor, orderBy: $orderBy, user: $user)
-      @connection(key: "StarNode_allStars") {
+      @connection(key: "StarNode_allStars", filter: ["orderBy", "user"]) {
       edges {
         node {
           id
@@ -19,8 +14,13 @@ const StarList = graphql`
           }
         }
       }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
     }
   }
+  ${PuzzlePanel}
 `;
 
 export default StarList;

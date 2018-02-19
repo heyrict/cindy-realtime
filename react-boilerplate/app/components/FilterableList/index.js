@@ -6,8 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { QueryRenderer } from 'react-relay';
-import environment from 'Environment';
 import { RoundedPanel } from 'style-store';
 import { Flex, Box } from 'rebass';
 
@@ -47,14 +45,13 @@ class FilterableList extends React.PureComponent {
       let exist = false;
       let order = [];
       state.order.forEach((obj) => {
-        if (obj.key !== name) {
-          order = order.concat(obj);
-        } else {
+        if (obj.key === name) {
+          order = [{ key: name, asc: !obj.asc }];
           exist = true;
         }
       });
       if (!exist) {
-        order = order.concat({ key: name, asc: false });
+        order = [{ key: name, asc: false }];
       }
       return { ...state, order };
     });
@@ -68,6 +65,7 @@ class FilterableList extends React.PureComponent {
   }
   render() {
     const reverseOrder = this.reverseOrder();
+    const { component: QueryList, variables, ...others } = this.props;
     return (
       <div>
         <RoundedPanel>
@@ -85,16 +83,12 @@ class FilterableList extends React.PureComponent {
             ))}
           </Flex>
         </RoundedPanel>
-        <QueryRenderer
-          environment={environment}
-          component={this.props.component}
-          query={this.props.query}
+        <QueryList
           variables={{
             orderBy: this.getOrder(),
-            count: 10,
-            ...this.props.variables,
+            ...variables,
           }}
-          render={this.props.render}
+          {...others}
         />
       </div>
     );
@@ -109,9 +103,7 @@ FilterableList.defaultProps = {
 };
 
 FilterableList.propTypes = {
-  query: PropTypes.any.isRequired,
   component: PropTypes.any.isRequired,
-  render: PropTypes.func.isRequired,
   variables: PropTypes.object,
   order: PropTypes.array,
   orderList: PropTypes.array,

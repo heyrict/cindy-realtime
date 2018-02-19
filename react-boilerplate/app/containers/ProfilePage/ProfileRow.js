@@ -4,6 +4,7 @@ import bootbox from 'bootbox';
 import { FormattedMessage } from 'react-intl';
 import { EditButton, ImgXs } from 'style-store';
 import { text2md, to_global_id as t } from 'common';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Flex } from 'rebass';
@@ -13,8 +14,7 @@ import dialogueMessages from 'containers/Dialogue/messages';
 import tick from 'images/tick.svg';
 import cross from 'images/cross.svg';
 
-import { commitMutation } from 'react-relay';
-import environment from 'Environment';
+import { graphql } from 'react-apollo';
 import UpdateUserMutation from 'graphql/UpdateUserMutation';
 
 import ProfRow from './ProfRow';
@@ -36,21 +36,19 @@ class ProfileRow extends React.PureComponent {
   }
 
   handleSubmit() {
-    commitMutation(environment, {
-      mutation: UpdateUserMutation,
-      variables: { input: { profile: this.state.content } },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert({
-            title: 'Error',
-            message: errors.map((error) => error.message).join(','),
-          });
-          return;
-        }
+    this.props
+      .mutate({
+        variables: { input: { profile: this.state.content } },
+      })
+      .then(() => {
         this.toggleEdit(false);
-      },
-      onError: (err) => console.error(err),
-    });
+      })
+      .catch((error) => {
+        bootbox.alert({
+          title: 'Error',
+          message: error.message,
+        });
+      });
   }
 
   render() {
@@ -102,10 +100,15 @@ ProfileRow.propTypes = {
   currentUser: PropTypes.object.isRequired,
   userId: PropTypes.string.isRequired,
   profile: PropTypes.string.isRequired,
+  mutate: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentUser: makeSelectUserNavbar(),
 });
 
-export default connect(mapStateToProps)(ProfileRow);
+const withConnect = connect(mapStateToProps);
+
+const withMutation = graphql(UpdateUserMutation);
+
+export default compose(withConnect, withMutation)(ProfileRow);

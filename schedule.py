@@ -31,7 +31,7 @@ def clean_recent_minichat(recent=None):
         return
 
     lobby = ChatRoom.objects.get(name="lobby")
-    lobby_messages = ChatMessage.objects.filter(chatroom=lobby)
+    lobby_messages = ChatMessage.objects.filter(chatroom=lobby).order_by("id")
     count = lobby_messages.count()
     if count < recent:
         return

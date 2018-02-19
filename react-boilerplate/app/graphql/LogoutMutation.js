@@ -1,6 +1,6 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
 
-const LogoutMutation = graphql`
+const LogoutMutation = gql`
   mutation LogoutMutation($input: UserLogoutInput!) {
     logout(input: $input) {
       clientMutationId

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { commitMutation } from 'react-relay';
 import { Glyphicon } from 'react-bootstrap';
-import environment from 'Environment';
 import bootbox from 'bootbox';
+import { graphql } from 'react-apollo';
 import createFavoriteChatRoomMutation from 'graphql/CreateFavoriteChatRoomMutation';
 
 import { addFavoriteChatRoom } from './actions';
@@ -17,21 +17,20 @@ const FavBtn = styled.button`
 
 function AddToFavBtn(props) {
   const handleSubmit = (dispatch) => {
-    commitMutation(environment, {
-      mutation: createFavoriteChatRoomMutation,
-      variables: {
-        input: {
-          chatroomName: props.chatroomName,
+    props
+      .mutate({
+        variables: {
+          input: {
+            chatroomName: props.chatroomName,
+          },
         },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-          return;
-        }
+      })
+      .then(() => {
         dispatch(addFavoriteChatRoom(props.chatroomName));
-      },
-    });
+      })
+      .catch((error) => {
+        bootbox.alert(error.message);
+      });
   };
 
   return (
@@ -44,10 +43,15 @@ function AddToFavBtn(props) {
 AddToFavBtn.propTypes = {
   chatroomName: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
+  mutate: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
 
-export default connect(mapDispatchToProps)(AddToFavBtn);
+const withConnect = connect(mapDispatchToProps);
+
+const withMutation = graphql(createFavoriteChatRoomMutation);
+
+export default compose(withMutation, withConnect)(AddToFavBtn);

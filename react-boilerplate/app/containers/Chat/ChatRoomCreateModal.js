@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import withModal from 'components/withModal';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { commitMutation } from 'react-relay';
-import environment from 'Environment';
 import CreateChatRoomMutation from 'graphql/CreateChatRoomMutation';
 import { Form, FormControl, Panel } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
+import { graphql } from 'react-apollo';
 import FieldGroup from 'components/FieldGroup';
 import messages from './messages';
-import { updateChannel, openChat } from './actions';
+import { updateChannel } from './actions';
 
 /* eslint-disable react/jsx-indent */
 
@@ -48,34 +47,33 @@ export class ChatRoomCreateForm extends React.Component {
   // {{{ confirm
   confirm() {
     const { name, description } = this.state;
-    commitMutation(environment, {
-      mutation: CreateChatRoomMutation,
-      variables: { input: { name, description } },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          this.setState({
-            errorMsg: errors,
-          });
-        } else if (response) {
-          this.props.dispatch(
-            updateChannel(name, response.createChatroom.chatroom)
-          );
-          this.props.onHide();
-          this.props.tune(name);
-        }
-      },
-    });
+    this.props
+      .mutate({
+        variables: { input: { name, description } },
+      })
+      .then(({ data }) => {
+        this.props.dispatch(updateChannel(name, data.createChatroom.chatroom));
+        this.props.onHide();
+        this.props.tune(name);
+      })
+      .catch((error) => {
+        this.setState({
+          errorMsg: error,
+        });
+      });
   }
   // }}}
   // {{{ render
   render() {
     return (
       <Form horizontal>
-        {this.state.errorMsg
-          ? this.state.errorMsg.map((e) => (
-              <Panel header={e.message} bsStyle="danger" key={e.message} />
-            ))
-          : null}
+        {this.state.errorMsg ? (
+          <Panel
+            header={this.state.errorMsg.message}
+            bsStyle="danger"
+            key={this.state.errorMsg.message}
+          />
+        ) : null}
         <FieldGroup
           id="formCreateChatRoomName"
           label={<FormattedMessage {...messages.channelName} />}
@@ -109,14 +107,18 @@ ChatRoomCreateForm.propTypes = {
   dispatch: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
   tune: PropTypes.func.isRequired,
+  mutate: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
 
+const withMutation = graphql(CreateChatRoomMutation);
+
 export default compose(
   connect(null, mapDispatchToProps),
+  withMutation,
   withModal({
     header: 'New ChatRoom',
     footer: {

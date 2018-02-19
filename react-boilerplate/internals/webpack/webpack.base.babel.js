@@ -28,9 +28,6 @@ module.exports = (options) => ({
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: {
-            plugins: ['relay'],
-          },
         },
       },
       {

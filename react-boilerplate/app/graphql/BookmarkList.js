@@ -1,15 +1,18 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
+import PuzzlePanel from './PuzzlePanel';
 
-const BookmarkList = graphql`
-  fragment BookmarkList_list on Query
-    @argumentDefinitions(
-      count: { type: Int, defaultValue: 3 }
-      cursor: { type: String }
-      orderBy: { type: "[String]", defaultValue: "-id" }
-      user: { type: ID, defaultValue: null }
-    ) {
+export const BookmarkListInitQuery = gql`
+  query BookmarkListInitQuery(
+    $count: Int
+    $cursor: String
+    $orderBy: [String]
+    $user: ID
+  ) {
     allBookmarks(first: $count, after: $cursor, orderBy: $orderBy, user: $user)
-      @connection(key: "BookmarkNode_allBookmarks") {
+      @connection(
+        key: "BookmarkNode_allBookmarks"
+        filter: ["orderBy", "user"]
+      ) {
       edges {
         node {
           id
@@ -19,8 +22,13 @@ const BookmarkList = graphql`
           }
         }
       }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
     }
   }
+  ${PuzzlePanel}
 `;
 
-export default BookmarkList;
+export default BookmarkListInitQuery;

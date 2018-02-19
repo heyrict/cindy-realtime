@@ -1,31 +1,37 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
+import PuzzlePanel from './PuzzlePanel';
 
-const PuzzleList = graphql`
-  fragment PuzzleList_list on Query
-    @argumentDefinitions(
-      count: { type: Int, defaultValue: 3 }
-      cursor: { type: String }
-      orderBy: { type: "[String]", defaultValue: "-id" }
-      status: { type: Float, defaultValue: null }
-      status__gt: { type: Float, defaultValue: null }
-      user: { type: ID, defaultValue: null }
-    ) {
+export const PuzzleList = gql`
+  query PuzzleListInitQuery(
+    $orderBy: [String]
+    $offset: Int
+    $limit: Int
+    $status: Float
+    $status__gt: Float
+    $user: ID
+  ) {
     allPuzzles(
-      first: $count
-      after: $cursor
+      offset: $offset
+      limit: $limit
       orderBy: $orderBy
       status: $status
       status_Gt: $status__gt
       user: $user
-    ) @connection(key: "PuzzleNode_allPuzzles") {
+    )
+      @connection(
+        key: "PuzzleNode_allPuzzles"
+        filter: ["orderBy", "user", "offset"]
+      ) {
       edges {
         node {
           id
           ...PuzzlePanel_node
         }
       }
+      totalCount
     }
   }
+  ${PuzzlePanel}
 `;
 
 export default PuzzleList;

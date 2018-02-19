@@ -6,3 +6,4 @@ graphene-django>=2.0,<3.0
 django-filter>=1.1,<2.0
 channels>=1.1,<2.0
 asgi-redis>=1.4,<2.0
+hiredis>=0.2.0,<1.0

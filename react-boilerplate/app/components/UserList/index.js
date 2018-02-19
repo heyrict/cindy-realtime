@@ -4,16 +4,19 @@
  *
  */
 
+/* eslint-disable indent */
+/* eslint-disable no-underscore-dangle */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import Relay from 'react-relay';
 import { ButtonOutline } from 'style-store';
 
 import UserPanel from 'components/UserPanel';
-import UserListFragment from 'graphql/UserList';
-import UserListInitQuery from 'graphql/UserListInitQuery';
+import UserListQuery from 'graphql/UserList';
+import LoadingDots from 'components/LoadingDots';
 import chatMessages from 'containers/Chat/messages';
 
 const StyledButtonOutline = ButtonOutline.extend`
@@ -21,63 +24,67 @@ const StyledButtonOutline = ButtonOutline.extend`
   padding: 10px 0;
 `;
 
-export class UserList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.loadMore = this.loadMore.bind(this);
+function UserList(props) {
+  if (props.loading || !props.allUsers) {
+    return <LoadingDots py={50} size={8} />;
   }
-
-  loadMore() {
-    if (!this.props.relay.hasMore() || this.props.relay.isLoading()) {
-      return;
-    }
-
-    this.props.relay.loadMore(10, (error) => {
-      console.log(error);
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        {this.props.list.allUsers.edges.map((edge) => (
-          <UserPanel node={edge.node} key={edge.node.id} />
-        ))}
-        {this.props.relay.hasMore() && (
-          <StyledButtonOutline onClick={this.loadMore} w={1}>
-            <FormattedMessage {...chatMessages.loadMore} />
-          </StyledButtonOutline>
-        )}
-      </div>
-    );
-  }
+  return (
+    <div>
+      {props.allUsers.edges.map((edge) => (
+        <UserPanel node={edge.node} key={edge.node.id} />
+      ))}
+      {props.hasMore() && (
+        <StyledButtonOutline onClick={props.loadMore} w={1}>
+          <FormattedMessage {...chatMessages.loadMore} />
+        </StyledButtonOutline>
+      )}
+    </div>
+  );
 }
 
 UserList.propTypes = {
-  relay: PropTypes.object.isRequired,
-  list: PropTypes.object.isRequired,
+  allUsers: PropTypes.shape({
+    edges: PropTypes.array.isRequired,
+  }),
+  loading: PropTypes.bool.isRequired,
+  hasMore: PropTypes.func.isRequired,
+  loadMore: PropTypes.func.isRequired,
 };
 
-const withUserList = (Component) =>
-  Relay.createPaginationContainer(Component, UserListFragment, {
-    direction: 'forward',
-    getConnectionFromProps(props) {
-      return props.list && props.list.allUsers;
-    },
-    getFragmentVariables(prevVars, totalCount) {
-      return {
-        ...prevVars,
-        count: totalCount,
-      };
-    },
-    getVariables(props, { count, cursor }, fragmentVariables) {
-      return {
-        count,
-        cursor,
-        orderBy: fragmentVariables.orderBy,
-      };
-    },
-    query: UserListInitQuery,
-  });
+const withUserList = graphql(UserListQuery, {
+  options: ({ variables }) => ({ variables }),
+  props({ data, ownProps }) {
+    const { loading, allUsers, fetchMore, refetch } = data;
+    return {
+      loading,
+      allUsers,
+      refetch,
+      hasMore: () => allUsers.pageInfo.hasNextPage,
+      loadMore: () =>
+        fetchMore({
+          query: UserListQuery,
+          variables: {
+            ...ownProps.variables,
+            count: 10,
+            cursor: allUsers.pageInfo.endCursor,
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            const newEdges = fetchMoreResult.allUsers.edges;
+            const pageInfo = fetchMoreResult.allUsers.pageInfo;
+
+            return newEdges.length
+              ? {
+                  allUsers: {
+                    __typename: previousResult.allUsers.__typename,
+                    edges: [...previousResult.allUsers.edges, ...newEdges],
+                    pageInfo,
+                  },
+                }
+              : previousResult;
+          },
+        }),
+    };
+  },
+});
 
 export default compose(withUserList)(UserList);

@@ -1,6 +1,6 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
 
-const DeleteFavoriteChatRoomMutation = graphql`
+const DeleteFavoriteChatRoomMutation = gql`
   mutation DeleteFavoriteChatRoomMutation(
     $input: DeleteFavoriteChatRoomInput!
   ) {

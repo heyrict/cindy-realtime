@@ -8,7 +8,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { createStructuredSelector, createSelector } from 'reselect';
+import { createStructuredSelector } from 'reselect';
+import { to_global_id as t } from 'common';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 
 import { Box, ButtonTransparent } from 'rebass';
 import { Navbar, ImgSm } from 'style-store';
@@ -21,9 +24,10 @@ import loginImg from 'images/login.svg';
 import menuImg from 'images/menu.svg';
 
 import { toggleChat, toggleMemo } from 'containers/Chat/actions';
-import { selectPuzzleShowPageDomain } from 'containers/PuzzleShowPage/selectors';
+// import { selectPuzzleShowPageDomain } from 'containers/PuzzleShowPage/selectors';
 
 import injectSaga from 'utils/injectSaga';
+import { makeSelectLocation } from 'containers/App/selectors';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import { toggleSubNav } from './actions';
@@ -105,14 +109,14 @@ TopNavbar.propTypes = {
   topnavbar: PropTypes.shape({
     subnav: PropTypes.string,
   }),
-  puzzle: PropTypes.object,
+  puzzle: PropTypes.shape({
+    memo: PropTypes.string.isRequired,
+  }),
 };
 
 const mapStateToProps = createStructuredSelector({
   topnavbar: makeSelectTopNavbar(),
-  puzzle: createSelector(selectPuzzleShowPageDomain, (substate) =>
-    substate.get('puzzle')
-  ),
+  location: makeSelectLocation(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -126,4 +130,36 @@ const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withSaga = injectSaga({ key: 'topNavBar', saga });
 
-export default compose(withSaga, withConnect)(TopNavbar);
+const withData = graphql(
+  gql`
+    query($id: ID) {
+      puzzle(id: $id) {
+        id
+        memo
+      }
+    }
+  `,
+  {
+    options: (props) => {
+      const defaultOpt = { fetchPolicy: 'cache-only' };
+      if (!props.location) return defaultOpt;
+      const match = props.location.pathname.match(/^\/puzzle\/show\/(\d+)$/);
+      if (!match) return defaultOpt;
+      const id = t('PuzzleNode', match[1]);
+      return {
+        ...defaultOpt,
+        variables: {
+          id,
+        },
+      };
+    },
+    props({ data }) {
+      const { puzzle } = data;
+      return {
+        puzzle,
+      };
+    },
+  }
+);
+
+export default compose(withSaga, withConnect, withData)(TopNavbar);

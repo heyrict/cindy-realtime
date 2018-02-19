@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { commitMutation } from 'react-relay';
-import environment from 'Environment';
 import moment from 'moment';
 import bootbox from 'bootbox';
-import { line2md, from_global_id as f } from 'common';
+import { line2md, from_global_id as f, to_global_id as t } from 'common';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector, createSelector } from 'reselect';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
-import { selectPuzzleShowPageDomain } from 'containers/PuzzleShowPage/selectors';
+
+import { graphql } from 'react-apollo';
+import DialoguePanel from 'graphql/DialoguePanel';
 import answerMutation from 'graphql/UpdateAnswerMutation';
 
 import tick from 'images/tick.svg';
@@ -98,24 +99,52 @@ class Answer extends React.PureComponent {
       return;
     }
 
-    const id = parseInt(f(this.props.id)[1], 10);
-    commitMutation(environment, {
-      mutation: answerMutation,
-      variables: {
-        input: {
-          dialogueId: id,
-          content: this.state.content,
-          good: this.state.good,
-          true: this.state.true,
+    const id = this.props.id;
+    const { content, good, true: istrue } = this.state;
+
+    this.props
+      .mutate({
+        variables: {
+          input: {
+            dialogueId: parseInt(f(id)[1], 10),
+            content,
+            good,
+            true: istrue,
+          },
         },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-        }
-      },
-    });
-    this.setState({ editMode: false });
+        update(proxy) {
+          const data = proxy.readFragment({
+            id,
+            fragment: DialoguePanel,
+            fragmentName: 'DialoguePanel',
+          });
+          const nextData = {
+            ...data,
+            answer: content,
+            good,
+            true: istrue,
+            answerEditTimes: data.answerEditTimes + 1,
+          };
+          proxy.writeFragment({
+            id,
+            fragment: DialoguePanel,
+            fragmentName: 'DialoguePanel',
+            data: nextData,
+          });
+        },
+        optimisticResponse: {
+          updateAnswer: {
+            __typename: 'UpdateAnswerPayload',
+            clientMutationId: null,
+          },
+        },
+      })
+      .then(() => {
+        this.setState({ editMode: false });
+      })
+      .catch((error) => {
+        bootbox.alert(error.message);
+      });
   }
 
   render() {
@@ -190,7 +219,7 @@ class Answer extends React.PureComponent {
             </Time>
           )}
           {this.props.owner.rowid === this.props.user.userId &&
-            this.props.puzzleStatus === 0 && (
+            this.props.status === 0 && (
               <FormattedMessage {...messages.edit}>
                 {(msg) => (
                   <EditButton onClick={this.toggleEditMode}>{msg}</EditButton>
@@ -209,7 +238,7 @@ class Answer extends React.PureComponent {
 }
 
 Answer.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  mutate: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   good: PropTypes.bool.isRequired,
   true: PropTypes.bool.isRequired,
@@ -218,18 +247,10 @@ Answer.propTypes = {
   answerEditTimes: PropTypes.number.isRequired,
   owner: PropTypes.object.isRequired,
   user: PropTypes.object,
-  puzzleStatus: PropTypes.number.isRequired,
+  status: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  owner: createSelector(
-    selectPuzzleShowPageDomain,
-    (substate) => substate.get('puzzle').user
-  ),
-  puzzleStatus: createSelector(
-    selectPuzzleShowPageDomain,
-    (substate) => substate.get('puzzle').status
-  ),
   user: createSelector(selectUserNavbarDomain, (substate) =>
     substate.get('user').toJS()
   ),
@@ -239,4 +260,8 @@ const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Answer);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
+
+const withMutation = graphql(answerMutation);
+
+export default compose(withConnect, withMutation)(Answer);

@@ -1,22 +1,23 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
+import UserLabel from './UserLabel';
 
-const UserList = graphql`
-  fragment UserList_list on Query
-    @argumentDefinitions(
-      count: { type: Int, defaultValue: 3 }
-      cursor: { type: String }
-      orderBy: { type: "[String]", defaultValue: "-id" }
-    ) {
+export const UserList = gql`
+  query UserListInitQuery($count: Int, $cursor: String, $orderBy: [String]) {
     allUsers(first: $count, after: $cursor, orderBy: $orderBy)
-      @connection(key: "UserNode_allUsers") {
+      @connection(key: "UserNode_allUsers", filter: ["orderBy"]) {
       edges {
         node {
           id
-          ...UserPanel_node
+          ...UserLabel_user
         }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
       }
     }
   }
+  ${UserLabel}
 `;
 
 export default UserList;

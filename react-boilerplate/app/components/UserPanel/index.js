@@ -11,11 +11,9 @@ import { Box, Row } from 'rebass';
 import { RoundedPanel } from 'style-store';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
-import Relay from 'react-relay';
 
 import { UserLabel as UserLabelPlain } from 'components/UserLabel';
 import sortMessages from 'components/FilterableList/messages';
-import UserPanelNodeFragment from 'graphql/UserPanel';
 
 const UserCol = styled(Box)`
   text-align: center;
@@ -53,4 +51,4 @@ UserPanel.propTypes = {
   node: PropTypes.object.isRequired,
 };
 
-export default Relay.createFragmentContainer(UserPanel, UserPanelNodeFragment);
+export default UserPanel;

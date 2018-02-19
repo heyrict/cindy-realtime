@@ -1,8 +1,10 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
+import UserLabel from './UserLabel';
 
-const RewardingModalQuery = graphql`
+const RewardingModalQuery = gql`
   query RewardingModalQuery($id: ID!) {
     puzzle(id: $id) {
+      id
       content
       commentSet {
         edges {
@@ -18,6 +20,7 @@ const RewardingModalQuery = graphql`
       }
     }
   }
+  ${UserLabel}
 `;
 
 export default RewardingModalQuery;

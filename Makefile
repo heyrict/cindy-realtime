@@ -7,7 +7,8 @@ schema:
 	# generate table schema
 	python3 manage.py graphql_schema --indent=2
 	# re-generate js files
-	cd $(BASEDIR)/react-boilerplate && npm run relay
+	#cd $(BASEDIR)/react-boilerplate && npm run relay
+	python3 dumpFragmentType.py > ./react-boilerplate/fragmentTypes.json
 
 makemessages:
 	python3 manage.py makemessages -d djangojs -e js,jsx -i node_modules -i build -i dist
