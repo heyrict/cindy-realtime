@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import { Box, Row } from 'rebass';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
+import { RoundedPanel } from 'style-store';
 
 import { UserLabel as UserLabelPlain } from 'components/UserLabel';
 import sortMessages from 'components/FilterableList/messages';
