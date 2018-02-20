@@ -651,7 +651,15 @@ class CreateAwardApplication(graphene.ClientIDMutation):
 
         award = Award.objects.get(pk=awardId)
 
-        awardapp = AwardApplication.objects.create(applier=user, comment=comment, award=award)
+        if AwardApplication.objects.filter(applier=user, status=0).count() > 2:
+            raise ValidationError(
+                _("You can apply up to 2 awards at the same time!"))
+
+        if UserAward.objects.filter(user=user, award=award).count() != 0:
+            raise ValidationError(_("You already have this award!"))
+
+        awardapp = AwardApplication.objects.create(
+            applier=user, comment=comment, award=award)
 
         return CreateAwardApplication(award_application=awardapp)
 
@@ -974,21 +982,29 @@ class UpdateAwardApplication(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
         user = info.context.user
-        if (not user.is_authenticated or not user.has_perm('sui_hei.can_review_award_application')):
+        if (not user.is_authenticated
+                or not user.has_perm('sui_hei.can_review_award_application')):
             raise ValidationError(_("You are not authenticated to do this!"))
 
-        nodeName, awardApplicationId = from_global_id(input['awardApplicationId'])
+        nodeName, awardApplicationId = from_global_id(
+            input['awardApplicationId'])
         status = input.get('status')
 
         assert nodeName == 'AwardApplicationNode'
 
         application = AwardApplication.objects.get(id=awardApplicationId)
         if status and application.status == 0:
+            if (user == application.applier and not user.is_staff):
+                raise ValidationError(
+                    _("Only staff members can review self-applied award applications"
+                      ))
+
             application.status = status
             application.reviewer = user
             application.reviewed = timezone.now()
             if status == 1:
-                UserAward.objects.get_or_create(user=application.applier, award=application.award)
+                UserAward.objects.get_or_create(
+                    user=application.applier, award=application.award)
 
         application.save()
         return UpdateAwardApplication(award_application=application)

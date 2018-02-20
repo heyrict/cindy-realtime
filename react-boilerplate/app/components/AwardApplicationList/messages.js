@@ -18,6 +18,18 @@ export default defineMessages({
     id: 'app.components.AwardApplicationList.reviewer',
     defaultMessage: 'Reviewer',
   },
+  created: {
+    id: 'app.components.AwardApplicationList.created',
+    defaultMessage: 'Application Time',
+  },
+  reviewed: {
+    id: 'app.components.AwardApplicationList.reviewed',
+    defaultMessage: 'Review Time',
+  },
+  comment: {
+    id: 'app.components.AwardApplicationList.comment',
+    defaultMessage: 'Comment',
+  },
   WAITING: {
     id: 'app.components.AwardApplicationList.WAITING',
     defaultMessage: 'WAITING',

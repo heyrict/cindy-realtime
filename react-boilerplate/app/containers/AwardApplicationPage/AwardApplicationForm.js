@@ -28,9 +28,13 @@ class AwardApplicationForm extends React.Component {
       awardId: null,
       comment: '',
     };
-    this.setAward = ({ value: awardId }) => this.setState({ awardId });
-    this.handleCommentChange = (e) =>
+    this.setAward = ({ value: awardId, description }) => {
+      this.setState({ awardId });
+      this.currentDescription = description;
+    };
+    this.handleCommentChange = (e) => {
       this.setState({ comment: e.target.value });
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleSubmit() {
@@ -39,36 +43,40 @@ class AwardApplicationForm extends React.Component {
       bootbox.alert('Please fill in the form.');
       return;
     }
-    this.props.mutate({
-      variables: {
-        input: { awardId, comment },
-      },
-      update(
-        proxy,
-        { data: { createAwardApplication: { awardApplication } } }
-      ) {
-        const data = proxy.readQuery({
-          query: AwardApplicationList,
-          variables: {
-            orderBy: ['status', '-id'],
-          },
-        });
-        data.allAwardApplications.edges = [
-          {
-            __typename: 'AwardApplicationNodeEdge',
-            node: awardApplication,
-          },
-          ...data.allAwardApplications.edges,
-        ];
-        proxy.writeQuery({
-          query: AwardApplicationList,
-          variables: {
-            orderBy: ['status', '-id'],
-          },
-          data,
-        });
-      },
-    });
+    this.props
+      .mutate({
+        variables: {
+          input: { awardId, comment },
+        },
+        update(
+          proxy,
+          { data: { createAwardApplication: { awardApplication } } }
+        ) {
+          const data = proxy.readQuery({
+            query: AwardApplicationList,
+            variables: {
+              orderBy: ['status', '-id'],
+            },
+          });
+          data.allAwardApplications.edges = [
+            {
+              __typename: 'AwardApplicationNodeEdge',
+              node: awardApplication,
+            },
+            ...data.allAwardApplications.edges,
+          ];
+          proxy.writeQuery({
+            query: AwardApplicationList,
+            variables: {
+              orderBy: ['status', '-id'],
+            },
+            data,
+          });
+        },
+      })
+      .catch((error) => {
+        bootbox.alert(error.message);
+      });
   }
   render() {
     if (this.props.loading) {
@@ -85,13 +93,19 @@ class AwardApplicationForm extends React.Component {
                   value={this.state.awardId}
                   placeholder={text}
                   onChange={this.setAward}
+                  clearable={false}
                   options={this.props.allAwards.edges.map((edge) => ({
                     value: edge.node.id,
                     label: edge.node.name,
+                    description: edge.node.description,
                   }))}
                 />
               )}
             </FormattedMessage>
+          </Box>
+          <Box w={1} style={{ minHeight: '50px' }}>
+            <FormattedMessage {...messages.awardDescription} />:{' '}
+            {this.currentDescription}
           </Box>
           <Box w={1}>
             <FormattedMessage {...messages.commentPlaceholder}>

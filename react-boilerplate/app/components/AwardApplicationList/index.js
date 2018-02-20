@@ -15,6 +15,7 @@ import { ButtonOutline } from 'style-store';
 
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import UserLabelFragment from 'graphql/UserLabel';
 import AwardApplicationListQuery from 'graphql/AwardApplicationList';
 
 import LoadingDots from 'components/LoadingDots';
@@ -37,8 +38,7 @@ function AwardApplicationList(props) {
         <AwardApplicationPanel
           node={edge.node}
           key={edge.node.id}
-          currentUserId={props.currentUserId}
-          canReviewAwardApplication={props.canReviewAwardApplication}
+          currentUser={props.currentUser}
         />
       ))}
       {props.hasMore() && (
@@ -59,7 +59,7 @@ AwardApplicationList.propTypes = {
   loadMore: PropTypes.func.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   currentUserId: PropTypes.string,
-  canReviewAwardApplication: PropTypes.bool,
+  currentUser: PropTypes.object,
 };
 
 const withAwardApplicationList = graphql(AwardApplicationListQuery, {
@@ -106,8 +106,10 @@ const withCurrentUser = graphql(
       user(id: $id) {
         id
         canReviewAwardApplication
+        ...UserLabel_user
       }
     }
+    ${UserLabelFragment}
   `,
   {
     options: ({ currentUserId }) => ({
@@ -117,8 +119,8 @@ const withCurrentUser = graphql(
     }),
     props({ data }) {
       if (data.loading) return {};
-      const { user: { canReviewAwardApplication } } = data;
-      return { canReviewAwardApplication };
+      const { user } = data;
+      return { currentUser: user };
     },
   }
 );

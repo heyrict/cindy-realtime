@@ -32,10 +32,10 @@ function AwardApplicationPage(props, context) {
       <Heading>
         <FormattedMessage {...messages.header} />
       </Heading>
-      <AwardApplicationForm />
+      {props.currentUser.user.userId && <AwardApplicationForm />}
       <AwardApplicationList
         variables={{ orderBy: ['status', '-id'] }}
-        currentUserId={t('UserNode', props.currentUser.user.userId)}
+        currentUserId={t('UserNode', props.currentUser.user.userId || -1)}
       />
     </Constrained>
   );
@@ -44,7 +44,7 @@ function AwardApplicationPage(props, context) {
 AwardApplicationPage.propTypes = {
   currentUser: PropTypes.shape({
     user: PropTypes.shape({
-      userId: PropTypes.number.isRequired,
+      userId: PropTypes.number,
     }),
   }),
 };

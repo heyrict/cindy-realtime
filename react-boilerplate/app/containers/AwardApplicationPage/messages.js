@@ -30,4 +30,8 @@ export default defineMessages({
     id: 'app.containers.AwardApplicationPage.commentPlaceholder',
     defaultMessage: 'Add some comment...',
   },
+  awardDescription: {
+    id: 'app.containers.AwardApplicationPage.awardDescription',
+    defaultMessage: 'Description',
+  },
 });
