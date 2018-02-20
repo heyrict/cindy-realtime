@@ -10,10 +10,6 @@ import cindychan from 'images/cindychan.png';
 
 import messages from './messages';
 
-const PurpleBg = styled.div`
-  background: linear-gradient(#4e182d, #330617);
-`;
-
 const H1 = styled.h1`
   color: burlywood;
   font-family: inconsolata, consolas, arial;
@@ -58,7 +54,7 @@ const StartBox = styled(Button)`
 
 function MainFrame(props) {
   return (
-    <PurpleBg>
+    <div>
       <Flex justify="center">
         <H1>
           <FormattedMessage
@@ -89,7 +85,7 @@ function MainFrame(props) {
           <FormattedMessage {...messages.start} />
         </StartBox>
       </Flex>
-    </PurpleBg>
+    </div>
   );
 }
 

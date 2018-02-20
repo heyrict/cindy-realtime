@@ -1150,6 +1150,8 @@ class Query(object):
         user=graphene.ID(),
         status=graphene.Float(),
         status__gt=graphene.Float(),
+        created__year=graphene.Int(),
+        created__month=graphene.Int(),
         limit=graphene.Int(),
         offset=graphene.Int())
     all_dialogues = DjangoFilterConnectionField(
@@ -1216,7 +1218,9 @@ class Query(object):
         qs = resolveFilter(
             qs,
             kwargs,
-            filters=["status", "status__gt"],
+            filters=[
+                "status", "status__gt", "created__year", "created__month"
+            ],
             filter_fields={"user": User})
         total_count = qs.count()
         qs = resolveLimitOffset(qs, limit, offset)
