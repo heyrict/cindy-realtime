@@ -99,8 +99,9 @@ class Answer extends React.PureComponent {
       return;
     }
 
-    const id = this.props.id;
+    const { id, answer } = this.props;
     const { content, good, true: istrue } = this.state;
+    const now = new Date();
 
     this.props
       .mutate({
@@ -123,7 +124,10 @@ class Answer extends React.PureComponent {
             answer: content,
             good,
             true: istrue,
-            answerEditTimes: data.answerEditTimes + 1,
+            answerEditTimes: answer
+              ? data.answerEditTimes + 1
+              : data.answerEditTimes,
+            answeredtime: now.toISOString(),
           };
           proxy.writeFragment({
             id,
