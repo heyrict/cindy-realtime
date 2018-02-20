@@ -29,7 +29,7 @@ function PuzzleList(props) {
       ))}
       <PaginatorBar
         changePage={props.changePage}
-        numPages={Math.floor(props.allPuzzles.totalCount / props.itemsPerPage)}
+        numPages={Math.ceil(props.allPuzzles.totalCount / props.itemsPerPage)}
         currentPage={props.page}
       />
     </div>
