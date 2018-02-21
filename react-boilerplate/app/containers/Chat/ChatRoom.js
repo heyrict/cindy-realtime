@@ -18,6 +18,7 @@ import UserLabel from 'graphql/UserLabel';
 import CreateChatmessageMutation from 'graphql/CreateChatmessageMutation';
 import ChatMessageSubscription from 'graphql/ChatMessageSubscription';
 
+import LoadingDots from 'components/LoadingDots';
 import ChatMessage from './ChatMessage';
 import DescriptionPanel from './DescriptionPanel';
 import MessageInput from './MessageInput';
@@ -126,16 +127,20 @@ class ChatRoom extends React.Component {
             this.props.height - this.state.taHeight - this.state.dpHeight - 14
           }
         >
-          {this.props.hasPreviousPage && (
-            <LoadMoreBtn onClick={this.props.loadMore}>
-              <FormattedMessage {...messages.loadMore} />
-            </LoadMoreBtn>
+          {this.props.loading ? (
+            <LoadingDots />
+          ) : (
+            this.props.hasPreviousPage && (
+              <LoadMoreBtn onClick={this.props.loadMore}>
+                <FormattedMessage {...messages.loadMore} />
+              </LoadMoreBtn>
+            )
           )}
-          {this.props.loading || !this.props.allChatmessages
-            ? null
-            : this.props.allChatmessages.edges.map((edge) => (
+          {this.props.allChatmessages
+            ? this.props.allChatmessages.edges.map((edge) => (
                 <ChatMessage key={edge.node.id} {...edge.node} />
-              ))}
+              ))
+            : null}
         </MessageWrapper>
         <Flex mx={1} w={1} hidden={this.props.currentUserId === null}>
           <MessageInput
