@@ -75,7 +75,11 @@ function ProfileDisplay(props, context) {
       {props.userId === props.currentUserId && (
         <BookmarkHideRow hideBookmark={props.user.hideBookmark} />
       )}
-      <ProfileRow userId={props.userId} profile={props.user.profile} />
+      <ProfileRow
+        userId={props.userId}
+        profile={props.user.profile}
+        currentUserId={props.currentUserId}
+      />
     </Flex>
   );
 }

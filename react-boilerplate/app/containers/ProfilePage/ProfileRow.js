@@ -16,6 +16,7 @@ import cross from 'images/cross.svg';
 
 import { graphql } from 'react-apollo';
 import UpdateUserMutation from 'graphql/UpdateUserMutation';
+import ProfileShowQuery from 'graphql/ProfileShowQuery';
 
 import ProfRow from './ProfRow';
 import messages from './messages';
@@ -36,9 +37,28 @@ class ProfileRow extends React.PureComponent {
   }
 
   handleSubmit() {
+    const content = this.state.content;
+    const currentUserId = this.props.currentUserId;
     this.props
       .mutate({
-        variables: { input: { profile: this.state.content } },
+        variables: { input: { profile: content } },
+        update(proxy) {
+          const data = proxy.readQuery({
+            query: ProfileShowQuery,
+            variables: { id: currentUserId },
+          });
+          proxy.writeQuery({
+            query: ProfileShowQuery,
+            variables: { id: currentUserId },
+            data: { user: { ...data.user, profile: content } },
+          });
+        },
+        optimisticResponse: {
+          updateUser: {
+            __typename: 'UpdateUserPayload',
+            clientMutationId: null,
+          },
+        },
       })
       .then(() => {
         this.toggleEdit(false);
@@ -86,7 +106,7 @@ class ProfileRow extends React.PureComponent {
             <div
               style={{ overflow: 'auto' }}
               dangerouslySetInnerHTML={{
-                __html: text2md(this.state.content),
+                __html: text2md(this.props.profile),
               }}
             />
           )
@@ -99,6 +119,7 @@ class ProfileRow extends React.PureComponent {
 ProfileRow.propTypes = {
   currentUser: PropTypes.object.isRequired,
   userId: PropTypes.string.isRequired,
+  currentUserId: PropTypes.string.isRequired,
   profile: PropTypes.string.isRequired,
   mutate: PropTypes.func.isRequired,
 };
