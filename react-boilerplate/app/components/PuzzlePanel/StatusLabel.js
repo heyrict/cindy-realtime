@@ -8,7 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import common from 'common';
+import { status_code_dict as STATUS_CODE } from 'common';
 
 const StatusBase = styled.span`
   text-align: center;
@@ -47,7 +47,7 @@ const styledStatus = (statusCode) => {
 
 function StatusLabel(props) {
   const status = props.status;
-  const translatedStatus = common.status_code_dict[status];
+  const translatedStatus = STATUS_CODE[status];
   const StyledStatus = styledStatus(status);
   return <StyledStatus>{translatedStatus}</StyledStatus>;
 }

@@ -8,4 +8,4 @@ const UpdateHintMutation = gql`
   }
 `;
 
-export default UpdateHintMutation
+export default UpdateHintMutation;

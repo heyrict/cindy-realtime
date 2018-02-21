@@ -28,7 +28,6 @@ import cross from 'images/cross.svg';
 
 import { createStructuredSelector, createSelector } from 'reselect';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
-import { selectPuzzleShowPageDomain } from 'containers/PuzzleShowPage/selectors';
 import { graphql } from 'react-apollo';
 import hintMutation from 'graphql/UpdateHintMutation';
 

@@ -1,5 +1,4 @@
-import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
-import { gqlQuery } from 'Environment';
+import { put, select, takeLatest, takeEvery } from 'redux-saga/effects';
 import { addDirectchatMessage, toggleChat, changeChannel } from './actions';
 import {
   TOGGLE_MINICHAT,
@@ -11,10 +10,8 @@ import {
   OPEN_CHAT,
   SEND_DIRECTCHAT,
   DIRECTCHAT_RECEIVED,
-  GOTID_MINICHAT,
   ADD_FAVCHAN,
   REMOVE_FAVCHAN,
-  chatmessageIdQuery,
 } from './constants';
 import { selectChatDomain } from './selectors';
 

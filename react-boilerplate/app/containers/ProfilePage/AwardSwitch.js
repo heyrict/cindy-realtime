@@ -10,7 +10,6 @@ import { from_global_id as f } from 'common';
 import { createStructuredSelector } from 'reselect';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import ProfileShowQuery from 'graphql/ProfileShowQuery';
 import UpdateCurrentAwardMutation from 'graphql/UpdateCurrentAwardMutation';
 

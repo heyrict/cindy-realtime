@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import bootbox from 'bootbox';
-import { line2md, from_global_id as f, to_global_id as t } from 'common';
+import { line2md, from_global_id as f } from 'common';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
