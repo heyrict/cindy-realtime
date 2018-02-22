@@ -66,9 +66,6 @@ CHATMESSAGE_ADDED = "ws/CHATMESSAGE_ADDED"
 CHATMESSAGE_UPDATED = "ws/CHATMESSAGE_UPDATED"
 USERAWARD_ADDED = "ws/USERAWARD_ADDED"
 
-VIEWER_CONNECT = "ws/VIEWER_CONNECT"
-VIEWER_DISCONNECT = "ws/VIEWER_DISCONNECT"
-
 CHATROOM_CONNECT = "ws/CHATROOM_CONNECT"
 CHATROOM_DISCONNECT = "ws/CHATROOM_DISCONNECT"
 
@@ -136,6 +133,8 @@ def ws_connect(message):
         })
         rediscon.set("onlineUsers", pickle.dumps(onlineUsers))
 
+    broadcast_status()
+
 
 def ws_disconnect(message):
     Group("viewer").discard(message.reply_channel)
@@ -157,12 +156,7 @@ def ws_message(message):
     data = json.loads(message.content["text"])
 
     logger.debug("RECEIVE %s", data)
-    if data.get("type") == VIEWER_CONNECT:
-        broadcast_status()
-    elif data.get("type") == VIEWER_DISCONNECT:
-        Group("viewer").discard(message.reply_channel)
-        broadcast_status()
-    elif data.get("type") == SET_CURRENT_USER:
+    if data.get("type") == SET_CURRENT_USER:
         user_change(message)
     elif data.get("type") == PUZZLE_CONNECT:
         Group("puzzle-%s" % data["data"]["puzzleId"])\

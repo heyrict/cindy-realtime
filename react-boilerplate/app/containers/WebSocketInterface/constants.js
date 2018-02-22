@@ -5,8 +5,6 @@
  */
 
 import {
-  VIEWER_CONNECT,
-  VIEWER_DISCONNECT,
   SET_CURRENT_USER,
 } from 'containers/UserNavbar/constants';
 
@@ -19,8 +17,6 @@ import {
 } from 'containers/Chat/constants';
 
 export const INTERNAL_ACTIONS = [
-  VIEWER_CONNECT,
-  VIEWER_DISCONNECT,
   SET_CURRENT_USER,
   PUZZLE_SHOWN,
   PUZZLE_HID,

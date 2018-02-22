@@ -58,11 +58,15 @@ const headerLink = new ApolloLink((operation, forward) => {
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://${window.location.host}/ws/`,
+  uri: `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${
+    window.location.host
+  }/ws/`,
   options: {
     reconnect: true,
   },
 });
+
+window.wsLink = wsLink;
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData,
