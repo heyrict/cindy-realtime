@@ -4,6 +4,8 @@
  *
  */
 
+/* eslint-disable no-mixed-operators */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -44,6 +46,13 @@ const Title = styled.h1`
 `;
 
 export class PuzzleShowPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentPage: 0,
+    };
+    this.changePage = (p) => this.setState({ currentPage: p });
+  }
   componentDidMount() {
     const puzzleId = t('PuzzleNode', this.props.match.params.id);
     this.props.subscribeToPuzzleUpdates({ id: puzzleId });
@@ -68,7 +77,30 @@ export class PuzzleShowPage extends React.Component {
     const translateGenreCode = (x) => _(genreMessages[genreType[x]]);
     const genre = translateGenreCode(P.genre);
     const yami = P.yami ? ` x ${_(genreMessages.yami)}` : '';
+
     let index = 0;
+    const numItems = 50;
+    const dSlices = [];
+    const dEdges = D.edges.map((edge, i) => {
+      if (f(edge.node.id)[0] === 'DialogueNode') {
+        index += 1;
+        if (index % numItems === 1 && index !== 1) dSlices.push(i);
+        return { ...edge, index };
+      }
+      return edge;
+    });
+    dSlices.push(dEdges.length);
+
+    const DialoguePaginationBar =
+      dSlices.length > 1 ? (
+        <Constrained wrap style={{ textAlign: 'center' }}>
+          {dSlices.map((dSlice, i) => (
+            <button key={dSlice} onClick={() => this.changePage(i)}>
+              {numItems * i + 1} - {Math.min(numItems * (i + 1), index)}
+            </button>
+          ))}
+        </Constrained>
+      ) : null;
 
     return (
       <div>
@@ -97,38 +129,47 @@ export class PuzzleShowPage extends React.Component {
               )}
             </FormattedMessage>
           )}
-        {(P.status <= 2 || P.user.rowid === U) &&
-          D.edges.map((edge) => {
-            const type = f(edge.node.id)[0];
-            if (type === 'DialogueNode') {
-              index += 1;
-              if (
-                P.yami &&
-                U !== edge.node.user.rowid &&
-                U !== P.user.rowid &&
-                P.status === 0
-              ) {
-                return null;
-              }
-              return (
-                <Dialogue
-                  key={edge.node.id}
-                  index={index}
-                  status={P.status}
-                  node={edge.node}
-                  owner={P.user}
-                />
-              );
-            }
-            return (
-              <Hint
-                key={edge.node.id}
-                owner={P.user}
-                status={P.status}
-                node={edge.node}
-              />
-            );
-          })}
+        {(P.status <= 2 || P.user.rowid === U) && (
+          <div>
+            {DialoguePaginationBar}
+            {dEdges
+              .slice(
+                dSlices[this.state.currentPage - 1],
+                dSlices[this.state.currentPage]
+              )
+              .map((edge) => {
+                const type = f(edge.node.id)[0];
+                if (type === 'DialogueNode') {
+                  if (
+                    P.yami &&
+                    U !== edge.node.user.rowid &&
+                    U !== P.user.rowid &&
+                    P.status === 0
+                  ) {
+                    return null;
+                  }
+                  return (
+                    <Dialogue
+                      key={edge.node.id}
+                      index={edge.index}
+                      status={P.status}
+                      node={edge.node}
+                      owner={P.user}
+                    />
+                  );
+                }
+                return (
+                  <Hint
+                    key={edge.node.id}
+                    owner={P.user}
+                    status={P.status}
+                    node={edge.node}
+                  />
+                );
+              })}
+            {DialoguePaginationBar}
+          </div>
+        )}
         {(P.status <= 2 || P.user.rowid === U) &&
           P.status !== 0 && <Frame text={P.solution} solved={P.modified} />}
         {P.status === 0 &&
@@ -202,7 +243,7 @@ const withData = graphql(PuzzleShowQuery, {
   options: (props) => ({
     variables: {
       id: t('PuzzleNode', props.match.params.id),
-      userId: props.user.userId || '-1',
+      userId: t('UserNode', props.user.userId || '-1'),
     },
     fetchPolicy: 'cache-and-network',
   }),

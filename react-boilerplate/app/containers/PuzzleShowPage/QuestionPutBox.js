@@ -75,12 +75,13 @@ class QuestionPutBox extends React.PureComponent {
           },
         },
         update(proxy, { data: { createQuestion: { dialogue } } }) {
+          let update = false;
           const id = t('PuzzleNode', puzzleId);
           const data = proxy.readQuery({
             query,
             variables: { id },
           });
-          data.puzzleShowUnion.edges.push({
+          const responseData = {
             __typename: 'PuzzleShowUnionEdge',
             node: {
               good: false,
@@ -93,7 +94,19 @@ class QuestionPutBox extends React.PureComponent {
               answeredtime: null,
               ...dialogue,
             },
-          });
+          };
+          data.puzzleShowUnion.edges = data.puzzleShowUnion.edges.map(
+            (edge) => {
+              if (edge.node.id === id) {
+                update = true;
+                return responseData;
+              }
+              return edge;
+            }
+          );
+          if (!update) {
+            data.puzzleShowUnion.edges.push(responseData);
+          }
           proxy.writeQuery({ query, variables: { id }, data });
         },
         optimisticResponse: {

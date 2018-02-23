@@ -27,7 +27,10 @@ class RewardingBox extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      stars: this.props.existingStar.length === 0 ? 0 : null,
+      stars:
+        this.props.existingStar.length === 0
+          ? 0
+          : this.props.existingStar[0].node.value,
       commitStar: false,
       comment:
         this.props.existingComment.length === 0
@@ -110,27 +113,25 @@ class RewardingBox extends React.PureComponent {
   render() {
     return (
       <Constrained>
-        {this.state.stars !== null && (
-          <PuzzleFrame>
-            <Flex wrap justify="center" align="center">
-              <FiveStars
-                justify="center"
-                align="center"
-                value={this.state.stars}
-                onSet={this.handleStarSet}
-                w={1 / 2}
-              />
-              <SubmitBtn w={1 / 2} onClick={this.handleSaveStar}>
-                <FormattedMessage {...messages.addStar} />
-              </SubmitBtn>
-              {this.state.commitStar && (
-                <button onClick={this.cancelStar}>
-                  <FormattedMessage {...messages.cancelStar} />
-                </button>
-              )}
-            </Flex>
-          </PuzzleFrame>
-        )}
+        <PuzzleFrame>
+          <Flex wrap justify="center" align="center">
+            <FiveStars
+              justify="center"
+              align="center"
+              value={this.state.stars}
+              onSet={this.handleStarSet}
+              w={1 / 2}
+            />
+            <SubmitBtn w={1 / 2} onClick={this.handleSaveStar}>
+              <FormattedMessage {...messages.addStar} />
+            </SubmitBtn>
+            {this.state.commitStar && (
+              <button onClick={this.cancelStar}>
+                <FormattedMessage {...messages.cancelStar} />
+              </button>
+            )}
+          </Flex>
+        </PuzzleFrame>
         <PuzzleFrame>
           <Flex wrap mt={10}>
             <CommentInput

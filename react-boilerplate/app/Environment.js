@@ -66,8 +66,6 @@ const wsLink = new WebSocketLink({
   },
 });
 
-window.wsLink = wsLink;
-
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData,
 });
