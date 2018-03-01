@@ -23,16 +23,20 @@ The required returned form is:
 """
 
 import asyncio
+import functools
 import json
 import logging
 
-from asgiref.sync import AsyncToSync
+from asgiref.sync import AsyncToSync, async_to_sync
+from channels.consumer import SyncConsumer
+from channels.exceptions import StopConsumer
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from channels.layers import get_channel_layer
 from django.core.cache import cache
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from graphql_relay import from_global_id, to_global_id
+from rx import Observable
 
 from schema import schema
 
@@ -175,130 +179,155 @@ class MainConsumer(AsyncJsonWebsocketConsumer):
             await self.broadcast_status()
 
 
-@receiver(post_save, sender=Dialogue)
-def send_dialogue_update(sender, instance, created, *args, **kwargs):
-    dialogueId = instance.id
-    puzzleId = instance.puzzle.id
+
+
+
+# GraphQL types might use info.context.user to access currently authenticated user.
+# When Query is called, info.context is request object,
+# however when Subscription is called, info.context is scope dict.
+# This is minimal wrapper around dict to mimic object behavior.
+class AttrDict:
+    def __init__(self, data):
+        self.data = data or {}
+
+    def __getattr__(self, item):
+        return self.get(item)
+
+    def get(self, item):
+        return self.data.get(item)
+
+
+class StreamObservable:
+    def __call__(self, observer):
+        self.observer = observer
+
+    def send(self, value):
+        if not self.observer:
+            raise Exception("Can't send values to disconnected observer.")
+        self.observer.on_next(value)
+
+
+class GraphqlSubcriptionConsumer(SyncConsumer):
+    def __init__(self, scope):
+        super().__init__(scope)
+        self.subscriptions = {}
+        self.groups = {}
+
+    def websocket_connect(self, message):
+        self.send({
+            "type": "websocket.accept",
+            "subprotocol": "graphql-ws"
+        })
+
+    def websocket_disconnect(self, message):
+        for group in self.groups.keys():
+            group_discard = async_to_sync(self.channel_layer.group_discard)
+            group_discard(f'django.{group}', self.channel_name)
+
+        self.send({
+            "type": "websocket.close", "code": 1000
+        })
+        raise StopConsumer()
+
+    def websocket_receive(self, message):
+        request = json.loads(message['text'])
+        id = request.get('id')
+
+        if request['type'] == 'connection_init':
+            return
+
+        elif request['type'] == 'start':
+            payload = request['payload']
+            context = AttrDict(self.scope)
+            context.subscribe = functools.partial(self._subscribe, id)
+
+            stream = StreamObservable()
+
+            result = schema.execute(
+                payload['query'],
+                operation_name=payload['operationName'],
+                variable_values=payload['variables'],
+                context_value=context,
+                root_value=Observable.create(stream).share(),
+                allow_subscriptions=True,
+            )
+            if hasattr(result, 'subscribe'):
+                result.subscribe(functools.partial(self._send_result, id))
+                self.subscriptions[id] = stream
+            else:
+                self._send_result(id, result)
+
+        elif request['type'] == 'stop':
+            self._unsubscribe(id)
+            del self.subscriptions[id]
+
+    def model_changed(self, message):
+        model = message['model']
+        pk = message['pk']
+
+        for id in self.groups.get(model, []):
+            stream = self.subscriptions.get(id)
+            if not stream:
+                continue
+            stream.send((pk, model))
+
+    def _subscribe(self, id, model_name):
+        group = self.groups.setdefault(model_name, set())
+        if not len(group):
+            group_add = async_to_sync(self.channel_layer.group_add)
+            group_add(f'django.{model_name}', self.channel_name)
+        self.groups[model_name].add(id)
+
+    def _unsubscribe(self, id):
+        for group, ids in self.groups.items():
+            if id not in ids:
+                continue
+
+            ids.remove(id)
+            if not len(ids):
+                # no more subscriptions for this group
+                group_discard = async_to_sync(self.channel_layer.group_discard)
+                group_discard(f'django.{group}', self.channel_name)
+
+    def _send_result(self, id, result):
+        errors = result.errors
+
+        self.send({
+            'type': 'websocket.send',
+            'text': json.dumps({
+                'id': id,
+                'type': 'data',
+                'payload': {
+                    'data': result.data,
+                    'errors': list(map(str, errors)) if errors else None,
+                }
+            })
+        })
+
+
+
+def notify_on_model_changes(model):
+    from django.contrib.contenttypes.models import ContentType
+    ct = ContentType.objects.get_for_model(model)
+    model_label = '.'.join([ct.app_label, ct.model])
+
     channel_layer = get_channel_layer()
-    if created:
-        text = {
-            "type": DIALOGUE_ADDED,
-            "data": {
-                "id": to_global_id('DialogueNode', dialogueId),
-                "puzzleId": puzzleId,
-            }
+    group_send = async_to_sync(channel_layer.group_send)
+
+    def receiver(sender, instance, **kwargs):
+        payload = {
+            'type': 'model.changed',
+            'pk': instance.pk,
+            'model': model_label
         }
-        logger.debug("Send %s", text)
-        AsyncToSync(channel_layer.group_send)("viewer", {
-            "type": "viewer.message",
-            "content": text
-        })
-    else:
-        text = {
-            "type": DIALOGUE_UPDATED,
-            "data": {
-                "id": to_global_id('DialogueNode', dialogueId),
-                "puzzleId": puzzleId,
-            }
-        }
-        logger.debug("Send %s", text)
-        AsyncToSync(channel_layer.group_send)("puzzle-%d" % instance.puzzle.id,
-                                              {
-                                                  "type": "viewer.message",
-                                                  "content": text
-                                              })
+        group_send(f'django.{model_label}', payload)
+
+    post_save.connect(receiver, sender=model, weak=False,
+            dispatch_uid=f'django.{model_label}')
 
 
-@receiver(post_save, sender=Puzzle)
-def send_puzzle_update(sender, instance, created, *args, **kwargs):
-    puzzleId = instance.id
-    channel_layer = get_channel_layer()
-    if created:
-        text = {
-            "type": PUZZLE_ADDED,
-            "data": {
-                "id": to_global_id('PuzzleNode', puzzleId),
-                "title": instance.title,
-                "nickname": instance.user.nickname
-            }
-        }
-        logger.debug("Send %s", text)
-        AsyncToSync(channel_layer.group_send)("viewer", {
-            "type": "viewer.message",
-            "content": text
-        })
-    else:
-        text = {
-            "type": PUZZLE_UPDATED,
-            "data": {
-                "id": to_global_id('PuzzleNode', puzzleId)
-            }
-        }
-        logger.debug("Send %s", text)
-        AsyncToSync(channel_layer.group_send)("viewer", {
-            "type": "viewer.message",
-            "content": text
-        })
-
-
-@receiver(post_save, sender=Hint)
-def send_hint_update(sender, instance, created, *args, **kwargs):
-    hintId = instance.id
-    puzzleId = instance.puzzle.id
-    channel_layer = get_channel_layer()
-    if created:
-        text = {
-            "type": HINT_ADDED,
-            "data": {
-                "id": to_global_id('HintNode', hintId),
-            }
-        }
-        logger.debug("Send %s", text)
-        AsyncToSync(channel_layer.group_send)("puzzle-%s" % puzzleId, {
-            "type": "viewer.message",
-            "content": text
-        })
-    else:
-        text = {
-            "type": HINT_UPDATED,
-            "data": {
-                "id": to_global_id('HintNode', hintId),
-            }
-        }
-        logger.debug("Send %s", text)
-        AsyncToSync(channel_layer.group_send)("puzzle-%s" % puzzleId, {
-            "type": "viewer.message",
-            "content": text
-        })
-
-
-@receiver(post_save, sender=ChatMessage)
-def send_chatmessage_update(sender, instance, created, *args, **kwargs):
-    chatmessageId = instance.id
-    channel = instance.chatroom.name
-    channel_layer = get_channel_layer()
-    if created:
-        text = {
-            "type": CHATMESSAGE_ADDED,
-            "data": {
-                "id": to_global_id('ChatMessageNode', chatmessageId),
-            }
-        }
-        logger.debug("Send %s", text)
-        __import__("pdb").set_trace()
-        AsyncToSync(channel_layer.group_send)("chatroom-%s" % channel, {
-            "type": "websocket.message",
-            "content": text
-        })
-    else:
-        text = {
-            "type": CHATMESSAGE_UPDATED,
-            "data": {
-                "id": to_global_id('ChatMessageNode', chatmessageId),
-            }
-        }
-        logger.debug("Send %s", text)
-        AsyncToSync(channel_layer.group_send)("chatroom-%s" % channel, {
-            "type": "viewer.message",
-            "content": text
-        })
+notify_on_model_changes(ChatMessage)
+notify_on_model_changes(Dialogue)
+notify_on_model_changes(Hint)
+notify_on_model_changes(Puzzle)
+notify_on_model_changes(User)
