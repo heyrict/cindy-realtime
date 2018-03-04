@@ -7,6 +7,7 @@ import UserAwardPopover from 'components/UserAwardPopover';
 import AwardSwitch from './AwardSwitch';
 import ProfRow from './ProfRow';
 import ProfileRow from './ProfileRow';
+import BookmarkHideRow from './BookmarkHideRow';
 
 import messages from './messages';
 
@@ -62,21 +63,30 @@ function ProfileDisplay(props, context) {
           <div>{moment(props.user.lastLogin).format('YYYY-MM-DD HH:mm')}</div>
         }
       />
-      {props.user.userId === props.currentUserId && (
+      {props.userId === props.currentUserId && (
         <AwardSwitch
+          userId={props.userId}
           currentAwardId={
             props.user.currentAward ? props.user.currentAward.id : null
           }
           userawardSet={props.user.userawardSet}
         />
       )}
-      <ProfileRow userId={props.user.userId} profile={props.user.profile} />
+      {props.userId === props.currentUserId && (
+        <BookmarkHideRow hideBookmark={props.user.hideBookmark} />
+      )}
+      <ProfileRow
+        userId={props.userId}
+        profile={props.user.profile}
+        currentUserId={props.currentUserId}
+      />
     </Flex>
   );
 }
 
 ProfileDisplay.propTypes = {
   user: PropTypes.object.isRequired,
+  userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
 };
 

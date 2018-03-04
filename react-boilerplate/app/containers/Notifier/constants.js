@@ -24,7 +24,12 @@ const wsConnectMsg = () => ({
 
 const chatroomNotExistsMsg = (context) => ({
   ...defaultMessageStyle,
-  children: <FormattedMessage {...messages.chatroomNotExists} values={{ name: context.name }} />,
+  children: (
+    <FormattedMessage
+      {...messages.chatroomNotExists}
+      values={{ name: context.name }}
+    />
+  ),
 });
 
 const puzzleAddedMsg = (context) => ({
@@ -36,7 +41,7 @@ const puzzleAddedMsg = (context) => ({
 
 const directMessageReceivedMsg = (context) => ({
   ...defaultMessageStyle,
-  autoDismiss: 30,
+  autoDismiss: 0,
   action: {
     label: <FormattedMessage {...messages.open} />,
     callback: context.callback,
@@ -49,13 +54,26 @@ const directMessageReceivedMsg = (context) => ({
   ),
 });
 
+const userawardAddedMsg = (context) => ({
+  ...defaultMessageStyle,
+  autoDismiss: 60,
+  message: (
+    <span style={{ fontSize: '1.1em' }}>
+      <FormattedMessage {...messages.userawardAdded} values={{ ...context }} />
+    </span>
+  ),
+});
+
 export const DIRECTCHAT_NOTIFY = 'containers/Notifier/DIRECTCHAT_NOTIFY';
+
+export const USERAWARD_ADDED = 'ws/USERAWARD_ADDED';
 
 export const NOTE_NEEDED = {
   WS_CONNECT,
   PUZZLE_ADDED,
   DIRECTCHAT_NOTIFY,
   GOTID_MINICHAT,
+  USERAWARD_ADDED,
 };
 
 export const NOTE_MSG = {
@@ -63,4 +81,5 @@ export const NOTE_MSG = {
   puzzleAddedMsg,
   directMessageReceivedMsg,
   chatroomNotExistsMsg,
+  userawardAddedMsg,
 };

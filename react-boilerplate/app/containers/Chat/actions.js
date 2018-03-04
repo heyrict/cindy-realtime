@@ -19,6 +19,8 @@ import {
   OPEN_CHAT,
   OPEN_DIRECTCHAT,
   GOTID_MINICHAT,
+  ADD_FAVCHAN,
+  REMOVE_FAVCHAN,
 } from './constants';
 
 export function toggleChat(open) {
@@ -109,5 +111,19 @@ export function updateChannel(name, chatroom) {
     type: GOTID_MINICHAT,
     name,
     chatroom,
+  };
+}
+
+export function addFavoriteChatRoom(chatroomName) {
+  return {
+    type: ADD_FAVCHAN,
+    chatroomName,
+  };
+}
+
+export function removeFavoriteChatRoom(chatroomName) {
+  return {
+    type: REMOVE_FAVCHAN,
+    chatroomName,
   };
 }

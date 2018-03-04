@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import bootbox from 'bootbox';
-import { commitMutation } from 'react-relay';
-import environment from 'Environment';
 import { FormattedMessage, intlShape } from 'react-intl';
 import { ImgXs, EditButton, Input } from 'style-store';
 import tag from 'images/tag.svg';
@@ -10,6 +9,7 @@ import tick from 'images/tick.svg';
 import cross from 'images/cross.svg';
 import del from 'images/delete.svg';
 
+import { graphql } from 'react-apollo';
 import dialogueMessages from 'containers/Dialogue/messages';
 import UpdateBookmarkMutation from 'graphql/UpdateBookmarkMutation';
 import DeleteBookmarkMutation from 'graphql/DeleteBookmarkMutation';
@@ -40,42 +40,48 @@ class BookmarkLabel extends React.PureComponent {
       bootbox.alert('Value must be in [0, 100]');
       return;
     }
-    commitMutation(environment, {
-      mutation: UpdateBookmarkMutation,
-      variables: {
-        input: {
-          bookmarkId: this.props.bookmarkId,
-          value: v,
+    this.props
+      .mutateBookmarkUpdate({
+        variables: {
+          input: {
+            bookmarkId: this.props.bookmarkId,
+            value: v,
+          },
         },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-        }
+      })
+      .then(() => {
         this.trueValue = v;
-      },
-    });
-    this.setState({ editMode: false });
+        this.setState({ editMode: false });
+      })
+      .catch((error) => {
+        bootbox.alert({
+          title: 'Error',
+          message: error.message,
+        });
+      });
   }
   handleDelete() {
     const _ = this.context.intl.formatMessage;
     bootbox.confirm(_(messages.deletePrompt), (p) => {
       if (!p) return;
-      commitMutation(environment, {
-        mutation: DeleteBookmarkMutation,
-        variables: {
-          input: {
-            bookmarkId: this.props.bookmarkId,
+      this.props
+        .mutateBookmarkDelete({
+          variables: {
+            input: {
+              bookmarkId: this.props.bookmarkId,
+            },
           },
-        },
-        onCompleted: (response, errors) => {
-          if (errors) {
-            bootbox.alert(errors.map((e) => e.message).join(','));
-          }
-        },
-      });
-      this.isDeleted = true;
-      this.setState({ editMode: false });
+        })
+        .then(() => {
+          this.isDeleted = true;
+          this.setState({ editMode: false });
+        })
+        .catch((error) => {
+          bootbox.alert({
+            title: 'Error',
+            message: error.message,
+          });
+        });
     });
   }
   render() {
@@ -137,6 +143,18 @@ BookmarkLabel.propTypes = {
   value: PropTypes.number.isRequired,
   isCurrentUser: PropTypes.bool.isRequired,
   bookmarkId: PropTypes.string.isRequired,
+  mutateBookmarkDelete: PropTypes.func.isRequired,
+  mutateBookmarkUpdate: PropTypes.func.isRequired,
 };
 
-export default BookmarkLabel;
+const withUpdateBookmarkMutation = graphql(UpdateBookmarkMutation, {
+  name: 'mutateBookmarkUpdate',
+});
+
+const withDeleteBookmarkMutation = graphql(DeleteBookmarkMutation, {
+  name: 'mutateBookmarkDelete',
+});
+
+export default compose(withUpdateBookmarkMutation, withDeleteBookmarkMutation)(
+  BookmarkLabel
+);

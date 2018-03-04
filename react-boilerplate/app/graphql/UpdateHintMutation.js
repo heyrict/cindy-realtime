@@ -1,6 +1,6 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
 
-const UpdateHintMutation = graphql`
+const UpdateHintMutation = gql`
   mutation UpdateHintMutation($input: UpdateHintInput!) {
     updateHint(input: $input) {
       clientMutationId
@@ -8,4 +8,4 @@ const UpdateHintMutation = graphql`
   }
 `;
 
-export default UpdateHintMutation
+export default UpdateHintMutation;

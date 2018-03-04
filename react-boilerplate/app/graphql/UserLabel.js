@@ -1,9 +1,11 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
 
-const UserLabel = graphql`
+const UserLabel = gql`
   fragment UserLabel_user on UserNode {
+    id
     rowid
     nickname
+    dateJoined
     currentAward {
       id
       created
@@ -14,6 +16,6 @@ const UserLabel = graphql`
       }
     }
   }
-`
+`;
 
 export default UserLabel;

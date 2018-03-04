@@ -7,9 +7,8 @@ import django
 django.setup()
 from django.utils import timezone
 
-from scoring import update_user_exp
 from awards import judgers, granters
-from sui_hei.models import Award, Minichat, Puzzle, User
+from sui_hei.models import Award, ChatMessage, ChatRoom, Puzzle, User
 
 daily_message = ""
 
@@ -18,14 +17,10 @@ def feedBot(message):
     try:
         message = message.strip()
         user = User.objects.get(username="System")
+        lobby = ChatRoom.objects.get(name="lobby")
         if message:
-            message = "My Work Today\n" + '=' * 20 + '\n' + message + '\n' + '=' * 20
-            Minichat(channel="minichat", user_id=user, content=message).save()
-        else:
-            Minichat(
-                channel="minichat",
-                user_id=user,
-                content="Today is my holiday :)").save()
+            message = "My Work Today\n" + '=' * 20 + '\n' + message
+            ChatMessage(chatroom=lobby, user=user, content=message).save()
 
     except Exception as e:
         print(e)
@@ -35,19 +30,21 @@ def clean_recent_minichat(recent=None):
     if not isinstance(recent, int):
         return
 
-    count = Minichat.objects.filter(channel="minichat").count()
+    lobby = ChatRoom.objects.get(name="lobby")
+    lobby_messages = ChatMessage.objects.filter(chatroom=lobby).order_by("id")
+    count = lobby_messages.count()
     if count < recent:
         return
 
     try:
-        earliest = Minichat.objects.filter(channel="minichat")[count - recent].id
+        earliest = lobby_messages[count - recent].id
     except IndexError:
         return
 
-    Minichat.objects.filter(channel="minichat", id__lt=earliest).delete()
+    lobby_messages.filter(id__lt=earliest).delete()
 
 
-def mark_puzzle_as_dazed(recent=7):
+def mark_puzzle_as_dazed(recent=14):
     message = ""
 
     now = timezone.now()
@@ -88,21 +85,19 @@ def grant_awards_to_users(recent=None):
 
 
 if __name__ == "__main__":
-    # Update user experience
-    update_user_exp(recent=timedelta(days=1))
-
     # delete old minichat chat messages
     clean_recent_minichat(200)
 
     # mark outdated puzzles as dazed
-    returned = mark_puzzle_as_dazed(7)
-    if returned:
-        daily_message += "## Dazed Soup :coffee:\n" + '- ' + '\n- '.join(
-            returned.split('\n')) + '\n'
+    #returned = mark_puzzle_as_dazed(14)
+    #if returned:
+    #    daily_message += "## Dazed Soup :coffee:\n" + '- ' + '\n- '.join(
+    #        returned.split('\n')) + '\n'
 
     # grant awards to users
-    returned = grant_awards_to_users(recent=timedelta(days=1))
-    if returned:
-        daily_message += "## Awards :crown:\n" + returned + '\n'
+    #returned = grant_awards_to_users(recent=timedelta(days=3))
+    #if returned:
+    #    daily_message += "## Awards :crown:\n" + returned + '\n'
 
-    feedBot(daily_message)
+    # Don't feed to Bot in favor of notification.
+    #feedBot(daily_message)

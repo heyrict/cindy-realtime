@@ -1,11 +1,20 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
 
-const RegisterFormMutation = graphql`
+const RegisterFormMutation = gql`
   mutation RegisterFormMutation($input: UserRegisterInput!) {
     register(input: $input) {
       user {
         rowid
         nickname
+        favoritechatroomSet {
+          edges {
+            node {
+              chatroom {
+                name
+              }
+            }
+          }
+        }
       }
     }
   }

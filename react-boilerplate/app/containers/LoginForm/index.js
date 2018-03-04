@@ -9,12 +9,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FieldGroup from 'components/FieldGroup';
-import environment from 'Environment';
 
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
-import { commitMutation } from 'react-relay';
+import { graphql } from 'react-apollo';
 
 import { Form, FormControl, Panel } from 'react-bootstrap';
 import { setCurrentUser } from 'containers/UserNavbar/actions';
@@ -56,35 +55,35 @@ export class LoginForm extends React.Component {
   // {{{ confirm
   confirm() {
     const { username, password } = this.state;
-    commitMutation(environment, {
-      mutation: LoginFormMutation,
-      variables: { input: { username, password } },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          this.setState({
-            errorMsg: errors,
-          });
-        } else if (response) {
-          const user = response.login.user;
-          // TODO: Update Global User Interface here
-          this.props.updateCurrentUser({
-            userId: user.rowid,
-            nickname: user.nickname,
-          });
-        }
-      },
-    });
+    this.props
+      .mutate({
+        variables: { input: { username, password } },
+      })
+      .then(({ data }) => {
+        const user = data.login.user;
+        this.props.updateCurrentUser({
+          ...user,
+          userId: user.rowid,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          errorMsg: error,
+        });
+      });
   }
   // }}}
   // {{{ render
   render() {
     return (
       <Form horizontal>
-        {this.state.errorMsg
-          ? this.state.errorMsg.map((e) => (
-              <Panel header={e.message} bsStyle="danger" key={e.message} />
-            ))
-          : null}
+        {this.state.errorMsg ? (
+          <Panel
+            header={this.state.errorMsg.message}
+            bsStyle="danger"
+            key={this.state.errorMsg.message}
+          />
+        ) : null}
         <FieldGroup
           id="formLoginUsername"
           label={<FormattedMessage {...messages.username} />}
@@ -116,6 +115,7 @@ export class LoginForm extends React.Component {
 
 LoginForm.propTypes = {
   updateCurrentUser: PropTypes.func.isRequired,
+  mutate: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -128,7 +128,10 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(null, mapDispatchToProps);
 
+const withLogin = graphql(LoginFormMutation);
+
 export default compose(
+  withLogin,
   withConnect,
   withModal({
     header: 'Login',

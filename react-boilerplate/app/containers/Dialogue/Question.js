@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { line2md, from_global_id as f } from 'common';
-import { commitMutation } from 'react-relay';
-import environment from 'Environment';
 import { createStructuredSelector, createSelector } from 'reselect';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
 import { FormattedMessage } from 'react-intl';
 import updateQuestionMutation from 'graphql/UpdateQuestionMutation';
 import bootbox from 'bootbox';
 import { Flex, Box } from 'rebass';
+import { graphql } from 'react-apollo';
 import UserAwardPopover from 'components/UserAwardPopover';
 import {
   DarkNicknameLink as NicknameLink,
@@ -57,22 +57,27 @@ class Question extends React.PureComponent {
   }
 
   handleSubmit() {
+    if (this.state.question === this.props.question) {
+      this.toggleEditMode();
+      return;
+    }
+
     const id = parseInt(f(this.props.id)[1], 10);
-    commitMutation(environment, {
-      mutation: updateQuestionMutation,
-      variables: {
-        input: {
-          question: this.state.question,
-          dialogueId: id,
+    this.props
+      .mutate({
+        variables: {
+          input: {
+            question: this.state.question,
+            dialogueId: id,
+          },
         },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-        }
+      })
+      .then(() => {
         this.toggleEditMode();
-      },
-    });
+      })
+      .catch((error) => {
+        bootbox.alert(error.message);
+      });
   }
 
   render() {
@@ -151,6 +156,7 @@ Question.propTypes = {
   currentUser: PropTypes.object.isRequired,
   created: PropTypes.string.isRequired,
   questionEditTimes: PropTypes.number.isRequired,
+  mutate: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -159,4 +165,8 @@ const mapStateToProps = createStructuredSelector({
   ),
 });
 
-export default connect(mapStateToProps)(Question);
+const withConnect = connect(mapStateToProps);
+
+const withMutation = graphql(updateQuestionMutation);
+
+export default compose(withConnect, withMutation)(Question);

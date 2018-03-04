@@ -6,11 +6,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Relay from 'react-relay';
 import { DarkNicknameLink as NicknameLink } from 'style-store';
 
 import UserAwardPopover from 'components/UserAwardPopover';
-import UserLabelUserFragment from 'graphql/UserLabel';
 
 export function UserLabel(props) {
   const user = props.user;
@@ -34,4 +32,4 @@ UserLabel.propTypes = {
   break: PropTypes.bool,
 };
 
-export default Relay.createFragmentContainer(UserLabel, UserLabelUserFragment);
+export default UserLabel;

@@ -4,18 +4,21 @@
  *
  */
 
+/* eslint-disable indent */
+/* eslint-disable no-underscore-dangle */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { from_global_id as f } from 'common';
 import { FormattedMessage } from 'react-intl';
-import Relay from 'react-relay';
+import { graphql } from 'react-apollo';
 import { ButtonOutline } from 'style-store';
 
 import PuzzlePanel from 'components/PuzzlePanel';
-import BookmarkListFragment from 'graphql/BookmarkList';
-import BookmarkListInitQuery from 'graphql/BookmarkListInitQuery';
+import BookmarkListQuery from 'graphql/BookmarkList';
 import chatMessages from 'containers/Chat/messages';
+import LoadingDots from 'components/LoadingDots';
 import BookmarkLabel from './BookmarkLabel';
 
 const StyledButtonOutline = ButtonOutline.extend`
@@ -23,26 +26,14 @@ const StyledButtonOutline = ButtonOutline.extend`
   padding: 10px 0;
 `;
 
-export class BookmarkList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.loadMore = this.loadMore.bind(this);
-  }
-
-  loadMore() {
-    if (!this.props.relay.hasMore() || this.props.relay.isLoading()) {
-      return;
-    }
-
-    this.props.relay.loadMore(10, (error) => {
-      console.log(error);
-    });
-  }
-
+class BookmarkList extends React.PureComponent {
   render() {
+    if (this.props.loading) {
+      return <LoadingDots size={8} py={50} />;
+    }
     return (
       <div>
-        {this.props.list.allBookmarks.edges.map((edge) => (
+        {this.props.allBookmarks.edges.map((edge) => (
           <PuzzlePanel
             node={edge.node.puzzle}
             key={edge.node.id}
@@ -55,8 +46,8 @@ export class BookmarkList extends React.Component {
             }
           />
         ))}
-        {this.props.relay.hasMore() ? (
-          <StyledButtonOutline onClick={this.loadMore} w={1}>
+        {this.props.hasMore() ? (
+          <StyledButtonOutline onClick={this.props.loadMore} w={1}>
             <FormattedMessage {...chatMessages.loadMore} />
           </StyledButtonOutline>
         ) : (
@@ -68,35 +59,50 @@ export class BookmarkList extends React.Component {
 }
 
 BookmarkList.propTypes = {
-  relay: PropTypes.object.isRequired,
-  list: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+  loadMore: PropTypes.func.isRequired,
+  hasMore: PropTypes.func.isRequired,
+  allBookmarks: PropTypes.shape({
+    edges: PropTypes.array.isRequired,
+  }),
   userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string,
 };
 
-const withBookmarkList = (Component) =>
-  Relay.createPaginationContainer(Component, BookmarkListFragment, {
-    direction: 'forward',
-    getConnectionFromProps(props) {
-      return props.list && props.list.allBookmarks;
-    },
-    getFragmentVariables(prevVars, totalCount) {
-      return {
-        ...prevVars,
-        count: totalCount,
-      };
-    },
-    getVariables(props, { count, cursor }, fragmentVariables) {
-      return {
-        count,
-        cursor,
-        orderBy: fragmentVariables.orderBy,
-        status: fragmentVariables.status,
-        status__gt: fragmentVariables.status__gt,
-        user: fragmentVariables.user,
-      };
-    },
-    query: BookmarkListInitQuery,
-  });
+const withBookmarkList = graphql(BookmarkListQuery, {
+  options: ({ variables }) => ({ variables: { ...variables, count: 10 } }),
+  props({ data, ownProps }) {
+    const { loading, allBookmarks, fetchMore, refetch } = data;
+    return {
+      loading,
+      allBookmarks,
+      refetch,
+      hasMore: () => allBookmarks.pageInfo.hasNextPage,
+      loadMore: () =>
+        fetchMore({
+          query: BookmarkListQuery,
+          variables: {
+            ...ownProps.variables,
+            count: 10,
+            cursor: allBookmarks.pageInfo.endCursor,
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            const newEdges = fetchMoreResult.allBookmarks.edges;
+            const pageInfo = fetchMoreResult.allBookmarks.pageInfo;
+
+            return newEdges.length
+              ? {
+                  allBookmarks: {
+                    __typename: previousResult.allBookmarks.__typename,
+                    edges: [...previousResult.allBookmarks.edges, ...newEdges],
+                    pageInfo,
+                  },
+                }
+              : previousResult;
+          },
+        }),
+    };
+  },
+});
 
 export default compose(withBookmarkList)(BookmarkList);

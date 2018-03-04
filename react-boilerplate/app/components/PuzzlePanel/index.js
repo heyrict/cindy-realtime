@@ -9,15 +9,13 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Box, Row, Divider, Flex } from 'rebass';
 import { RoundedPanel } from 'style-store';
+import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 
-import Relay from 'react-relay';
-
 import TitleLabel from 'components/TitleLabel';
-import UserLabel, { UserLabel as UserLabelPlain } from 'components/UserLabel';
+import UserLabel from 'components/UserLabel';
 import RewardingModal from 'components/RewardingModal/Loadable';
-
-import PuzzlePanelNodeFragment from 'graphql/PuzzlePanel';
+import sortMessages from 'components/FilterableList/messages';
 
 import StarLabel from './StarLabel';
 import CommentLabel from './CommentLabel';
@@ -52,14 +50,12 @@ export class PuzzlePanel extends React.Component {
     this.toggleRewardingPanel = (s) => this.setState({ rewardingShown: s });
   }
   render() {
-    const UserLabelInst =
-      this.props.relay === undefined ? UserLabelPlain : UserLabel;
     const node = this.props.node;
     return (
       <RoundedPanel my={10}>
         <Row mx={10} py={10}>
           <UserCol w={[1 / 4, 1 / 6]} px={10}>
-            <UserLabelInst user={node.user} break />
+            <UserLabel user={node.user} break />
             {this.props.additional}
           </UserCol>
           <Box w={[3 / 4, 5 / 6]} px={10}>
@@ -74,7 +70,8 @@ export class PuzzlePanel extends React.Component {
               </Box>
               <Box ml="auto" style={{ alignSelf: 'center' }}>
                 <PuzzleDate>
-                  Created: {moment(node.created).format('YYYY-MM-DD HH:mm')}
+                  <FormattedMessage {...sortMessages.created} />:{' '}
+                  {moment(node.created).format('YYYY-MM-DD HH:mm')}
                 </PuzzleDate>
               </Box>
             </Flex>
@@ -112,11 +109,7 @@ export class PuzzlePanel extends React.Component {
 
 PuzzlePanel.propTypes = {
   node: PropTypes.object.isRequired,
-  relay: PropTypes.object,
   additional: PropTypes.any,
 };
 
-export default Relay.createFragmentContainer(
-  PuzzlePanel,
-  PuzzlePanelNodeFragment
-);
+export default PuzzlePanel;

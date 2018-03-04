@@ -1,8 +1,9 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
 
-export const ProfileShowQuery = graphql`
+export const ProfileShowQuery = gql`
   query ProfileShowQuery($id: ID!) {
     user(id: $id) {
+      id
       nickname
       puzzleCount
       quesCount
@@ -28,6 +29,7 @@ export const ProfileShowQuery = graphql`
       dateJoined
       lastLogin
       profile
+      hideBookmark
     }
   }
 `;

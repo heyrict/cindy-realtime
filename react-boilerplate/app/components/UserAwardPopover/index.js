@@ -23,15 +23,17 @@ class UserAwardPopover extends React.PureComponent {
           dangerouslySetInnerHTML={{ __html: line2md(ua.award.description) }}
         />
         <br />
-        <span
-          className="pull-right"
-          style={{ color: '#ff582b', fontWeight: 'bold' }}
-        >
-          <span role="img" aria-label="gold-cup">
-            🏆
+        {ua.created && (
+          <span
+            className="pull-right"
+            style={{ color: '#ff582b', fontWeight: 'bold' }}
+          >
+            <span role="img" aria-label="gold-cup">
+              🏆
+            </span>
+            {ua.created}
           </span>
-          {ua.created}
-        </span>
+        )}
       </Popover>
     );
     return (

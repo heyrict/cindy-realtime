@@ -10,26 +10,46 @@
  */
 
 import React from 'react';
+import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
 import { intlShape } from 'react-intl';
-import Constrained from 'components/Constrained';
 import messages from './messages';
 
 import MainFrame from './MainFrame';
+import PuzzleDescribeList from './PuzzleDescribeList';
 
-export default function HomePage(props, context) {
+const PurpleBg = styled.div`
+  background: linear-gradient(#5f293e, #330617);
+`;
+
+function HomePage(props, context) {
   const _ = context.intl.formatMessage;
+  const now = new Date();
+  let year;
+  let month;
+  year = now.getYear() + 1900;
+  month = now.getMonth() + 1;
+  if (month === 1) {
+    year -= 1;
+    month = 12;
+  }
   return (
-    <div>
+    <PurpleBg>
       <Helmet>
         <title>{_(messages.title)}</title>
         <meta name="description" content={_(messages.description)} />
       </Helmet>
       <MainFrame />
-    </div>
+      <PuzzleDescribeList
+        variables={{ year, month, orderBy: ['-starCount'] }}
+        itemsPerPage={5}
+      />
+    </PurpleBg>
   );
 }
 
 HomePage.contextTypes = {
   intl: intlShape,
 };
+
+export default HomePage;

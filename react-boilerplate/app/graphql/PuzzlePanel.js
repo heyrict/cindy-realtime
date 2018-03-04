@@ -1,6 +1,7 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
+import UserLabel from './UserLabel';
 
-const PuzzlePanel = graphql`
+const PuzzlePanel = gql`
   fragment PuzzlePanel_node on PuzzleNode {
     id
     rowid
@@ -9,7 +10,6 @@ const PuzzlePanel = graphql`
     title
     status
     created
-    content
     quesCount
     uaquesCount
     starSet {
@@ -28,6 +28,7 @@ const PuzzlePanel = graphql`
       ...UserLabel_user
     }
   }
+  ${UserLabel}
 `;
 
 export default PuzzlePanel;

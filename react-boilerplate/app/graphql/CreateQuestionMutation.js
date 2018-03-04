@@ -1,9 +1,12 @@
-import { graphql } from 'react-relay';
+import gql from 'graphql-tag';
 
-const CreateQuestionMutation = graphql`
+const CreateQuestionMutation = gql`
   mutation CreateQuestionMutation($input: CreateQuestionInput!) {
     createQuestion(input: $input) {
-      clientMutationId
+      dialogue {
+        id
+        created
+      }
     }
   }
 `;

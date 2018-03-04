@@ -8,9 +8,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import bootbox from 'bootbox';
-import { commitMutation } from 'react-relay';
-import environment from 'Environment';
 import { line2md, from_global_id as f } from 'common';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
@@ -29,7 +28,7 @@ import cross from 'images/cross.svg';
 
 import { createStructuredSelector, createSelector } from 'reselect';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
-import { selectPuzzleShowPageDomain } from 'containers/PuzzleShowPage/selectors';
+import { graphql } from 'react-apollo';
 import hintMutation from 'graphql/UpdateHintMutation';
 
 import dialogueMessages from 'containers/Dialogue/messages';
@@ -73,20 +72,19 @@ export class Hint extends React.Component {
     }
 
     const id = parseInt(f(this.props.node.id)[1], 10);
-    commitMutation(environment, {
-      mutation: hintMutation,
-      variables: {
-        input: {
-          hintId: id,
-          content: this.state.content,
+    this.props
+      .mutate({
+        variables: {
+          input: {
+            hintId: id,
+            content: this.state.content,
+          },
         },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-        }
-      },
-    });
+      })
+      .then(() => {})
+      .catch((error) => {
+        bootbox.alert(error.message);
+      });
     this.setState({ editMode: false });
   }
 
@@ -124,7 +122,7 @@ export class Hint extends React.Component {
             }}
           />
           {this.props.owner.rowid === this.props.user.userId &&
-            this.props.puzzleStatus === 0 && (
+            this.props.status === 0 && (
               <FormattedMessage {...dialogueMessages.edit}>
                 {(msg) => (
                   <EditButton onClick={this.toggleEditMode}>{msg}</EditButton>
@@ -150,18 +148,11 @@ Hint.propTypes = {
   }),
   owner: PropTypes.object.isRequired,
   user: PropTypes.object,
-  puzzleStatus: PropTypes.number.isRequired,
+  status: PropTypes.number.isRequired,
+  mutate: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  owner: createSelector(
-    selectPuzzleShowPageDomain,
-    (substate) => substate.get('puzzle').user
-  ),
-  puzzleStatus: createSelector(
-    selectPuzzleShowPageDomain,
-    (substate) => substate.get('puzzle').status
-  ),
   user: createSelector(selectUserNavbarDomain, (substate) =>
     substate.get('user').toJS()
   ),
@@ -173,4 +164,8 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Hint);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
+
+const withMutate = graphql(hintMutation);
+
+export default compose(withConnect, withMutate)(Hint);

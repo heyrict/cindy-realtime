@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import bootbox from 'bootbox';
+import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
 import Constrained from 'components/Constrained';
 import FiveStars from 'components/FiveStars';
 import { PuzzleFrame, ButtonOutline, Input, Switch } from 'style-store';
 
-import { commitMutation } from 'react-relay';
-import environment from 'Environment';
+import { graphql } from 'react-apollo';
 import UpdateStarMutation from 'graphql/UpdateStarMutation';
 import UpdateCommentMutation from 'graphql/UpdateCommentMutation';
 
@@ -27,7 +27,10 @@ class RewardingBox extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      stars: this.props.existingStar.length === 0 ? 0 : null,
+      stars:
+        this.props.existingStar.length === 0
+          ? 0
+          : this.props.existingStar[0].node.value,
       commitStar: false,
       comment:
         this.props.existingComment.length === 0
@@ -49,17 +52,19 @@ class RewardingBox extends React.PureComponent {
   }
   componentWillUnmount() {
     if (!this.state.commitStar) return;
-    commitMutation(environment, {
-      mutation: UpdateStarMutation,
-      variables: {
-        input: this.state.commitStar,
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-        }
-      },
-    });
+    this.props
+      .mutateStarUpdate({
+        variables: {
+          input: this.state.commitStar,
+        },
+      })
+      .then(() => {})
+      .catch((error) => {
+        bootbox.alert({
+          title: 'Error',
+          message: error.message,
+        });
+      });
   }
   cancelStar() {
     this.setState({
@@ -85,47 +90,48 @@ class RewardingBox extends React.PureComponent {
       bootbox.alert('Comment cannot be blank!');
       return;
     }
-    commitMutation(environment, {
-      mutation: UpdateCommentMutation,
-      variables: {
-        input: {
-          puzzleId: this.props.puzzleId,
-          content: this.state.comment,
-          spoiler: this.state.spoiler,
+    this.props
+      .mutateCommentUpdate({
+        variables: {
+          input: {
+            puzzleId: this.props.puzzleId,
+            content: this.state.comment,
+            spoiler: this.state.spoiler,
+          },
         },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-        }
+      })
+      .then(() => {
         bootbox.alert('Save Succeeded');
-      },
-    });
+      })
+      .catch((error) => {
+        bootbox.alert({
+          title: 'Error',
+          message: error.message,
+        });
+      });
   }
   render() {
     return (
       <Constrained>
-        {this.state.stars !== null && (
-          <PuzzleFrame>
-            <Flex wrap justify="center" align="center">
-              <FiveStars
-                justify="center"
-                align="center"
-                value={this.state.stars}
-                onSet={this.handleStarSet}
-                w={1 / 2}
-              />
-              <SubmitBtn w={1 / 2} onClick={this.handleSaveStar}>
-                <FormattedMessage {...messages.addStar} />
-              </SubmitBtn>
-              {this.state.commitStar && (
-                <button onClick={this.cancelStar}>
-                  <FormattedMessage {...messages.cancelStar} />
-                </button>
-              )}
-            </Flex>
-          </PuzzleFrame>
-        )}
+        <PuzzleFrame>
+          <Flex wrap justify="center" align="center">
+            <FiveStars
+              justify="center"
+              align="center"
+              value={this.state.stars}
+              onSet={this.handleStarSet}
+              w={1 / 2}
+            />
+            <SubmitBtn w={1 / 2} onClick={this.handleSaveStar}>
+              <FormattedMessage {...messages.addStar} />
+            </SubmitBtn>
+            {this.state.commitStar && (
+              <button onClick={this.cancelStar}>
+                <FormattedMessage {...messages.cancelStar} />
+              </button>
+            )}
+          </Flex>
+        </PuzzleFrame>
         <PuzzleFrame>
           <Flex wrap mt={10}>
             <CommentInput
@@ -153,6 +159,18 @@ RewardingBox.propTypes = {
   puzzleId: PropTypes.number.isRequired,
   existingStar: PropTypes.array.isRequired,
   existingComment: PropTypes.array.isRequired,
+  mutateStarUpdate: PropTypes.func.isRequired,
+  mutateCommentUpdate: PropTypes.func.isRequired,
 };
 
-export default RewardingBox;
+const withStarUpdateMutation = graphql(UpdateStarMutation, {
+  name: 'mutateStarUpdate',
+});
+
+const withCommentUpdateMutation = graphql(UpdateCommentMutation, {
+  name: 'mutateCommentUpdate',
+});
+
+export default compose(withStarUpdateMutation, withCommentUpdateMutation)(
+  RewardingBox
+);

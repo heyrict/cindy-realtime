@@ -4,17 +4,20 @@
  *
  */
 
+/* eslint-disable indent */
+/* eslint-disable no-underscore-dangle */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import Relay from 'react-relay';
 import { ButtonOutline } from 'style-store';
 
 import PuzzlePanel from 'components/PuzzlePanel';
+import StarListQuery from 'graphql/StarList';
+import LoadingDots from 'components/LoadingDots';
 import FiveStars from 'components/FiveStars';
-import StarListFragment from 'graphql/StarList';
-import StarListInitQuery from 'graphql/StarListInitQuery';
 import chatMessages from 'containers/Chat/messages';
 
 const StyledButtonOutline = ButtonOutline.extend`
@@ -22,26 +25,14 @@ const StyledButtonOutline = ButtonOutline.extend`
   padding: 10px 0;
 `;
 
-export class StarList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.loadMore = this.loadMore.bind(this);
-  }
-
-  loadMore() {
-    if (!this.props.relay.hasMore() || this.props.relay.isLoading()) {
-      return;
-    }
-
-    this.props.relay.loadMore(10, (error) => {
-      console.log(error);
-    });
-  }
-
+class StarList extends React.PureComponent {
   render() {
+    if (this.props.loading) {
+      return <LoadingDots size={8} py={50} />;
+    }
     return (
       <div>
-        {this.props.list.allStars.edges.map((edge) => (
+        {this.props.allStars.edges.map((edge) => (
           <PuzzlePanel
             node={edge.node.puzzle}
             key={edge.node.id}
@@ -54,8 +45,8 @@ export class StarList extends React.Component {
             }
           />
         ))}
-        {this.props.relay.hasMore() && (
-          <StyledButtonOutline onClick={this.loadMore} w={1}>
+        {this.props.hasMore() && (
+          <StyledButtonOutline onClick={this.props.loadMore} w={1}>
             <FormattedMessage {...chatMessages.loadMore} />
           </StyledButtonOutline>
         )}
@@ -65,31 +56,48 @@ export class StarList extends React.Component {
 }
 
 StarList.propTypes = {
-  relay: PropTypes.object.isRequired,
-  list: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+  loadMore: PropTypes.func.isRequired,
+  hasMore: PropTypes.func.isRequired,
+  allStars: PropTypes.shape({
+    edges: PropTypes.array.isRequired,
+  }),
 };
 
-const withStarList = (Component) =>
-  Relay.createPaginationContainer(Component, StarListFragment, {
-    direction: 'forward',
-    getConnectionFromProps(props) {
-      return props.list && props.list.allStars;
-    },
-    getFragmentVariables(prevVars, totalCount) {
-      return {
-        ...prevVars,
-        count: totalCount,
-      };
-    },
-    getVariables(props, { count, cursor }, fragmentVariables) {
-      return {
-        count,
-        cursor,
-        orderBy: fragmentVariables.orderBy,
-        user: fragmentVariables.user,
-      };
-    },
-    query: StarListInitQuery,
-  });
+const withStarList = graphql(StarListQuery, {
+  options: ({ variables }) => ({ variables: { ...variables, count: 10 } }),
+  props({ data, ownProps }) {
+    const { loading, allStars, fetchMore, refetch } = data;
+    return {
+      loading,
+      allStars,
+      refetch,
+      hasMore: () => allStars.pageInfo.hasNextPage,
+      loadMore: () =>
+        fetchMore({
+          query: StarListQuery,
+          variables: {
+            ...ownProps.variables,
+            count: 10,
+            cursor: allStars.pageInfo.endCursor,
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            const newEdges = fetchMoreResult.allStars.edges;
+            const pageInfo = fetchMoreResult.allStars.pageInfo;
+
+            return newEdges.length
+              ? {
+                  allStars: {
+                    __typename: previousResult.allStars.__typename,
+                    edges: [...previousResult.allStars.edges, ...newEdges],
+                    pageInfo,
+                  },
+                }
+              : previousResult;
+          },
+        }),
+    };
+  },
+});
 
 export default compose(withStarList)(StarList);

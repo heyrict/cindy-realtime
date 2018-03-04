@@ -17,6 +17,10 @@ export default defineMessages({
     id: 'app.containers.Notifier.chatroomNotExists',
     defaultMessage: 'ChatRoom {name} does not exists.',
   },
+  userawardAdded: {
+    id: 'app.containers.Notifier.userawardAdded',
+    defaultMessage: 'Congratulations to {nickname} for getting award {award}!',
+  },
   open: {
     id: 'app.containers.Notifier.open',
     defaultMessage: 'Open',

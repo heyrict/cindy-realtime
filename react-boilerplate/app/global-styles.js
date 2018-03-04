@@ -1,3 +1,4 @@
+import 'react-select/dist/react-select.css';
 import { injectGlobal } from 'styled-components';
 
 /* eslint no-unused-expressions: 0 */

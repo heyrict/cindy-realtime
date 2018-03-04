@@ -1,14 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import bootbox from 'bootbox';
 import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { to_global_id as t } from 'common';
 import { Box, Flex } from 'rebass';
 import Constrained from 'components/Constrained';
 import { ButtonOutline, Input } from 'style-store';
 
-import { commitMutation } from 'react-relay';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import putQuestionMutation from 'graphql/CreateQuestionMutation';
-import environment from 'Environment';
+import UserLabel from 'graphql/UserLabel';
+import DialoguePanel from 'graphql/DialoguePanel';
 
 import messages from './messages';
 
@@ -18,6 +22,7 @@ class QuestionPutBox extends React.PureComponent {
 
     this.state = {
       content: '',
+      loading: false,
     };
     this.handleKeyDown = (e) => {
       if (e.key === 'Enter') this.handleSubmit();
@@ -32,22 +37,84 @@ class QuestionPutBox extends React.PureComponent {
 
   handleSubmit() {
     if (this.state.content === '') return;
+    if (this.state.loading) return;
+    if (!this.props.currentUserId) return;
+    const { puzzleId, currentUser } = this.props;
+    const content = this.state.content;
+    this.setState({ content: '', loading: true });
 
-    commitMutation(environment, {
-      mutation: putQuestionMutation,
-      variables: {
-        input: {
-          content: this.state.content,
-          puzzleId: this.props.puzzleId,
-        },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          console.log(errors);
+    const query = gql`
+      query {
+        puzzleShowUnion(id: $id)
+          @connection(key: "PuzzleShowUnion_PuzzleShowUnion", filter: ["id"]) {
+          edges {
+            node {
+              ... on DialogueNode {
+                ...DialoguePanel
+              }
+
+              ... on HintNode {
+                id
+                content
+                created
+              }
+            }
+          }
         }
-      },
-    });
-    this.setState({ content: '' });
+      }
+      ${DialoguePanel}
+    `;
+
+    this.props
+      .mutate({
+        variables: {
+          input: {
+            content,
+            puzzleId,
+          },
+        },
+        update(proxy, { data: { createQuestion: { dialogue } } }) {
+          let update = false;
+          const id = t('PuzzleNode', puzzleId);
+          const data = proxy.readQuery({
+            query,
+            variables: { id },
+          });
+          const responseData = {
+            __typename: 'PuzzleShowUnionEdge',
+            node: {
+              good: false,
+              true: false,
+              question: content,
+              user: currentUser,
+              answer: null,
+              questionEditTimes: 0,
+              answerEditTimes: 0,
+              answeredtime: null,
+              ...dialogue,
+            },
+          };
+          data.puzzleShowUnion.edges = data.puzzleShowUnion.edges.map(
+            (edge) => {
+              if (edge.node.id === responseData.node.id) {
+                update = true;
+                return responseData;
+              }
+              return edge;
+            }
+          );
+          if (!update) {
+            data.puzzleShowUnion.edges.push(responseData);
+          }
+          proxy.writeQuery({ query, variables: { id }, data });
+        },
+      })
+      .then(() => {})
+      .catch((error) => {
+        this.setState({ content });
+        bootbox.alert(error.message);
+      });
+    this.setState({ loading: false });
   }
 
   render() {
@@ -55,9 +122,7 @@ class QuestionPutBox extends React.PureComponent {
       <Constrained level={3}>
         <Flex mx={-1}>
           <FormattedMessage
-            {...messages[
-              this.props.currentUserId === undefined ? 'disableInput' : 'input'
-            ]}
+            {...messages[this.props.currentUserId ? 'input' : 'disableInput']}
           >
             {(msg) => (
               <Input
@@ -74,7 +139,7 @@ class QuestionPutBox extends React.PureComponent {
               {(msg) => (
                 <ButtonOutline
                   onClick={this.handleSubmit}
-                  disabled={this.props.currentUserId === undefined}
+                  disabled={!this.props.currentUserId}
                   style={{ wordBreak: 'keep-all' }}
                 >
                   {msg}
@@ -89,13 +154,34 @@ class QuestionPutBox extends React.PureComponent {
 }
 
 QuestionPutBox.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  mutate: PropTypes.func.isRequired,
   puzzleId: PropTypes.number.isRequired,
   currentUserId: PropTypes.number,
+  currentUser: PropTypes.object,
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  dispatch,
-});
+const withMutation = graphql(putQuestionMutation);
 
-export default connect(null, mapDispatchToProps)(QuestionPutBox);
+const withCurrentUser = graphql(
+  gql`
+    query($id: ID!) {
+      user(id: $id) {
+        ...UserLabel_user
+      }
+    }
+    ${UserLabel}
+  `,
+  {
+    options: ({ currentUserId }) => ({
+      variables: {
+        id: t('UserNode', currentUserId || '-1'),
+      },
+    }),
+    props({ data }) {
+      const { user: currentUser } = data;
+      return { currentUser };
+    },
+  }
+);
+
+export default compose(withCurrentUser, withMutation)(QuestionPutBox);

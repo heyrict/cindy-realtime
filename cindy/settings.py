@@ -172,12 +172,25 @@ GRAPHENE = {
     'SCHEMA_OUTPUT': 'react-boilerplate/schema.json'
 }
 
+CHANNELS_WS_PROTOCOLS = [
+    "graphql-ws",
+]
+
 # Channels
+REDIS_HOST = {
+    "host": "localhost",
+    "port": "6379",
+}
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [os.environ.get("REDIS_URL", "redis://localhost:6379")],
+            "hosts": [
+                os.environ.get(
+                    "REDIS_URL",
+                    "redis://" + REDIS_HOST["host"] + ":" + REDIS_HOST["port"])
+            ],
         },
     },
 }

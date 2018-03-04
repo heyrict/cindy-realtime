@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import bootbox from 'bootbox';
-import { commitMutation } from 'react-relay';
-import environment from 'Environment';
+import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { Tabs, TabItem, Flex, Box } from 'rebass';
 import Constrained from 'components/Constrained';
@@ -11,7 +10,8 @@ import { text2md } from 'common';
 import dialogueMessages from 'containers/Dialogue/messages';
 import PreviewEdit from 'components/PreviewEdit';
 
-import hintMutation from 'graphql/CreateHintMutation';
+import { graphql } from 'react-apollo';
+import createHintMutation from 'graphql/CreateHintMutation';
 import puzzleUpdateMutation from 'graphql/UpdatePuzzleMutation';
 
 import tick from 'images/tick.svg';
@@ -42,7 +42,7 @@ class PuzzleModifyBox extends React.Component {
       memo: props.puzzle.memo,
       solutionEditMode: false,
       memoEditMode: props.puzzle.memo === '',
-      solve: props.puzzle.status !== 0,
+      solve: props.puzzle.status === 3,
       yami: props.puzzle.yami,
       hidden: props.puzzle.status === 3,
       hint: '',
@@ -66,7 +66,10 @@ class PuzzleModifyBox extends React.Component {
       this.setState({ hint: e.target.value });
     };
     this.handleSolveChange = () => {
-      this.setState((p) => ({ solve: !p.solve }));
+      this.setState((p) => ({
+        solve: !p.solve,
+        hidden: p.solve ? false : p.hidden,
+      }));
     };
     this.handleYamiChange = () => {
       this.setState((p) => ({ yami: !p.yami }));
@@ -97,78 +100,88 @@ class PuzzleModifyBox extends React.Component {
   handleSaveSolution() {
     this.toggleSolutionEditMode();
     if (this.state.solution === this.props.puzzle.solution) return;
-    commitMutation(environment, {
-      mutation: puzzleUpdateMutation,
-      variables: {
-        input: {
-          puzzleId: this.props.puzzleId,
-          solution: this.state.solution,
+    this.props
+      .mutatePuzzleUpdate({
+        variables: {
+          input: {
+            puzzleId: this.props.puzzleId,
+            solution: this.state.solution,
+          },
         },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-        }
-      },
-    });
+      })
+      .then(() => {})
+      .catch((error) => {
+        bootbox.alert({
+          title: 'Error',
+          message: error.message,
+        });
+      });
   }
 
   handleSaveMemo() {
     this.toggleMemoEditMode();
     if (this.state.memo === this.props.puzzle.memo) return;
-    commitMutation(environment, {
-      mutation: puzzleUpdateMutation,
-      variables: {
-        input: {
-          puzzleId: this.props.puzzleId,
-          memo: this.state.memo,
+    this.props
+      .mutatePuzzleUpdate({
+        variables: {
+          input: {
+            puzzleId: this.props.puzzleId,
+            memo: this.state.memo,
+          },
         },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-        }
-      },
-    });
+      })
+      .then(() => {})
+      .catch((error) => {
+        bootbox.alert({
+          title: 'Error',
+          message: error.message,
+        });
+      });
   }
 
   handleSaveControl() {
-    commitMutation(environment, {
-      mutation: puzzleUpdateMutation,
-      variables: {
-        input: {
-          puzzleId: this.props.puzzleId,
-          solve: this.state.solve,
-          yami: this.state.yami,
-          hidden: this.state.hidden,
+    let status;
+    if (this.state.solve) status = 1;
+    if (this.state.hidden) status = 3;
+    this.props
+      .mutatePuzzleUpdate({
+        variables: {
+          input: {
+            puzzleId: this.props.puzzleId,
+            yami: this.state.yami,
+            status,
+          },
         },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-        }
-      },
-    });
+      })
+      .then(() => {})
+      .catch((error) => {
+        bootbox.alert({
+          title: 'Error',
+          message: error.message,
+        });
+      });
   }
 
   handleCreateHint() {
     if (this.state.hint === '') return;
-    commitMutation(environment, {
-      mutation: hintMutation,
-      variables: {
-        input: {
-          puzzleId: this.props.puzzleId,
-          content: this.state.hint,
+    this.props
+      .mutateHintCreate({
+        variables: {
+          input: {
+            puzzleId: this.props.puzzleId,
+            content: this.state.hint,
+          },
         },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          bootbox.alert(errors.map((e) => e.message).join(','));
-          return;
-        }
+      })
+      .then(() => {
         this.setState({ hint: '' });
-      },
-    });
+      })
+      .catch((error) => {
+        bootbox.alert({
+          title: 'Error',
+          message: error.message,
+        });
+      });
   }
 
   render() {
@@ -307,7 +320,9 @@ class PuzzleModifyBox extends React.Component {
                   w={1 / 3}
                   hidden={
                     this.props.puzzle.status !== 1 &&
-                    this.props.puzzle.status !== 3
+                    this.props.puzzle.status !== 3 &&
+                    (this.props.puzzle.status === 0 &&
+                      this.state.solve === false)
                   }
                 >
                   <FormattedMessage {...messages.toggleHidden} />
@@ -342,8 +357,19 @@ class PuzzleModifyBox extends React.Component {
 
 PuzzleModifyBox.propTypes = {
   puzzle: PropTypes.object.isRequired,
-  currentUserId: PropTypes.number.isRequired,
   puzzleId: PropTypes.number.isRequired,
+  mutatePuzzleUpdate: PropTypes.func.isRequired,
+  mutateHintCreate: PropTypes.func.isRequired,
 };
 
-export default PuzzleModifyBox;
+const withPuzzleUpdateMutation = graphql(puzzleUpdateMutation, {
+  name: 'mutatePuzzleUpdate',
+});
+
+const withHintCreateMutation = graphql(createHintMutation, {
+  name: 'mutateHintCreate',
+});
+
+export default compose(withPuzzleUpdateMutation, withHintCreateMutation)(
+  PuzzleModifyBox
+);

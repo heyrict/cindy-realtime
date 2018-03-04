@@ -9,8 +9,8 @@ import { UPDATE_ONLINE_VIEWER_COUNT, SET_CURRENT_USER } from './constants';
 
 const initialState = fromJS({
   user: {
-    userId: window.django.user_id,
-    nickname: window.django.user_nickname,
+    userId: window.django.user_id || null,
+    nickname: window.django.user_nickname || null,
   },
   onlineViewerCount: 0,
 });
@@ -20,7 +20,8 @@ function userNavbarReducer(state = initialState, action) {
     case UPDATE_ONLINE_VIEWER_COUNT:
       return state.set('onlineViewerCount', action.data.onlineViewerCount);
     case SET_CURRENT_USER:
-      return state.mergeIn(['user'], action.currentUser);
+      return state.setIn(['user', 'userId'], action.currentUser.userId)
+        .setIn(['user', 'nickname'], action.currentUser.nickname);
     default:
       return state;
   }

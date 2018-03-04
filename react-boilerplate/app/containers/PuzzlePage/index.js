@@ -10,20 +10,19 @@ import injectSaga from 'utils/injectSaga';
 
 import { Helmet } from 'react-helmet';
 import { FormattedMessage, intlShape } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Heading } from 'style-store';
 import Constrained from 'components/Constrained';
+import FilterableList from 'components/FilterableList';
+import PuzzleList from 'components/PuzzleList';
 import PuzzleActiveList from 'containers/PuzzleActiveList';
-import PuzzleFilterableList from 'containers/PuzzleFilterableList';
 import AddPuzzleBtn from './AddPuzzleBtn';
 
-import makeSelectPuzzlePage from './selectors';
 import saga from './saga';
 import messages from './messages';
 
-function PuzzlePage(p, context) {
+function PuzzlePage(props, context) {
   const _ = context.intl.formatMessage;
   return (
     <Constrained level={4}>
@@ -37,10 +36,12 @@ function PuzzlePage(p, context) {
         <AddPuzzleBtn />
       </Heading>
       <PuzzleActiveList />
-      <PuzzleFilterableList
+      <FilterableList
+        component={PuzzleList}
         variables={{ status__gt: 0 }}
         order={[{ key: 'modified', asc: false }]}
-        orderList={['modified', 'starCount', 'starSum']}
+        orderList={['modified', 'starCount', 'starSum', 'commentCount']}
+        fetchPolicy="cache-and-network"
       />
     </Constrained>
   );
@@ -54,17 +55,13 @@ PuzzlePage.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = createStructuredSelector({
-  puzzlepage: makeSelectPuzzlePage(),
-});
-
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
   };
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(null, mapDispatchToProps);
 
 const withSaga = injectSaga({ key: 'puzzlePage', saga });
 

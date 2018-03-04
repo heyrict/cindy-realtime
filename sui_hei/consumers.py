@@ -26,7 +26,9 @@ import asyncio
 import functools
 import json
 import logging
+import pickle
 
+import redis
 from asgiref.sync import AsyncToSync, async_to_sync
 from channels.consumer import SyncConsumer
 from channels.exceptions import StopConsumer
@@ -38,11 +40,13 @@ from django.dispatch.dispatcher import receiver
 from graphql_relay import from_global_id, to_global_id
 from rx import Observable
 
+from cindy.settings import REDIS_HOST
 from schema import schema
 
-from .models import ChatMessage, Dialogue, Hint, Puzzle, User
+from .models import ChatMessage, Dialogue, Hint, Puzzle, User, UserAward
 
-logger = logging.getLogger(__name__)
+rediscon = redis.Redis(host=REDIS_HOST["host"], port=REDIS_HOST["port"])
+rediscon.set("onlineUsers", b'\x80\x03}q\x00.')
 
 # {{{1 Constants
 PUZZLE_CONNECT = "app/containers/PuzzleShowPage/PUZZLE_SHOWN"
@@ -57,9 +61,7 @@ HINT_ADDED = "ws/HINT_ADDED"
 HINT_UPDATED = "ws/HINT_UPDATED"
 CHATMESSAGE_ADDED = "ws/CHATMESSAGE_ADDED"
 CHATMESSAGE_UPDATED = "ws/CHATMESSAGE_UPDATED"
-
-VIEWER_CONNECT = "ws/VIEWER_CONNECT"
-VIEWER_DISCONNECT = "ws/VIEWER_DISCONNECT"
+USERAWARD_ADDED = "ws/USERAWARD_ADDED"
 
 CHATROOM_CONNECT = "ws/CHATROOM_CONNECT"
 CHATROOM_DISCONNECT = "ws/CHATROOM_DISCONNECT"
@@ -69,14 +71,16 @@ DIRECTCHAT_RECEIVED = "ws/DIRECTCHAT_RECEIVED"
 
 UPDATE_ONLINE_VIEWER_COUNT = "ws/UPDATE_ONLINE_VIEWER_COUNT"
 
-
 # }}}
+
+
 class MainConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         await self.accept()
         await self.channel_layer.group_add("viewer", self.channel_name)
 
-        onlineUsers = cache.get("onlineUsers", {})
+        onlineUsers = rediscon.get("onlineUsers")
+        onlineUsers = pickle.loads(onlineUsers) if onlineUsers else {}
         self.user = self.scope['user']
         if not self.user.is_anonymous:
             await self.channel_layer.group_add("User-%s" % self.user.id,
@@ -84,35 +88,33 @@ class MainConsumer(AsyncJsonWebsocketConsumer):
             onlineUsers.update({
                 str(self.channel_name): (self.user.id, self.user.nickname)
             })
-            cache.set("onlineUsers", onlineUsers, None)
+            rediscon.set("onlineUsers", pickle.dumps(onlineUsers))
 
-        onlineUserCount = cache.get("onlineUserCount", 0)
-        cache.set("onlineUserCount", onlineUserCount + 1, None)
+        await self.broadcast_status()
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard("viewer", self.channel_name)
 
-        onlineUsers = cache.get("onlineUsers", {})
+        onlineUsers = rediscon.get("onlineUsers")
+        onlineUsers = pickle.loads(onlineUsers) if onlineUsers else {}
         if str(self.channel_name) in onlineUsers.keys():
             await self.channel_layer.group_discard(
                 "User-%s" % onlineUsers[str(self.channel_name)][0],
                 self.channel_name)
             onlineUsers.pop(str(self.channel_name))
-            cache.set('onlineUsers', onlineUsers, None)
-
-        onlineUserCount = cache.get("onlineUserCount", 0)
-        cache.set("onlineUserCount", onlineUserCount - 1, None)
+            rediscon.set("onlineUsers", pickle.dumps(onlineUsers))
 
         await self.broadcast_status()
 
     async def broadcast_status(self):
-        onlineUsers = cache.get("onlineUsers", {})
+        onlineUsers = rediscon.get("onlineUsers")
+        onlineUsers = pickle.loads(onlineUsers) if onlineUsers else {}
         onlineUserList = dict(set(onlineUsers.values()))
         text = {
             "type": UPDATE_ONLINE_VIEWER_COUNT,
             "data": {
-                "onlineViewerCount": cache.get('onlineUserCount', 0),
-                "onlineUsers": onlineUserList
+                "onlineViewerCount": len(onlineUsers),
+                "onlineUsers": onlineUserList,
             }
         }
         await self.channel_layer.group_send("viewer", {
@@ -121,17 +123,10 @@ class MainConsumer(AsyncJsonWebsocketConsumer):
         })
 
     async def viewer_message(self, event):
-        print("SEND:", event['content'])
         await self.send_json(event["content"])
 
     async def receive_json(self, content):
-        print("RECEIVE:", content)
-        if content.get("type") == VIEWER_CONNECT:
-            await self.broadcast_status()
-        elif content.get("type") == VIEWER_DISCONNECT:
-            self.channel_layer.group_discard("viewer", self.channel_name)
-            await self.broadcast_status()
-        elif content.get("type") == SET_CURRENT_USER:
+        if content.get("type") == SET_CURRENT_USER:
             await self.user_change(content)
         elif content.get("type") == PUZZLE_CONNECT:
             self.channel_layer.group_add(
@@ -154,8 +149,8 @@ class MainConsumer(AsyncJsonWebsocketConsumer):
                 })
 
     async def user_change(self, content):
-        onlineUsers = cache.get("onlineUsers")
-        onlineUsers = onlineUsers if onlineUsers else {}
+        onlineUsers = rediscon.get("onlineUsers")
+        onlineUsers = pickle.loads(onlineUsers) if onlineUsers else {}
         update = False
 
         if str(self.channel_name) in onlineUsers.keys():
@@ -175,11 +170,8 @@ class MainConsumer(AsyncJsonWebsocketConsumer):
             update = True
 
         if update:
-            cache.set("onlineUsers", onlineUsers, None)
+            rediscon.set("onlineUsers", pickle.dumps(onlineUsers))
             await self.broadcast_status()
-
-
-
 
 
 # GraphQL types might use info.context.user to access currently authenticated user.
@@ -214,23 +206,19 @@ class GraphqlSubcriptionConsumer(SyncConsumer):
         self.groups = {}
 
     def websocket_connect(self, message):
-        self.send({
-            "type": "websocket.accept",
-            "subprotocol": "graphql-ws"
-        })
+        self.send({"type": "websocket.accept", "subprotocol": "graphql-ws"})
 
     def websocket_disconnect(self, message):
         for group in self.groups.keys():
             group_discard = async_to_sync(self.channel_layer.group_discard)
-            group_discard(f'django.{group}', self.channel_name)
+            group_discard('django.%s' % group, self.channel_name)
 
-        self.send({
-            "type": "websocket.close", "code": 1000
-        })
+        self.send({"type": "websocket.close", "code": 1000})
         raise StopConsumer()
 
     def websocket_receive(self, message):
         request = json.loads(message['text'])
+        print("WS_RECEIVE:", request)
         id = request.get('id')
 
         if request['type'] == 'connection_init':
@@ -259,7 +247,8 @@ class GraphqlSubcriptionConsumer(SyncConsumer):
 
         elif request['type'] == 'stop':
             self._unsubscribe(id)
-            del self.subscriptions[id]
+            if id in self.subscriptions:
+                del self.subscriptions[id]
 
     def model_changed(self, message):
         model = message['model']
@@ -275,7 +264,7 @@ class GraphqlSubcriptionConsumer(SyncConsumer):
         group = self.groups.setdefault(model_name, set())
         if not len(group):
             group_add = async_to_sync(self.channel_layer.group_add)
-            group_add(f'django.{model_name}', self.channel_name)
+            group_add('django.%s' % model_name, self.channel_name)
         self.groups[model_name].add(id)
 
     def _unsubscribe(self, id):
@@ -287,14 +276,16 @@ class GraphqlSubcriptionConsumer(SyncConsumer):
             if not len(ids):
                 # no more subscriptions for this group
                 group_discard = async_to_sync(self.channel_layer.group_discard)
-                group_discard(f'django.{group}', self.channel_name)
+                group_discard('django.%s' % group, self.channel_name)
 
     def _send_result(self, id, result):
         errors = result.errors
 
         self.send({
-            'type': 'websocket.send',
-            'text': json.dumps({
+            'type':
+            'websocket.send',
+            'text':
+            json.dumps({
                 'id': id,
                 'type': 'data',
                 'payload': {
@@ -305,29 +296,30 @@ class GraphqlSubcriptionConsumer(SyncConsumer):
         })
 
 
-
 def notify_on_model_changes(model):
     from django.contrib.contenttypes.models import ContentType
     ct = ContentType.objects.get_for_model(model)
     model_label = '.'.join([ct.app_label, ct.model])
 
     channel_layer = get_channel_layer()
-    group_send = async_to_sync(channel_layer.group_send)
 
     def receiver(sender, instance, **kwargs):
         payload = {
             'type': 'model.changed',
             'pk': instance.pk,
-            'model': model_label
+            'model': model_label,
         }
-        group_send(f'django.{model_label}', payload)
+        async_to_sync(channel_layer.group_send)('django.%s' % model_label,
+                                                payload)
 
-    post_save.connect(receiver, sender=model, weak=False,
-            dispatch_uid=f'django.{model_label}')
+    post_save.connect(
+        receiver,
+        sender=model,
+        weak=False,
+        dispatch_uid='django.%s' % model_label)
 
 
 notify_on_model_changes(ChatMessage)
 notify_on_model_changes(Dialogue)
 notify_on_model_changes(Hint)
 notify_on_model_changes(Puzzle)
-notify_on_model_changes(User)

@@ -4,6 +4,8 @@
  *
  */
 
+/* eslint-disable no-mixed-operators */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -13,9 +15,12 @@ import { FormattedMessage, intlShape } from 'react-intl';
 import { createStructuredSelector, createSelector } from 'reselect';
 import { compose } from 'redux';
 
-import injectSaga from 'utils/injectSaga';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
-import { from_global_id as f, genre_type_dict as genreType } from 'common';
+import {
+  from_global_id as f,
+  to_global_id as t,
+  genre_type_dict as genreType,
+} from 'common';
 import genreMessages from 'components/TitleLabel/messages';
 import Dialogue from 'containers/Dialogue/Loadable';
 import { Box } from 'rebass';
@@ -23,11 +28,13 @@ import Hint from 'containers/Hint';
 import Constrained from 'components/Constrained';
 import LoadingDots from 'components/LoadingDots';
 
+import { graphql } from 'react-apollo';
+import PuzzleShowQuery from 'graphql/PuzzleShow';
+import PuzzleShowSubscription from 'graphql/PuzzleShowSubscription';
+import PuzzleShowUnionSubscription from 'graphql/PuzzleShowUnionSubscription';
+
 import Frame from './Frame';
-import makeSelectPuzzleShowPage from './selectors';
-import saga from './saga';
 import messages from './messages';
-import { puzzleShown, puzzleHid } from './actions';
 import QuestionPutBox from './QuestionPutBox';
 import PuzzleModifyBox from './PuzzleModifyBox';
 import RewardingBox from './RewardingBox';
@@ -39,21 +46,26 @@ const Title = styled.h1`
 `;
 
 export class PuzzleShowPage extends React.Component {
-  componentDidMount() {
-    this.puzzleId = this.props.match.params.id;
-    this.props.dispatch(puzzleShown(this.puzzleId));
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentPage: 0,
+    };
+    this.changePage = (p) => this.setState({ currentPage: p });
   }
-
-  componentWillUnmount() {
-    this.props.dispatch(puzzleHid(this.puzzleId));
+  componentDidMount() {
+    const puzzleId = t('PuzzleNode', this.props.match.params.id);
+    this.props.subscribeToPuzzleUpdates({ id: puzzleId });
+    this.props.subscribeToUnionUpdates({ id: puzzleId });
   }
 
   render() {
-    const P = this.props.puzzleshowpage.puzzle;
-    const D = this.props.puzzleshowpage.puzzleShowUnion;
+    const P = this.props.puzzle;
+    const D = this.props.puzzleShowUnion;
     const U = this.props.user.userId;
+    const puzzleId = parseInt(this.props.match.params.id, 10);
 
-    if (P === null) {
+    if (this.props.loading || P === null) {
       return (
         <div style={{ paddingTop: '100px' }}>
           <LoadingDots />
@@ -65,7 +77,30 @@ export class PuzzleShowPage extends React.Component {
     const translateGenreCode = (x) => _(genreMessages[genreType[x]]);
     const genre = translateGenreCode(P.genre);
     const yami = P.yami ? ` x ${_(genreMessages.yami)}` : '';
+
     let index = 0;
+    const numItems = 50;
+    const dSlices = [];
+    const dEdges = D.edges.map((edge, i) => {
+      if (f(edge.node.id)[0] === 'DialogueNode') {
+        index += 1;
+        if (index % numItems === 1 && index !== 1) dSlices.push(i);
+        return { ...edge, index };
+      }
+      return edge;
+    });
+    dSlices.push(dEdges.length);
+
+    const DialoguePaginationBar =
+      dSlices.length > 1 ? (
+        <Constrained wrap style={{ textAlign: 'center' }}>
+          {dSlices.map((dSlice, i) => (
+            <button key={dSlice} onClick={() => this.changePage(i)}>
+              {numItems * i + 1} - {Math.min(numItems * (i + 1), index)}
+            </button>
+          ))}
+        </Constrained>
+      ) : null;
 
     return (
       <div>
@@ -94,62 +129,74 @@ export class PuzzleShowPage extends React.Component {
               )}
             </FormattedMessage>
           )}
-        {(P.status <= 2 || P.user.rowid === U) &&
-          D.edges.map((node) => {
-            const type = f(node.node.id)[0];
-            if (type === 'DialogueNode') {
-              index += 1;
-              if (
-                P.yami &&
-                U !== node.node.user.rowid &&
-                U !== P.user.rowid &&
-                P.status === 0
-              ) {
-                return null;
-              }
-              return (
-                <Dialogue
-                  key={node.node.id}
-                  index={index}
-                  type={type}
-                  status={P.status}
-                  {...node}
-                />
-              );
-            }
-            return <Hint key={node.node.id} {...node} />;
-          })}
+        {(P.status <= 2 || P.user.rowid === U) && (
+          <div>
+            {DialoguePaginationBar}
+            {dEdges
+              .slice(
+                dSlices[this.state.currentPage - 1],
+                dSlices[this.state.currentPage]
+              )
+              .map((edge) => {
+                const type = f(edge.node.id)[0];
+                if (type === 'DialogueNode') {
+                  if (
+                    P.yami &&
+                    U !== edge.node.user.rowid &&
+                    U !== P.user.rowid &&
+                    P.status === 0
+                  ) {
+                    return null;
+                  }
+                  return (
+                    <Dialogue
+                      key={edge.node.id}
+                      index={edge.index}
+                      status={P.status}
+                      node={edge.node}
+                      owner={P.user}
+                    />
+                  );
+                }
+                return (
+                  <Hint
+                    key={edge.node.id}
+                    owner={P.user}
+                    status={P.status}
+                    node={edge.node}
+                  />
+                );
+              })}
+            {DialoguePaginationBar}
+          </div>
+        )}
         {(P.status <= 2 || P.user.rowid === U) &&
           P.status !== 0 && <Frame text={P.solution} solved={P.modified} />}
         {P.status === 0 &&
           U !== P.user.rowid && (
             <QuestionPutBox
-              puzzleId={parseInt(this.puzzleId, 10)}
+              puzzleId={puzzleId}
               currentUserId={this.props.user.userId}
             />
           )}
         {(P.status === 1 || P.status === 2) &&
           U && (
             <BookmarkBox
-              puzzleId={parseInt(this.puzzleId, 10)}
-              existingBookmark={this.props.puzzleshowpage.allBookmarks.edges}
+              puzzleId={puzzleId}
+              existingBookmark={this.props.allBookmarks.edges}
             />
           )}
         {(P.status === 1 || P.status === 2) &&
           U &&
           U !== P.user.rowid && (
             <RewardingBox
-              puzzleId={parseInt(this.puzzleId, 10)}
-              existingComment={this.props.puzzleshowpage.allComments.edges}
-              existingStar={this.props.puzzleshowpage.allStars.edges}
+              puzzleId={puzzleId}
+              existingComment={this.props.allComments.edges}
+              existingStar={this.props.allStars.edges}
             />
           )}
         {U === P.user.rowid && (
-          <PuzzleModifyBox
-            currentUserId={this.props.user.userId}
-            puzzle={P}
-            puzzleId={parseInt(this.puzzleId, 10)}
-          />
+          <PuzzleModifyBox puzzle={P} puzzleId={puzzleId} />
         )}
         <Box py={10} width={1} />
       </div>
@@ -162,20 +209,23 @@ PuzzleShowPage.contextTypes = {
 };
 
 PuzzleShowPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  puzzleshowpage: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }),
-    path: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
   }),
+  puzzleShowUnion: PropTypes.object,
+  puzzle: PropTypes.object,
+  allComments: PropTypes.object,
+  allStars: PropTypes.object,
+  allBookmarks: PropTypes.object,
+  loading: PropTypes.bool.isRequired,
+  subscribeToPuzzleUpdates: PropTypes.func.isRequired,
+  subscribeToUnionUpdates: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  puzzleshowpage: makeSelectPuzzleShowPage(),
   user: createSelector(selectUserNavbarDomain, (substate) =>
     substate.get('user').toJS()
   ),
@@ -189,6 +239,97 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-const withSaga = injectSaga({ key: 'puzzleShowPage', saga });
+const withData = graphql(PuzzleShowQuery, {
+  options: (props) => ({
+    variables: {
+      id: t('PuzzleNode', props.match.params.id),
+      userId: t('UserNode', props.user.userId || '-1'),
+    },
+    fetchPolicy: 'cache-and-network',
+  }),
+  props({ data }) {
+    const {
+      puzzleShowUnion,
+      puzzle,
+      allComments,
+      allStars,
+      allBookmarks,
+      loading,
+      subscribeToMore,
+    } = data;
+    return {
+      puzzleShowUnion,
+      puzzle,
+      allComments,
+      allStars,
+      allBookmarks,
+      loading,
+      subscribeToPuzzleUpdates: ({ id }) =>
+        subscribeToMore({
+          document: PuzzleShowSubscription,
+          variables: { id },
+          updateQuery: (prev, { subscriptionData }) => {
+            if (!subscriptionData.data) {
+              return prev;
+            }
 
-export default compose(withSaga, withConnect)(PuzzleShowPage);
+            const update = subscriptionData.data.puzzleSub;
+            if (!update) return prev;
+
+            return {
+              ...prev,
+              puzzle: {
+                ...prev.puzzle,
+                ...update,
+              },
+            };
+          },
+        }),
+      subscribeToUnionUpdates: ({ id }) =>
+        subscribeToMore({
+          document: PuzzleShowUnionSubscription,
+          variables: { id },
+          updateQuery: (prev, { subscriptionData }) => {
+            if (!subscriptionData.data) {
+              return prev;
+            }
+
+            const newNode = subscriptionData.data.puzzleShowUnionSub;
+            if (!newNode) return prev;
+
+            let update = false;
+            const prevEdges = prev.puzzleShowUnion.edges.map((edge) => {
+              if (edge.node.id === newNode.id) {
+                update = true;
+                return { ...edge, node: newNode };
+              }
+              return edge;
+            });
+
+            if (update) {
+              return {
+                ...prev,
+                puzzleShowUnion: {
+                  ...prev.puzzleShowUnion,
+                  edges: prevEdges,
+                },
+              };
+            }
+
+            return {
+              ...prev,
+              puzzleShowUnion: {
+                ...prev.puzzleShowUnion,
+                edges: [
+                  ...prev.puzzleShowUnion.edges,
+                  { __typename: 'PuzzleShowUnionEdge', node: newNode },
+                ],
+              },
+            };
+          },
+        }),
+    };
+  },
+});
+
+export default compose(withConnect, withData)(PuzzleShowPage);

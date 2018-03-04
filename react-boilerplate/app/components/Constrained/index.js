@@ -12,26 +12,21 @@ export function Constrained(props) {
     align: 'center',
     ...others,
   };
-  let PW;
   let MW;
   if (level === 1) {
-    PW = [1 / 12, 1 / 10, 1 / 8, 1 / 6];
     MW = [5 / 6, 4 / 5, 3 / 4, 2 / 3];
   } else if (level === 2) {
-    PW = [1 / 16, 1 / 12, 1 / 10, 1 / 8];
     MW = [7 / 8, 5 / 6, 4 / 5, 3 / 4];
   } else if (level === 3) {
-    PW = [1 / 24, 1 / 16, 1 / 12, 1 / 10];
     MW = [11 / 12, 7 / 8, 5 / 6, 4 / 5];
-  } else {
-    PW = [1 / 36, 1 / 24, 1 / 16, 1 / 12];
+  } else if (level === 4) {
     MW = [17 / 18, 11 / 12, 7 / 8, 5 / 6];
+  } else {
+    MW = [1, 17 / 18, 11 / 12, 7 / 8];
   }
   return (
     <Flex {...styles}>
-      <Box width={PW} />
       <Box width={MW}>{children}</Box>
-      <Box width={PW} />
     </Flex>
   );
 }
