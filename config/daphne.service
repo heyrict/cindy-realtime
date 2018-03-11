@@ -1,0 +1,13 @@
+[Unit]
+Description=Daphne Application Server handling cindy
+After=network.target
+
+[Service]
+User=username
+Group=www-data
+WorkingDirectory=/path/to/cindy
+ExecStart=daphne --access-log /tmp/daphne.log -v2 --ws-protocol "graphql-ws" -u /tmp/daphne.sock cindy.asgi:application
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
