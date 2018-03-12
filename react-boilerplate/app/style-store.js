@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import ReactTextareaAutosize from 'react-textarea-autosize';
 import {
   Flex,
   Button as RebassButton,
@@ -8,6 +9,21 @@ import {
   Switch as RebassSwitch,
   Panel as RebassPanel,
 } from 'rebass';
+
+export const AutoResizeTextarea = styled(ReactTextareaAutosize)`
+  border-radius: 10px;
+  border-color: #2075c7;
+  color: #073642;
+  font-size: 1.1em;
+  margin: 0;
+  max-height: 120px;
+  padding: 5px;
+  width: 100%;
+  box-shadow: inset 0 0 0 1px #2075c7;
+  &:focus {
+    box-shadow: inset 0 0 0 2px #2075c7;
+  }
+`;
 
 const NavbarBase = styled(Flex)`
   min-height: 50px;

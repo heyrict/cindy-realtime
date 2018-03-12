@@ -16,6 +16,7 @@ import { NavLink } from 'rebass';
 import LoginMenuItem from 'containers/LoginMenuItem';
 import LogoutMenuItem from 'containers/LogoutMenuItem';
 import RegisterMenuItem from 'containers/RegisterMenuItem';
+import SettingsMenuItem from 'containers/Settings/SettingsMenuItem';
 
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
@@ -43,10 +44,7 @@ function UserNavbar(props) {
   );
   if (props.usernavbar.user.userId) {
     return (
-      <SubNavbar
-        mx={-2}
-        style={{ display: props.open ? 'block' : 'none' }}
-      >
+      <SubNavbar mx={-2} style={{ display: props.open ? 'block' : 'none' }}>
         <RouterLink
           to={`/profile/show/${props.usernavbar.user.userId}`}
           tabIndex="0"
@@ -65,6 +63,9 @@ function UserNavbar(props) {
             <FormattedMessage {...messages.awardApplication} />
           </NavLink>
         </RouterLink>
+        <SettingsMenuItem>
+          <FormattedMessage {...messages.settings} />
+        </SettingsMenuItem>
         <LogoutMenuItem>
           <FormattedMessage {...messages.logout} />
         </LogoutMenuItem>
@@ -77,10 +78,7 @@ function UserNavbar(props) {
     );
   }
   return (
-    <SubNavbar
-      mx={-2}
-      style={{ display: props.open ? 'block' : 'none' }}
-    >
+    <SubNavbar mx={-2} style={{ display: props.open ? 'block' : 'none' }}>
       <RouterLink to="/profile" tabIndex="0">
         <NavLink is="span">
           <FormattedMessage {...messages.userlist} />

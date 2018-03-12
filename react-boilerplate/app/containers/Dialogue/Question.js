@@ -12,13 +12,14 @@ import bootbox from 'bootbox';
 import { Flex, Box } from 'rebass';
 import { graphql } from 'react-apollo';
 import UserAwardPopover from 'components/UserAwardPopover';
+import { OPTIONS_SEND } from 'containers/Settings/constants';
 import {
   DarkNicknameLink as NicknameLink,
   EditButton,
   ButtonOutline,
   ImgXs,
   Indexer,
-  Textarea,
+  AutoResizeTextarea as DefaultTextarea,
   PuzzleFrame,
   Splitter,
   Time,
@@ -27,6 +28,11 @@ import tick from 'images/tick.svg';
 import cross from 'images/cross.svg';
 
 import messages from './messages';
+
+const Textarea = DefaultTextarea.extend`
+  min-height: 75px;
+  max-height: 200px;
+`;
 
 const StyledButton = ButtonOutline.extend`
   padding: 5px 15px;
@@ -40,25 +46,35 @@ class Question extends React.PureComponent {
     super(props);
     this.state = { editMode: false, question: props.question };
     this.handleChange = (e) => this.setState({ question: e.target.value });
-    this.toggleEditMode = () =>
-      this.setState((s) => ({ editMode: !s.editMode }));
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.toggleEditMode = (m) =>
+      this.setState((s) => ({ editMode: m || !s.editMode }));
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    // When a user has two windows open, escape editMode
-    // if the answer is updated.
-    if (this.props.question !== nextProps.question) {
-      this.setState({
-        editMode: false,
-        question: nextProps.question,
-      });
+  handleKeyPress(e) {
+    switch (this.props.sendPolicy) {
+      case OPTIONS_SEND.NONE:
+        break;
+      case OPTIONS_SEND.ON_SHIFT_RETURN:
+        if (e.nativeEvent.keyCode === 13 && e.nativeEvent.shiftKey) {
+          this.handleSubmit();
+        }
+        break;
+      case OPTIONS_SEND.ON_RETURN:
+        if (e.nativeEvent.keyCode === 13 && !e.nativeEvent.shiftKey) {
+          this.handleSubmit();
+        }
+        break;
+      default:
     }
   }
 
   handleSubmit() {
-    if (this.state.question === this.props.question) {
-      this.toggleEditMode();
+    this.setState((p) => ({ question: p.question.trimRight() }));
+
+    if (this.state.question.trimRight() === this.props.question.trimRight()) {
+      this.toggleEditMode(false);
       return;
     }
 
@@ -67,13 +83,13 @@ class Question extends React.PureComponent {
       .mutate({
         variables: {
           input: {
-            question: this.state.question,
+            question: this.state.question.trimRight(),
             dialogueId: id,
           },
         },
       })
       .then(() => {
-        this.toggleEditMode();
+        this.toggleEditMode(false);
       })
       .catch((error) => {
         bootbox.alert(error.message);
@@ -89,11 +105,11 @@ class Question extends React.PureComponent {
               <Textarea
                 value={this.state.question}
                 onChange={this.handleChange}
-                onKeyDown={this.handleKeyDown}
+                onKeyUp={this.handleKeyPress}
               />
             </Box>
             <Box w={[1 / 3, 1 / 6, 1 / 8]} mr={1}>
-              <StyledButton onClick={this.toggleEditMode}>
+              <StyledButton onClick={() => this.toggleEditMode(false)}>
                 <ImgXs src={cross} />
               </StyledButton>
               <StyledButton onClick={this.handleSubmit}>
@@ -136,7 +152,9 @@ class Question extends React.PureComponent {
             !this.props.answered && (
               <FormattedMessage {...messages.edit}>
                 {(msg) => (
-                  <EditButton onClick={this.toggleEditMode}>{msg}</EditButton>
+                  <EditButton onClick={() => this.toggleEditMode(true)}>
+                    {msg}
+                  </EditButton>
                 )}
               </FormattedMessage>
             )}
@@ -157,6 +175,7 @@ Question.propTypes = {
   created: PropTypes.string.isRequired,
   questionEditTimes: PropTypes.number.isRequired,
   mutate: PropTypes.func.isRequired,
+  sendPolicy: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -18,7 +18,7 @@ import bulb from 'images/bulb.svg';
 import cracker from 'images/cracker.svg';
 import { Box, Flex } from 'rebass';
 import {
-  Input,
+  AutoResizeTextarea,
   ButtonOutline,
   EditButton,
   ImgMd,
@@ -30,14 +30,10 @@ import {
   PuzzleFrame,
 } from 'style-store';
 
+import { OPTIONS_SEND } from 'containers/Settings/constants';
 import UserAwardPopover from 'components/UserAwardPopover';
 
 import messages from './messages';
-
-const StyledInput = Input.extend`
-  border-radius: 10px;
-  margin-bottom: 5px;
-`;
 
 const StyledButton = ButtonOutline.extend`
   padding: 5px 15px;
@@ -62,13 +58,11 @@ class Answer extends React.PureComponent {
     };
 
     this.handleChange = (e) => this.setState({ content: e.target.value });
-    this.handleKeyDown = (e) => {
-      if (e.key === 'Enter') this.handleSubmit();
-    };
+    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.toggleGood = () => this.setState((s) => ({ good: !s.good }));
     this.toggleTrue = () => this.setState((s) => ({ true: !s.true }));
-    this.toggleEditMode = () =>
-      this.setState((s) => ({ editMode: !s.editMode }));
+    this.toggleEditMode = (m) =>
+      this.setState((s) => ({ editMode: m || !s.editMode }));
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -88,19 +82,40 @@ class Answer extends React.PureComponent {
     }
   }
 
+  handleKeyPress(e) {
+    switch (this.props.sendPolicy) {
+      case OPTIONS_SEND.NONE:
+        break;
+      case OPTIONS_SEND.ON_SHIFT_RETURN:
+        if (e.nativeEvent.keyCode === 13 && e.nativeEvent.shiftKey) {
+          this.handleSubmit();
+        }
+        break;
+      case OPTIONS_SEND.ON_RETURN:
+        if (e.nativeEvent.keyCode === 13 && !e.nativeEvent.shiftKey) {
+          this.handleSubmit();
+        }
+        break;
+      default:
+    }
+  }
+
   handleSubmit() {
-    if (this.state.content === '') return;
+    const { good, true: istrue } = this.state;
+    const content = this.state.content.trimRight();
+    this.setState({ content });
+
+    if (content === '') return;
     if (
-      this.state.content === this.props.answer &&
-      this.state.good === this.props.good &&
-      this.state.true === this.props.true
+      content === this.props.answer &&
+      good === this.props.good &&
+      istrue === this.props.true
     ) {
-      this.toggleEditMode();
+      this.toggleEditMode(false);
       return;
     }
 
     const { id, answer } = this.props;
-    const { content, good, true: istrue } = this.state;
     const now = new Date();
 
     this.props
@@ -158,11 +173,13 @@ class Answer extends React.PureComponent {
           <Box w={1}>
             <FormattedMessage {...messages.answerInputHint}>
               {(msg) => (
-                <StyledInput
+                <AutoResizeTextarea
                   placeholder={msg}
                   value={this.state.content}
                   onChange={this.handleChange}
-                  onKeyDown={this.handleKeyDown}
+                  onKeyUp={this.handleKeyPress}
+                  minRows={1}
+                  maxRows={5}
                 />
               )}
             </FormattedMessage>
@@ -226,7 +243,9 @@ class Answer extends React.PureComponent {
             this.props.status === 0 && (
               <FormattedMessage {...messages.edit}>
                 {(msg) => (
-                  <EditButton onClick={this.toggleEditMode}>{msg}</EditButton>
+                  <EditButton onClick={() => this.toggleEditMode(true)}>
+                    {msg}
+                  </EditButton>
                 )}
               </FormattedMessage>
             )}
@@ -252,6 +271,7 @@ Answer.propTypes = {
   owner: PropTypes.object.isRequired,
   user: PropTypes.object,
   status: PropTypes.number.isRequired,
+  sendPolicy: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

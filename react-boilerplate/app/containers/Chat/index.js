@@ -21,6 +21,7 @@ import FavoriteChatRoomQuery from 'graphql/FavoriteChatRoomQuery';
 import injectSaga from 'utils/injectSaga';
 import { makeSelectLocation } from 'containers/App/selectors';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
+import makeSelectSettings from 'containers/Settings/selectors';
 import ChatRoom from './ChatRoom';
 import Channels from './Channels';
 import Direct from './Direct';
@@ -80,6 +81,7 @@ export function Chat(props) {
           channel={props.chat.channel}
           favChannels={props.allFavoriteChatrooms}
           currentUserId={props.currentUser.user.userId}
+          sendPolicy={props.settings.sendChat}
           pathname={props.location.pathname}
           height={props.height - 50}
         />
@@ -91,6 +93,7 @@ export function Chat(props) {
         <Direct
           currentUser={props.currentUser.user}
           chat={props.chat}
+          sendPolicy={props.settings.sendChat}
           height={props.height - 50}
         />
       )}
@@ -101,6 +104,9 @@ export function Chat(props) {
 Chat.propTypes = {
   chat: PropTypes.object.isRequired,
   currentUser: PropTypes.object,
+  settings: PropTypes.shape({
+    sendChat: PropTypes.string.isRequired,
+  }),
   dispatch: PropTypes.func.isRequired,
   height: PropTypes.number.isRequired,
   puzzle: PropTypes.shape({
@@ -116,6 +122,7 @@ Chat.propTypes = {
 const mapStateToProps = createStructuredSelector({
   chat: makeSelectChat(),
   currentUser: makeSelectUserNavbar(),
+  settings: makeSelectSettings(),
   location: makeSelectLocation(),
 });
 

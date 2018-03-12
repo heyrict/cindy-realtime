@@ -6,11 +6,11 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Flex, Box } from 'rebass';
-import { Button, ButtonOutline } from 'style-store';
+import { Button, ButtonOutline, AutoResizeTextarea } from 'style-store';
+import { OPTIONS_SEND } from 'containers/Settings/constants';
 
 import Wrapper from './Wrapper';
 import ChatMessage from './ChatMessage';
-import MessageInput from './MessageInput';
 import { changeDirectchat, sendDirectchat } from './actions';
 import messages from './messages';
 
@@ -46,9 +46,28 @@ class DirectChat extends React.Component {
       taHeight: 36,
     };
     this.handleChange = (e) => this.setState({ content: e.target.value });
+    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleHeightChange = (h, inst) =>
       this.setState({ taHeight: inst._rootDOMNode.clientHeight });
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleKeyPress(e) {
+    switch (this.props.sendPolicy) {
+      case OPTIONS_SEND.NONE:
+        break;
+      case OPTIONS_SEND.ON_SHIFT_RETURN:
+        if (e.nativeEvent.keyCode === 13 && e.nativeEvent.shiftKey) {
+          this.handleSubmit();
+        }
+        break;
+      case OPTIONS_SEND.ON_RETURN:
+        if (e.nativeEvent.keyCode === 13 && !e.nativeEvent.shiftKey) {
+          this.handleSubmit();
+        }
+        break;
+      default:
+    }
   }
 
   handleSubmit() {
@@ -85,14 +104,18 @@ class DirectChat extends React.Component {
             ))}
         </MessageWrapper>
         <Flex mx={1} w={1}>
-          <MessageInput
+          <AutoResizeTextarea
+            style={{ borderRadius: '10px 0 0 10px', minHeight: '36px' }}
             value={this.state.content}
             onChange={this.handleChange}
+            onKeyUp={this.handleKeyPress}
             onHeightChange={this.handleHeightChange}
             disabled={
               C.onlineUsers[C.activeDirectChat] === undefined ||
               !this.props.currentUser.userId
             }
+            minRows={1}
+            maxRows={5}
           />
           <ButtonOutline
             onClick={this.handleSubmit}
@@ -121,6 +144,7 @@ DirectChat.propTypes = {
   }),
   currentUser: PropTypes.object,
   height: PropTypes.number.isRequired,
+  sendPolicy: PropTypes.string.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({

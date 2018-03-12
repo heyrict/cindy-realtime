@@ -6,7 +6,8 @@ import { compose } from 'redux';
 import { to_global_id as t } from 'common';
 import { Box, Flex } from 'rebass';
 import Constrained from 'components/Constrained';
-import { ButtonOutline, Input } from 'style-store';
+import { ButtonOutline, AutoResizeTextarea } from 'style-store';
+import { OPTIONS_SEND } from 'containers/Settings/constants';
 
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -27,20 +28,35 @@ class QuestionPutBox extends React.PureComponent {
     this.handleKeyDown = (e) => {
       if (e.key === 'Enter') this.handleSubmit();
     };
-    this.handleInput = this.handleInput.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleChange = (e) => this.setState({ content: e.target.value });
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleInput(e) {
-    this.setState({ content: e.target.value });
+  handleKeyPress(e) {
+    switch (this.props.sendPolicy) {
+      case OPTIONS_SEND.NONE:
+        break;
+      case OPTIONS_SEND.ON_SHIFT_RETURN:
+        if (e.nativeEvent.keyCode === 13 && e.nativeEvent.shiftKey) {
+          this.handleSubmit();
+        }
+        break;
+      case OPTIONS_SEND.ON_RETURN:
+        if (e.nativeEvent.keyCode === 13 && !e.nativeEvent.shiftKey) {
+          this.handleSubmit();
+        }
+        break;
+      default:
+    }
   }
 
   handleSubmit() {
-    if (this.state.content === '') return;
     if (this.state.loading) return;
     if (!this.props.currentUserId) return;
     const { puzzleId, currentUser } = this.props;
-    const content = this.state.content;
+    const content = this.state.content.trimRight();
+    if (content === '') return;
     this.setState({ content: '', loading: true });
 
     const query = gql`
@@ -125,12 +141,13 @@ class QuestionPutBox extends React.PureComponent {
             {...messages[this.props.currentUserId ? 'input' : 'disableInput']}
           >
             {(msg) => (
-              <Input
+              <AutoResizeTextarea
+                style={{ minHeight: '48px' }}
                 value={this.state.content}
                 disabled={this.props.currentUserId === undefined}
                 placeholder={msg}
-                onChange={this.handleInput}
-                onKeyDown={this.handleKeyDown}
+                onChange={this.handleChange}
+                onKeyUp={this.handleKeyPress}
               />
             )}
           </FormattedMessage>
@@ -158,6 +175,7 @@ QuestionPutBox.propTypes = {
   puzzleId: PropTypes.number.isRequired,
   currentUserId: PropTypes.number,
   currentUser: PropTypes.object,
+  sendPolicy: PropTypes.string.isRequired,
 };
 
 const withMutation = graphql(putQuestionMutation);

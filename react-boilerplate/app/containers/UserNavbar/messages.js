@@ -43,4 +43,8 @@ export default defineMessages({
     id: 'app.containers.UserNavbar.register',
     defaultMessage: 'Register',
   },
+  settings: {
+    id: 'app.containers.UserNavbar.settings',
+    defaultMessage: 'Settings',
+  },
 });

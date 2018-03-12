@@ -9,7 +9,7 @@ import { compose } from 'redux';
 import { from_global_id as f, to_global_id as t } from 'common';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
-import { ButtonOutline } from 'style-store';
+import { ButtonOutline, AutoResizeTextarea } from 'style-store';
 
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -18,10 +18,10 @@ import UserLabel from 'graphql/UserLabel';
 import CreateChatmessageMutation from 'graphql/CreateChatmessageMutation';
 import ChatMessageSubscription from 'graphql/ChatMessageSubscription';
 
+import { OPTIONS_SEND } from 'containers/Settings/constants';
 import LoadingDots from 'components/LoadingDots';
 import ChatMessage from './ChatMessage';
 import DescriptionPanel from './DescriptionPanel';
-import MessageInput from './MessageInput';
 import Wrapper from './Wrapper';
 import messages from './messages';
 
@@ -47,6 +47,7 @@ class ChatRoom extends React.Component {
 
     this.state = { content: '', loading: false, taHeight: 36, dpHeight: 20 };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleChange = (e) => this.setState({ content: e.target.value });
     this.handleHeightChange = (h, inst) =>
       this.setState({ taHeight: inst._rootDOMNode.clientHeight || h });
@@ -55,6 +56,24 @@ class ChatRoom extends React.Component {
 
   componentDidMount() {
     this.props.subscribeChatUpdates();
+  }
+
+  handleKeyPress(e) {
+    switch (this.props.sendPolicy) {
+      case OPTIONS_SEND.NONE:
+        break;
+      case OPTIONS_SEND.ON_SHIFT_RETURN:
+        if (e.nativeEvent.keyCode === 13 && e.nativeEvent.shiftKey) {
+          this.handleSubmit();
+        }
+        break;
+      case OPTIONS_SEND.ON_RETURN:
+        if (e.nativeEvent.keyCode === 13 && !e.nativeEvent.shiftKey) {
+          this.handleSubmit();
+        }
+        break;
+      default:
+    }
   }
 
   handleSubmit() {
@@ -143,9 +162,11 @@ class ChatRoom extends React.Component {
             : null}
         </MessageWrapper>
         <Flex mx={1} w={1} hidden={this.props.currentUserId === null}>
-          <MessageInput
+          <AutoResizeTextarea
+            style={{ borderRadius: '10px 0 0 10px', minHeight: '36px' }}
             value={this.state.content}
             onChange={this.handleChange}
+            onKeyUp={this.handleKeyPress}
             onHeightChange={this.handleHeightChange}
             minRows={1}
             maxRows={5}
@@ -176,6 +197,7 @@ ChatRoom.propTypes = {
   height: PropTypes.number.isRequired,
   currentUserId: PropTypes.number,
   currentUser: PropTypes.object,
+  sendPolicy: PropTypes.string.isRequired,
   favChannels: PropTypes.shape({
     edges: PropTypes.array.isRequired,
   }),
@@ -190,7 +212,6 @@ const withChat = graphql(ChatQuery, {
     const chatroomName = channel || defaultChannel(pathname);
     return {
       variables: { chatroomName },
-      fetchPolicy: 'cache-and-network',
     };
   },
   props({ data, ownProps }) {

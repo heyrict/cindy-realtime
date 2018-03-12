@@ -218,7 +218,6 @@ class GraphqlSubcriptionConsumer(SyncConsumer):
 
     def websocket_receive(self, message):
         request = json.loads(message['text'])
-        print("WS_RECEIVE:", request)
         id = request.get('id')
 
         if request['type'] == 'connection_init':

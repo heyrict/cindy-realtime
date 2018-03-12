@@ -19,6 +19,7 @@ const Dialogue = (props) => (
           answered={Boolean(props.node.answer)}
           questionEditTimes={props.node.questionEditTimes}
           status={props.status}
+          sendPolicy={props.settings.modifyQuestion}
         />
       </Box>
       <Box width={1 / 2} ml={5}>
@@ -31,6 +32,7 @@ const Dialogue = (props) => (
           true={props.node.true}
           owner={props.owner}
           status={props.status}
+          sendPolicy={props.settings.sendAnswer}
         />
       </Box>
     </Row>
@@ -51,6 +53,10 @@ Dialogue.propTypes = {
     answeredtime: PropTypes.string,
     answerEditTimes: PropTypes.number.isRequired,
     questionEditTimes: PropTypes.number.isRequired,
+  }),
+  settings: PropTypes.shape({
+    modifyQuestion: PropTypes.string.isRequired,
+    sendAnswer: PropTypes.string.isRequired,
   }),
   owner: PropTypes.object.isRequired,
 };

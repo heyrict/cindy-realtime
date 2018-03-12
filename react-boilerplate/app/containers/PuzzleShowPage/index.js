@@ -16,6 +16,7 @@ import { createStructuredSelector, createSelector } from 'reselect';
 import { compose } from 'redux';
 
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
+import makeSelectSettings from 'containers/Settings/selectors';
 import {
   from_global_id as f,
   to_global_id as t,
@@ -154,6 +155,7 @@ export class PuzzleShowPage extends React.Component {
                       index={edge.index}
                       status={P.status}
                       node={edge.node}
+                      settings={this.props.settings}
                       owner={P.user}
                     />
                   );
@@ -177,6 +179,7 @@ export class PuzzleShowPage extends React.Component {
             <QuestionPutBox
               puzzleId={puzzleId}
               currentUserId={this.props.user.userId}
+              sendPolicy={this.props.settings.sendQuestion}
             />
           )}
         {(P.status === 1 || P.status === 2) &&
@@ -210,6 +213,11 @@ PuzzleShowPage.contextTypes = {
 
 PuzzleShowPage.propTypes = {
   user: PropTypes.object.isRequired,
+  settings: PropTypes.shape({
+    sendQuestion: PropTypes.string.isRequired,
+    sendAnswer: PropTypes.string.isRequired,
+    modifyQuestion: PropTypes.string.isRequired,
+  }),
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -229,6 +237,7 @@ const mapStateToProps = createStructuredSelector({
   user: createSelector(selectUserNavbarDomain, (substate) =>
     substate.get('user').toJS()
   ),
+  settings: makeSelectSettings(),
 });
 
 function mapDispatchToProps(dispatch) {
