@@ -28,25 +28,24 @@ const StyledButtonOutline = ButtonOutline.extend`
 
 class BookmarkList extends React.PureComponent {
   render() {
-    if (this.props.loading) {
-      return <LoadingDots size={8} py={50} />;
-    }
     return (
       <div>
-        {this.props.allBookmarks.edges.map((edge) => (
-          <PuzzlePanel
-            node={edge.node.puzzle}
-            key={edge.node.id}
-            additional={
-              <BookmarkLabel
-                value={edge.node.value}
-                isCurrentUser={this.props.currentUserId === this.props.userId}
-                bookmarkId={f(edge.node.id)[1]}
-              />
-            }
-          />
-        ))}
-        {this.props.hasMore() ? (
+        {this.props.allBookmarks &&
+          this.props.allBookmarks.edges.map((edge) => (
+            <PuzzlePanel
+              node={edge.node.puzzle}
+              key={edge.node.id}
+              additional={
+                <BookmarkLabel
+                  value={edge.node.value}
+                  isCurrentUser={this.props.currentUserId === this.props.userId}
+                  bookmarkId={f(edge.node.id)[1]}
+                />
+              }
+            />
+          ))}
+        {this.props.loading && <LoadingDots size={8} py={this.props.allBookmarks ? 10 : 50} />}
+        {!this.props.loading && this.props.hasMore() ? (
           <StyledButtonOutline onClick={this.props.loadMore} w={1}>
             <FormattedMessage {...chatMessages.loadMore} />
           </StyledButtonOutline>

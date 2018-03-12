@@ -29,14 +29,15 @@ class PuzzleActiveList extends React.Component {
     this.props.subscribeToDialogueUpdates();
   }
   render() {
-    if (this.props.loading || !this.props.allPuzzles) {
-      return <LoadingDots py={50} size={8} />;
-    }
     return (
       <div>
-        {this.props.allPuzzles.edges.map((edge) => (
-          <PuzzlePanel node={edge.node} key={edge.node.id} />
-        ))}
+        {this.props.allPuzzles &&
+          this.props.allPuzzles.edges.map((edge) => (
+            <PuzzlePanel node={edge.node} key={edge.node.id} />
+          ))}
+        {this.props.loading && (
+          <LoadingDots py={this.props.allPuzzles ? 5 : 50} size={8} />
+        )}
       </div>
     );
   }

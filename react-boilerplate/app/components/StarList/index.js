@@ -27,29 +27,29 @@ const StyledButtonOutline = ButtonOutline.extend`
 
 class StarList extends React.PureComponent {
   render() {
-    if (this.props.loading) {
-      return <LoadingDots size={8} py={50} />;
-    }
     return (
       <div>
-        {this.props.allStars.edges.map((edge) => (
-          <PuzzlePanel
-            node={edge.node.puzzle}
-            key={edge.node.id}
-            additional={
-              <FiveStars
-                value={edge.node.value}
-                starSize="15px"
-                justify="center"
-              />
-            }
-          />
-        ))}
-        {this.props.hasMore() && (
-          <StyledButtonOutline onClick={this.props.loadMore} w={1}>
-            <FormattedMessage {...chatMessages.loadMore} />
-          </StyledButtonOutline>
-        )}
+        {this.props.allStars &&
+          this.props.allStars.edges.map((edge) => (
+            <PuzzlePanel
+              node={edge.node.puzzle}
+              key={edge.node.id}
+              additional={
+                <FiveStars
+                  value={edge.node.value}
+                  starSize="15px"
+                  justify="center"
+                />
+              }
+            />
+          ))}
+        {this.props.loading && <LoadingDots size={8} py={this.props.allStars ? 10 : 50} />}
+        {!this.props.loading &&
+          this.props.hasMore() && (
+            <StyledButtonOutline onClick={this.props.loadMore} w={1}>
+              <FormattedMessage {...chatMessages.loadMore} />
+            </StyledButtonOutline>
+          )}
       </div>
     );
   }

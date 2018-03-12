@@ -18,7 +18,7 @@ urlpatterns = [
     path('sw.js', TemplateView.as_view(template_name="sw.js", content_type="application/javascript"), name="sw.js"),
     path('users', include('django.contrib.auth.urls')),
     # GraphQL
-    path("graphql", GraphQLView.as_view(graphiql=True)),
+    path("graphql", GraphQLView.as_view(batch=True)),
     # rest
     #re_path("^(puzzle|profile)", views.simple, name="simple"),
     re_path("(puzzle|profile|rules)", views.main, name="main"),

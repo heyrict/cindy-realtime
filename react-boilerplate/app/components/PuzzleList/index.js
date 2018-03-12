@@ -19,19 +19,20 @@ import PuzzleListQuery from 'graphql/PuzzleList';
 import LoadingDots from 'components/LoadingDots';
 
 function PuzzleList(props) {
-  if (props.loading || !props.allPuzzles) {
-    return <LoadingDots py={50} size={8} />;
-  }
   return (
     <div>
-      {props.allPuzzles.edges.map((edge) => (
-        <PuzzlePanel node={edge.node} key={edge.node.id} />
-      ))}
-      <PaginatorBar
-        changePage={props.changePage}
-        numPages={Math.ceil(props.allPuzzles.totalCount / props.itemsPerPage)}
-        currentPage={props.page}
-      />
+      {props.allPuzzles &&
+        props.allPuzzles.edges.map((edge) => (
+          <PuzzlePanel node={edge.node} key={edge.node.id} />
+        ))}
+      {props.loading && <LoadingDots py={props.allPuzzles ? 5 : 50} size={8} />}
+      {!props.loading && (
+        <PaginatorBar
+          changePage={props.changePage}
+          numPages={Math.ceil(props.allPuzzles.totalCount / props.itemsPerPage)}
+          currentPage={props.page}
+        />
+      )}
     </div>
   );
 }

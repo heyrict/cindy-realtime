@@ -215,6 +215,7 @@ const withChat = graphql(ChatQuery, {
     const chatroomName = channel || defaultChannel(pathname);
     return {
       variables: { chatroomName },
+      fetchPolicy: 'cache-and-network',
     };
   },
   props({ data, ownProps }) {

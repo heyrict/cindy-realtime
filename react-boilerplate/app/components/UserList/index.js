@@ -25,19 +25,19 @@ const StyledButtonOutline = ButtonOutline.extend`
 `;
 
 function UserList(props) {
-  if (props.loading || !props.allUsers) {
-    return <LoadingDots py={50} size={8} />;
-  }
   return (
     <div>
-      {props.allUsers.edges.map((edge) => (
-        <UserPanel node={edge.node} key={edge.node.id} />
-      ))}
-      {props.hasMore() && (
-        <StyledButtonOutline onClick={props.loadMore} w={1}>
-          <FormattedMessage {...chatMessages.loadMore} />
-        </StyledButtonOutline>
-      )}
+      {props.allUsers &&
+        props.allUsers.edges.map((edge) => (
+          <UserPanel node={edge.node} key={edge.node.id} />
+        ))}
+      {props.loading && <LoadingDots py={props.allUsers ? 5 : 50} size={8} />}
+      {!props.loading &&
+        props.hasMore() && (
+          <StyledButtonOutline onClick={props.loadMore} w={1}>
+            <FormattedMessage {...chatMessages.loadMore} />
+          </StyledButtonOutline>
+        )}
     </div>
   );
 }
@@ -52,7 +52,7 @@ UserList.propTypes = {
 };
 
 const withUserList = graphql(UserListQuery, {
-  options: ({ variables }) => ({ variables }),
+  options: ({ variables }) => ({ variables, count: 10 }),
   props({ data, ownProps }) {
     const { loading, allUsers, fetchMore, refetch } = data;
     return {
