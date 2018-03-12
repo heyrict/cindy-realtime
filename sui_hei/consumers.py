@@ -154,8 +154,9 @@ class MainConsumer(AsyncJsonWebsocketConsumer):
         update = False
 
         if str(self.channel_name) in onlineUsers.keys():
-            await self.channel_layer.group_discard("User-%s" % onlineUsers[str(
-                self.channel_name, self.channel_name)])
+            await self.channel_layer.group_discard(
+                "User-%s" % onlineUsers[str(self.channel_name)][0],
+                self.channel_name)
             onlineUsers.pop(str(self.channel_name))
             update = True
 
