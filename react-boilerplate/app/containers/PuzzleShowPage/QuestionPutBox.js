@@ -34,6 +34,7 @@ class QuestionPutBox extends React.PureComponent {
   }
 
   handleKeyPress(e) {
+    const content = this.state.content;
     switch (this.props.sendPolicy) {
       case OPTIONS_SEND.NONE:
         break;
@@ -44,7 +45,9 @@ class QuestionPutBox extends React.PureComponent {
         break;
       case OPTIONS_SEND.ON_RETURN:
         if (e.nativeEvent.keyCode === 13 && !e.nativeEvent.shiftKey) {
-          this.handleSubmit();
+          if (content[content.length - 1] === '\n') {
+            this.handleSubmit();
+          }
         }
         break;
       default:
