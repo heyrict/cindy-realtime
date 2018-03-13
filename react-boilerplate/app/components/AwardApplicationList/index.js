@@ -23,11 +23,6 @@ import chatMessages from 'containers/Chat/messages';
 
 import AwardApplicationPanel from './AwardApplicationPanel';
 
-const StyledButtonOutline = ButtonOutline.extend`
-  border-radius: 10px;
-  padding: 10px 0;
-`;
-
 function AwardApplicationList(props) {
   return (
     <div>
@@ -42,9 +37,9 @@ function AwardApplicationList(props) {
       {props.loading && <LoadingDots py={50} size={8} />}
       {!props.loading &&
         props.hasMore() && (
-          <StyledButtonOutline onClick={props.loadMore} w={1}>
+          <ButtonOutline onClick={props.loadMore} w={1} py="10px">
             <FormattedMessage {...chatMessages.loadMore} />
-          </StyledButtonOutline>
+          </ButtonOutline>
         )}
     </div>
   );

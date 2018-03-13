@@ -15,4 +15,8 @@ export default defineMessages({
     id: 'app.components.RewardingModal.jump',
     defaultMessage: 'View the solution',
   },
+  close: {
+    id: 'app.components.RewardingModal.close',
+    defaultMessage: 'Close',
+  },
 });

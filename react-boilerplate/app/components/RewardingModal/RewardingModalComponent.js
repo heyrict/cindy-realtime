@@ -9,6 +9,7 @@ import {
   from_global_id as f,
 } from 'common';
 import { FormattedMessage, intlShape } from 'react-intl';
+import { Flex, Box } from 'rebass';
 import { Splitter, PuzzleFrame, ButtonOutline } from 'style-store';
 import genreMessages from 'components/TitleLabel/messages';
 
@@ -26,13 +27,12 @@ const Frame = PuzzleFrame.extend`
 `;
 
 const JumpButton = ButtonOutline.extend`
-  border-radius: 10px;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.5);
   &:hover {
-    background-color: blanchedalmond;
+    background-color: rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 0 0 2px #2075c7;
     color: #4297e9;
-    border: 2px solid #2075c7;
   }
 `;
 
@@ -53,9 +53,24 @@ function RewardingModalComponent(props, context) {
           <CommentShowPanel node={edge.node} />
         </Frame>
       ))}
-      <JumpButton onClick={() => props.jumpToPuzzle(f(props.id)[1])}>
-        <FormattedMessage {...messages.jump} />
-      </JumpButton>
+      <Flex wrap>
+        <Box w={2 / 3}>
+          <JumpButton
+            onClick={() => props.jumpToPuzzle(f(props.id)[1])}
+            style={{ borderRadius: '10px 0 0 10px' }}
+          >
+            <FormattedMessage {...messages.jump} />
+          </JumpButton>
+        </Box>
+        <Box w={1 / 3}>
+          <JumpButton
+            onClick={props.onHide}
+            style={{ borderRadius: '0 10px 10px 0' }}
+          >
+            <FormattedMessage {...messages.close} />
+          </JumpButton>
+        </Box>
+      </Flex>
     </div>
   );
 }
@@ -74,6 +89,7 @@ RewardingModalComponent.propTypes = {
     edges: PropTypes.array.isRequired,
   }),
   jumpToPuzzle: PropTypes.func.isRequired,
+  onHide: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({

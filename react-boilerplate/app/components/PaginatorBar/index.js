@@ -15,8 +15,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
 const SqBtn = ButtonOutline.extend`
-  border-radius: 10px;
-  padding: 5px 5px;
+  padding: 5px;
   margin: 5px;
   max-width: 40px;
   max-height: 40px;

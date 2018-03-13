@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Flex, Box, Button } from 'rebass';
+import { Flex, Box } from 'rebass';
+import { Button } from 'style-store';
 import { line2md } from 'common';
 import cindychan from 'images/cindychan.png';
 
@@ -34,7 +35,7 @@ const IntroBox = styled(Box)`
   }
 `;
 
-const StartBox = styled(Button)`
+const StartBox = Button.extend`
   font-weight: bold;
   color: #4e182d;
   background: burlywood;

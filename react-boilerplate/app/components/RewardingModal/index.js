@@ -17,21 +17,13 @@ import RewardingModalQuery from 'graphql/RewardingModalQuery';
 import RewardingModalComponent from './RewardingModalComponent';
 
 export function RewardingModal(props) {
-  const { loading, error, puzzle } = props;
+  const { loading, error, puzzle, ...others } = props;
   if (error) {
     return <div>{error.message}</div>;
   } else if (loading) {
     return <LoadingDots />;
   }
-  return (
-    <RewardingModalComponent
-      title={props.title}
-      genre={props.genre}
-      yami={props.yami}
-      id={props.id}
-      {...puzzle}
-    />
-  );
+  return <RewardingModalComponent {...others} {...puzzle} />;
 }
 
 RewardingModal.propTypes = {
@@ -41,6 +33,7 @@ RewardingModal.propTypes = {
   yami: PropTypes.bool.isRequired,
   puzzle: PropTypes.object,
   loading: PropTypes.bool.isRequired,
+  onHide: PropTypes.func.isRequired,
   error: PropTypes.shape({
     message: PropTypes.string.isRequired,
   }),

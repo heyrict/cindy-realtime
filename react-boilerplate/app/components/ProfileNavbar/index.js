@@ -12,7 +12,6 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
 const ProfileButton = Button.extend`
-  border-radius: 10px;
   padding: 5px;
   background-color: ${(props) => props.color || 'darkgoldenrod'};
   &:hover {

@@ -12,7 +12,6 @@ import messages from './messages';
 const WarningBtn = ButtonOutline.extend`
   color: tomato;
   width: 100%;
-  border-radius: 10px;
   &:hover {
     background-color: tomato;
   }

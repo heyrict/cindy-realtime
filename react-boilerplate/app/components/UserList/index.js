@@ -19,11 +19,6 @@ import UserListQuery from 'graphql/UserList';
 import LoadingDots from 'components/LoadingDots';
 import chatMessages from 'containers/Chat/messages';
 
-const StyledButtonOutline = ButtonOutline.extend`
-  border-radius: 10px;
-  padding: 10px 0;
-`;
-
 function UserList(props) {
   return (
     <div>
@@ -34,9 +29,9 @@ function UserList(props) {
       {props.loading && <LoadingDots py={props.allUsers ? 5 : 50} size={8} />}
       {!props.loading &&
         props.hasMore() && (
-          <StyledButtonOutline onClick={props.loadMore} w={1}>
+          <ButtonOutline onClick={props.loadMore} w={1} py="10px">
             <FormattedMessage {...chatMessages.loadMore} />
-          </StyledButtonOutline>
+          </ButtonOutline>
         )}
     </div>
   );
@@ -52,7 +47,7 @@ UserList.propTypes = {
 };
 
 const withUserList = graphql(UserListQuery, {
-  options: ({ variables }) => ({ variables, count: 10 }),
+  options: ({ variables }) => ({ variables: { ...variables, count: 10 } }),
   props({ data, ownProps }) {
     const { loading, allUsers, fetchMore, refetch } = data;
     return {

@@ -16,22 +16,6 @@ import UserAwardPopover from 'components/UserAwardPopover';
 
 import messages from './messages';
 
-const AcceptBtn = ButtonOutline.extend`
-  border-radius: 10px;
-  padding: 5px;
-`;
-
-const DenyBtn = ButtonOutline.extend`
-  border-radius: 10px;
-  padding: 5px;
-`;
-
-const ToggleBtn = ButtonOutline.extend`
-  border-radius: 10px;
-  padding: 5px;
-  min-width: 30px;
-`;
-
 class AwardApplicationPanel extends React.Component {
   constructor(props) {
     super(props);
@@ -224,16 +208,16 @@ class AwardApplicationPanel extends React.Component {
                   <Flex w={1}>
                     {this.props.currentUser.canReviewAwardApplication && (
                       <Box w={1 / 2}>
-                        <AcceptBtn w={1} onClick={this.handleAccept}>
+                        <ButtonOutline w={1} p={1} onClick={this.handleAccept}>
                           <FormattedMessage {...messages.accept} />
-                        </AcceptBtn>
+                        </ButtonOutline>
                       </Box>
                     )}
                     {this.props.currentUser.canReviewAwardApplication && (
                       <Box w={1 / 2}>
-                        <DenyBtn w={1} onClick={this.handleDeny}>
+                        <ButtonOutline w={1} p={1} onClick={this.handleDeny}>
                           <FormattedMessage {...messages.deny} />
-                        </DenyBtn>
+                        </ButtonOutline>
                       </Box>
                     )}
                   </Flex>
@@ -242,9 +226,9 @@ class AwardApplicationPanel extends React.Component {
             )}
           </Box>
           {this.props.currentUser && (
-            <ToggleBtn ml="auto" onClick={this.toggleMode}>
+            <ButtonOutline ml={1} p={1} onClick={this.toggleMode}>
               O
-            </ToggleBtn>
+            </ButtonOutline>
           )}
         </Flex>
       </RoundedPanel>

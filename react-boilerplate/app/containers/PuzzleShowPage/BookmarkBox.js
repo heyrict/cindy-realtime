@@ -13,11 +13,6 @@ import CreateBookmarkMutation from 'graphql/CreateBookmarkMutation';
 
 import messages from './messages';
 
-const SubmitBtn = ButtonOutline.extend`
-  border-radius: 10px;
-  padding: 10px;
-`;
-
 class BookmarkBox extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -70,9 +65,13 @@ class BookmarkBox extends React.PureComponent {
                 )}
               />
             </Box>
-            <SubmitBtn w={[1, 1 / 2]} onClick={this.handleSaveBookmark}>
+            <ButtonOutline
+              w={[1, 1 / 2]}
+              p={1}
+              onClick={this.handleSaveBookmark}
+            >
               <FormattedMessage {...messages.addBookmark} />
-            </SubmitBtn>
+            </ButtonOutline>
           </Flex>
         </PuzzleFrame>
       </Constrained>

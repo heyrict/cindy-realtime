@@ -145,7 +145,7 @@ class QuestionPutBox extends React.PureComponent {
           >
             {(msg) => (
               <AutoResizeTextarea
-                style={{ minHeight: '48px' }}
+                style={{ minHeight: '48px', borderRadius: '10px 0 0 10px' }}
                 value={this.state.content}
                 disabled={this.props.currentUserId === undefined}
                 placeholder={msg}
@@ -160,7 +160,7 @@ class QuestionPutBox extends React.PureComponent {
                 <ButtonOutline
                   onClick={this.handleSubmit}
                   disabled={!this.props.currentUserId}
-                  style={{ wordBreak: 'keep-all' }}
+                  style={{ wordBreak: 'keep-all', borderRadius: '0 10px 10px 0' }}
                 >
                   {msg}
                 </ButtonOutline>

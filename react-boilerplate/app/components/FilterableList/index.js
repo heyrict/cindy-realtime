@@ -39,7 +39,7 @@ const SearchInput = Input.extend`
   min-height: 36px;
   margin-top: 5px;
   margin-bottom: 5px;
-  border-radius: 0 10px 10px 0;
+  border-radius: 0;
   border: 1px solid #ccc;
   box-shadow: unset;
   &:focus {
@@ -64,8 +64,9 @@ class FilterableList extends React.PureComponent {
     };
     this.state = {
       display: this.MODE.SORT,
-      order: [],
-      filterKey: this.props.filterList.length > 0 ? this.props.filterList[0] : '',
+      order: this.props.order || [],
+      filterKey:
+        this.props.filterList.length > 0 ? this.props.filterList[0] : '',
       filterValue: '',
       filter: {},
     };
@@ -73,7 +74,6 @@ class FilterableList extends React.PureComponent {
     // Sorting functions
     this.getOrder = this.getOrder.bind(this);
     this.reverseOrder = this.reverseOrder.bind(this);
-    // Filtering functions
     // Event handling functions
     this.handleMainButtonClick = this.handleMainButtonClick.bind(this);
     this.handleSortButtonClick = this.handleSortButtonClick.bind(this);
@@ -81,11 +81,10 @@ class FilterableList extends React.PureComponent {
       this.setState((p) => ({
         filter: { [p.filterKey]: this.state.filterValue },
       }));
-    this.handleFilterChange = (e) => 
+    this.handleFilterChange = (e) =>
       this.setState({ filterKey: e.target.value });
-    ;
     this.handleSearchInputChange = (e) =>
-      this.setState({ filterValue: e.target.value });
+      this.setState({ filterValue: e.target.value.slice(0, 64) });
     this.handleToggleButtonClick = () =>
       this.setState((p) => ({
         display:
@@ -177,14 +176,14 @@ class FilterableList extends React.PureComponent {
                     onChange={this.handleFilterChange}
                   >
                     {this.props.filterList.map(
-                      (filter) =>
-                        filter in messages ? (
-                          <FormattedMessage {...messages[filter]} key={filter}>
+                      (f) =>
+                        f in messages ? (
+                          <FormattedMessage {...messages[f]} key={f}>
                             {(msg) => <option value={filter}>{msg}</option>}
                           </FormattedMessage>
                         ) : (
-                          <option value={filter} key={filter}>
-                            {filter}
+                          <option value={f} key={f}>
+                            {f}
                           </option>
                         )
                     )}
@@ -199,6 +198,7 @@ class FilterableList extends React.PureComponent {
                 <SearchBtn
                   w={[1, 1, 1 / 12]}
                   onClick={this.handleSearchButtonClick}
+                  style={{ borderRadius: '0 10px 10px 0' }}
                 >
                   Search
                 </SearchBtn>
@@ -211,7 +211,7 @@ class FilterableList extends React.PureComponent {
         </RoundedPanel>
         <QueryList
           variables={{
-            orderBy: this.state.order || ['-id'],
+            orderBy: this.getOrder() || ['-id'],
             ...(this.state.filter || this.props.filter || {}),
             ...variables,
           }}

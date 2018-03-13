@@ -37,7 +37,6 @@ import messages from './messages';
 
 const StyledButton = ButtonOutline.extend`
   padding: 5px 15px;
-  border-radius: 10px;
   width: 100%;
 `;
 

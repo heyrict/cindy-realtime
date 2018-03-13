@@ -16,7 +16,6 @@ import AwardList from 'graphql/AwardList';
 import messages from './messages';
 
 const StyledBtn = ButtonOutline.extend`
-  border-radius: 10px;
   padding: 5px;
   min-width: 30px;
 `;

@@ -16,16 +16,6 @@ import UpdateCurrentAwardMutation from 'graphql/UpdateCurrentAwardMutation';
 import ProfRow from './ProfRow';
 import messages from './messages';
 
-const StyledButtonOutline = ButtonOutline.extend`
-  border-radius: 10px;
-  padding: 10px;
-`;
-
-const StyledButton = Button.extend`
-  border-radius: 10px;
-  padding: 10px;
-`;
-
 class AwardSwitch extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -83,27 +73,39 @@ class AwardSwitch extends React.PureComponent {
           heading={<FormattedMessage {...messages.awardSelect} />}
           content={
             <Flex wrap>
-              <StyledButtonOutline onClick={() => this.selectAward(null)}>
+              <ButtonOutline
+                px={1}
+                py={1}
+                mx="2px"
+                onClick={() => this.selectAward(null)}
+              >
                 <FormattedMessage {...messages.nullAward} />
-              </StyledButtonOutline>
+              </ButtonOutline>
               {this.props.userawardSet.edges.map((edge) => (
                 <span key={edge.node.id}>
                   {edge.node.id === this.state.selectedAward ? (
-                    <StyledButton onClick={() => this.selectAward(null)}>
+                    <Button
+                      px={1}
+                      mx="2px"
+                      py={1}
+                      onClick={() => this.selectAward(null)}
+                    >
                       {edge.node.award.name}
-                    </StyledButton>
+                    </Button>
                   ) : (
-                    <StyledButtonOutline
+                    <ButtonOutline
+                      p={1}
+                      mx="2px"
                       onClick={() => this.selectAward(edge.node.id)}
                     >
                       {edge.node.award.name}
-                    </StyledButtonOutline>
+                    </ButtonOutline>
                   )}
                 </span>
               ))}
-              <StyledButtonOutline onClick={this.handleSubmit} w={1} mt={2}>
+              <ButtonOutline p={1} onClick={this.handleSubmit} w={1} mt="5px">
                 <FormattedMessage {...messages.save} />
-              </StyledButtonOutline>
+              </ButtonOutline>
             </Flex>
           }
         />

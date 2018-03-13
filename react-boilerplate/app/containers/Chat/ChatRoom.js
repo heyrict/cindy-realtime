@@ -27,12 +27,6 @@ import messages from './messages';
 
 import { defaultChannel } from './constants';
 
-const LoadMoreBtn = ButtonOutline.extend`
-  border-radius: 10px;
-  padding: 5px;
-  width: 100%;
-`;
-
 const MessageWrapper = Wrapper.extend`
   overflow-y: auto;
   height: ${(props) => props.height}px;
@@ -153,9 +147,9 @@ class ChatRoom extends React.Component {
             <LoadingDots />
           ) : (
             this.props.hasPreviousPage && (
-              <LoadMoreBtn onClick={this.props.loadMore}>
+              <ButtonOutline p="5px" w={1} onClick={this.props.loadMore}>
                 <FormattedMessage {...messages.loadMore} />
-              </LoadMoreBtn>
+              </ButtonOutline>
             )
           )}
           {this.props.allChatmessages
@@ -177,7 +171,7 @@ class ChatRoom extends React.Component {
           <ButtonOutline
             onClick={this.handleSubmit}
             p={10}
-            style={{ wordBreak: 'keep-all' }}
+            style={{ wordBreak: 'keep-all', borderRadius: '0 10px 10px 0' }}
           >
             <FormattedMessage {...messages.send} />
           </ButtonOutline>

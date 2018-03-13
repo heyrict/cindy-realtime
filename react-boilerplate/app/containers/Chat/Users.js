@@ -9,7 +9,6 @@ import { changeDirectchat } from './actions';
 import messages from './messages';
 
 const StyledButton = ButtonOutline.extend`
-  border-radius: 10px;
   padding: 5px;
   margin: 5px 3px;
 `;

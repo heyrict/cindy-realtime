@@ -120,7 +120,7 @@ export const Heading = styled.h1`
 `;
 
 export const Button = styled(RebassButton)`
-  border-radius: 0 10px 10px 0;
+  border-radius: 10px;
   color: blanchedalmond;
   background-color: #2075c7;
   font-weight: bold;
@@ -131,7 +131,7 @@ export const Button = styled(RebassButton)`
 `;
 
 export const ButtonOutline = styled(RebassButtonOutline)`
-  border-radius: 0 10px 10px 0;
+  border-radius: 10px;
   color: #2075c7;
   font-weight: bold;
   &:hover {
@@ -141,7 +141,7 @@ export const ButtonOutline = styled(RebassButtonOutline)`
 `;
 
 export const Select = styled.select`
-  border-radius: 10px 0 0 10px;
+  border-radius: 10px;
   border-color: #2075c7;
   background-color: rgba(255, 255, 255, 60);
   padding: 5px;
@@ -155,7 +155,7 @@ export const Select = styled.select`
 `;
 
 export const Input = styled.input`
-  border-radius: 10px 0 0 10px;
+  border-radius: 10px;
   border-color: #2075c7;
   padding: 5px;
   width: 100%;
@@ -170,7 +170,6 @@ export const Input = styled.input`
 export const EditButton = ButtonOutline.extend`
   padding: 5px 10px;
   margin: 0 5px;
-  border-radius: 10px;
 `;
 
 export const PuzzleFrame = styled.div`

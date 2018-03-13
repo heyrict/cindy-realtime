@@ -3,16 +3,6 @@ import PropTypes from 'prop-types';
 import { Button, ButtonOutline } from 'style-store';
 import { Flex } from 'rebass';
 
-const StyledButtonOutline = ButtonOutline.extend`
-  border-radius: 10px;
-  padding: 10px;
-`;
-
-const StyledButton = Button.extend`
-  border-radius: 10px;
-  padding: 10px;
-`;
-
 function BtnSwitch(props) {
   const { onChange, options, selected } = props;
   return (
@@ -20,19 +10,23 @@ function BtnSwitch(props) {
       {options.map((opt) => (
         <span key={opt.id}>
           {opt.id === selected ? (
-            <StyledButton
+            <Button
+              px={1}
+              py={1}
               onClick={() => onChange(opt)}
               style={{ marginRight: '5px' }}
             >
               {opt.label}
-            </StyledButton>
+            </Button>
           ) : (
-            <StyledButtonOutline
+            <ButtonOutline
+              px={1}
+              py={1}
               onClick={() => onChange(opt)}
               style={{ marginRight: '5px' }}
             >
               {opt.label}
-            </StyledButtonOutline>
+            </ButtonOutline>
           )}
         </span>
       ))}

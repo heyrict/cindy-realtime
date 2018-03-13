@@ -36,7 +36,6 @@ import dialogueMessages from 'containers/Dialogue/messages';
 const StyledButton = ButtonOutline.extend`
   padding: 5px 15px;
   margin-bottom: 5px;
-  border-radius: 10px;
   width: 100%;
 `;
 

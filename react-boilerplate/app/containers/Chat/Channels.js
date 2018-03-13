@@ -86,13 +86,14 @@ class Channels extends React.PureComponent {
                 placeholder={msg}
                 onChange={this.handleChange}
                 onKeyDown={this.handleKeyDown}
+                style={{ borderRadius: '10px 0 0 10px' }}
               />
             )}
           </FormattedMessage>
           <ButtonOutline
             onClick={() => this.props.tune(this.state.content)}
             p={10}
-            style={{ wordBreak: 'keep-all' }}
+            style={{ wordBreak: 'keep-all', borderRadius: '0 10px 10px 0' }}
           >
             <FormattedMessage {...messages.change} />
           </ButtonOutline>

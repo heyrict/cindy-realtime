@@ -20,11 +20,6 @@ import LoadingDots from 'components/LoadingDots';
 import FiveStars from 'components/FiveStars';
 import chatMessages from 'containers/Chat/messages';
 
-const StyledButtonOutline = ButtonOutline.extend`
-  border-radius: 10px;
-  padding: 10px 0;
-`;
-
 class StarList extends React.PureComponent {
   render() {
     return (
@@ -46,9 +41,9 @@ class StarList extends React.PureComponent {
         {this.props.loading && <LoadingDots size={8} py={this.props.allStars ? 10 : 50} />}
         {!this.props.loading &&
           this.props.hasMore() && (
-            <StyledButtonOutline onClick={this.props.loadMore} w={1}>
+            <ButtonOutline onClick={this.props.loadMore} w={1} py="10px">
               <FormattedMessage {...chatMessages.loadMore} />
-            </StyledButtonOutline>
+            </ButtonOutline>
           )}
       </div>
     );

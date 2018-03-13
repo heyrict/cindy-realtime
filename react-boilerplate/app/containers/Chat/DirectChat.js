@@ -123,7 +123,7 @@ class DirectChat extends React.Component {
           <ButtonOutline
             onClick={this.handleSubmit}
             p={10}
-            style={{ wordBreak: 'keep-all' }}
+            style={{ wordBreak: 'keep-all', borderRadius: '0 10px 10px 0' }}
             disabled={
               C.onlineUsers[C.activeDirectChat] === undefined ||
               !this.props.currentUser.userId

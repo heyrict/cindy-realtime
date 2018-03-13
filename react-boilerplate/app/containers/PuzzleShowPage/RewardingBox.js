@@ -14,15 +14,6 @@ import UpdateCommentMutation from 'graphql/UpdateCommentMutation';
 
 import messages from './messages';
 
-const SubmitBtn = ButtonOutline.extend`
-  border-radius: 10px;
-  padding: 10px;
-`;
-
-const CommentInput = Input.extend`
-  border-radius: 10px;
-`;
-
 class RewardingBox extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -122,9 +113,9 @@ class RewardingBox extends React.PureComponent {
               onSet={this.handleStarSet}
               w={1 / 2}
             />
-            <SubmitBtn w={1 / 2} onClick={this.handleSaveStar}>
+            <ButtonOutline w={1 / 2} p={1} onClick={this.handleSaveStar}>
               <FormattedMessage {...messages.addStar} />
-            </SubmitBtn>
+            </ButtonOutline>
             {this.state.commitStar && (
               <button onClick={this.cancelStar}>
                 <FormattedMessage {...messages.cancelStar} />
@@ -134,7 +125,7 @@ class RewardingBox extends React.PureComponent {
         </PuzzleFrame>
         <PuzzleFrame>
           <Flex wrap mt={10}>
-            <CommentInput
+            <Input
               value={this.state.comment}
               onChange={this.handleCommentChange}
             />
@@ -145,9 +136,9 @@ class RewardingBox extends React.PureComponent {
                 onClick={this.handleSpoilerClick}
               />
             </div>
-            <SubmitBtn w={1} mt={5} onClick={this.handleSaveComment}>
+            <ButtonOutline w={1} p={1} mt={5} onClick={this.handleSaveComment}>
               <FormattedMessage {...messages.addComment} />
-            </SubmitBtn>
+            </ButtonOutline>
           </Flex>
         </PuzzleFrame>
       </Constrained>
