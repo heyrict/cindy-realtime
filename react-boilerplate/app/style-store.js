@@ -140,6 +140,20 @@ export const ButtonOutline = styled(RebassButtonOutline)`
   }
 `;
 
+export const Select = styled.select`
+  border-radius: 10px 0 0 10px;
+  border-color: #2075c7;
+  background-color: rgba(255, 255, 255, 60);
+  padding: 5px;
+  width: 100%;
+  color: #073642;
+  font-size: 1.1em;
+  box-shadow: inset 0 0 0 1px #2075c7;
+  &:focus {
+    box-shadow: inset 0 0 0 2px #2075c7;
+  }
+`;
+
 export const Input = styled.input`
   border-radius: 10px 0 0 10px;
   border-color: #2075c7;

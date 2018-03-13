@@ -220,29 +220,32 @@ class AwardApplicationPanel extends React.Component {
                     <FormattedMessage {...messages.comment} />: {node.comment}
                   </div>
                 </Box>
-                {this.props.currentUser.canReviewAwardApplication && (
-                  <Box w={1 / 2}>
-                    <AcceptBtn w={1} onClick={this.handleAccept}>
-                      <FormattedMessage {...messages.accept} />
-                    </AcceptBtn>
-                  </Box>
-                )}
-                {this.props.currentUser.canReviewAwardApplication && (
-                  <Box w={1 / 2}>
-                    <DenyBtn w={1} onClick={this.handleDeny}>
-                      <FormattedMessage {...messages.deny} />
-                    </DenyBtn>
-                  </Box>
+                {node.status === this.STATUS.WAITING && (
+                  <Flex w={1}>
+                    {this.props.currentUser.canReviewAwardApplication && (
+                      <Box w={1 / 2}>
+                        <AcceptBtn w={1} onClick={this.handleAccept}>
+                          <FormattedMessage {...messages.accept} />
+                        </AcceptBtn>
+                      </Box>
+                    )}
+                    {this.props.currentUser.canReviewAwardApplication && (
+                      <Box w={1 / 2}>
+                        <DenyBtn w={1} onClick={this.handleDeny}>
+                          <FormattedMessage {...messages.deny} />
+                        </DenyBtn>
+                      </Box>
+                    )}
+                  </Flex>
                 )}
               </Flex>
             )}
           </Box>
-          {node.status === this.STATUS.WAITING &&
-            this.props.currentUser && (
-              <ToggleBtn ml="auto" onClick={this.toggleMode}>
-                O
-              </ToggleBtn>
-            )}
+          {this.props.currentUser && (
+            <ToggleBtn ml="auto" onClick={this.toggleMode}>
+              O
+            </ToggleBtn>
+          )}
         </Flex>
       </RoundedPanel>
     );

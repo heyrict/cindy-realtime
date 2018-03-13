@@ -29,23 +29,23 @@ const StyledButtonOutline = ButtonOutline.extend`
 `;
 
 function AwardApplicationList(props) {
-  if (props.loading || !props.allAwardApplications) {
-    return <LoadingDots py={50} size={8} />;
-  }
   return (
     <div>
-      {props.allAwardApplications.edges.map((edge) => (
-        <AwardApplicationPanel
-          node={edge.node}
-          key={edge.node.id}
-          currentUser={props.currentUser}
-        />
-      ))}
-      {props.hasMore() && (
-        <StyledButtonOutline onClick={props.loadMore} w={1}>
-          <FormattedMessage {...chatMessages.loadMore} />
-        </StyledButtonOutline>
-      )}
+      {props.allAwardApplications &&
+        props.allAwardApplications.edges.map((edge) => (
+          <AwardApplicationPanel
+            node={edge.node}
+            key={edge.node.id}
+            currentUser={props.currentUser}
+          />
+        ))}
+      {props.loading && <LoadingDots py={50} size={8} />}
+      {!props.loading &&
+        props.hasMore() && (
+          <StyledButtonOutline onClick={props.loadMore} w={1}>
+            <FormattedMessage {...chatMessages.loadMore} />
+          </StyledButtonOutline>
+        )}
     </div>
   );
 }

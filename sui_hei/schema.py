@@ -1189,6 +1189,7 @@ class Query(object):
         user=graphene.ID(),
         status=graphene.Float(),
         status__gt=graphene.Float(),
+        title__contains=graphene.String(),
         created__year=graphene.Int(),
         created__month=graphene.Int(),
         limit=graphene.Int(),
@@ -1258,7 +1259,7 @@ class Query(object):
             qs,
             kwargs,
             filters=[
-                "status", "status__gt", "created__year", "created__month"
+                "status", "status__gt", "created__year", "created__month", "title__contains",
             ],
             filter_fields={"user": User})
         total_count = qs.count()

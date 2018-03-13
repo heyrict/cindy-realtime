@@ -46,4 +46,8 @@ export default defineMessages({
     id: 'app.containers.FilterableList.value',
     defaultMessage: 'Value',
   },
+  title__contains: {
+    id: 'app.containers.FilterableList.title__contains',
+    defaultMessage: 'Title',
+  },
 });
