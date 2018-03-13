@@ -50,4 +50,8 @@ export default defineMessages({
     id: 'app.containers.FilterableList.title__contains',
     defaultMessage: 'Title',
   },
+  search: {
+    id: 'app.containers.FilterableList.search',
+    defaultMessage: 'Search',
+  },
 });

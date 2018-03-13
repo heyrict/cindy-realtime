@@ -5,7 +5,7 @@ import moment from 'moment';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { Flex, Box } from 'rebass';
-import { RoundedPanel, ButtonOutline } from 'style-store';
+import { RoundedPanel, Button, ButtonOutline, ImgXs } from 'style-store';
 
 import { graphql } from 'react-apollo';
 import UpdateAwardApplication from 'graphql/UpdateAwardApplicationMutation';
@@ -13,6 +13,7 @@ import AwardApplicationFragment from 'graphql/AwardApplication';
 
 import UserLabel from 'components/UserLabel';
 import UserAwardPopover from 'components/UserAwardPopover';
+import switcher from 'images/switcher.svg';
 
 import messages from './messages';
 
@@ -226,9 +227,9 @@ class AwardApplicationPanel extends React.Component {
             )}
           </Box>
           {this.props.currentUser && (
-            <ButtonOutline ml={1} p={1} onClick={this.toggleMode}>
-              O
-            </ButtonOutline>
+            <Button ml={1} px={1} onClick={this.toggleMode}>
+              <ImgXs src={switcher} alt="Switch" />
+            </Button>
           )}
         </Flex>
       </RoundedPanel>

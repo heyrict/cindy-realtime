@@ -7,8 +7,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { RoundedPanel, Button, Input, Select } from 'style-store';
+import { RoundedPanel, Button, Input, Select, ImgXs } from 'style-store';
 import { Flex, Box } from 'rebass';
+
+import switcher from 'images/switcher.svg';
 
 import FilterButton from './FilterButton';
 import messages from './messages';
@@ -200,12 +202,14 @@ class FilterableList extends React.PureComponent {
                   onClick={this.handleSearchButtonClick}
                   style={{ borderRadius: '0 10px 10px 0' }}
                 >
-                  Search
+                  <FormattedMessage {...messages.search} />
                 </SearchBtn>
               </Flex>
             )}
             {this.props.filterList.length > 0 && (
-              <ToggleBtn onClick={this.handleToggleButtonClick}>O</ToggleBtn>
+              <ToggleBtn onClick={this.handleToggleButtonClick}>
+                <ImgXs src={switcher} alt="Switch" />
+              </ToggleBtn>
             )}
           </Flex>
         </RoundedPanel>
