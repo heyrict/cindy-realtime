@@ -79,6 +79,9 @@ const withPuzzleList = graphql(
             title
             genre
             yami
+            user {
+              ...UserLabel_user
+            }
             content
             commentSet {
               edges {

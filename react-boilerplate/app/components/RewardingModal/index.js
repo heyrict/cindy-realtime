@@ -28,12 +28,9 @@ export function RewardingModal(props) {
 
 RewardingModal.propTypes = {
   id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  genre: PropTypes.number.isRequired,
-  yami: PropTypes.bool.isRequired,
   puzzle: PropTypes.object,
   loading: PropTypes.bool.isRequired,
-  onHide: PropTypes.func.isRequired,
+  onHide: PropTypes.func,
   error: PropTypes.shape({
     message: PropTypes.string.isRequired,
   }),

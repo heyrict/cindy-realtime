@@ -5,6 +5,12 @@ const RewardingModalQuery = gql`
   query RewardingModalQuery($id: ID!) {
     puzzle(id: $id) {
       id
+      title
+      genre
+      yami
+      user {
+        ...UserLabel_user
+      }
       content
       commentSet {
         edges {

@@ -96,9 +96,6 @@ export class PuzzlePanel extends React.Component {
           <RewardingModal
             id={node.id}
             show={this.state.rewardingShown}
-            title={node.title}
-            genre={node.genre}
-            yami={node.yami}
             onHide={() => this.toggleRewardingPanel(false)}
           />
         </Row>
