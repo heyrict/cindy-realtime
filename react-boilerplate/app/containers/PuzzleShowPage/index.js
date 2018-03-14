@@ -96,7 +96,16 @@ export class PuzzleShowPage extends React.Component {
       dSlices.length > 1 ? (
         <Constrained wrap style={{ textAlign: 'center' }}>
           {dSlices.map((dSlice, i) => (
-            <button key={dSlice} onClick={() => this.changePage(i)}>
+            <button
+              style={{
+                borderBottom:
+                  this.state.currentPage === i
+                    ? '3px solid #2075c7'
+                    : undefined,
+              }}
+              key={dSlice}
+              onClick={() => this.changePage(i)}
+            >
               {numItems * i + 1} - {Math.min(numItems * (i + 1), index)}
             </button>
           ))}
