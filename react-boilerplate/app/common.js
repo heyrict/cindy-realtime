@@ -207,7 +207,14 @@ export const genre_type_dict = {
   3: 'others',
 };
 
-export const from_global_id = (id) => atob(id).split(':');
+export const from_global_id = (id) => {
+  try {
+    return atob(id).split(':');
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const to_global_id = (className, rid) => btoa(`${className}:${rid}`);
 
 export default {

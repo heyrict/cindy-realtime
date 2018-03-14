@@ -6,10 +6,10 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Flex, Box } from 'rebass';
-import { Button, ButtonOutline, AutoResizeTextarea } from 'style-store';
-import { OPTIONS_SEND } from 'containers/Settings/constants';
+import { Button } from 'style-store';
 
 import Wrapper from './Wrapper';
+import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import { changeDirectchat, sendDirectchat } from './actions';
 import messages from './messages';
@@ -45,41 +45,18 @@ class DirectChat extends React.Component {
       content: '',
       taHeight: 36,
     };
-    this.handleChange = (e) => this.setState({ content: e.target.value });
-    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleHeightChange = (h, inst) =>
       this.setState({ taHeight: inst._rootDOMNode.clientHeight });
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleKeyPress(e) {
-    const content = this.state.content;
-    switch (this.props.sendPolicy) {
-      case OPTIONS_SEND.NONE:
-        break;
-      case OPTIONS_SEND.ON_SHIFT_RETURN:
-        if (e.nativeEvent.keyCode === 13 && e.nativeEvent.shiftKey) {
-          this.handleSubmit();
-        }
-        break;
-      case OPTIONS_SEND.ON_RETURN:
-        if (e.nativeEvent.keyCode === 13 && !e.nativeEvent.shiftKey) {
-          if (content[content.length - 1] === '\n') {
-            this.handleSubmit();
-          }
-        }
-        break;
-      default:
-    }
-  }
-
-  handleSubmit() {
-    this.setState({ content: '' });
-    if (!this.state.content) return;
+  handleSubmit(content) {
+    this.input.setContent('');
+    if (!content) return;
     this.props.sendMessage({
       from: this.props.currentUser,
       to: parseInt(this.props.chat.activeDirectChat, 10),
-      message: this.state.content,
+      message: content,
     });
   }
 
@@ -106,32 +83,16 @@ class DirectChat extends React.Component {
               />
             ))}
         </MessageWrapper>
-        <Flex mx={1} w={1}>
-          <AutoResizeTextarea
-            style={{ borderRadius: '10px 0 0 10px', minHeight: '36px' }}
-            value={this.state.content}
-            onChange={this.handleChange}
-            onKeyUp={this.handleKeyPress}
-            onHeightChange={this.handleHeightChange}
-            disabled={
+        <ChatInput
+          ref={(ins) => (this.input = ins)}
+          sendPolicy={this.props.sendPolicy}
+          onSubmit={this.handleSubmit}
+          onHeightChange={this.handleHeightChange}
+          disabled={
               C.onlineUsers[C.activeDirectChat] === undefined ||
               !this.props.currentUser.userId
-            }
-            minRows={1}
-            maxRows={5}
-          />
-          <ButtonOutline
-            onClick={this.handleSubmit}
-            p={10}
-            style={{ wordBreak: 'keep-all', borderRadius: '0 10px 10px 0' }}
-            disabled={
-              C.onlineUsers[C.activeDirectChat] === undefined ||
-              !this.props.currentUser.userId
-            }
-          >
-            <FormattedMessage {...messages.send} />
-          </ButtonOutline>
-        </Flex>
+          }
+        />
       </Flex>
     );
   }

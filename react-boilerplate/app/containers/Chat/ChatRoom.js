@@ -9,7 +9,7 @@ import { compose } from 'redux';
 import { from_global_id as f, to_global_id as t } from 'common';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
-import { ButtonOutline, AutoResizeTextarea } from 'style-store';
+import { ButtonOutline } from 'style-store';
 
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -18,8 +18,8 @@ import UserLabel from 'graphql/UserLabel';
 import CreateChatmessageMutation from 'graphql/CreateChatmessageMutation';
 import ChatMessageSubscription from 'graphql/ChatMessageSubscription';
 
-import { OPTIONS_SEND } from 'containers/Settings/constants';
 import LoadingDots from 'components/LoadingDots';
+import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import DescriptionPanel from './DescriptionPanel';
 import Wrapper from './Wrapper';
@@ -39,10 +39,8 @@ class ChatRoom extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { content: '', loading: false, taHeight: 36, dpHeight: 20 };
+    this.state = { loading: false, taHeight: 36, dpHeight: 20 };
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.handleChange = (e) => this.setState({ content: e.target.value });
     this.handleHeightChange = (h, inst) =>
       this.setState({ taHeight: inst._rootDOMNode.clientHeight || h });
     this.handleDPHeightChange = (h) => this.setState({ dpHeight: h });
@@ -52,34 +50,13 @@ class ChatRoom extends React.Component {
     this.props.subscribeChatUpdates();
   }
 
-  handleKeyPress(e) {
-    const content = this.state.content;
-    switch (this.props.sendPolicy) {
-      case OPTIONS_SEND.NONE:
-        break;
-      case OPTIONS_SEND.ON_SHIFT_RETURN:
-        if (e.nativeEvent.keyCode === 13 && e.nativeEvent.shiftKey) {
-          this.handleSubmit();
-        }
-        break;
-      case OPTIONS_SEND.ON_RETURN:
-        if (e.nativeEvent.keyCode === 13 && !e.nativeEvent.shiftKey) {
-          if (content[content.length - 1] === '\n') {
-            this.handleSubmit();
-          }
-        }
-        break;
-      default:
-    }
-  }
-
-  handleSubmit() {
+  handleSubmit(content) {
     if (this.state.loading) return;
     const { channel, currentUser, pathname } = this.props;
-    const content = this.state.content;
     const now = new Date();
     const chatroomName = channel || defaultChannel(pathname);
-    this.setState({ loading: true, content: '' });
+    this.setState({ loading: true });
+    this.input.setContent('');
 
     this.props
       .mutate({
@@ -122,7 +99,7 @@ class ChatRoom extends React.Component {
       })
       .then(() => {})
       .catch((error) => {
-        this.setState({ content });
+        this.input.setContent(content);
         bootbox.alert(error.message);
       });
     this.setState({ loading: false });
@@ -158,24 +135,13 @@ class ChatRoom extends React.Component {
               ))
             : null}
         </MessageWrapper>
-        <Flex mx={1} w={1} hidden={this.props.currentUserId === null}>
-          <AutoResizeTextarea
-            style={{ borderRadius: '10px 0 0 10px', minHeight: '36px' }}
-            value={this.state.content}
-            onChange={this.handleChange}
-            onKeyUp={this.handleKeyPress}
-            onHeightChange={this.handleHeightChange}
-            minRows={1}
-            maxRows={5}
-          />
-          <ButtonOutline
-            onClick={this.handleSubmit}
-            p={10}
-            style={{ wordBreak: 'keep-all', borderRadius: '0 10px 10px 0' }}
-          >
-            <FormattedMessage {...messages.send} />
-          </ButtonOutline>
-        </Flex>
+        <ChatInput
+          ref={(ins) => (this.input = ins)}
+          sendPolicy={this.props.sendPolicy}
+          disabled={this.props.currentUserId === null}
+          onSubmit={this.handleSubmit}
+          onHeightChange={this.handleHeightChange}
+        />
       </Flex>
     );
   }
