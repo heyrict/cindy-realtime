@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { fromJS } from 'immutable';
 import { FormattedMessage } from 'react-intl';
 import { RoundedPanel, Button, Input, Select, ImgXs } from 'style-store';
 import { Flex, Box } from 'rebass';
@@ -66,7 +67,7 @@ class FilterableList extends React.PureComponent {
     };
     this.state = {
       display: this.MODE.SORT,
-      order: this.props.order || [],
+      order: fromJS(this.props.order || []),
       filterKey:
         this.props.filterList.length > 0 ? this.props.filterList[0] : '',
       filterValue: '',
@@ -75,7 +76,6 @@ class FilterableList extends React.PureComponent {
     this.extraFilter = {};
     // Sorting functions
     this.getOrder = this.getOrder.bind(this);
-    this.reverseOrder = this.reverseOrder.bind(this);
     // Event handling functions
     this.handleMainButtonClick = this.handleMainButtonClick.bind(this);
     this.handleSortButtonClick = this.handleSortButtonClick.bind(this);
@@ -96,41 +96,20 @@ class FilterableList extends React.PureComponent {
 
   // {{{ getOrder()
   getOrder() {
-    let orderBy = [];
-    this.state.order.forEach(({ key, asc }) => {
-      if (asc) {
-        orderBy = orderBy.concat(key);
-      } else {
-        orderBy = orderBy.concat(`-${key}`);
-      }
-    });
-    return orderBy;
-  }
-  // }}}
-
-  // {{{ reverseOrder()
-  reverseOrder() {
-    const returns = {};
-    this.state.order.forEach(({ key, asc }, index) => {
-      returns[key] = { index, asc };
-    });
-    return returns;
+    return this.state.order
+      .toJS()
+      .map(({ key, asc }) => (asc ? key : `-${key}`));
   }
   // }}}
 
   // {{{ handleMainButtonClick()
   handleMainButtonClick(name) {
     this.setState((state) => {
-      let exist = false;
-      let order = [];
-      state.order.forEach((obj) => {
-        if (obj.key === name) {
-          order = [{ key: name, asc: !obj.asc }];
-          exist = true;
-        }
-      });
-      if (!exist) {
-        order = [{ key: name, asc: false }];
+      let order;
+      if (state.order.getIn([0, 'key']) === name) {
+        order = state.order.updateIn([0, 'asc'], (asc) => !asc);
+      } else {
+        order = fromJS([{ key: name, asc: false }]);
       }
       return { ...state, order };
     });
@@ -138,18 +117,16 @@ class FilterableList extends React.PureComponent {
   // }}}
 
   // {{{ handleSortButtonClick()
-  handleSortButtonClick(name) {
+  handleSortButtonClick() {
     this.setState((state) => ({
-      order: state.order.map(
-        ({ key, asc }) => (name === key ? { key, asc: !asc } : { key, asc })
-      ),
+      order: state.order.updateIn([0, 'asc'], (asc) => !asc),
     }));
   }
   // }}}
 
   // {{{ render()
   render() {
-    const reverseOrder = this.reverseOrder();
+    const curOrder = this.state.order.get(0).toJS();
     const { component: QueryList, variables, filter, ...others } = this.props;
     return (
       <div>
@@ -161,7 +138,8 @@ class FilterableList extends React.PureComponent {
                   <Box mr={1} key={name}>
                     <FilterButton
                       name={name}
-                      {...reverseOrder[name]}
+                      index={curOrder.key === name ? 0 : undefined}
+                      asc={curOrder.key === name ? curOrder.asc : undefined}
                       onMainButtonClick={this.handleMainButtonClick}
                       onSortButtonClick={this.handleSortButtonClick}
                     />
