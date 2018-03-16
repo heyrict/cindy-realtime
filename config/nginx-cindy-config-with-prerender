@@ -1,0 +1,93 @@
+upstream pulse_web_sockets {
+    server unix:/tmp/daphne.sock fail_timeout=0;
+}
+
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
+server {
+    server_name cindythink.com;
+    return 301 $scheme://www.cindythink.com$request_uri;
+}
+
+server {
+    server_name www.cindythink.com 165.227.21.196;
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/www.cindythink.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/www.cindythink.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+    client_max_body_size 40M;
+
+    proxy_read_timeout 36000s;
+    proxy_send_timeout 36000s;
+    proxy_connect_timeout 36000s;
+
+    location /favicon.ico {
+        access_log off;
+        log_not_found off; 
+        alias /path/to/cindy/collected_static/favicon.ico;
+    }
+    location /static/ {
+        alias /path/to/cindy/collected_static/;
+    }
+
+    location / {
+        try_files $uri @prerender;
+    }
+
+    location @prerender {
+        set $prerender 0;
+        if ($http_user_agent ~* "baiduspider|twitterbot|facebookexternalhit|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|slackbot|vkShare|W3C_Validator") {
+            set $prerender 1;
+        }
+        if ($args ~ "_escaped_fragment_") {
+            set $prerender 1;
+        }
+        if ($http_user_agent ~ "Prerender") {
+            set $prerender 0;
+        }
+        if ($uri ~* "\.(js|css|xml|less|png|jpg|jpeg|gif|pdf|doc|txt|ico|rss|zip|mp3|rar|exe|wmv|doc|avi|ppt|mpg|mpeg|tif|wav|mov|psd|ai|xls|mp4|m4a|swf|dat|dmg|iso|flv|m4v|torrent|ttf|woff|svg|eot)") {
+            set $prerender 0;
+        }
+        
+        #resolve using Google's DNS server to force DNS resolution and prevent caching of IPs
+        resolver 8.8.8.8;
+ 
+        if ($prerender = 1) {
+            #setting prerender as a variable forces DNS resolution since nginx caches IPs and doesnt play well with load balancing
+            set $prerender "service.prerender.io";
+            rewrite .* /$scheme://$host$request_uri? break;
+            proxy_pass http://$prerender;
+        }
+
+        if ($prerender = 0) {
+            proxy_pass http://pulse_web_sockets;
+
+            proxy_http_version 1.1;
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection $connection_upgrade;
+            proxy_set_header X-Real_IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Host $server_name;
+        }
+    }
+}
+
+
+server {
+    if ($host = www.cindythink.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    server_name www.cindythink.com 165.227.21.196;
+
+    listen 80;
+    return 404; # managed by Certbot
+}
