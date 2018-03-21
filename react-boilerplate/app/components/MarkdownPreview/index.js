@@ -43,7 +43,7 @@ class MarkdownPreview extends React.Component {
         <Panel collapsible expanded={this.state.open}>
           <div
             dangerouslySetInnerHTML={{
-              __html: text2md(this.props.content),
+              __html: text2md(this.props.content, this.props.safe),
             }}
             style={{ overflow: 'auto' }}
           />
@@ -55,6 +55,11 @@ class MarkdownPreview extends React.Component {
 
 MarkdownPreview.propTypes = {
   content: PropTypes.string,
+  safe: PropTypes.bool,
+};
+
+MarkdownPreview.defaultProps = {
+  safe: false,
 };
 
 export default MarkdownPreview;

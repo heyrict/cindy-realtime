@@ -12,6 +12,7 @@ const RewardingModalQuery = gql`
         ...UserLabel_user
       }
       content
+      contentSafe
       commentSet {
         edges {
           node {

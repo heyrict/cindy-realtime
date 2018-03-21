@@ -97,6 +97,7 @@ class Puzzle(models.Model):
     genre = models.IntegerField(_('genre'), default=0, null=False)
     content = models.TextField(_('content'), null=False)
     solution = models.TextField(_('solution'), null=False)
+    content_safe = models.BooleanField(_('allow safe rendering'), default=True)
     created = models.DateTimeField(_('created'), null=False)
     modified = models.DateTimeField(_('modified'), null=False)
     status = models.IntegerField(_('status'), default=0, null=False)

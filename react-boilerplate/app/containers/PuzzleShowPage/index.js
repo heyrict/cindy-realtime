@@ -124,7 +124,12 @@ export class PuzzleShowPage extends React.Component {
           <Title>{`[${genre}${yami}] ${P.title}`}</Title>
         </Constrained>
         {(P.status <= 2 || P.user.rowid === U) && (
-          <Frame user={P.user} text={P.content} created={P.created} />
+          <Frame
+            user={P.user}
+            text={P.content}
+            created={P.created}
+            safe={P.contentSafe}
+          />
         )}
         {P.status >= 3 &&
           P.user.rowid !== U && (
@@ -135,6 +140,7 @@ export class PuzzleShowPage extends React.Component {
                   text={msg}
                   created={P.created}
                   solved={P.solved}
+                  safe={P.contentSafe}
                 />
               )}
             </FormattedMessage>
@@ -182,7 +188,9 @@ export class PuzzleShowPage extends React.Component {
           </div>
         )}
         {(P.status <= 2 || P.user.rowid === U) &&
-          P.status !== 0 && <Frame text={P.solution} solved={P.modified} />}
+          P.status !== 0 && (
+            <Frame text={P.solution} solved={P.modified} safe={P.contentSafe} />
+          )}
         {P.status === 0 &&
           U !== P.user.rowid && (
             <QuestionPutBox

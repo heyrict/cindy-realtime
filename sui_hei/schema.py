@@ -25,6 +25,9 @@ from .models import *
 from .subscription import Subscription as SubscriptionType
 
 
+MIN_CONTENT_SAFE_CREDIT = 1000
+
+
 # {{{1 resolveLimitOffset
 def resolveLimitOffset(qs, limit, offset):
     if isinstance(limit, int) and isinstance(offset, int):
@@ -492,6 +495,7 @@ class CreatePuzzle(relay.ClientIDMutation):
             genre=genre,
             yami=yami,
             content=content,
+            content_safe=user.credit > MIN_CONTENT_SAFE_CREDIT
             solution=solution,
             created=created,
             modified=created)

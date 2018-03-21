@@ -39,7 +39,7 @@ function Frame(props) {
       <PuzzleFrame>
         <ContentBox
           pl={10}
-          dangerouslySetInnerHTML={{ __html: text2md(props.text) }}
+          dangerouslySetInnerHTML={{ __html: text2md(props.text, props.safe) }}
         />
         <br />
         {props.user ? (
@@ -90,6 +90,11 @@ Frame.propTypes = {
   user: PropTypes.object,
   created: PropTypes.string,
   solved: PropTypes.string,
+  safe: PropTypes.bool,
+};
+
+Frame.defaultProps = {
+  safe: false,
 };
 
 export default Frame;

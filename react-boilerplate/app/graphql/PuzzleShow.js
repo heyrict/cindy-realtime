@@ -29,6 +29,7 @@ const PuzzleShow = gql`
         ...UserLabel_user
       }
       content
+      contentSafe
       solution
       memo
       created

@@ -157,14 +157,60 @@ export function line2md(string) {
   );
 }
 
-export function text2md(string) {
-  return LinkNorm(
-    sanitizeHtml(md.render(PreNorm(string)), {
+export function text2md(string, safe=true) {
+  if (safe) {
+    return sanitizeHtml(md.render(PreNorm(string)), {
       allowedTags: false,
       allowedAttributes: false,
       allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'chat', 'javascript'],
+      textFilter: _norm_countdown,
+      transformTags: {
+        '*': (tagName, attribs) => ({
+          tagName,
+          attribs: {
+            ...attribs,
+            href: attribs.href && _norm_openchat(attribs.href),
+          },
+        }),
+      },
     })
-  );
+  } else {
+    return sanitizeHtml(md.render(PreNorm(string)), {
+      allowedTags: ['h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+        'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
+        'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'font'],
+      allowedAttributes: {
+        '*': ['style', 'href', 'data-*'],
+        'font': ['style', 'color', 'size'],
+      },
+      allowedStyles: {
+        '*': {
+          // Match HEX and RGB
+          'color': [/^\#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+          'text-align': [/^left$/, /^right$/, /^center$/],
+          // Match any number with px, em, or %
+          'font-size': [/^\d+$[px|em|\%]$/],
+          'border': [".*"],
+          'border-*': [".*"],
+        },
+        'p': {
+          'font-size': [/^\d+rem$/]
+        }
+      },
+      allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'chat'],
+      nonTextTags: ['style', 'script'],
+      textFilter: _norm_countdown,
+      transformTags: {
+        '*': (tagName, attribs) => ({
+          tagName,
+          attribs: {
+            ...attribs,
+            href: attribs.href && _norm_openchat(attribs.href),
+          },
+        }),
+      },
+    })
+  }
 }
 
 export function getCookie(c_name) {

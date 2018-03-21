@@ -69,7 +69,11 @@ function RewardingModalComponent(props, context) {
       <Frame>
         <Title>{`[${genre}${yami}] ${props.title}`}</Title>
         <Splitter />
-        <div dangerouslySetInnerHTML={{ __html: text2md(props.content) }} />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: text2md(props.content, props.contentSafe),
+          }}
+        />
         <div style={{ textAlign: 'right' }}>
           {'——'}
           <PuzzleUserLabel to={`/profile/show/${props.user.rowid}`}>
@@ -128,6 +132,7 @@ RewardingModalComponent.propTypes = {
   yami: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired,
   content: PropTypes.string.isRequired,
+  contentSafe: PropTypes.bool.isRequired,
   commentSet: PropTypes.shape({
     edges: PropTypes.array.isRequired,
   }),
