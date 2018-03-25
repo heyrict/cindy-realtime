@@ -68,6 +68,30 @@ class App extends React.Component {
     this.setState({ height });
   }
   render() {
+    const tp = (path, locale) => (locale ? `/${locale}${path}` : path);
+    const InnerRoutes = (locale) => (
+      <Switch>
+        <Route exact path={tp('/', locale)} component={HomePage} />
+        <Route exact path={tp('/rules', locale)} component={RulesPage} />
+        <Route exact path={tp('/puzzle', locale)} component={PuzzlePage} />
+        <Route
+          exact
+          path={tp('/puzzle/add', locale)}
+          component={PuzzleAddPage}
+        />
+        <Route
+          path={tp('/puzzle/show/:id', locale)}
+          component={PuzzleShowPage}
+        />
+        <Route exact path={tp('/profile', locale)} component={UserListPage} />
+        <Route
+          exact
+          path={tp('/profile/award', locale)}
+          component={AwardApplicationPage}
+        />
+        <Route path={tp('/profile/show/:id', locale)} component={ProfilePage} />
+      </Switch>
+    );
     return (
       <div>
         <Notifier />
@@ -86,19 +110,10 @@ class App extends React.Component {
             height={this.state.height}
           >
             <Switch>
-              <Route exact path="/" component={HomePage} />
-              <Route exact path="/rules" component={RulesPage} />
-              <Route exact path="/puzzle" component={PuzzlePage} />
-              <Route exact path="/puzzle/add" component={PuzzleAddPage} />
-              <Route path="/puzzle/show/:id" component={PuzzleShowPage} />
-              <Route exact path="/profile" component={UserListPage} />
-              <Route
-                exact
-                path="/profile/award"
-                component={AwardApplicationPage}
-              />
-              <Route path="/profile/show/:id" component={ProfilePage} />
-              <Route component={NotFoundPage} />
+              <Route path="/en">{InnerRoutes('en')}</Route>
+              <Route path="/ja">{InnerRoutes('ja')}</Route>
+              <Route path="/">{InnerRoutes()}</Route>
+              <Route path="*" component={NotFoundPage} />
             </Switch>
           </EasingBox>
         </Flex>
