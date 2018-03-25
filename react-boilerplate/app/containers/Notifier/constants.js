@@ -54,26 +54,21 @@ const directMessageReceivedMsg = (context) => ({
   ),
 });
 
-const userawardAddedMsg = (context) => ({
+const notifierMsg = (context) => ({
   ...defaultMessageStyle,
-  autoDismiss: 60,
-  message: (
-    <span style={{ fontSize: '1.1em' }}>
-      <FormattedMessage {...messages.userawardAdded} values={{ ...context }} />
-    </span>
-  ),
+  ...context.payload,
 });
 
 export const DIRECTCHAT_NOTIFY = 'containers/Notifier/DIRECTCHAT_NOTIFY';
 
-export const USERAWARD_ADDED = 'ws/USERAWARD_ADDED';
+export const NOTIFIER_MESSAGE = 'containers/Notifier/NOTIFIER_MESSAGE';
 
 export const NOTE_NEEDED = {
   WS_CONNECT,
   PUZZLE_ADDED,
   DIRECTCHAT_NOTIFY,
   GOTID_MINICHAT,
-  USERAWARD_ADDED,
+  NOTIFIER_MESSAGE,
 };
 
 export const NOTE_MSG = {
@@ -81,5 +76,5 @@ export const NOTE_MSG = {
   puzzleAddedMsg,
   directMessageReceivedMsg,
   chatroomNotExistsMsg,
-  userawardAddedMsg,
+  notifierMsg,
 };

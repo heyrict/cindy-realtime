@@ -205,32 +205,33 @@ class AwardApplicationPanel extends React.Component {
                     <FormattedMessage {...messages.comment} />: {node.comment}
                   </div>
                 </Box>
-                {node.status === this.STATUS.WAITING && (
-                  <Flex w={1}>
-                    {this.props.currentUser.canReviewAwardApplication && (
+                {node.status === this.STATUS.WAITING &&
+                  this.props.currentUser &&
+                  this.props.currentUser.canReviewAwardApplication &&
+                  this.props.currentUser.id !== node.applier.id && (
+                    <Flex w={1}>
                       <Box w={1 / 2}>
                         <ButtonOutline w={1} p={1} onClick={this.handleAccept}>
                           <FormattedMessage {...messages.accept} />
                         </ButtonOutline>
                       </Box>
-                    )}
-                    {this.props.currentUser.canReviewAwardApplication && (
                       <Box w={1 / 2}>
                         <ButtonOutline w={1} p={1} onClick={this.handleDeny}>
                           <FormattedMessage {...messages.deny} />
                         </ButtonOutline>
                       </Box>
-                    )}
-                  </Flex>
-                )}
+                    </Flex>
+                  )}
               </Flex>
             )}
           </Box>
-          {this.props.currentUser && (
-            <Button ml={1} px={1} onClick={this.toggleMode}>
-              <ImgXs src={switcher} alt="Switch" />
-            </Button>
-          )}
+          {this.props.currentUser &&
+            (this.props.currentUser.id === node.applier.id ||
+              this.props.currentUser.canReviewAwardApplication) && (
+              <Button ml={1} px={1} onClick={this.toggleMode}>
+                <ImgXs src={switcher} alt="Switch" />
+              </Button>
+            )}
         </Flex>
       </RoundedPanel>
     );

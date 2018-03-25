@@ -138,7 +138,7 @@ class AwardNode(DjangoObjectType):
 class AwardApplicationNode(DjangoObjectType):
     class Meta:
         model = AwardApplication
-        filter_fields = []
+        filter_fields = ['applier']
         interfaces = (relay.Node, )
 
     rowid = graphene.Int()
@@ -696,6 +696,10 @@ class CreateAwardApplication(graphene.ClientIDMutation):
 
         if UserAward.objects.filter(user=user, award=award).count() != 0:
             raise ValidationError(_("You already have this award!"))
+
+        if AwardApplication.objects.filter(
+                applier=user, award=award, status=0).count() != 0:
+            raise ValidationError(_("You already have applied this award!"))
 
         awardapp = AwardApplication.objects.create(
             applier=user, comment=comment, award=award)
@@ -1259,7 +1263,11 @@ class Query(object):
             qs,
             kwargs,
             filters=[
-                "status", "status__gt", "created__year", "created__month", "title__contains",
+                "status",
+                "status__gt",
+                "created__year",
+                "created__month",
+                "title__contains",
             ],
             filter_fields={"user": User})
         total_count = qs.count()

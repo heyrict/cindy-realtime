@@ -16,7 +16,6 @@ import saga from './saga';
 import { wsConnect } from './actions';
 
 export class WebSocketInterface extends React.Component {
-  // eslint-disable-line react/prefer-stateless-function
   componentDidMount() {
     this.props.dispatch(wsConnect());
   }

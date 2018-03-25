@@ -29,14 +29,14 @@ class Notifier extends React.Component {
       PUZZLE_ADDED,
       DIRECTCHAT_NOTIFY,
       GOTID_MINICHAT,
-      USERAWARD_ADDED,
+      NOTIFIER_MESSAGE,
     } = NOTE_NEEDED;
     const {
       wsConnectMsg,
       puzzleAddedMsg,
       directMessageReceivedMsg,
       chatroomNotExistsMsg,
-      userawardAddedMsg,
+      notifierMsg,
     } = NOTE_MSG;
 
     switch (nextProps.notification.type) {
@@ -64,9 +64,9 @@ class Notifier extends React.Component {
           chatroomNotExistsMsg(nextProps.notification)
         );
         break;
-      case USERAWARD_ADDED:
+      case NOTIFIER_MESSAGE:
         this.notif.addNotification(
-          userawardAddedMsg(nextProps.notification.data)
+          notifierMsg(nextProps.notification)
         );
         break;
       default:
