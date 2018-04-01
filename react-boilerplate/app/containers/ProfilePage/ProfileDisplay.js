@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import { Flex } from 'rebass';
 import { intlShape } from 'react-intl';
 import moment from 'moment';
+import { to_global_id as t } from 'common';
+
+import AwardApplicationList from 'components/AwardApplicationList';
 import UserAwardPopover from 'components/UserAwardPopover';
+
 import AwardSwitch from './AwardSwitch';
 import ProfRow from './ProfRow';
 import ProfileRow from './ProfileRow';
@@ -74,6 +78,22 @@ function ProfileDisplay(props, context) {
       )}
       {props.userId === props.currentUserId && (
         <BookmarkHideRow hideBookmark={props.user.hideBookmark} />
+      )}
+      {props.userId === props.currentUserId && (
+        <ProfRow
+          heading={_(messages.awardApplications)}
+          content={
+            <AwardApplicationList
+              variables={{
+                orderBy: ['-id'],
+                applier: props.currentUserId || t('UserNode', -1),
+                count: 5,
+              }}
+              currentUserId={props.currentUserId || t('UserNode', -1)}
+              allowPagination={false}
+            />
+          }
+        />
       )}
       <ProfileRow
         userId={props.userId}

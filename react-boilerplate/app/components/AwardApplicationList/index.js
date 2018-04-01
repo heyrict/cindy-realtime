@@ -36,7 +36,8 @@ function AwardApplicationList(props) {
         ))}
       {props.loading && <LoadingDots py={50} size={8} />}
       {!props.loading &&
-        props.hasMore() && (
+        props.hasMore() &&
+        props.allowPagination && (
           <ButtonOutline onClick={props.loadMore} w={1} py="10px">
             <FormattedMessage {...chatMessages.loadMore} />
           </ButtonOutline>
@@ -55,22 +56,27 @@ AwardApplicationList.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   currentUserId: PropTypes.string,
   currentUser: PropTypes.object,
+  allowPagination: PropTypes.bool.isRequired,
+};
+
+AwardApplicationList.defaultProps = {
+  allowPagination: true,
 };
 
 const withAwardApplicationList = graphql(AwardApplicationListQuery, {
-  options: ({ variables }) => ({ variables: { ...variables, count: 10 } }),
+  options: ({ variables }) => ({ variables: { count: 10, ...variables } }),
   props({ data, ownProps }) {
     const { loading, allAwardApplications, fetchMore } = data;
     return {
       loading,
       allAwardApplications,
-      hasMore: () => allAwardApplications.pageInfo.hasNextPage,
+      hasMore: () =>
+        allAwardApplications && allAwardApplications.pageInfo.hasNextPage,
       loadMore: () =>
         fetchMore({
           query: AwardApplicationListQuery,
           variables: {
             ...ownProps.variables,
-            count: 10,
             cursor: allAwardApplications.pageInfo.endCursor,
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {

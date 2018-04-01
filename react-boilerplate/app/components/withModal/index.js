@@ -7,9 +7,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { intlShape } from 'react-intl';
 
 import { Modal } from 'react-bootstrap';
 import { Button } from 'style-store';
+
+import messages from './messages';
 
 const StyledButton = Button.extend`
   padding: 10px;
@@ -57,6 +60,7 @@ export function withModal(p) {
       // }}}
       // {{{ render
       render() {
+        const _ = this.context.intl.formatMessage;
         return (
           <Modal
             show={this.props.show}
@@ -81,13 +85,13 @@ export function withModal(p) {
                 {footer.confirm ? (
                   <StyledButton onClick={this.handleConfirm}>
                     {footer.confirm === true
-                      ? gettext('Confirm')
+                      ? _(messages.confirm)
                       : footer.confirm}
                   </StyledButton>
                 ) : null}
                 {footer.close ? (
                   <StyledButton onClick={this.props.onHide}>
-                    {footer.close === true ? gettext('Close') : footer.close}
+                    {footer.close === true ? _(messages.close) : footer.close}
                   </StyledButton>
                 ) : null}
               </ModalFooter>
@@ -101,6 +105,10 @@ export function withModal(p) {
     withModalWrapper.propTypes = {
       show: PropTypes.bool.isRequired,
       onHide: PropTypes.func.isRequired,
+    };
+
+    withModalWrapper.contextTypes = {
+      intl: intlShape,
     };
 
     return withModalWrapper;

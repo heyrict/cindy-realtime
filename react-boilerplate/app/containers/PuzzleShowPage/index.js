@@ -118,7 +118,10 @@ export class PuzzleShowPage extends React.Component {
           <title>
             {P ? `Cindy - [${genre}${yami}] ${P.title}` : _(messages.title)}
           </title>
-          <meta name="description" content="Description of PuzzleShowPage" />
+          <meta
+            name="description"
+            content={P ? P.content : _(messages.description)}
+          />
         </Helmet>
         <Constrained>
           <Title>{`[${genre}${yami}] ${P.title}`}</Title>

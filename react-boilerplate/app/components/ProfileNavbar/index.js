@@ -21,18 +21,18 @@ const ProfileButton = Button.extend`
 
 function ProfileNavbar(props) {
   return (
-    <Flex wrap align="center" justify="center" w={1} my={1}>
-      <ProfileButton w={[1 / 4, 1 / 5]} onClick={props.onProfileClick}>
+    <Flex align="center" justify="center" w={1} my={1}>
+      <ProfileButton w={1} mx={1} onClick={props.onProfileClick}>
         <FormattedMessage {...messages.profile} />
       </ProfileButton>
-      <ProfileButton w={[1 / 4, 1 / 5]} onClick={props.onPuzzlesClick}>
+      <ProfileButton w={1} mx={1} onClick={props.onPuzzlesClick}>
         <FormattedMessage {...messages.puzzles} />
       </ProfileButton>
-      <ProfileButton w={[1 / 4, 1 / 5]} onClick={props.onStarsClick}>
+      <ProfileButton w={1} mx={1} onClick={props.onStarsClick}>
         <FormattedMessage {...messages.stars} />
       </ProfileButton>
       {!props.hideBookmark && (
-        <ProfileButton w={[1 / 4, 1 / 5]} onClick={props.onBookmarksClick}>
+        <ProfileButton w={1} mx={1} onClick={props.onBookmarksClick}>
           <FormattedMessage {...messages.bookmarks} />
         </ProfileButton>
       )}
@@ -40,18 +40,11 @@ function ProfileNavbar(props) {
   );
 }
 
-ProfileNavbar.defaultProps = {
-  onProfileClick: () => {},
-  onPuzzlesClick: () => {},
-  onStarsClick: () => {},
-  onBookmarksClick: () => {},
-};
-
 ProfileNavbar.propTypes = {
-  onProfileClick: PropTypes.func,
-  onPuzzlesClick: PropTypes.func,
-  onStarsClick: PropTypes.func,
-  onBookmarksClick: PropTypes.func,
+  onProfileClick: PropTypes.func.isRequired,
+  onPuzzlesClick: PropTypes.func.isRequired,
+  onStarsClick: PropTypes.func.isRequired,
+  onBookmarksClick: PropTypes.func.isRequired,
   hideBookmark: PropTypes.bool.isRequired,
 };
 

@@ -10,6 +10,10 @@ export default defineMessages({
     id: 'app.containers.PuzzleShowPage.title',
     defaultMessage: 'Come and play lateral thinking puzzles at Cindy!',
   },
+  description: {
+    id: 'app.containers.PuzzleShowPage.description',
+    defaultMessage: 'Waiting for page to be rendered',
+  },
   creator: {
     id: 'app.containers.PuzzleShowPage.creator',
     defaultMessage: 'Creator',
