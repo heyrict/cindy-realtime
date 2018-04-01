@@ -33,14 +33,22 @@ class MarkdownPreview extends React.Component {
   render() {
     return (
       <div>
-        <Button onClick={this.togglePreview} block>
+        <Button
+          onClick={this.togglePreview}
+          block
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.618' }}
+        >
           {this.state.open ? (
             <FormattedMessage {...messages.hide} />
           ) : (
             <FormattedMessage {...messages.show} />
           )}
         </Button>
-        <Panel collapsible expanded={this.state.open}>
+        <Panel
+          collapsible
+          expanded={this.state.open}
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.618' }}
+        >
           <div
             dangerouslySetInnerHTML={{
               __html: text2md(this.props.content, this.props.safe),

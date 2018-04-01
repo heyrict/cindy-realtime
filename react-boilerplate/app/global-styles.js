@@ -19,6 +19,10 @@ injectGlobal`
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
 
+  .form-control {
+    background-color: rgba(255, 255, 255, 0.618);
+  }
+
   #app {
     min-height: 100%;
     min-width: 100%;

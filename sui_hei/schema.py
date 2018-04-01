@@ -19,11 +19,8 @@ from graphql_relay import from_global_id, to_global_id
 from rx import Observable, Observer
 from six import get_unbound_function
 
-from awards import judgers
-
 from .models import *
 from .subscription import Subscription as SubscriptionType
-
 
 MIN_CONTENT_SAFE_CREDIT = 1000
 
@@ -481,11 +478,11 @@ class CreatePuzzle(relay.ClientIDMutation):
         solution = input["puzzleSolution"]
 
         if not title:
-            raise ValidationError("Title cannot be empty!")
+            raise ValidationError(_("Title cannot be empty!"))
         if not content:
-            raise ValidationError("Content cannot be empty!")
+            raise ValidationError(_("Content cannot be empty!"))
         if not solution:
-            raise ValidationError("Solution cannot be empty!")
+            raise ValidationError(_("Solution cannot be empty!"))
 
         created = timezone.now()
 
@@ -495,7 +492,7 @@ class CreatePuzzle(relay.ClientIDMutation):
             genre=genre,
             yami=yami,
             content=content,
-            content_safe=user.credit > MIN_CONTENT_SAFE_CREDIT
+            content_safe=user.credit > MIN_CONTENT_SAFE_CREDIT,
             solution=solution,
             created=created,
             modified=created)
@@ -506,9 +503,6 @@ class CreatePuzzle(relay.ClientIDMutation):
         if len(existingChatRooms) != 0:
             existingChatRooms.delete()
         ChatRoom.objects.create(name=crName, user=user)
-
-        # Judge soup count and grant awards
-        judgers["soup"].execute(user)
 
         return CreatePuzzle(puzzle=puzzle)
 
