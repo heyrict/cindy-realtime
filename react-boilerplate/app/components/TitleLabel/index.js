@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
+import { withLocale } from 'common';
 
 import messages from './messages';
 
@@ -45,7 +46,7 @@ TranslatedGenre.propTypes = {
 
 function TitleLabel(props) {
   return (
-    <PuzzleTitle to={`/puzzle/show/${props.puzzleId}`}>
+    <PuzzleTitle to={withLocale(`/puzzle/show/${props.puzzleId}`)}>
       [{<TranslatedGenre genre={props.genre} />}
       {props.yami ? ' x ' : null}
       {props.yami ? <FormattedMessage {...messages.yami} /> : null}]

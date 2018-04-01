@@ -7,6 +7,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { RouterLink, ImgSm } from 'style-store';
+import { withLocale } from 'common';
 
 import plusIcon from 'images/plus.svg';
 import { ButtonCircle } from 'rebass';
@@ -30,7 +31,7 @@ class AddPuzzleBtn extends React.PureComponent {
 
   render() {
     return (
-      <RouterLink to="/puzzle/add">
+      <RouterLink to={withLocale('/puzzle/add')}>
         <ButtonCircle
           bg="transparent"
           px={5}

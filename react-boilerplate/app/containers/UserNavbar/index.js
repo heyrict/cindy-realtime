@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { withLocale } from 'common';
 
 import { SubNavbar, RouterLink } from 'style-store';
 import { NavLink } from 'rebass';
@@ -46,19 +47,19 @@ function UserNavbar(props) {
     return (
       <SubNavbar mx={-2} style={{ display: props.open ? 'block' : 'none' }}>
         <RouterLink
-          to={`/profile/show/${props.usernavbar.user.userId}`}
+          to={withLocale(`/profile/show/${props.usernavbar.user.userId}`)}
           tabIndex="0"
         >
           <NavLink is="span">
             <FormattedMessage {...messages.myprof} />
           </NavLink>
         </RouterLink>
-        <RouterLink to="/profile" tabIndex="0">
+        <RouterLink to={withLocale('/profile')} tabIndex="0">
           <NavLink is="span">
             <FormattedMessage {...messages.userlist} />
           </NavLink>
         </RouterLink>
-        <RouterLink to="/profile/award" tabIndex="0">
+        <RouterLink to={withLocale('/profile/award')} tabIndex="0">
           <NavLink is="span">
             <FormattedMessage {...messages.awardApplication} />
           </NavLink>
@@ -79,7 +80,7 @@ function UserNavbar(props) {
   }
   return (
     <SubNavbar mx={-2} style={{ display: props.open ? 'block' : 'none' }}>
-      <RouterLink to="/profile" tabIndex="0">
+      <RouterLink to={withLocale('/profile')} tabIndex="0">
         <NavLink is="span">
           <FormattedMessage {...messages.userlist} />
         </NavLink>

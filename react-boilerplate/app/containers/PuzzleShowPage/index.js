@@ -116,7 +116,7 @@ export class PuzzleShowPage extends React.Component {
       <div>
         <Helmet>
           <title>
-            {P ? `Cindy - [${genre}${yami}] ${P.title}` : _(messages.title)}
+            {P ? `[${genre}${yami}] ${P.title} - Cindy` : _(messages.title)}
           </title>
           <meta
             name="description"

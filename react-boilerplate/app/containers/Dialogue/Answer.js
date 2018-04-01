@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import bootbox from 'bootbox';
-import { line2md, from_global_id as f } from 'common';
+import { line2md, from_global_id as f, withLocale } from 'common';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -207,7 +207,9 @@ class Answer extends React.PureComponent {
       return (
         <PuzzleFrame>
           <Box width={1}>
-            <NicknameLink to={`/profile/show/${this.props.owner.rowid}`}>
+            <NicknameLink
+              to={withLocale(`/profile/show/${this.props.owner.rowid}`)}
+            >
               {this.props.owner.nickname}
             </NicknameLink>
             <UserAwardPopover

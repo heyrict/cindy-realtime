@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Flex, Box } from 'rebass';
 import { Button } from 'style-store';
-import { line2md } from 'common';
+import { line2md, pushWithLocale } from 'common';
 import cindychan from 'images/cindychan.png';
 
 import messages from './messages';
@@ -81,7 +80,7 @@ function MainFrame(props) {
           w={1}
           mx={30}
           my={10}
-          onClick={() => props.dispatch(push('/puzzle'))}
+          onClick={() => props.dispatch(pushWithLocale('/puzzle'))}
         >
           <FormattedMessage {...messages.start} />
         </StartBox>

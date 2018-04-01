@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { line2md, from_global_id as f } from 'common';
+import { line2md, from_global_id as f, withLocale } from 'common';
 import { createStructuredSelector, createSelector } from 'reselect';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
 import { FormattedMessage } from 'react-intl';
@@ -126,7 +126,9 @@ class Question extends React.PureComponent {
       <PuzzleFrame>
         <Box width={1}>
           <Indexer>{this.props.index}</Indexer>
-          <NicknameLink to={`/profile/show/${this.props.user.rowid}`}>
+          <NicknameLink
+            to={withLocale(`/profile/show/${this.props.user.rowid}`)}
+          >
             {this.props.user.nickname}
           </NicknameLink>
           <UserAwardPopover

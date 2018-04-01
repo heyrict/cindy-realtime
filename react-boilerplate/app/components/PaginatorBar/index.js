@@ -104,6 +104,7 @@ class PaginatorBar extends React.Component {
         <Flex align="center">
           <Box mr="auto">
             <Link
+              rel="prev"
               to={setQueryStr({
                 ...this.query,
                 [this.props.queryKey]: this.confinePage(
@@ -128,6 +129,7 @@ class PaginatorBar extends React.Component {
           </Box>
           <Box ml="auto">
             <Link
+              rel="next"
               to={setQueryStr({
                 ...this.query,
                 [this.props.queryKey]: this.confinePage(

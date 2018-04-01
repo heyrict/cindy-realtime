@@ -15,6 +15,8 @@ import sanitizeHtml from 'sanitize-html';
 import 'expose-loader?jQuery!expose-loader?$!jquery';
 import moment, * as moments from 'moment';
 import bootstrap from 'bootstrap';
+import { push } from 'react-router-redux';
+import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants';
 
 const md = MarkdownIt({
   html: true,
@@ -237,6 +239,18 @@ export const from_global_id = (id) => {
   } catch (e) {
     console.log(e);
   }
+};
+
+export const withLocale = (link) => {
+  let locale = window.location.pathname.split('/')[1];
+  if (locale !== 'ja' && locale !== 'en') {
+    locale = DEFAULT_LOCALE;
+  }
+  return `/${locale}${link}`;
+}
+
+export const pushWithLocale = (link) => {
+  return push(withLocale(link));
 };
 
 export const to_global_id = (className, rid) => btoa(`${className}:${rid}`);

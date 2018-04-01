@@ -62,7 +62,7 @@ function ProfilePage(props, context) {
     <Constrained level={3}>
       <Helmet>
         <title>
-          {`Cindy - ${_(messages.heading, { nickname: user.nickname })}`}
+          {_(messages.heading, { nickname: user.nickname })}
         </title>
       </Helmet>
       <Heading>

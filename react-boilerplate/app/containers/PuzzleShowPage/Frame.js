@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { text2md } from 'common';
+import { text2md, withLocale } from 'common';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import { Box } from 'rebass';
@@ -47,7 +47,9 @@ function Frame(props) {
             {(c) => (
               <RightBox>
                 <Label>{c}:</Label>
-                <PuzzleUserLabel to={`/profile/show/${props.user.rowid}`}>
+                <PuzzleUserLabel
+                  to={withLocale(`/profile/show/${props.user.rowid}`)}
+                >
                   {props.user.nickname}
                 </PuzzleUserLabel>
                 <UserAwardPopover
