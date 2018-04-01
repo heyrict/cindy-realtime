@@ -20,10 +20,10 @@ export function withNumberPaginator() {
   return (Wrapped) => {
     /* Add Paginator handlers */
     const withNumberPaginatorWrapper = (props) => {
-      const query = getQueryStr(props.location.search) || {
-        [props.queryKey]: props.defaultPage,
-      };
-      const currentPage = parseInt(query[props.queryKey], 10);
+      const query = getQueryStr(props.location.search) || {};
+      const currentPage = query[props.queryKey]
+        ? parseInt(query[props.queryKey], 10)
+        : props.defaultPage;
       const changePage = (page) => {
         props.goto(setQueryStr({ ...query, [props.queryKey]: page }));
       };

@@ -90,8 +90,8 @@
   "app.containers.Notifier.directMessageReceived": "{nickname} sends a direct message to you!",
   "app.containers.Notifier.open": "Open",
   "app.containers.Notifier.puzzleAdded": "A New Puzzle {title} is Added by {nickname}!",
-  "app.containers.Notifier.userawardAdded": "Congratulations to {nickname} for getting award {award}!",
   "app.containers.Notifier.wsConnect": "Connected to server!",
+  "app.containers.ProfilePage.awardApplications": "Recent Award Applications",
   "app.containers.ProfilePage.awardSelect": "Award Select",
   "app.containers.ProfilePage.commentCount": "Comment Count",
   "app.containers.ProfilePage.dateJoined": "Joined Date",
@@ -128,6 +128,7 @@
   "app.containers.PuzzleShowPage.controlPanel": "Control Panel",
   "app.containers.PuzzleShowPage.created": "Created",
   "app.containers.PuzzleShowPage.creator": "Creator",
+  "app.containers.PuzzleShowPage.description": "Waiting for page to be rendered",
   "app.containers.PuzzleShowPage.disableInput": "Please login before playing ^^",
   "app.containers.PuzzleShowPage.hiddenFrame": "This puzzle is set to hidden, which means you cannot view it",
   "app.containers.PuzzleShowPage.hint": "Hint",
@@ -174,5 +175,7 @@
   "app.containers.UserNavbar.onlineUsers": "Online users: {userCount}",
   "app.containers.UserNavbar.register": "Register",
   "app.containers.UserNavbar.settings": "Settings",
-  "app.containers.UserNavbar.userlist": "User List"
+  "app.containers.UserNavbar.userlist": "User List",
+  "app.containers.withModel.close": "Close",
+  "app.containers.withModel.confirm": "Confirm"
 }

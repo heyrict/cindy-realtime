@@ -193,7 +193,7 @@ export function setCookie(c_name, c_value, c_expiry = 0, c_path = '/') {
 }
 
 export function getQueryStr(qs) {
-  if (!qs) return null;
+  if (!qs) return {};
 
   qs = qs.substring(1);
   let qsList = qs.split('&');

@@ -90,8 +90,8 @@
   "app.containers.Notifier.directMessageReceived": "{nickname}さんはあなたにメッセージを送りました。",
   "app.containers.Notifier.open": "開く",
   "app.containers.Notifier.puzzleAdded": "{nickname} さんが新しい問題「{title}」を出題しました！",
-  "app.containers.Notifier.userawardAdded": "{nickname} さんが称号 {award} を獲得しました！おめでとうございます！",
   "app.containers.Notifier.wsConnect": "サーバーに接続しました",
+  "app.containers.ProfilePage.awardApplications": "最近の称号申請履歴",
   "app.containers.ProfilePage.awardSelect": "称号選択",
   "app.containers.ProfilePage.commentCount": "コメント数",
   "app.containers.ProfilePage.dateJoined": "登録日時",
@@ -128,6 +128,7 @@
   "app.containers.PuzzleShowPage.controlPanel": "コントロールパネル",
   "app.containers.PuzzleShowPage.created": "出題時間",
   "app.containers.PuzzleShowPage.creator": "出題者",
+  "app.containers.PuzzleShowPage.description": "問題ロード中です・・・",
   "app.containers.PuzzleShowPage.disableInput": "遊ぶ前にログインしてくださいね^^",
   "app.containers.PuzzleShowPage.hiddenFrame": "この問題は非公開に設定されています。あなたはこの問題を見ることが出来ません。",
   "app.containers.PuzzleShowPage.hint": "ヒント",
@@ -174,5 +175,7 @@
   "app.containers.UserNavbar.onlineUsers": "現在閲覧者：{userCount} 人",
   "app.containers.UserNavbar.register": "登録",
   "app.containers.UserNavbar.settings": "設定",
-  "app.containers.UserNavbar.userlist": "ユーザー一覧"
+  "app.containers.UserNavbar.userlist": "ユーザー一覧",
+  "app.containers.withModel.close": "閉じる",
+  "app.containers.withModel.confirm": "確認"
 }
