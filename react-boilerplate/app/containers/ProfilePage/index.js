@@ -91,6 +91,7 @@ class ProfilePage extends React.Component {
             variables={{ count: 10, user: userId }}
             order={[{ key: 'modified', asc: false }]}
             orderList={['modified', 'starCount', 'starSum']}
+            queryKey="puzzlePage"
           />
         )}
         {this.state.tabIndex === 2 && (

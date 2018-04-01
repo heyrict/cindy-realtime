@@ -192,6 +192,30 @@ export function setCookie(c_name, c_value, c_expiry = 0, c_path = '/') {
   document.cookie = `${c_name}=${c_value}${expiry_str}${path_str}`;
 }
 
+export function getQueryStr(qs) {
+  if (!qs) return null;
+
+  qs = qs.substring(1);
+  let qsList = qs.split('&');
+  let i;
+  let qObj = {};
+  let p;
+  for (i = 0; i < qsList.length; i += 1) {
+    p = qsList[i].split('=');
+    qObj[p[0]] = p[1];
+  }
+  return qObj;
+}
+
+export function setQueryStr(qObj) {
+  return (
+    '?' +
+    Object.entries(qObj)
+      .map((arg) => arg.join('='))
+      .join('&')
+  );
+}
+
 export const status_code_dict = {
   0: 'unsolved',
   1: 'solved',
@@ -223,4 +247,6 @@ export default {
   text2md,
   line2md,
   StartCountdown,
+  getQueryStr,
+  setQueryStr,
 };
