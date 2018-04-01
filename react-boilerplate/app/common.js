@@ -144,12 +144,18 @@ function PreNorm(string) {
 }
 
 export function line2md(string) {
-  string = PreNorm(string)
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+  const mdEscape = MarkdownIt({
+    html: false,
+    breaks: true,
+    linkify: true,
+    typographer: true,
+  })
+    .enable(['table', 'strikethrough'])
+    .use(mdEmoji);
+  string = PreNorm(string);
 
   return LinkNorm(
-    md
+    mdEscape
       .render(string)
       .replace(/<p>/g, '')
       .replace(/<\/p>\s*$/g, '')
@@ -167,10 +173,10 @@ export function text2md(string, safe=true) {
       transformTags: {
         '*': (tagName, attribs) => ({
           tagName,
-          attribs: {
+          attribs: attribs.href ? {
             ...attribs,
-            href: attribs.href && _norm_openchat(attribs.href),
-          },
+            href: _norm_openchat(attribs.href),
+          } : attribs,
         }),
       },
     })
@@ -203,10 +209,10 @@ export function text2md(string, safe=true) {
       transformTags: {
         '*': (tagName, attribs) => ({
           tagName,
-          attribs: {
+          attribs: attribs.href ? {
             ...attribs,
-            href: attribs.href && _norm_openchat(attribs.href),
-          },
+            href: _norm_openchat(attribs.href),
+          } : attribs,
         }),
       },
     })
