@@ -478,11 +478,11 @@ class CreatePuzzle(relay.ClientIDMutation):
         solution = input["puzzleSolution"]
 
         if not title:
-            raise ValidationError("Title cannot be empty!")
+            raise ValidationError(_("Title cannot be empty!"))
         if not content:
-            raise ValidationError("Content cannot be empty!")
+            raise ValidationError(_("Content cannot be empty!"))
         if not solution:
-            raise ValidationError("Solution cannot be empty!")
+            raise ValidationError(_("Solution cannot be empty!"))
 
         created = timezone.now()
 
@@ -640,7 +640,7 @@ class CreateChatRoom(graphene.ClientIDMutation):
         description = input["description"]
         existingChatrooms = ChatRoom.objects.filter(name=name)
         if len(existingChatrooms) > 0:
-            raise ValidationError("Channel %s exists already!" % name)
+            raise ValidationError(_("Channel %s exists already!") % name)
 
         chatroom = ChatRoom.objects.create(
             user=user, name=name, description=description)
@@ -1144,30 +1144,30 @@ class UserRegister(relay.ClientIDMutation):
         nickname = input["nickname"].strip()  # nickname: (0, 64]
 
         if not re.findall(r"^[a-zA-Z0-9\@+_\-.]+$", username):
-            raise ValidationError(
+            raise ValidationError(_(
                 "Characters other than letters,"
-                "digits and @/./+/-/_ are not allowed in username")
+                "digits and @/./+/-/_ are not allowed in username"))
         if len(username) < 4:
-            raise ValidationError(
-                "Your username is too short (less than 4 characters)")
+            raise ValidationError(_(
+                "Your username is too short (less than 4 characters)"))
         if len(username) > 150:
-            raise ValidationError(
-                "Your username is too long (more than 150 characters)")
+            raise ValidationError(_(
+                "Your username is too long (more than 150 characters)"))
         if re.findall("^[ 　]*$", nickname):
-            raise ValidationError("Username cannot be blank!")
+            raise ValidationError(_("Username cannot be blank!"))
         if len(nickname) > 64:
-            raise ValidationError(
-                "Your nickname is too long (more than 64 characters)")
+            raise ValidationError(_(
+                "Your nickname is too long (more than 64 characters)"))
         if not (re.findall(r"[0-9]+", password)
                 and re.findall(r"[a-zA-Z]", password)):
-            raise ValidationError(
-                "Password should have both letters and digits")
+            raise ValidationError(_(
+                "Password should have both letters and digits"))
         if len(password) < 8:
-            raise ValidationError(
-                "Your password is too short (less than 8 characters)")
+            raise ValidationError(_(
+                "Your password is too short (less than 8 characters)"))
         if len(password) > 64:
-            raise ValidationError(
-                "Your password is too long (more than 32 characters)")
+            raise ValidationError(_(
+                "Your password is too long (more than 32 characters)"))
 
         user = User.objects.create_user(
             username=username, nickname=nickname, password=password)
