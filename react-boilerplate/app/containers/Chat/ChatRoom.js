@@ -107,6 +107,8 @@ class ChatRoom extends React.Component {
   }
 
   render() {
+    if (this.props.hidden) return null;
+
     return (
       <Flex wrap justify="center">
         <DescriptionPanel
@@ -168,6 +170,7 @@ ChatRoom.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   pathname: PropTypes.string.isRequired,
   alert: PropTypes.func.isRequired,
+  hidden: PropTypes.bool,
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -293,4 +296,6 @@ const withCurrentUser = graphql(
   }
 );
 
-export default compose(withCurrentUser, withChat, withMutation, withConnect)(ChatRoom);
+export default compose(withCurrentUser, withChat, withMutation, withConnect)(
+  ChatRoom
+);
