@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import bootbox from 'bootbox';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { to_global_id as t } from 'common';
+import { nAlert } from 'containers/Notifier/actions';
 import { Box, Flex } from 'rebass';
 import Constrained from 'components/Constrained';
 import { ButtonOutline, AutoResizeTextarea } from 'style-store';
@@ -131,7 +132,7 @@ class QuestionPutBox extends React.PureComponent {
       .then(() => {})
       .catch((error) => {
         this.setState({ content });
-        bootbox.alert(error.message);
+        this.props.alert(error.message);
       });
     this.setState({ loading: false });
   }
@@ -160,7 +161,10 @@ class QuestionPutBox extends React.PureComponent {
                 <ButtonOutline
                   onClick={this.handleSubmit}
                   disabled={!this.props.currentUserId}
-                  style={{ wordBreak: 'keep-all', borderRadius: '0 10px 10px 0' }}
+                  style={{
+                    wordBreak: 'keep-all',
+                    borderRadius: '0 10px 10px 0',
+                  }}
                 >
                   {msg}
                 </ButtonOutline>
@@ -179,7 +183,14 @@ QuestionPutBox.propTypes = {
   currentUserId: PropTypes.number,
   currentUser: PropTypes.object,
   sendPolicy: PropTypes.string.isRequired,
+  alert: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+});
+
+const withConnect = connect(null, mapDispatchToProps);
 
 const withMutation = graphql(putQuestionMutation);
 
@@ -205,4 +216,6 @@ const withCurrentUser = graphql(
   }
 );
 
-export default compose(withCurrentUser, withMutation)(QuestionPutBox);
+export default compose(withCurrentUser, withMutation, withConnect)(
+  QuestionPutBox
+);

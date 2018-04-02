@@ -4,12 +4,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import bootbox from 'bootbox';
+import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { from_global_id as f, to_global_id as t } from 'common';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
 import { ButtonOutline } from 'style-store';
+import { nAlert } from 'containers/Notifier/actions';
 
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -100,7 +101,7 @@ class ChatRoom extends React.Component {
       .then(() => {})
       .catch((error) => {
         this.input.setContent(content);
-        bootbox.alert(error.message);
+        this.props.alert(error.message);
       });
     this.setState({ loading: false });
   }
@@ -166,7 +167,14 @@ ChatRoom.propTypes = {
   }),
   // eslint-disable-next-line react/no-unused-prop-types
   pathname: PropTypes.string.isRequired,
+  alert: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+});
+
+const withConnect = connect(null, mapDispatchToProps);
 
 const withMutation = graphql(CreateChatmessageMutation);
 
@@ -285,4 +293,4 @@ const withCurrentUser = graphql(
   }
 );
 
-export default compose(withCurrentUser, withChat, withMutation)(ChatRoom);
+export default compose(withCurrentUser, withChat, withMutation, withConnect)(ChatRoom);

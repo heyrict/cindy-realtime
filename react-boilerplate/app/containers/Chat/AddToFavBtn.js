@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { nAlert } from 'containers/Notifier/actions';
 import { Glyphicon } from 'react-bootstrap';
-import bootbox from 'bootbox';
 import { graphql } from 'react-apollo';
 import createFavoriteChatRoomMutation from 'graphql/CreateFavoriteChatRoomMutation';
+import FavoriteChatRoomQuery from 'graphql/FavoriteChatRoomQuery';
 
 import { addFavoriteChatRoom } from './actions';
 
@@ -16,25 +17,45 @@ const FavBtn = styled.button`
 `;
 
 function AddToFavBtn(props) {
-  const handleSubmit = (dispatch) => {
+  const { userId, chatroomName, alert, addFavCR } = props;
+  const handleSubmit = () => {
     props
       .mutate({
         variables: {
           input: {
-            chatroomName: props.chatroomName,
+            chatroomName,
           },
+        },
+        update(proxy, { data: { createFavoriteChatroom: { favchatroom } } }) {
+          const data = proxy.readQuery({
+            query: FavoriteChatRoomQuery,
+            variables: { userId },
+          });
+          console.log(data);
+          data.allFavoriteChatrooms.edges.push({
+            __typename: 'FavoriteChatRoomNodeEdge',
+            node: {
+              __typename: 'FavoriteChatRoomNode',
+              ...favchatroom,
+            },
+          });
+          proxy.writeQuery({
+            query: FavoriteChatRoomQuery,
+            variables: { userId },
+            data,
+          });
         },
       })
       .then(() => {
-        dispatch(addFavoriteChatRoom(props.chatroomName));
+        addFavCR(props.chatroomName);
       })
       .catch((error) => {
-        bootbox.alert(error.message);
+        alert(error.message);
       });
   };
 
   return (
-    <FavBtn onClick={() => handleSubmit(props.dispatch)}>
+    <FavBtn onClick={handleSubmit}>
       <Glyphicon glyph="star-empty" />
     </FavBtn>
   );
@@ -42,15 +63,18 @@ function AddToFavBtn(props) {
 
 AddToFavBtn.propTypes = {
   chatroomName: PropTypes.string.isRequired,
-  dispatch: PropTypes.func.isRequired,
+  userId: PropTypes.string.isRequired,
+  addFavCR: PropTypes.func.isRequired,
   mutate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatch,
+  addFavCR: (name) => dispatch(addFavoriteChatRoom(name)),
+  alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(mapDispatchToProps);
+const withConnect = connect(null, mapDispatchToProps);
 
 const withMutation = graphql(createFavoriteChatRoomMutation);
 

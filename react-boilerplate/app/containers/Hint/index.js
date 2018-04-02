@@ -7,11 +7,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import bootbox from 'bootbox';
 import { line2md, from_global_id as f } from 'common';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { nAlert } from 'containers/Notifier/actions';
 
 import { Box, Flex } from 'rebass';
 import Constrained from 'components/Constrained';
@@ -82,7 +82,7 @@ export class Hint extends React.Component {
       })
       .then(() => {})
       .catch((error) => {
-        bootbox.alert(error.message);
+        this.props.alert(error.message);
       });
     this.setState({ editMode: false });
   }
@@ -149,6 +149,7 @@ Hint.propTypes = {
   user: PropTypes.object,
   status: PropTypes.number.isRequired,
   mutate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -157,11 +158,9 @@ const mapStateToProps = createStructuredSelector({
   ),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+});
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 

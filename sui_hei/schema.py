@@ -664,7 +664,7 @@ class CreateFavoriteChatRoom(graphene.ClientIDMutation):
         chatroomName = input["chatroomName"]
         chatroom = ChatRoom.objects.get(name=chatroomName)
 
-        ind, favchatroom = FavoriteChatRoom.objects.get_or_create(
+        favchatroom, ind = FavoriteChatRoom.objects.get_or_create(
             user=user, chatroom=chatroom)
 
         return CreateFavoriteChatRoom(favchatroom=favchatroom)

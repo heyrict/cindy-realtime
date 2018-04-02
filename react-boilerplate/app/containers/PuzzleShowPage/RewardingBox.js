@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import bootbox from 'bootbox';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { nAlert } from 'containers/Notifier/actions';
 import { Flex } from 'rebass';
 import Constrained from 'components/Constrained';
 import FiveStars from 'components/FiveStars';
@@ -51,10 +52,7 @@ class RewardingBox extends React.PureComponent {
       })
       .then(() => {})
       .catch((error) => {
-        bootbox.alert({
-          title: 'Error',
-          message: error.message,
-        });
+        this.props.alert(error.message);
       });
   }
   cancelStar() {
@@ -65,7 +63,7 @@ class RewardingBox extends React.PureComponent {
   }
   handleSaveStar() {
     if (this.state.stars === 0) {
-      bootbox.alert('Please Choose at least one star!');
+      this.props.alert(<FormattedMessage {...messages.zeroStarAlert} />);
       return;
     }
     this.setState({
@@ -74,11 +72,11 @@ class RewardingBox extends React.PureComponent {
         value: this.state.stars,
       },
     });
-    bootbox.alert('Save Succeeded');
+    this.props.alert(<FormattedMessage {...messages.saveSucceededAlert} />);
   }
   handleSaveComment() {
     if (this.state.comment === '') {
-      bootbox.alert('Comment cannot be blank!');
+      this.props.alert(<FormattedMessage {...messages.commentNoBlankAlert} />);
       return;
     }
     this.props
@@ -92,13 +90,10 @@ class RewardingBox extends React.PureComponent {
         },
       })
       .then(() => {
-        bootbox.alert('Save Succeeded');
+        this.props.alert(<FormattedMessage {...messages.saveSucceededAlert} />);
       })
       .catch((error) => {
-        bootbox.alert({
-          title: 'Error',
-          message: error.message,
-        });
+        this.props.alert(error.message);
       });
   }
   render() {
@@ -152,7 +147,14 @@ RewardingBox.propTypes = {
   existingComment: PropTypes.array.isRequired,
   mutateStarUpdate: PropTypes.func.isRequired,
   mutateCommentUpdate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+});
+
+const withConnect = connect(null, mapDispatchToProps);
 
 const withStarUpdateMutation = graphql(UpdateStarMutation, {
   name: 'mutateStarUpdate',
@@ -162,6 +164,6 @@ const withCommentUpdateMutation = graphql(UpdateCommentMutation, {
   name: 'mutateCommentUpdate',
 });
 
-export default compose(withStarUpdateMutation, withCommentUpdateMutation)(
+export default compose(withStarUpdateMutation, withCommentUpdateMutation, withConnect)(
   RewardingBox
 );

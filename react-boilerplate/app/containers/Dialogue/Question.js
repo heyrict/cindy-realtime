@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 import { line2md, from_global_id as f, withLocale } from 'common';
+import { nAlert } from 'containers/Notifier/actions';
 import { createStructuredSelector, createSelector } from 'reselect';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
-import { FormattedMessage } from 'react-intl';
-import updateQuestionMutation from 'graphql/UpdateQuestionMutation';
-import bootbox from 'bootbox';
-import { Flex, Box } from 'rebass';
+
 import { graphql } from 'react-apollo';
+import updateQuestionMutation from 'graphql/UpdateQuestionMutation';
+
+import { Flex, Box } from 'rebass';
 import UserAwardPopover from 'components/UserAwardPopover';
 import { OPTIONS_SEND } from 'containers/Settings/constants';
 import {
@@ -94,7 +96,7 @@ class Question extends React.PureComponent {
         this.toggleEditMode(false);
       })
       .catch((error) => {
-        bootbox.alert(error.message);
+        this.props.alert(error.message);
       });
   }
 
@@ -179,6 +181,7 @@ Question.propTypes = {
   created: PropTypes.string.isRequired,
   questionEditTimes: PropTypes.number.isRequired,
   mutate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
   sendPolicy: PropTypes.string.isRequired,
 };
 
@@ -188,7 +191,11 @@ const mapStateToProps = createStructuredSelector({
   ),
 });
 
-const withConnect = connect(mapStateToProps);
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+});
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withMutation = graphql(updateQuestionMutation);
 

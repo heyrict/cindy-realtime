@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import bootbox from 'bootbox';
 import { FormattedMessage } from 'react-intl';
 import { EditButton, ImgXs } from 'style-store';
 import { text2md, to_global_id as t } from 'common';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { nAlert } from 'containers/Notifier/actions';
+
 import { Flex } from 'rebass';
 import PreviewEdit from 'components/PreviewEdit';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
@@ -64,10 +65,7 @@ class ProfileRow extends React.PureComponent {
         this.toggleEdit(false);
       })
       .catch((error) => {
-        bootbox.alert({
-          title: 'Error',
-          message: error.message,
-        });
+        this.props.alert(error.message);
       });
   }
 
@@ -122,13 +120,18 @@ ProfileRow.propTypes = {
   currentUserId: PropTypes.string.isRequired,
   profile: PropTypes.string.isRequired,
   mutate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+});
 
 const mapStateToProps = createStructuredSelector({
   currentUser: makeSelectUserNavbar(),
 });
 
-const withConnect = connect(mapStateToProps);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withMutation = graphql(UpdateUserMutation);
 

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import bootbox from 'bootbox';
 import moment from 'moment';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { nAlert } from 'containers/Notifier/actions';
 import { Flex, Box } from 'rebass';
 import { RoundedPanel, Button, ButtonOutline, ImgXs } from 'style-store';
 
@@ -92,7 +93,7 @@ class AwardApplicationPanel extends React.Component {
         },
       })
       .catch((error) => {
-        bootbox.alert(error.message);
+        this.props.alert(error.message);
       });
   }
   handleDeny() {
@@ -134,7 +135,7 @@ class AwardApplicationPanel extends React.Component {
         },
       })
       .catch((error) => {
-        bootbox.alert(error.message);
+        this.props.alert(error.message);
       });
   }
   render() {
@@ -242,8 +243,15 @@ AwardApplicationPanel.propTypes = {
   node: PropTypes.object.isRequired,
   currentUser: PropTypes.object,
   mutate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+});
+
+const withConnect = connect(null, mapDispatchToProps);
 
 const withMutation = graphql(UpdateAwardApplication);
 
-export default compose(withMutation)(AwardApplicationPanel);
+export default compose(withMutation, withConnect)(AwardApplicationPanel);

@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { nAlert } from 'containers/Notifier/actions';
+
 import { Switch } from 'style-store';
 import { Flex } from 'rebass';
-import bootbox from 'bootbox';
+
 import { graphql } from 'react-apollo';
 import UpdateUserMutation from 'graphql/UpdateUserMutation';
 
@@ -30,10 +34,7 @@ class AwardSwitch extends React.PureComponent {
       })
       .then(() => {})
       .catch((error) => {
-        bootbox.alert({
-          title: 'Error',
-          message: error.message,
-        });
+        this.props.alert(error.message);
       });
   }
 
@@ -57,8 +58,15 @@ class AwardSwitch extends React.PureComponent {
 AwardSwitch.propTypes = {
   hideBookmark: PropTypes.bool.isRequired,
   mutate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+});
+
+const withConnect = connect(null, mapDispatchToProps);
 
 const withMutate = graphql(UpdateUserMutation);
 
-export default withMutate(AwardSwitch);
+export default compose(withMutate, withConnect)(AwardSwitch);
