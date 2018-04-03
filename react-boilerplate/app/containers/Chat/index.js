@@ -170,7 +170,7 @@ const withMemo = graphql(
 const withFavChannels = graphql(FavoriteChatRoomQuery, {
   options: ({ currentUser }) => ({
     variables: {
-      userId: t('UserNode', currentUser.user.userId || '-1'),
+      userId: currentUser.user.userId || t('UserNode', '-1'),
     },
   }),
   props({ data }) {

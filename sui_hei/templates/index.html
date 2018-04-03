@@ -17,11 +17,6 @@
           {% if request.user.is_authenticated %}
           user_id: {{ request.user.id }},
           user_nickname: "{{ request.user.nickname }}",
-          user_favChannels: [
-            {% for favchan in request.user.favoritechatroom_set.all %}
-            "{{ favchan.chatroom.name }}",
-            {% endfor %}
-          ],
           {% endif %}
           LANGUAGE_CODE: "{{ LANGUAGE_CODE }}",
         };
