@@ -45,7 +45,10 @@ function ProfilePage(props, context) {
         <title>{`Cindy - ${_(messages.title)}`}</title>
         <meta
           name="description"
-          content={text2desc(user && user.profile) || _(messages.description)}
+          content={
+            (user && user.profile && text2desc(user.profile)) ||
+            _(messages.description)
+          }
         />
       </Helmet>
     );
