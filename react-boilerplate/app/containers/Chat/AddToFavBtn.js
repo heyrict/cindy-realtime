@@ -31,7 +31,6 @@ function AddToFavBtn(props) {
             query: FavoriteChatRoomQuery,
             variables: { userId },
           });
-          console.log(data);
           data.allFavoriteChatrooms.edges.push({
             __typename: 'FavoriteChatRoomNodeEdge',
             node: {

@@ -28,6 +28,7 @@ import StarList from 'components/StarList';
 import injectSaga from 'utils/injectSaga';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
 import { makeSelectLocation } from 'containers/App/selectors';
+import { nAlert } from 'containers/Notifier/actions';
 import ProfileDisplay from './ProfileDisplay';
 import saga from './saga';
 import messages from './messages';
@@ -49,7 +50,7 @@ function ProfilePage(props, context) {
       </Helmet>
     );
   } else if (error) {
-    console.log(error);
+    props.alert(error);
     return <LoadingDots />;
   }
 
@@ -146,6 +147,7 @@ ProfilePage.propTypes = {
     search: PropTypes.string.isRequired,
   }),
   goto: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -153,11 +155,10 @@ const mapStateToProps = createStructuredSelector({
   location: makeSelectLocation(),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    goto: (path) => dispatch(push(path)),
-  };
-}
+const mapDispatchToProps = (dispatch) => ({
+  goto: (path) => dispatch(push(path)),
+  alert: (msg) => dispatch(nAlert(message)),
+});
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
