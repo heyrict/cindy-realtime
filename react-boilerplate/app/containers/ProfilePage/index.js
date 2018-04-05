@@ -12,7 +12,7 @@ import { Helmet } from 'react-helmet';
 import { FormattedMessage, intlShape } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { to_global_id as t, getQueryStr, setQueryStr } from 'common';
+import { to_global_id as t, text2desc, getQueryStr, setQueryStr } from 'common';
 import { Heading } from 'style-store';
 import Constrained from 'components/Constrained';
 import LoadingDots from 'components/LoadingDots';
@@ -42,7 +42,10 @@ function ProfilePage(props, context) {
     return (
       <Helmet>
         <title>{`Cindy - ${_(messages.title)}`}</title>
-        <meta name="description" content={_(messages.description)} />
+        <meta
+          name="description"
+          content={text2desc(user && user.profile) || _(messages.description)}
+        />
       </Helmet>
     );
   } else if (error) {
@@ -61,9 +64,10 @@ function ProfilePage(props, context) {
   return (
     <Constrained level={3}>
       <Helmet>
-        <title>
-          {_(messages.heading, { nickname: user.nickname })}
-        </title>
+        <title>{`${_(messages.heading, {
+          nickname: user.nickname,
+        })} - Cindy`}</title>
+        <meta name="description" content={_(messages.description)} />
       </Helmet>
       <Heading>
         <FormattedMessage
