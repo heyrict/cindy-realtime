@@ -148,7 +148,7 @@ const withMemo = graphql(
     options: (props) => {
       const defaultOpt = { fetchPolicy: 'cache-only' };
       if (!props.location) return defaultOpt;
-      const match = props.location.pathname.match(/^\/puzzle\/show\/(\d+)$/);
+      const match = props.location.pathname.match(/\/puzzle\/show\/(\d+)$/);
       if (!match) return defaultOpt;
       const id = t('PuzzleNode', match[1]);
       return {
