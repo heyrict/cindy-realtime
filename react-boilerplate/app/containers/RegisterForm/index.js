@@ -128,7 +128,7 @@ export class RegisterForm extends React.Component {
           ...user,
           userId: user.rowid,
         });
-        this.props.dispatch(registerSucceeded());
+        this.props.dispatch(registerSucceeded(user.rowid));
       })
       .catch((error) => {
         this.setState({
