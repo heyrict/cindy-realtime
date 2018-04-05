@@ -17,6 +17,7 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico', permanent=True)),
     path('sw.js', TemplateView.as_view(template_name="sw.js", content_type="application/javascript"), name="sw.js"),
+    path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain"), name="robots.txt"),
     path('users', include('django.contrib.auth.urls')),
     # GraphQL
     path("graphql", GraphQLView.as_view(batch=True)),
