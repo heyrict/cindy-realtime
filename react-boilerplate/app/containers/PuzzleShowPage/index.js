@@ -21,6 +21,7 @@ import {
   from_global_id as f,
   to_global_id as t,
   genre_type_dict as genreType,
+  text2desc,
 } from 'common';
 import genreMessages from 'components/TitleLabel/messages';
 import Dialogue from 'containers/Dialogue/Loadable';
@@ -120,7 +121,7 @@ export class PuzzleShowPage extends React.Component {
           </title>
           <meta
             name="description"
-            content={P ? P.content : _(messages.description)}
+            content={P ? text2desc(P.content) : _(messages.description)}
           />
         </Helmet>
         <Constrained>

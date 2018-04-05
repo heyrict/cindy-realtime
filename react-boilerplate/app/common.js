@@ -169,6 +169,13 @@ export function text2md(string) {
   );
 }
 
+export function text2desc(string) {
+  return sanitizeHtml(md.render(string), {
+    allowedTags: [],
+    allowedAttributes: [],
+  }).substr(0, 250);
+}
+
 export function getCookie(c_name) {
   var c_start, c_end;
   if (document.cookie.length > 0) {
@@ -247,7 +254,7 @@ export const withLocale = (link) => {
     locale = DEFAULT_LOCALE;
   }
   return `/${locale}${link}`;
-}
+};
 
 export const pushWithLocale = (link) => {
   return push(withLocale(link));
