@@ -9,6 +9,9 @@ import { DarkNicknameLink as NicknameLink, PuzzleFrame } from 'style-store';
 import UserAwardPopover from 'components/UserAwardPopover';
 
 import Constrained from 'components/Constrained';
+import GoogleAd from 'components/GoogleAd';
+import { googleAdInfo } from 'settings';
+
 import messages from './messages';
 
 const Label = styled.span`
@@ -41,6 +44,7 @@ function Frame(props) {
           pl={10}
           dangerouslySetInnerHTML={{ __html: text2md(props.text) }}
         />
+        <GoogleAd {...googleAdInfo.textAd} />
         <br />
         {props.user ? (
           <FormattedMessage {...messages.creator}>

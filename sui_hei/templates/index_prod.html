@@ -1,0 +1,9 @@
+{% extends 'base_index.html' %}
+{% load webpack_loader %}
+
+{% block extraHead %}
+{% endblock extraHead %}
+
+{% block bundle %}
+{% render_bundle 'main' %}
+{% endblock bundle %}
