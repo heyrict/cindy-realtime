@@ -44,7 +44,7 @@ function Frame(props) {
           pl={10}
           dangerouslySetInnerHTML={{ __html: text2md(props.text) }}
         />
-        <GoogleAd {...googleAdInfo.textAd} />
+        {props.text > 200 && <GoogleAd {...googleAdInfo.textAd} />}
         <br />
         {props.user ? (
           <FormattedMessage {...messages.creator}>
