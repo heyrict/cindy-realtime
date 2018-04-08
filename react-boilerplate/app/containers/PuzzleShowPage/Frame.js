@@ -9,6 +9,7 @@ import { DarkNicknameLink as NicknameLink, PuzzleFrame } from 'style-store';
 import UserAwardPopover from 'components/UserAwardPopover';
 
 import Constrained from 'components/Constrained';
+
 import messages from './messages';
 
 const Label = styled.span`

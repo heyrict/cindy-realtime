@@ -25,10 +25,12 @@ import {
 } from 'common';
 import genreMessages from 'components/TitleLabel/messages';
 import Dialogue from 'containers/Dialogue/Loadable';
-import { Box } from 'rebass';
+import { PuzzleFrame } from 'style-store';
 import Hint from 'containers/Hint';
 import Constrained from 'components/Constrained';
 import LoadingDots from 'components/LoadingDots';
+import GoogleAd from 'components/GoogleAd';
+import { googleAdInfo } from 'settings';
 
 import { graphql } from 'react-apollo';
 import PuzzleShowQuery from 'graphql/PuzzleShow';
@@ -214,7 +216,11 @@ export class PuzzleShowPage extends React.Component {
         {U === P.user.rowid && (
           <PuzzleModifyBox puzzle={P} puzzleId={puzzleId} />
         )}
-        <Box py={10} width={1} />
+        <Constrained mt={2}>
+          <PuzzleFrame>
+            <GoogleAd {...googleAdInfo.textAd} />
+          </PuzzleFrame>
+        </Constrained>
       </div>
     );
   }
