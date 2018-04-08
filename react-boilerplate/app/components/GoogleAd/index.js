@@ -15,11 +15,15 @@ class GoogleAd extends React.PureComponent {
     (window.adsbygoogle = window.adsbygoogle || []).push({});
   }
   render() {
+    const optionalAttr = {
+      'data-ad-layout-key': this.props.layoutKey,
+    };
     return (
       <div style={this.props.wrapperDivStyle}>
         <ins
           className="adsbygoogle"
           style={{ display: 'block' }}
+          {...optionalAttr}
           data-ad-client={this.props.client}
           data-ad-slot={this.props.slot}
           data-ad-format={this.props.format}
@@ -34,10 +38,13 @@ GoogleAd.propTypes = {
   slot: PropTypes.string.isRequired,
   format: PropTypes.string.isRequired,
   wrapperDivStyle: PropTypes.object,
+  layoutKey: PropTypes.string,
 };
 
 GoogleAd.defaultProps = {
-  wrapperDivStyle: {},
+  wrapperDivStyle: {
+    overflow: 'hidden',
+  },
 };
 
 const RegisterGoogleAd = (Wrapped) => (props) =>
