@@ -4,6 +4,7 @@ import django_filters
 import graphene
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator
 from django.db.models import Count, F, Q, Sum
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -28,12 +29,10 @@ from .subscription import Subscription as SubscriptionType
 # {{{1 resolveLimitOffset
 def resolveLimitOffset(qs, limit, offset):
     if isinstance(limit, int) and isinstance(offset, int):
-        end = offset + limit
+        return Paginator(qs, limit).page(offset // limit + 1)
     elif isinstance(limit, int):
-        end = limit
-    else:
-        end = None
-    return qs[offset:end]
+        return Paginator(qs, limit).page(1)
+    return qs[offset:]
 
 
 # {{{1 resolveFilter
@@ -1333,10 +1332,7 @@ class Query(object):
         qs = Star.objects.all()
         qs = resolveOrderBy(qs, orderBy)
         qs = resolveFilter(
-            qs,
-            kwargs,
-            filters=[],
-            filter_fields={"user": User})
+            qs, kwargs, filters=[], filter_fields={"user": User})
         total_count = qs.count()
         qs = resolveLimitOffset(qs, limit, offset)
         qs = list(qs)
@@ -1353,10 +1349,7 @@ class Query(object):
         qs = Bookmark.objects.all()
         qs = resolveOrderBy(qs, orderBy)
         qs = resolveFilter(
-            qs,
-            kwargs,
-            filters=[],
-            filter_fields={"user": User})
+            qs, kwargs, filters=[], filter_fields={"user": User})
         total_count = qs.count()
         qs = resolveLimitOffset(qs, limit, offset)
         qs = list(qs)

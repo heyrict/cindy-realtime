@@ -24,7 +24,7 @@ export function withNumberPaginator() {
         ? parseInt(props.page, 10)
         : props.defaultPage;
       const changePage = (page) => {
-        props.goto(updateQueryStr({ ...query, page }));
+        props.goto(updateQueryStr({ page }));
       };
       return (
         <Wrapped
