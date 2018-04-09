@@ -44,7 +44,11 @@ function PuzzlePage(props, context) {
         variables={{ status__gt: 0 }}
         order={[{ key: 'modified', asc: false }]}
         orderList={['modified', 'starCount', 'starSum', 'commentCount']}
-        filterList={['title__contains']}
+        filterList={[
+          'title__contains',
+          'content__contains',
+          'solution__contains',
+        ]}
         fetchPolicy="cache-and-network"
       />
     </Constrained>

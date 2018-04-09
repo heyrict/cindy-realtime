@@ -50,6 +50,14 @@ export default defineMessages({
     id: 'app.containers.FilterableList.title__contains',
     defaultMessage: 'Title',
   },
+  content__contains: {
+    id: 'app.containers.FilterableList.content__contains',
+    defaultMessage: 'Content',
+  },
+  solution__contains: {
+    id: 'app.containers.FilterableList.solution__contains',
+    defaultMessage: 'Solution',
+  },
   search: {
     id: 'app.containers.FilterableList.search',
     defaultMessage: 'Search',

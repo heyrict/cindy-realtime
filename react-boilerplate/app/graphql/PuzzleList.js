@@ -9,6 +9,8 @@ export const PuzzleList = gql`
     $status: Float
     $status__gt: Float
     $title__contains: String
+    $content__contains: String
+    $solution__contains: String
     $user: ID
   ) {
     allPuzzles(
@@ -18,11 +20,20 @@ export const PuzzleList = gql`
       status: $status
       status_Gt: $status__gt
       title_Contains: $title__contains
+      content_Contains: $content__contains
+      solution_Contains: $solution__contains
       user: $user
     )
       @connection(
         key: "PuzzleNode_allPuzzles"
-        filter: ["orderBy", "user", "offset", "title_Contains"]
+        filter: [
+          "orderBy"
+          "user"
+          "offset"
+          "title_Contains"
+          "content_Contains"
+          "solution_Contains"
+        ]
       ) {
       edges {
         node {

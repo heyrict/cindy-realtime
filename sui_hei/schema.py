@@ -1210,6 +1210,8 @@ class Query(object):
         status=graphene.Float(),
         status__gt=graphene.Float(),
         title__contains=graphene.String(),
+        content__contains=graphene.String(),
+        solution__contains=graphene.String(),
         created__year=graphene.Int(),
         created__month=graphene.Int(),
         limit=graphene.Int(),
@@ -1228,12 +1230,14 @@ class Query(object):
         StarConnection,
         orderBy=graphene.List(of_type=graphene.String),
         user=graphene.ID(),
+        puzzle=graphene.ID(),
         limit=graphene.Int(),
         offset=graphene.Int())
     all_bookmarks = graphene.ConnectionField(
         BookmarkConnection,
         orderBy=graphene.List(of_type=graphene.String),
         user=graphene.ID(),
+        puzzle=graphene.ID(),
         limit=graphene.Int(),
         offset=graphene.Int())
 
@@ -1292,6 +1296,8 @@ class Query(object):
                 "created__year",
                 "created__month",
                 "title__contains",
+                "content__contains",
+                "solution__contains",
             ],
             filter_fields={"user": User})
         total_count = qs.count()
