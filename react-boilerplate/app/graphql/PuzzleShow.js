@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import DialoguePanel from './DialoguePanel';
 
 const PuzzleShow = gql`
-  query($id: ID!, $userId: ID!) {
+  query PuzzleShowQuery($id: ID!, $userId: ID!) {
     puzzleShowUnion(id: $id)
       @connection(key: "PuzzleShowUnion_PuzzleShowUnion", filter: ["id"]) {
       edges {
@@ -48,6 +48,9 @@ const PuzzleShow = gql`
         node {
           id
           value
+          user {
+            ...UserLabel_user
+          }
         }
       }
     }

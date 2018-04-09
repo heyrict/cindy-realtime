@@ -7,16 +7,18 @@ export const BookmarkListInitQuery = gql`
     $offset: Int
     $orderBy: [String]
     $user: ID
+    $puzzle: ID
   ) {
     allBookmarks(
       limit: $limit
       offset: $offset
       orderBy: $orderBy
       user: $user
+      puzzle: $puzzle
     )
       @connection(
         key: "BookmarkNode_allBookmarks"
-        filter: ["orderBy", "user", "offset"]
+        filter: ["orderBy", "user", "offset", "puzzle"]
       ) {
       edges {
         node {

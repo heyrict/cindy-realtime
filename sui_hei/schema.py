@@ -1338,7 +1338,13 @@ class Query(object):
         qs = Star.objects.all()
         qs = resolveOrderBy(qs, orderBy)
         qs = resolveFilter(
-            qs, kwargs, filters=[], filter_fields={"user": User})
+            qs,
+            kwargs,
+            filters=[],
+            filter_fields={
+                "user": User,
+                "puzzle": Puzzle
+            })
         total_count = qs.count()
         qs = resolveLimitOffset(qs, limit, offset)
         qs = list(qs)
@@ -1355,7 +1361,13 @@ class Query(object):
         qs = Bookmark.objects.all()
         qs = resolveOrderBy(qs, orderBy)
         qs = resolveFilter(
-            qs, kwargs, filters=[], filter_fields={"user": User})
+            qs,
+            kwargs,
+            filters=[],
+            filter_fields={
+                "user": User,
+                "puzzle": Puzzle
+            })
         total_count = qs.count()
         qs = resolveLimitOffset(qs, limit, offset)
         qs = list(qs)
