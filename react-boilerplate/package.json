@@ -239,7 +239,7 @@
     "graphql-tag": "^2.7.3",
     "history": "4.6.3",
     "hoist-non-react-statics": "2.1.1",
-    "immutable": "^4.0.0-rc.9",
+    "immutable": "^3.8.1",
     "intl": "1.2.5",
     "invariant": "2.2.2",
     "ip": "1.1.5",

@@ -31,7 +31,7 @@ function UserListPage(props, context) {
       </Heading>
       <FilterableList
         component={UserList}
-        order={[{ key: 'date_joined', asc: false }]}
+        order="-date_joined"
         orderList={['date_joined']}
       />
     </Constrained>
