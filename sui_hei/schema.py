@@ -4,7 +4,6 @@ import django_filters
 import graphene
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
-from django.core.paginator import Paginator
 from django.db.models import Count, F, Q, Sum
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -29,10 +28,12 @@ from .subscription import Subscription as SubscriptionType
 # {{{1 resolveLimitOffset
 def resolveLimitOffset(qs, limit, offset):
     if isinstance(limit, int) and isinstance(offset, int):
-        return Paginator(qs, limit).page(offset // limit + 1)
+        end = offset + limit
     elif isinstance(limit, int):
-        return Paginator(qs, limit).page(1)
-    return qs[offset:]
+        end = limit
+    else:
+        end = None
+    return qs[offset:end]
 
 
 # {{{1 resolveFilter
@@ -76,6 +77,11 @@ def resolveOrderBy(qs, order_by):
             fieldQueries.append(
                 F(fieldName).desc(nulls_last=True)
                 if desc else F(fieldName).asc(nulls_last=True))
+
+        # Fix postgresql disorder
+        if "id" not in fieldQueries and "-id" not in fieldQueries:
+            fieldQueries.append("-id")
+
         return qs.order_by(*fieldQueries)
     else:
         return qs.all()
