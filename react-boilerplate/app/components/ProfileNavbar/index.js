@@ -22,17 +22,17 @@ const ProfileButton = Button.extend`
 function ProfileNavbar(props) {
   return (
     <Flex align="center" justify="center" w={1} my={1}>
-      <ProfileButton w={1} mx={1} onClick={props.onProfileClick}>
+      <ProfileButton w={1} mx="3px" onClick={props.onProfileClick}>
         <FormattedMessage {...messages.profile} />
       </ProfileButton>
-      <ProfileButton w={1} mx={1} onClick={props.onPuzzlesClick}>
+      <ProfileButton w={1} mx="3px" onClick={props.onPuzzlesClick}>
         <FormattedMessage {...messages.puzzles} />
       </ProfileButton>
-      <ProfileButton w={1} mx={1} onClick={props.onStarsClick}>
+      <ProfileButton w={1} mx="3px" onClick={props.onStarsClick}>
         <FormattedMessage {...messages.stars} />
       </ProfileButton>
       {!props.hideBookmark && (
-        <ProfileButton w={1} mx={1} onClick={props.onBookmarksClick}>
+        <ProfileButton w={1} mx="3px" onClick={props.onBookmarksClick}>
           <FormattedMessage {...messages.bookmarks} />
         </ProfileButton>
       )}

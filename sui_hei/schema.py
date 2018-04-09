@@ -336,6 +336,22 @@ class PuzzleConnection(graphene.Connection):
         node = PuzzleNode
 
 
+# {{{2 BookmarkConnection
+class BookmarkConnection(graphene.Connection):
+    total_count = graphene.Int()
+
+    class Meta:
+        node = BookmarkNode
+
+
+# {{{2 StarConnection
+class StarConnection(graphene.Connection):
+    total_count = graphene.Int()
+
+    class Meta:
+        node = StarNode
+
+
 # {{{1 Unions
 # {{{2 PuzzleShowUnion
 class PuzzleShowUnion(graphene.Union):
@@ -1144,30 +1160,30 @@ class UserRegister(relay.ClientIDMutation):
         nickname = input["nickname"].strip()  # nickname: (0, 64]
 
         if not re.findall(r"^[a-zA-Z0-9\@+_\-.]+$", username):
-            raise ValidationError(_(
-                "Characters other than letters,"
-                "digits and @/./+/-/_ are not allowed in username"))
+            raise ValidationError(
+                _("Characters other than letters,"
+                  "digits and @/./+/-/_ are not allowed in username"))
         if len(username) < 4:
-            raise ValidationError(_(
-                "Your username is too short (less than 4 characters)"))
+            raise ValidationError(
+                _("Your username is too short (less than 4 characters)"))
         if len(username) > 150:
-            raise ValidationError(_(
-                "Your username is too long (more than 150 characters)"))
+            raise ValidationError(
+                _("Your username is too long (more than 150 characters)"))
         if re.findall("^[ 　]*$", nickname):
             raise ValidationError(_("Username cannot be blank!"))
         if len(nickname) > 64:
-            raise ValidationError(_(
-                "Your nickname is too long (more than 64 characters)"))
+            raise ValidationError(
+                _("Your nickname is too long (more than 64 characters)"))
         if not (re.findall(r"[0-9]+", password)
                 and re.findall(r"[a-zA-Z]", password)):
-            raise ValidationError(_(
-                "Password should have both letters and digits"))
+            raise ValidationError(
+                _("Password should have both letters and digits"))
         if len(password) < 8:
-            raise ValidationError(_(
-                "Your password is too short (less than 8 characters)"))
+            raise ValidationError(
+                _("Your password is too short (less than 8 characters)"))
         if len(password) > 64:
-            raise ValidationError(_(
-                "Your password is too long (more than 32 characters)"))
+            raise ValidationError(
+                _("Your password is too long (more than 32 characters)"))
 
         user = User.objects.create_user(
             username=username, nickname=nickname, password=password)
@@ -1208,10 +1224,18 @@ class Query(object):
     all_favorite_chatrooms = DjangoFilterConnectionField(FavoriteChatRoomNode)
     all_comments = DjangoFilterConnectionField(
         CommentNode, orderBy=graphene.List(of_type=graphene.String))
-    all_stars = DjangoFilterConnectionField(
-        StarNode, orderBy=graphene.List(of_type=graphene.String))
-    all_bookmarks = DjangoFilterConnectionField(
-        BookmarkNode, orderBy=graphene.List(of_type=graphene.String))
+    all_stars = graphene.ConnectionField(
+        StarConnection,
+        orderBy=graphene.List(of_type=graphene.String),
+        user=graphene.ID(),
+        limit=graphene.Int(),
+        offset=graphene.Int())
+    all_bookmarks = graphene.ConnectionField(
+        BookmarkConnection,
+        orderBy=graphene.List(of_type=graphene.String),
+        user=graphene.ID(),
+        limit=graphene.Int(),
+        offset=graphene.Int())
 
     # {{{2 nodes
     user = relay.Node.Field(UserNode)
@@ -1297,12 +1321,44 @@ class Query(object):
         return resolveOrderBy(Comment.objects, orderBy)
 
     def resolve_all_stars(self, info, **kwargs):
-        orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Star.objects, orderBy)
+        orderBy = kwargs.get("orderBy", [])
+        limit = kwargs.get("limit", None)
+        offset = kwargs.get("offset", None)
+        qs = Star.objects.all()
+        qs = resolveOrderBy(qs, orderBy)
+        qs = resolveFilter(
+            qs,
+            kwargs,
+            filters=[],
+            filter_fields={"user": User})
+        total_count = qs.count()
+        qs = resolveLimitOffset(qs, limit, offset)
+        qs = list(qs)
+        return StarConnection(
+            total_count=total_count,
+            edges=[
+                PuzzleConnection.Edge(node=qs[i], ) for i in range(len(qs))
+            ])
 
     def resolve_all_bookmarks(self, info, **kwargs):
-        orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Bookmark.objects, orderBy)
+        orderBy = kwargs.get("orderBy", [])
+        limit = kwargs.get("limit", None)
+        offset = kwargs.get("offset", None)
+        qs = Bookmark.objects.all()
+        qs = resolveOrderBy(qs, orderBy)
+        qs = resolveFilter(
+            qs,
+            kwargs,
+            filters=[],
+            filter_fields={"user": User})
+        total_count = qs.count()
+        qs = resolveLimitOffset(qs, limit, offset)
+        qs = list(qs)
+        return BookmarkConnection(
+            total_count=total_count,
+            edges=[
+                PuzzleConnection.Edge(node=qs[i], ) for i in range(len(qs))
+            ])
 
     def resolve_all_award_applications(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)

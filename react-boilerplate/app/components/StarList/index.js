@@ -11,88 +11,70 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { graphql } from 'react-apollo';
-import { FormattedMessage } from 'react-intl';
-import { ButtonOutline } from 'style-store';
 
+import withNumberPaginator from 'components/withNumberPaginator';
 import PuzzlePanel from 'components/PuzzlePanel';
 import StarListQuery from 'graphql/StarList';
 import LoadingDots from 'components/LoadingDots';
 import FiveStars from 'components/FiveStars';
-import chatMessages from 'containers/Chat/messages';
+import PaginatorBar from 'components/PaginatorBar';
 
-class StarList extends React.PureComponent {
-  render() {
-    return (
-      <div>
-        {this.props.allStars &&
-          this.props.allStars.edges.map((edge) => (
-            <PuzzlePanel
-              node={edge.node.puzzle}
-              key={edge.node.id}
-              additional={
-                <FiveStars
-                  value={edge.node.value}
-                  starSize="15px"
-                  justify="center"
-                />
-              }
+const StarList = (props) => (
+  <div>
+    {props.allStars &&
+      props.allStars.edges.map((edge) => (
+        <PuzzlePanel
+          node={edge.node.puzzle}
+          key={edge.node.id}
+          additional={
+            <FiveStars
+              value={edge.node.value}
+              starSize="15px"
+              justify="center"
             />
-          ))}
-        {this.props.loading && <LoadingDots size={8} py={this.props.allStars ? 10 : 50} />}
-        {!this.props.loading &&
-          this.props.hasMore() && (
-            <ButtonOutline onClick={this.props.loadMore} w={1} py="10px">
-              <FormattedMessage {...chatMessages.loadMore} />
-            </ButtonOutline>
-          )}
-      </div>
-    );
-  }
-}
+          }
+        />
+      ))}
+    {props.loading && <LoadingDots size={8} py={props.allStars ? 10 : 50} />}
+    {!props.loading && (
+      <PaginatorBar
+        queryKey={props.queryKey}
+        numPages={Math.ceil(props.allStars.totalCount / props.itemsPerPage)}
+        currentPage={props.page}
+        changePage={props.changePage}
+      />
+    )}
+  </div>
+);
 
 StarList.propTypes = {
   loading: PropTypes.bool.isRequired,
-  loadMore: PropTypes.func.isRequired,
-  hasMore: PropTypes.func.isRequired,
   allStars: PropTypes.shape({
     edges: PropTypes.array.isRequired,
+    totalCount: PropTypes.number.isRequired,
   }),
+  page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  itemsPerPage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  queryKey: PropTypes.string.isRequired,
+  changePage: PropTypes.func.isRequired,
 };
 
 const withStarList = graphql(StarListQuery, {
-  options: ({ variables }) => ({ variables: { ...variables, count: 10 } }),
-  props({ data, ownProps }) {
-    const { loading, allStars, fetchMore, refetch } = data;
+  options: ({ variables, page, itemsPerPage }) => ({
+    variables: {
+      limit: itemsPerPage,
+      offset: itemsPerPage * (page - 1),
+      ...variables,
+    },
+  }),
+  props({ data }) {
+    const { loading, allStars, refetch } = data;
     return {
       loading,
       allStars,
       refetch,
-      hasMore: () => allStars.pageInfo.hasNextPage,
-      loadMore: () =>
-        fetchMore({
-          query: StarListQuery,
-          variables: {
-            ...ownProps.variables,
-            count: 10,
-            cursor: allStars.pageInfo.endCursor,
-          },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            const newEdges = fetchMoreResult.allStars.edges;
-            const pageInfo = fetchMoreResult.allStars.pageInfo;
-
-            return newEdges.length
-              ? {
-                  allStars: {
-                    __typename: previousResult.allStars.__typename,
-                    edges: [...previousResult.allStars.edges, ...newEdges],
-                    pageInfo,
-                  },
-                }
-              : previousResult;
-          },
-        }),
     };
   },
 });
 
-export default compose(withStarList)(StarList);
+export default compose(withNumberPaginator(), withStarList)(StarList);

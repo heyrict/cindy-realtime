@@ -109,6 +109,7 @@ function ProfilePage(props, context) {
           variables={{ user: userId }}
           order={[{ key: 'value', asc: false }]}
           orderList={['id', 'value']}
+          queryKey="starPage"
         />
       )}
       {currentTab === TAB_NAMES.bookmark &&
@@ -120,6 +121,7 @@ function ProfilePage(props, context) {
             orderList={['id', 'value']}
             userId={userId}
             currentUserId={t('UserNode', props.usernavbar.user.userId)}
+            queryKey="bookmarkPage"
           />
         )}
     </Constrained>
