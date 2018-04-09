@@ -210,19 +210,23 @@ export function getQueryStr(qs) {
   let qObj = {};
   let p;
   for (i = 0; i < qsList.length; i += 1) {
-    p = qsList[i].split('=');
+    p = decodeURI(qsList[i]).split('=');
     qObj[p[0]] = p[1];
   }
   return qObj;
 }
 
 export function setQueryStr(qObj) {
-  return (
-    '?' +
-    Object.entries(qObj)
-      .map((arg) => arg.join('='))
-      .join('&')
+  const query = [];
+  Object.entries(qObj).forEach(
+    (arg) => arg[0] && arg[1] && query.push(arg.join('='))
   );
+  return '?' + encodeURI(query.join('&'));
+}
+
+export function updateQueryStr(qObj) {
+  qObj = { ...getQueryStr(window.location.search), ...qObj };
+  return setQueryStr(qObj);
 }
 
 export const status_code_dict = {

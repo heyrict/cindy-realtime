@@ -8,11 +8,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
+import { createSelector, createStructuredSelector } from 'reselect';
 import { push } from 'react-router-redux';
 
-import { makeSelectLocation } from 'containers/App/selectors';
-import { getQueryStr, setQueryStr } from 'common';
+import { selectLocation } from 'containers/App/selectors';
+import { getQueryStr, updateQueryStr } from 'common';
 
 /* eslint-disable no-undef */
 
@@ -20,12 +20,11 @@ export function withNumberPaginator() {
   return (Wrapped) => {
     /* Add Paginator handlers */
     const withNumberPaginatorWrapper = (props) => {
-      const query = getQueryStr(props.location.search) || {};
-      const currentPage = query[props.queryKey]
-        ? parseInt(query[props.queryKey], 10)
+      const currentPage = props.page
+        ? parseInt(props.page, 10)
         : props.defaultPage;
       const changePage = (page) => {
-        props.goto(setQueryStr({ ...query, [props.queryKey]: page }));
+        props.goto(updateQueryStr({ ...query, page }));
       };
       return (
         <Wrapped
@@ -40,21 +39,20 @@ export function withNumberPaginator() {
     withNumberPaginatorWrapper.propTypes = {
       defaultPage: PropTypes.number.isRequired,
       itemsPerPage: PropTypes.number.isRequired,
-      queryKey: PropTypes.string.isRequired,
       goto: PropTypes.func.isRequired,
-      location: PropTypes.shape({
-        search: PropTypes.string.isRequired,
-      }),
+      page: PropTypes.string,
     };
 
     withNumberPaginatorWrapper.defaultProps = {
       defaultPage: 1,
       itemsPerPage: 10,
-      queryKey: 'page',
     };
 
     const mapStateToProps = createStructuredSelector({
-      location: makeSelectLocation(),
+      page: createSelector(
+        selectLocation,
+        (location) => getQueryStr(location.get('search')).page
+      ),
     });
 
     const mapDispatchToProps = (dispatch) => ({

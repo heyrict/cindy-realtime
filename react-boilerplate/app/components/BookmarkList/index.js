@@ -41,7 +41,6 @@ const BookmarkList = (props) => (
     )}
     {!props.loading && (
       <PaginatorBar
-        queryKey={props.queryKey}
         numPages={Math.ceil(props.allBookmarks.totalCount / props.itemsPerPage)}
         currentPage={props.page}
         changePage={props.changePage}
@@ -61,7 +60,6 @@ BookmarkList.propTypes = {
   currentUserId: PropTypes.string,
   page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   itemsPerPage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  queryKey: PropTypes.string.isRequired,
   changePage: PropTypes.func.isRequired,
 };
 

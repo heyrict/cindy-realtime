@@ -107,9 +107,7 @@ class PaginatorBar extends React.Component {
               rel="prev"
               to={setQueryStr({
                 ...this.query,
-                [this.props.queryKey]: this.confinePage(
-                  this.props.currentPage - 1
-                ),
+                page: this.confinePage(this.props.currentPage - 1),
               })}
             >
               <SqBtn disabled={this.props.currentPage === 1}>
@@ -132,9 +130,7 @@ class PaginatorBar extends React.Component {
               rel="next"
               to={setQueryStr({
                 ...this.query,
-                [this.props.queryKey]: this.confinePage(
-                  this.props.currentPage + 1
-                ),
+                page: this.confinePage(this.props.currentPage + 1),
               })}
             >
               <SqBtn disabled={this.props.currentPage === this.props.numPages}>
@@ -158,7 +154,6 @@ PaginatorBar.propTypes = {
   changePage: PropTypes.func.isRequired,
   currentPage: PropTypes.number.isRequired,
   numPages: PropTypes.number.isRequired,
-  queryKey: PropTypes.string.isRequired,
   location: PropTypes.shape({
     search: PropTypes.string.isRequired,
   }),

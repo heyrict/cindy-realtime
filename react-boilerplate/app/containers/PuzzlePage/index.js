@@ -42,7 +42,7 @@ function PuzzlePage(props, context) {
       <FilterableList
         component={PuzzleList}
         variables={{ status__gt: 0 }}
-        order={[{ key: 'modified', asc: false }]}
+        order="-modified"
         orderList={['modified', 'starCount', 'starSum', 'commentCount']}
         filterList={[
           'title__contains',

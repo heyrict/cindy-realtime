@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage, intlShape } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
+import { createSelector, createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { to_global_id as t, text2desc, getQueryStr, setQueryStr } from 'common';
 import { Heading } from 'style-store';
@@ -27,7 +27,7 @@ import StarList from 'components/StarList';
 
 import injectSaga from 'utils/injectSaga';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
-import { makeSelectLocation } from 'containers/App/selectors';
+import { selectLocation } from 'containers/App/selectors';
 import { nAlert } from 'containers/Notifier/actions';
 import ProfileDisplay from './ProfileDisplay';
 import saga from './saga';
@@ -57,10 +57,9 @@ function ProfilePage(props, context) {
     return <LoadingDots />;
   }
 
-  const query = getQueryStr(props.location.search);
-  const currentTab = query.display || TAB_NAMES.profile;
+  const currentTab = props.display || TAB_NAMES.profile;
   const changeTab = (display) => {
-    props.goto(setQueryStr({ ...query, display }));
+    props.goto(setQueryStr({ display }));
   };
   const hideBookmark =
     user.hideBookmark && t('UserNode', props.usernavbar.user.userId) !== userId;
@@ -98,18 +97,16 @@ function ProfilePage(props, context) {
         <FilterableList
           component={PuzzleList}
           variables={{ count: 10, user: userId }}
-          order={[{ key: 'modified', asc: false }]}
+          order="-modified"
           orderList={['modified', 'starCount', 'starSum']}
-          queryKey="puzzlePage"
         />
       )}
       {currentTab === TAB_NAMES.star && (
         <FilterableList
           component={StarList}
           variables={{ user: userId }}
-          order={[{ key: 'value', asc: false }]}
+          order="-value"
           orderList={['id', 'value']}
-          queryKey="starPage"
         />
       )}
       {currentTab === TAB_NAMES.bookmark &&
@@ -117,11 +114,10 @@ function ProfilePage(props, context) {
           <FilterableList
             component={BookmarkList}
             variables={{ user: userId }}
-            order={[{ key: 'value', asc: false }]}
+            order="-value"
             orderList={['id', 'value']}
             userId={userId}
             currentUserId={t('UserNode', props.usernavbar.user.userId)}
-            queryKey="bookmarkPage"
           />
         )}
     </Constrained>
@@ -148,21 +144,22 @@ ProfilePage.propTypes = {
     error: PropTypes.any,
     user: PropTypes.object,
   }),
-  location: PropTypes.shape({
-    search: PropTypes.string.isRequired,
-  }),
+  display: PropTypes.string,
   goto: PropTypes.func.isRequired,
   alert: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   usernavbar: makeSelectUserNavbar(),
-  location: makeSelectLocation(),
+  display: createSelector(
+    selectLocation,
+    (location) => getQueryStr(location.get('search')).display
+  ),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   goto: (path) => dispatch(push(path)),
-  alert: (msg) => dispatch(nAlert(message)),
+  alert: (msg) => dispatch(nAlert(msg)),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

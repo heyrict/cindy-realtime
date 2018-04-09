@@ -38,7 +38,6 @@ const StarList = (props) => (
     {props.loading && <LoadingDots size={8} py={props.allStars ? 10 : 50} />}
     {!props.loading && (
       <PaginatorBar
-        queryKey={props.queryKey}
         numPages={Math.ceil(props.allStars.totalCount / props.itemsPerPage)}
         currentPage={props.page}
         changePage={props.changePage}
@@ -55,7 +54,6 @@ StarList.propTypes = {
   }),
   page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   itemsPerPage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  queryKey: PropTypes.string.isRequired,
   changePage: PropTypes.func.isRequired,
 };
 

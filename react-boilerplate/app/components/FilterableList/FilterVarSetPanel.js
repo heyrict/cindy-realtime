@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { RoundedPanel, Button, ImgXs } from 'style-store';
-import { fromJS } from 'immutable';
 import { Flex, Box } from 'rebass';
 
 import switcher from 'images/switcher.svg';
@@ -36,13 +35,21 @@ class FilterVarSetPanel extends React.Component {
     this.handleSortButtonClick = this.handleSortButtonClick.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.order !== this.props.order) {
+      this.asc = nextProps.order[0] === '-';
+      this.curOrder = this.asc ? nextProps.order.slice(1) : nextProps.order;
+    }
+  }
+
   // {{{ handleMainButtonClick()
   handleMainButtonClick(name) {
     let order;
-    if (this.props.order.getIn([0, 'key']) === name) {
-      order = this.props.order.updateIn([0, 'asc'], (asc) => !asc);
+    if (this.curOrder === name) {
+      order = this.asc ? this.curOrder : `-${this.curOrder}`;
+      this.asc = !this.asc;
     } else {
-      order = fromJS([{ key: name, asc: false }]);
+      order = `-${name}`;
     }
     this.props.onOrderChange(order);
   }
@@ -50,14 +57,14 @@ class FilterVarSetPanel extends React.Component {
 
   // {{{ handleSortButtonClick()
   handleSortButtonClick() {
-    this.props.onOrderChange(
-      this.props.order.updateIn([0, 'asc'], (asc) => !asc)
-    );
+    this.props.onOrderChange(this.asc ? this.curOrder : `-${this.curOrder}`);
+    this.asc = !this.asc;
   }
   // }}}
 
   render() {
-    const curOrder = this.props.order.get(0).toJS();
+    this.asc = this.props.order[0] === '-';
+    this.curOrder = this.asc ? this.props.order.slice(1) : this.props.order;
     return (
       <RoundedPanel>
         <Flex justify="center">
@@ -67,8 +74,8 @@ class FilterVarSetPanel extends React.Component {
                 <Box mr={1} key={name}>
                   <FilterButton
                     name={name}
-                    index={curOrder.key === name ? 0 : undefined}
-                    asc={curOrder.key === name ? curOrder.asc : undefined}
+                    index={this.curOrder === name ? 0 : undefined}
+                    asc={this.curOrder === name ? this.asc : undefined}
                     onMainButtonClick={this.handleMainButtonClick}
                     onSortButtonClick={this.handleSortButtonClick}
                   />
@@ -96,7 +103,7 @@ class FilterVarSetPanel extends React.Component {
 FilterVarSetPanel.propTypes = {
   filterList: PropTypes.array.isRequired,
   orderList: PropTypes.array.isRequired,
-  order: PropTypes.object.isRequired,
+  order: PropTypes.string.isRequired,
   onOrderChange: PropTypes.func.isRequired,
   onFilterChange: PropTypes.func.isRequired,
 };
