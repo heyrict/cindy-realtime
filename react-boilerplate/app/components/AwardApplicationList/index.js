@@ -76,6 +76,7 @@ const withAwardApplicationList = graphql(AwardApplicationListQuery, {
         fetchMore({
           query: AwardApplicationListQuery,
           variables: {
+            count: 10,
             ...ownProps.variables,
             cursor: allAwardApplications.pageInfo.endCursor,
           },

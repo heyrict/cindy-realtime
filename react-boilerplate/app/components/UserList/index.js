@@ -47,7 +47,7 @@ UserList.propTypes = {
 };
 
 const withUserList = graphql(UserListQuery, {
-  options: ({ variables }) => ({ variables: { ...variables, count: 10 } }),
+  options: ({ variables }) => ({ variables: { count: 10, ...variables } }),
   props({ data, ownProps }) {
     const { loading, allUsers, fetchMore, refetch } = data;
     return {
@@ -59,8 +59,8 @@ const withUserList = graphql(UserListQuery, {
         fetchMore({
           query: UserListQuery,
           variables: {
-            ...ownProps.variables,
             count: 10,
+            ...ownProps.variables,
             cursor: allUsers.pageInfo.endCursor,
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {

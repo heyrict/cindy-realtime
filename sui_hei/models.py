@@ -13,6 +13,7 @@ class Award(models.Model):
     name = models.CharField(max_length=255, null=False)
     groupName = models.CharField(max_length=255, null=False, default="default")
     description = models.TextField(default="")
+    requisition = models.TextField(default="")
 
     class Meta:
         verbose_name = _("Award")

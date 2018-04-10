@@ -1,6 +1,12 @@
-from modeltranslation.translator import register, TranslationOptions
+from modeltranslation.translator import TranslationOptions, register
+
 from .models import Award
+
 
 @register(Award)
 class AwardTranslationOptions(TranslationOptions):
-    fields = ('name', 'description', )
+    fields = (
+        'name',
+        'description',
+        'requisition',
+    )

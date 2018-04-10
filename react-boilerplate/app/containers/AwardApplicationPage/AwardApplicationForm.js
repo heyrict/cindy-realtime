@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { line2md } from 'common';
 import { FormattedMessage, intlShape } from 'react-intl';
 import { Flex, Box } from 'rebass';
 import Select from 'react-select';
@@ -28,9 +29,10 @@ class AwardApplicationForm extends React.Component {
       awardId: null,
       comment: '',
     };
-    this.setAward = ({ value: awardId, description }) => {
+    this.setAward = ({ value: awardId, description, requisition }) => {
       this.setState({ awardId });
       this.currentDescription = description;
+      this.currentRequisition = requisition;
     };
     this.handleCommentChange = (e) => {
       this.setState({ comment: e.target.value });
@@ -99,14 +101,31 @@ class AwardApplicationForm extends React.Component {
                     value: edge.node.id,
                     label: edge.node.name,
                     description: edge.node.description,
+                    requisition: edge.node.requisition,
                   }))}
                 />
               )}
             </FormattedMessage>
           </Box>
-          <Box w={1} style={{ minHeight: '50px' }}>
-            <FormattedMessage {...messages.awardDescription} />:{' '}
-            {this.currentDescription}
+          <Box w={1} mb={1} style={{ minHeight: '50px' }}>
+            <b>
+              <FormattedMessage {...messages.awardDescription} />:
+            </b>{' '}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: line2md(this.currentDescription || ''),
+              }}
+            />
+          </Box>
+          <Box w={1} mb={1} style={{ minHeight: '50px' }}>
+            <b>
+              <FormattedMessage {...messages.awardRequisition} />:
+            </b>{' '}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: line2md(this.currentRequisition || ''),
+              }}
+            />
           </Box>
           <Box w={1}>
             <FormattedMessage {...messages.commentPlaceholder}>
