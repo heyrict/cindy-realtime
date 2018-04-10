@@ -232,7 +232,9 @@ export class PuzzleShowPage extends React.Component {
         {U === P.user.rowid && (
           <PuzzleModifyBox puzzle={P} puzzleId={puzzleId} />
         )}
-        <GoogleAd {...googleAdInfo.textAd} />
+        <Constrained>
+          <GoogleAd {...googleAdInfo.textAd} />
+        </Constrained>
         <div
           ref={(adref) => {
             this.adref = adref;
