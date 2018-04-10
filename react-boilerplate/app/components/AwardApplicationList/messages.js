@@ -30,6 +30,18 @@ export default defineMessages({
     id: 'app.components.AwardApplicationList.comment',
     defaultMessage: 'Comment',
   },
+  reason: {
+    id: 'app.components.AwardApplicationList.reason',
+    defaultMessage: 'Reason',
+  },
+  reasonHint: {
+    id: 'app.components.AwardApplicationList.reasonHint',
+    defaultMessage: 'Please add reason here',
+  },
+  status: {
+    id: 'app.components.AwardApplicationList.status',
+    defaultMessage: 'Status',
+  },
   WAITING: {
     id: 'app.components.AwardApplicationList.WAITING',
     defaultMessage: 'WAITING',

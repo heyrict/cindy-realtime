@@ -1,14 +1,16 @@
+/**
+ *
+ * UnhandledTextarea
+ *
+ */
+
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
-import { Flex } from 'rebass';
-import { ButtonOutline, AutoResizeTextarea } from 'style-store';
+import { AutoResizeTextarea } from 'style-store';
 
 import { OPTIONS_SEND } from 'containers/Settings/constants';
 
-import messages from './messages';
-
-class ChatInput extends React.Component {
+class UnhandledTextarea extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,6 +20,7 @@ class ChatInput extends React.Component {
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleChange = (e) => this.setState({ content: e.target.value });
     this.setContent = (content) => this.setState({ content });
+    this.getContent = () => this.state.content;
   }
 
   handleKeyPress(e) {
@@ -42,36 +45,36 @@ class ChatInput extends React.Component {
   }
 
   render() {
+    const {
+      component: Component,
+      sendPolicy,
+      onSubmit,
+      style,
+      ...others
+    } = this.props;
     return (
-      <Flex mx={1} w={1}>
-        <AutoResizeTextarea
-          style={{ borderRadius: '10px 0 0 10px', minHeight: '36px' }}
-          value={this.state.content}
-          onChange={this.handleChange}
-          onKeyUp={this.handleKeyPress}
-          onHeightChange={this.props.onHeightChange}
-          disabled={this.props.disabled}
-          minRows={1}
-          maxRows={5}
-        />
-        <ButtonOutline
-          onClick={() => this.props.onSubmit(this.state.content)}
-          p={10}
-          disabled={this.props.disabled}
-          style={{ wordBreak: 'keep-all', borderRadius: '0 10px 10px 0' }}
-        >
-          <FormattedMessage {...messages.send} />
-        </ButtonOutline>
-      </Flex>
+      <Component
+        style={{ borderRadius: '10px 0 0 10px', minHeight: '36px', ...style }}
+        value={this.state.content}
+        onChange={this.handleChange}
+        onKeyUp={this.handleKeyPress}
+        {...others}
+      />
     );
   }
 }
 
-ChatInput.propTypes = {
+UnhandledTextarea.propTypes = {
+  component: PropTypes.any.isRequired,
   sendPolicy: PropTypes.string.isRequired,
-  disabled: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  onHeightChange: PropTypes.func.isRequired,
+  style: PropTypes.object,
 };
 
-export default ChatInput;
+UnhandledTextarea.defaultProps = {
+  component: AutoResizeTextarea,
+  sendPolicy: OPTIONS_SEND.NONE,
+  onSubmit: () => {},
+};
+
+export default UnhandledTextarea;

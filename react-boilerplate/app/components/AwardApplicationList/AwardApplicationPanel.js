@@ -5,13 +5,20 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { nAlert } from 'containers/Notifier/actions';
-import { Flex, Box } from 'rebass';
-import { RoundedPanel, Button, ButtonOutline, ImgXs } from 'style-store';
 
 import { graphql } from 'react-apollo';
 import UpdateAwardApplication from 'graphql/UpdateAwardApplicationMutation';
 import AwardApplicationFragment from 'graphql/AwardApplication';
 
+import { Flex, Box } from 'rebass';
+import {
+  RoundedPanel,
+  Button,
+  ButtonOutline,
+  ImgXs,
+  Textarea,
+} from 'style-store';
+import UnhandledTextarea from 'components/UnhandledTextarea';
 import UserLabel from 'components/UserLabel';
 import UserAwardPopover from 'components/UserAwardPopover';
 import switcher from 'images/switcher.svg';
@@ -42,8 +49,7 @@ class AwardApplicationPanel extends React.Component {
             ? { mode: this.MODE.REVIEW }
             : { mode: this.MODE.DISPLAY }
       );
-    this.handleAccept = this.handleAccept.bind(this);
-    this.handleDeny = this.handleDeny.bind(this);
+    this.handleReview = this.handleReview.bind(this);
   }
   componentWillReceiveProps(nextProps) {
     if (
@@ -54,17 +60,18 @@ class AwardApplicationPanel extends React.Component {
       this.setState({ mode: this.MODE.DISPLAY });
     }
   }
-  handleAccept() {
+  handleReview(status) {
     const id = this.props.node.id;
-    const ACCEPTED = this.STATUS.ACCEPTED;
     const currentUser = this.props.currentUser;
+    const reason = this.reasonInput.getContent().trim();
     const now = new Date();
     this.props
       .mutate({
         variables: {
           input: {
             awardApplicationId: this.props.node.id,
-            status: this.STATUS.ACCEPTED,
+            status,
+            reason,
           },
         },
         update(proxy) {
@@ -79,49 +86,8 @@ class AwardApplicationPanel extends React.Component {
             fragmentName: 'AwardApplication',
             data: {
               ...data,
-              status: ACCEPTED,
-              reviewer: currentUser,
-              reviewed: now.toISOString(),
-            },
-          });
-        },
-        optimisticResponse: {
-          updateAwardApplication: {
-            __typename: 'UpdateAwardApplicationPayload',
-            clientMutationId: null,
-          },
-        },
-      })
-      .catch((error) => {
-        this.props.alert(error.message);
-      });
-  }
-  handleDeny() {
-    const id = this.props.node.id;
-    const DENIED = this.STATUS.DENIED;
-    const currentUser = this.props.currentUser;
-    const now = new Date();
-    this.props
-      .mutate({
-        variables: {
-          input: {
-            awardApplicationId: this.props.node.id,
-            status: this.STATUS.DENIED,
-          },
-        },
-        update(proxy) {
-          const data = proxy.readFragment({
-            id,
-            fragment: AwardApplicationFragment,
-            fragmentName: 'AwardApplication',
-          });
-          proxy.writeFragment({
-            id,
-            fragment: AwardApplicationFragment,
-            fragmentName: 'AwardApplication',
-            data: {
-              ...data,
-              status: DENIED,
+              status,
+              reason,
               reviewer: currentUser,
               reviewed: now.toISOString(),
             },
@@ -140,6 +106,19 @@ class AwardApplicationPanel extends React.Component {
   }
   render() {
     const node = this.props.node;
+    const statusText = (
+      <span>
+        {node.status === this.STATUS.WAITING && (
+          <FormattedMessage {...messages.WAITING} />
+        )}
+        {node.status === this.STATUS.ACCEPTED && (
+          <FormattedMessage {...messages.ACCEPTED} />
+        )}
+        {node.status === this.STATUS.DENIED && (
+          <FormattedMessage {...messages.DENIED} />
+        )}
+      </span>
+    );
     return (
       <RoundedPanel wrap p={1} m={1}>
         <Flex>
@@ -176,17 +155,7 @@ class AwardApplicationPanel extends React.Component {
                     </div>
                   )}
                 </Box>
-                <Box w={[1, 1 / 3]}>
-                  {node.status === this.STATUS.WAITING && (
-                    <FormattedMessage {...messages.WAITING} />
-                  )}
-                  {node.status === this.STATUS.ACCEPTED && (
-                    <FormattedMessage {...messages.ACCEPTED} />
-                  )}
-                  {node.status === this.STATUS.DENIED && (
-                    <FormattedMessage {...messages.DENIED} />
-                  )}
-                </Box>
+                <Box w={[1, 1 / 3]}>{statusText}</Box>
               </Flex>
             )}
             {this.state.mode === this.MODE.REVIEW && (
@@ -202,22 +171,52 @@ class AwardApplicationPanel extends React.Component {
                       userAward={{ id: node.id, award: node.award }}
                     />
                   </div>
-                  <div>
-                    <FormattedMessage {...messages.comment} />: {node.comment}
-                  </div>
+                  {node.comment && (
+                    <div>
+                      <FormattedMessage {...messages.comment} />: {node.comment}
+                    </div>
+                  )}
+                  {
+                    <div>
+                      <FormattedMessage {...messages.status} />: {statusText}
+                    </div>
+                  }
+                  {node.reason && (
+                    <div>
+                      <FormattedMessage {...messages.reason} />: {node.reason}
+                    </div>
+                  )}
                 </Box>
                 {node.status === this.STATUS.WAITING &&
                   this.props.currentUser &&
                   this.props.currentUser.canReviewAwardApplication &&
                   this.props.currentUser.id !== node.applier.id && (
-                    <Flex w={1}>
+                    <Flex wrap w={1}>
+                      <Box w={1}>
+                        <UnhandledTextarea
+                          ref={(ins) => (this.reasonInput = ins)}
+                          component={Textarea}
+                          minRows={3}
+                          maxRows={5}
+                        />
+                      </Box>
                       <Box w={1 / 2}>
-                        <ButtonOutline w={1} p={1} onClick={this.handleAccept}>
+                        <ButtonOutline
+                          w={1}
+                          p={1}
+                          onClick={() =>
+                            this.handleReview(this.STATUS.ACCEPTED)
+                          }
+                        >
                           <FormattedMessage {...messages.accept} />
                         </ButtonOutline>
                       </Box>
                       <Box w={1 / 2}>
-                        <ButtonOutline w={1} p={1} onClick={this.handleDeny}>
+                        <ButtonOutline
+                          w={1}
+                          p={1}
+                          onClick={() => this.handleReview(this.STATUS.DENIED)}
+                        >
                           <FormattedMessage {...messages.deny} />
                         </ButtonOutline>
                       </Box>

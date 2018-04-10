@@ -1042,6 +1042,7 @@ class UpdateAwardApplication(relay.ClientIDMutation):
     class Input:
         awardApplicationId = graphene.String()
         status = graphene.Int()
+        reason = graphene.String()
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -1053,6 +1054,7 @@ class UpdateAwardApplication(relay.ClientIDMutation):
         nodeName, awardApplicationId = from_global_id(
             input['awardApplicationId'])
         status = input.get('status')
+        reason = input.get('reason')
 
         assert nodeName == 'AwardApplicationNode'
 
@@ -1065,6 +1067,7 @@ class UpdateAwardApplication(relay.ClientIDMutation):
 
             application.status = status
             application.reviewer = user
+            application.reason = reason
             application.reviewed = timezone.now()
             if status == 1:
                 UserAward.objects.get_or_create(
