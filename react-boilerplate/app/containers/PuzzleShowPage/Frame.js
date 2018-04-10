@@ -36,7 +36,7 @@ const ContentBox = styled(Box)`
 
 function Frame(props) {
   return (
-    <Constrained mt={20} mb={20}>
+    <Constrained mt={2} mb={2}>
       <PuzzleFrame>
         <ContentBox
           pl={10}
