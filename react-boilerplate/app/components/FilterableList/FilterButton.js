@@ -22,13 +22,18 @@ const IndexSpan = styled.span`
 
 function FilterButton(props) {
   const { name, index, asc } = props;
+  const namestr = messages[name] ? (
+    <FormattedMessage {...messages[name]} />
+  ) : (
+    name
+  );
 
   return (
     <div>
       <StyledButton onClick={() => props.onMainButtonClick(name)}>
         {index !== undefined &&
           index !== null && <IndexSpan>{index + 1}</IndexSpan>}
-        <FormattedMessage {...messages[name]} />
+        {namestr}
       </StyledButton>
       {props.asc !== null &&
         props.asc !== undefined && (

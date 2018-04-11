@@ -33,6 +33,7 @@ function UserListPage(props, context) {
         component={UserList}
         order="-date_joined"
         orderList={['date_joined']}
+        filterList={['nickname__contains']}
       />
     </Constrained>
   );

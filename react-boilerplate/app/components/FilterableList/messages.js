@@ -58,6 +58,10 @@ export default defineMessages({
     id: 'app.containers.FilterableList.solution__contains',
     defaultMessage: 'Solution',
   },
+  nickname__contains: {
+    id: 'app.containers.FilterableList.nickname__contains',
+    defaultMessage: 'Nickname',
+  },
   search: {
     id: 'app.containers.FilterableList.search',
     defaultMessage: 'Search',

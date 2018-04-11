@@ -92,7 +92,10 @@ def resolveOrderBy(qs, order_by):
 class UserNode(DjangoObjectType):
     class Meta:
         model = User
-        filter_fields = ["username", "nickname"]
+        filter_fields = {
+            "username": ["exact"],
+            "nickname": ["exact", "contains"],
+        }
         interfaces = (relay.Node, )
 
     rowid = graphene.Int()
