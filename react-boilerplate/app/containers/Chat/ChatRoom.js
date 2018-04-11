@@ -45,10 +45,30 @@ class ChatRoom extends React.Component {
     this.handleHeightChange = (h, inst) =>
       this.setState({ taHeight: inst._rootDOMNode.clientHeight || h });
     this.handleDPHeightChange = (h) => this.setState({ dpHeight: h });
+    this.scrollToBottom = this.scrollToBottom.bind(this);
   }
 
   componentDidMount() {
     this.props.subscribeChatUpdates();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.allChatmessages) return;
+    if (
+      this.props.allChatmessages.edges.length !==
+      prevProps.allChatmessages.edges.length
+    ) {
+      this.scrollToBottom();
+    }
+  }
+
+  scrollToBottom() {
+    const domrect = this.lastcmref.getBoundingClientRect();
+    const windowHeight =
+      window.innerHeight || document.documentElement.clientHeight;
+    if (domrect.top <= windowHeight && domrect.top > 0) {
+      this.btmref.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   handleSubmit(content) {
@@ -133,10 +153,21 @@ class ChatRoom extends React.Component {
             )
           )}
           {this.props.allChatmessages
-            ? this.props.allChatmessages.edges.map((edge) => (
-                <ChatMessage key={edge.node.id} {...edge.node} />
-              ))
+            ? this.props.allChatmessages.edges.map((edge, i) => {
+                if (i + 1 === this.props.allChatmessages.edges.length) {
+                  return (
+                    <div
+                      ref={(lastcm) => (this.lastcmref = lastcm)}
+                      key={edge.node.id}
+                    >
+                      <ChatMessage {...edge.node} />
+                    </div>
+                  );
+                }
+                return <ChatMessage key={edge.node.id} {...edge.node} />;
+              })
             : null}
+          <div ref={(btm) => (this.btmref = btm)} />
         </MessageWrapper>
         <ChatInput
           ref={(ins) => (this.input = ins)}
