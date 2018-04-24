@@ -121,3 +121,6 @@ fragmentTypes.json
 
 # security
 security.py
+
+# Database dumps (backup)
+/*.json

@@ -53,7 +53,10 @@ class ChatRoom extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.allChatmessages) return;
+    if (!prevProps.allChatmessages && this.props.allChatmessages) {
+      this.scrollToBottom();
+    }
+
     if (
       this.props.allChatmessages.edges.length !==
       prevProps.allChatmessages.edges.length
