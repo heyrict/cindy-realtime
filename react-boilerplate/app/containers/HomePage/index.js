@@ -29,9 +29,12 @@ function HomePage(props, context) {
   let month;
   year = now.getYear() + 1900;
   month = now.getMonth() + 1;
-  if (month === 1) {
+  const date = now.getDate();
+  if (month === 1 && date <= 15) {
     year -= 1;
     month = 12;
+  } else if (date <= 15) {
+    month -= 1;
   }
   return (
     <PurpleBg>

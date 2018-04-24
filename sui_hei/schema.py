@@ -19,8 +19,6 @@ from graphql_relay import from_global_id, to_global_id
 from rx import Observable, Observer
 from six import get_unbound_function
 
-from awards import judgers
-
 from .models import *
 from .subscription import Subscription as SubscriptionType
 
@@ -527,8 +525,7 @@ class CreatePuzzle(relay.ClientIDMutation):
             existingChatRooms.delete()
         ChatRoom.objects.create(name=crName, user=user)
 
-        # Judge soup count and grant awards
-        judgers["soup"].execute(user)
+        # TODO?: Judge soup count and grant awards
 
         return CreatePuzzle(puzzle=puzzle)
 

@@ -60,30 +60,6 @@ def mark_puzzle_as_dazed(recent=14):
     return message
 
 
-def grant_awards_to_users(recent=None):
-    message = ""
-
-    if recent:
-        users = User.objects.filter(
-            last_login__gt=timezone.now() - recent).all()
-    else:
-        users = User.objects.all()
-
-    for key, judger in judgers.items():
-        returned = judger.execAll(users).strip()
-        if returned:
-            message += "### Award Group: **" + key + "**\n"
-            message += '- ' + '\n- '.join(returned.split('\n')) + '\n'
-
-    for key, granter in granters.items():
-        returned = granter().strip()
-        if returned:
-            message += "### Award Group: **" + key + "**\n"
-            message += '- ' + '\n- '.join(returned.split('\n')) + '\n'
-
-    return message
-
-
 if __name__ == "__main__":
     # delete old minichat chat messages
     clean_recent_minichat(200)
@@ -93,11 +69,6 @@ if __name__ == "__main__":
     #if returned:
     #    daily_message += "## Dazed Soup :coffee:\n" + '- ' + '\n- '.join(
     #        returned.split('\n')) + '\n'
-
-    # grant awards to users
-    #returned = grant_awards_to_users(recent=timedelta(days=3))
-    #if returned:
-    #    daily_message += "## Awards :crown:\n" + returned + '\n'
 
     # Don't feed to Bot in favor of notification.
     #feedBot(daily_message)
