@@ -27,7 +27,7 @@ const LightBg = styled.div`
   border-radius: 10px;
 `;
 
-function PuzzleDescribeList(props) {
+export function PuzzleDescribeList(props) {
   if (props.loading || !props.allPuzzles) {
     return <LoadingDots py={50} size={8} />;
   }

@@ -9,6 +9,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
+import { push } from 'react-router-redux';
+import { withLocale } from 'common';
 import { nAlert } from 'containers/Notifier/actions';
 
 import { Button, Form, FormControl } from 'react-bootstrap';
@@ -66,7 +68,7 @@ export class PuzzleAddForm extends React.Component {
       })
       .then(({ data }) => {
         const puzzleId = data.createPuzzle.puzzle.rowid;
-        this.props.history.push(`/puzzle/show/${puzzleId}`);
+        this.props.goto(withLocale(`/puzzle/show/${puzzleId}`));
       })
       .catch((error) => {
         this.props.alert(error.message);
@@ -160,13 +162,14 @@ export class PuzzleAddForm extends React.Component {
 }
 
 PuzzleAddForm.propTypes = {
-  history: PropTypes.any,
   mutate: PropTypes.func.isRequired,
   alert: PropTypes.func.isRequired,
+  goto: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
+  goto: (url) => dispatch(push(url)),
 });
 
 const withConnect = connect(null, mapDispatchToProps);
