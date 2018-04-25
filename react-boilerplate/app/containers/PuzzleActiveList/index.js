@@ -21,7 +21,7 @@ import DialogueCountSubscription from 'graphql/DialogueCountSubscription';
 import PuzzlePanel from 'components/PuzzlePanel';
 import LoadingDots from 'components/LoadingDots';
 
-import { PUZZLE_ADDED } from 'containers/PuzzleActiveList/constants';
+import { PUZZLE_ADDED } from './constants';
 
 class PuzzleActiveList extends React.Component {
   componentWillMount() {

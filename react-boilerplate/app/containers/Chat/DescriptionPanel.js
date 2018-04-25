@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import bootbox from 'bootbox';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import {
@@ -11,15 +10,17 @@ import {
   Textarea,
 } from 'style-store';
 import { Flex, Box } from 'rebass';
-import { line2md, from_global_id as f } from 'common';
+import { line2md, from_global_id as f, to_global_id as t } from 'common';
 import { FormattedMessage } from 'react-intl';
 import { graphql } from 'react-apollo';
 import { UserLabel } from 'components/UserLabel';
 import dialogueMessages from 'containers/Dialogue/messages';
+import { nAlert } from 'containers/Notifier/actions';
 import tick from 'images/tick.svg';
 import cross from 'images/cross.svg';
 import UpdateChatroomMutation from 'graphql/UpdateChatroomMutation';
 import ChatRoomQuery from 'graphql/ChatRoomQuery';
+
 import Wrapper from './Wrapper';
 import AddToFavBtn from './AddToFavBtn';
 import DeleteFromFavBtn from './DeleteFromFavBtn';
@@ -105,7 +106,7 @@ class DescriptionPanel extends React.Component {
       })
       .catch((error) => {
         this.setState({ loading: false });
-        bootbox.alert(error.message);
+        this.props.alert(error.message);
       });
   }
   render() {
@@ -136,9 +137,15 @@ class DescriptionPanel extends React.Component {
                 </Box>
                 <Box ml="auto">
                   {inFavorite ? (
-                    <DeleteFromFavBtn chatroomName={this.props.name} />
+                    <DeleteFromFavBtn
+                      chatroomName={this.props.name}
+                      userId={t('UserNode', this.props.currentUserId)}
+                    />
                   ) : (
-                    <AddToFavBtn chatroomName={this.props.name} />
+                    <AddToFavBtn
+                      chatroomName={this.props.name}
+                      userId={t('UserNode', this.props.currentUserId)}
+                    />
                   )}
                 </Box>
               </Flex>
@@ -193,6 +200,7 @@ class DescriptionPanel extends React.Component {
 
 DescriptionPanel.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
   mutate: PropTypes.func.isRequired,
   name: PropTypes.string,
   channel: PropTypes.object,
@@ -206,6 +214,7 @@ DescriptionPanel.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
   dispatch,
+  alert: (message) => dispatch(nAlert(message)),
 });
 
 const withConnect = connect(null, mapDispatchToProps);

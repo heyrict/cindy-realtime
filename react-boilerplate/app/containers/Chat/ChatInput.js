@@ -50,18 +50,14 @@ class ChatInput extends React.Component {
           onChange={this.handleChange}
           onKeyUp={this.handleKeyPress}
           onHeightChange={this.props.onHeightChange}
-          disabled={
-            this.props.disabled
-          }
+          disabled={this.props.disabled}
           minRows={1}
           maxRows={5}
         />
         <ButtonOutline
           onClick={() => this.props.onSubmit(this.state.content)}
           p={10}
-          disabled={
-            this.props.disabled
-          }
+          disabled={this.props.disabled}
           style={{ wordBreak: 'keep-all', borderRadius: '0 10px 10px 0' }}
         >
           <FormattedMessage {...messages.send} />

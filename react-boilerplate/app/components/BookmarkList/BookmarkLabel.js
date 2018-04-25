@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import bootbox from 'bootbox';
 import { FormattedMessage, intlShape } from 'react-intl';
+import { nAlert } from 'containers/Notifier/actions';
 import { ImgXs, EditButton, Input } from 'style-store';
 import tag from 'images/tag.svg';
 import tick from 'images/tick.svg';
@@ -37,7 +39,7 @@ class BookmarkLabel extends React.PureComponent {
   handleSubmit() {
     const v = this.state.value;
     if (!(v >= 0 && v <= 100)) {
-      bootbox.alert('Value must be in [0, 100]');
+      this.props.alert('Value must be in [0, 100]');
       return;
     }
     this.props
@@ -54,10 +56,7 @@ class BookmarkLabel extends React.PureComponent {
         this.setState({ editMode: false });
       })
       .catch((error) => {
-        bootbox.alert({
-          title: 'Error',
-          message: error.message,
-        });
+        this.props.alert(error.message);
       });
   }
   handleDelete() {
@@ -77,10 +76,7 @@ class BookmarkLabel extends React.PureComponent {
           this.setState({ editMode: false });
         })
         .catch((error) => {
-          bootbox.alert({
-            title: 'Error',
-            message: error.message,
-          });
+          this.props.alert(error.message);
         });
     });
   }
@@ -145,7 +141,14 @@ BookmarkLabel.propTypes = {
   bookmarkId: PropTypes.string.isRequired,
   mutateBookmarkDelete: PropTypes.func.isRequired,
   mutateBookmarkUpdate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+});
+
+const withConnect = connect(null, mapDispatchToProps);
 
 const withUpdateBookmarkMutation = graphql(UpdateBookmarkMutation, {
   name: 'mutateBookmarkUpdate',
@@ -155,6 +158,8 @@ const withDeleteBookmarkMutation = graphql(DeleteBookmarkMutation, {
   name: 'mutateBookmarkDelete',
 });
 
-export default compose(withUpdateBookmarkMutation, withDeleteBookmarkMutation)(
-  BookmarkLabel
-);
+export default compose(
+  withUpdateBookmarkMutation,
+  withDeleteBookmarkMutation,
+  withConnect
+)(BookmarkLabel);

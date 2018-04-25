@@ -7,8 +7,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import { getQueryStr, setQueryStr } from 'common';
+import { makeSelectLocation } from 'containers/App/selectors';
+
 import { Box, Flex } from 'rebass';
 import { ButtonOutline } from 'style-store';
+import { Link } from 'react-router-dom';
 import Constrained from 'components/Constrained';
 
 import { FormattedMessage } from 'react-intl';
@@ -53,6 +60,13 @@ const SqSubmit = styled.button`
 class PaginatorBar extends React.Component {
   constructor(props) {
     super(props);
+    this.confinePage = (page, maxNum, minNum) => {
+      let confined = page;
+      if (page < minNum) confined = minNum;
+      if (page > maxNum) confined = maxNum;
+      return confined;
+    };
+    this.query = getQueryStr(props.location.search);
     this.state = {
       value: props.currentPage || 1,
     };
@@ -68,29 +82,38 @@ class PaginatorBar extends React.Component {
           this.setState({ value: props.currentPage });
           return;
         }
-        if (nextPage < 1) nextPage = 1;
-        if (nextPage > props.numPages) nextPage = props.numPages;
+        nextPage = this.confinePage(nextPage, props.numPages, 1);
       } else {
-        nextPage = p;
-        if (nextPage < 1) nextPage = 1;
-        if (nextPage > props.numPages) nextPage = props.numPages;
+        nextPage = this.confinePage(p, props.numPages, 1);
         this.setState({ value: nextPage });
       }
 
       props.changePage(nextPage);
     };
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentPage !== this.props.currentPage) {
+      this.setState({ value: nextProps.currentPage });
+    }
+  }
+
   render() {
     return (
       <Constrained level={4}>
         <Flex align="center">
           <Box mr="auto">
-            <SqBtn
-              onClick={() => this.handleSubmit(this.props.currentPage - 1)}
-              disabled={this.props.currentPage === 1}
+            <Link
+              rel="prev"
+              to={setQueryStr({
+                ...this.query,
+                page: this.confinePage(this.props.currentPage - 1),
+              })}
             >
-              <FormattedMessage {...messages.prev} />
-            </SqBtn>
+              <SqBtn disabled={this.props.currentPage === 1}>
+                <FormattedMessage {...messages.prev} />
+              </SqBtn>
+            </Link>
           </Box>
           <Box mx="auto">
             <SqInput
@@ -103,12 +126,17 @@ class PaginatorBar extends React.Component {
             </SqSubmit>
           </Box>
           <Box ml="auto">
-            <SqBtn
-              onClick={() => this.handleSubmit(this.props.currentPage + 1)}
-              disabled={this.props.currentPage === this.props.numPages}
+            <Link
+              rel="next"
+              to={setQueryStr({
+                ...this.query,
+                page: this.confinePage(this.props.currentPage + 1),
+              })}
             >
-              <FormattedMessage {...messages.next} />
-            </SqBtn>
+              <SqBtn disabled={this.props.currentPage === this.props.numPages}>
+                <FormattedMessage {...messages.next} />
+              </SqBtn>
+            </Link>
           </Box>
         </Flex>
       </Constrained>
@@ -116,10 +144,19 @@ class PaginatorBar extends React.Component {
   }
 }
 
+const mapStateToProps = createStructuredSelector({
+  location: makeSelectLocation(),
+});
+
+const withConnect = connect(mapStateToProps);
+
 PaginatorBar.propTypes = {
   changePage: PropTypes.func.isRequired,
   currentPage: PropTypes.number.isRequired,
   numPages: PropTypes.number.isRequired,
+  location: PropTypes.shape({
+    search: PropTypes.string.isRequired,
+  }),
 };
 
-export default PaginatorBar;
+export default compose(withConnect)(PaginatorBar);

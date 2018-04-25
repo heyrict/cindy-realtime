@@ -21,13 +21,18 @@ from django.utils import timezone
 from django.views.decorators.http import last_modified
 from django.views.i18n import JavaScriptCatalog
 
+from sui_hei.urls import contentpatterns as sui_hei_patterns
+
 last_modified_date = timezone.now()
+
+jstranslation_patterns = i18n_patterns(
+    path(
+        'jsi18n',
+        last_modified(lambda req, **kw: last_modified_date)(
+            JavaScriptCatalog.as_view()),
+        name='jsi18n'))
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('sui_hei.urls')),
-] + i18n_patterns(
-    path('jsi18n',
-        last_modified(lambda req, **kw: last_modified_date)
-        (JavaScriptCatalog.as_view()),
-        name='jsi18n'))
+] + jstranslation_patterns + sui_hei_patterns

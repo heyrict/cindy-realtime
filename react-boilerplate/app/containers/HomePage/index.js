@@ -24,15 +24,24 @@ const PurpleBg = styled.div`
 
 function HomePage(props, context) {
   const _ = context.intl.formatMessage;
-  const now = new Date();
+  const now = new Date(Date.now());
+  const dateOfReflesh = 15;
   let year;
   let month;
-  year = now.getYear() + 1900;
-  month = now.getMonth() + 1;
-  if (month === 1) {
-    year -= 1;
-    month = 12;
+  year = now.getYear() + 1900;  // Current Year
+  month = now.getMonth() + 1;  // Current Month (1-12)
+  const date = now.getDate();  // Current Date (1-31)
+
+  if (date <= dateOfReflesh) {
+    month -= 2;
+  } else {
+    month -= 1;
   }
+  if (month <= 0) {
+    month += 12;
+    year -= 1;
+  }
+
   return (
     <PurpleBg>
       <Helmet>

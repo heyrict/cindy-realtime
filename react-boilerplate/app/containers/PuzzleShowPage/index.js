@@ -21,13 +21,18 @@ import {
   from_global_id as f,
   to_global_id as t,
   genre_type_dict as genreType,
+  text2desc,
 } from 'common';
 import genreMessages from 'components/TitleLabel/messages';
 import Dialogue from 'containers/Dialogue/Loadable';
-import { Box } from 'rebass';
 import Hint from 'containers/Hint';
 import Constrained from 'components/Constrained';
 import LoadingDots from 'components/LoadingDots';
+import GoogleAd from 'components/GoogleAd';
+import top from 'images/top.svg';
+import bottom from 'images/bottom.svg';
+import { ImgXs as Img } from 'style-store';
+import { googleAdInfo } from 'settings';
 
 import { graphql } from 'react-apollo';
 import PuzzleShowQuery from 'graphql/PuzzleShow';
@@ -53,6 +58,12 @@ export class PuzzleShowPage extends React.Component {
       currentPage: 0,
     };
     this.changePage = (p) => this.setState({ currentPage: p });
+    this.scrollToBottom = () => {
+      this.adref.scrollIntoView({ behavior: 'smooth' });
+    };
+    this.scrollToTop = () => {
+      this.titleref.scrollIntoView({ behavior: 'smooth' });
+    };
   }
   componentDidMount() {
     const puzzleId = t('PuzzleNode', this.props.match.params.id);
@@ -92,37 +103,45 @@ export class PuzzleShowPage extends React.Component {
     });
     dSlices.push(dEdges.length);
 
-    const DialoguePaginationBar =
-      dSlices.length > 1 ? (
-        <Constrained wrap style={{ textAlign: 'center' }}>
-          {dSlices.map((dSlice, i) => (
-            <button
-              style={{
-                borderBottom:
-                  this.state.currentPage === i
-                    ? '3px solid #2075c7'
-                    : undefined,
-              }}
-              key={dSlice}
-              onClick={() => this.changePage(i)}
-            >
-              {numItems * i + 1} - {Math.min(numItems * (i + 1), index)}
-            </button>
-          ))}
-        </Constrained>
-      ) : null;
+    const DialoguePaginationBar = (
+      <Constrained wrap mb={2} style={{ textAlign: 'center' }}>
+        <button onClick={this.scrollToTop}>
+          <Img src={top} alt="Top" />
+        </button>
+        {dSlices.map((dSlice, i) => (
+          <button
+            style={{
+              borderBottom:
+                this.state.currentPage === i ? '3px solid #2075c7' : undefined,
+            }}
+            key={dSlice}
+            onClick={() => this.changePage(i)}
+          >
+            {numItems * i + 1} - {Math.min(numItems * (i + 1), index)}
+          </button>
+        ))}
+        <button onClick={this.scrollToBottom}>
+          <Img src={bottom} alt="Bottom" />
+        </button>
+      </Constrained>
+    );
 
     return (
       <div>
         <Helmet>
           <title>
-            {P ? `Cindy - [${genre}${yami}] ${P.title}` : _(messages.title)}
+            {P ? `[${genre}${yami}] ${P.title} - Cindy` : _(messages.title)}
           </title>
           <meta
             name="description"
-            content={P ? P.content : _(messages.description)}
+            content={P ? text2desc(P.content) : _(messages.description)}
           />
         </Helmet>
+        <div
+          ref={(titleref) => {
+            this.titleref = titleref;
+          }}
+        />
         <Constrained>
           <Title>{`[${genre}${yami}] ${P.title}`}</Title>
         </Constrained>
@@ -221,7 +240,14 @@ export class PuzzleShowPage extends React.Component {
         {U === P.user.rowid && (
           <PuzzleModifyBox puzzle={P} puzzleId={puzzleId} />
         )}
-        <Box py={10} width={1} />
+        <Constrained>
+          <GoogleAd {...googleAdInfo.textAd} />
+        </Constrained>
+        <div
+          ref={(adref) => {
+            this.adref = adref;
+          }}
+        />
       </div>
     );
   }

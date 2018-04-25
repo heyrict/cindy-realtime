@@ -12,9 +12,9 @@
 import MarkdownIt from 'markdown-it';
 import mdEmoji from 'markdown-it-emoji';
 import sanitizeHtml from 'sanitize-html';
-import 'expose-loader?jQuery!expose-loader?$!jquery';
 import moment, * as moments from 'moment';
-import bootstrap from 'bootstrap';
+import { push } from 'react-router-redux';
+import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants';
 
 const md = MarkdownIt({
   html: true,
@@ -51,6 +51,27 @@ function _norm_countdown(string) {
   );
 }
 
+const changeTabularTab = (id) => {
+  const tabContents = document.getElementById(id).parentElement;
+  const navtabContents = document.getElementById(`nav${id}`).parentElement;
+  Array.forEach(tabContents.children, (child) => {
+    if (child.id === id) {
+      child.setAttribute('class', 'tab-pane active');
+    } else {
+      child.setAttribute('class', 'tab-pane');
+    }
+  });
+  Array.forEach(navtabContents.children, (child) => {
+    if (child.id === `nav${id}`) {
+      child.setAttribute('class', 'active');
+    } else {
+      child.removeAttribute('class');
+    }
+  });
+};
+
+window.changeTabularTab = changeTabularTab;
+
 function _norm_tabs(string) {
   var _createID = (text, nmspc) =>
     'tab-' + (nmspc ? nmspc + '-' : '') + hash(text);
@@ -60,10 +81,11 @@ function _norm_tabs(string) {
 <ul class="nav nav-tabs"${namespace ? " id='tabs-" + namespace + "'" : ''}>`;
 
     for (var i in tab_titles) {
+      const newId = _createID(tab_contents[i], namespace);
       returns += `
-<li${i == 0 ? " class='active'" : ''}>
-  <a data-toggle="tab" data-target="#${_createID(tab_contents[i], namespace)}"
-    href="javascript:void(0);">
+<li${i == 0 ? " class='active'" : ''} id="nav${newId}">
+  <a data-toggle="tab" data-target="#${newId}"
+    href="javascript:changeTabularTab('${newId}');">
     ${tab_titles[i]}
   </a>
 </li>`;
@@ -117,18 +139,20 @@ function _norm_tabs(string) {
 
 function StartCountdown(selector) {
   return window.setInterval(function() {
-    $(selector || '.countdownobj').each(function() {
-      var until = moment($(this).attr('until')),
-        now = moment();
-      var diff = until.diff(now, 'milliseconds'),
-        diffdays = until.diff(now, 'days');
-      $(this).html(
-        diff < 0
-          ? `<font color='tomato'>${gettext('Time Out')}</font>`
-          : (diffdays ? diffdays + 'd ' : '') +
-            moment(diff).format('H[h]:mm[m]:ss[s]')
-      );
-    });
+    Array.forEach(
+      document.getElementsByClassName(selector || '.countdownobj'),
+      (countdownobj) => {
+        var until = moment(countdownobj.getAttribute('until')),
+          now = moment();
+        var diff = until.diff(now, 'milliseconds'),
+          diffdays = until.diff(now, 'days');
+        countdownobj.innerHtml =
+          diff < 0
+            ? `<font color='tomato'>${gettext('Time Out')}</font>`
+            : (diffdays ? diffdays + 'd ' : '') +
+              moment(diff).format('H[h]:mm[m]:ss[s]');
+      }
+    );
   }, 1000);
 }
 
@@ -219,6 +243,13 @@ export function text2md(string, safe=true) {
   }
 }
 
+export function text2desc(string) {
+  return sanitizeHtml(md.render(string), {
+    allowedTags: [],
+    allowedAttributes: [],
+  }).substr(0, 250);
+}
+
 export function getCookie(c_name) {
   var c_start, c_end;
   if (document.cookie.length > 0) {
@@ -233,15 +264,43 @@ export function getCookie(c_name) {
   return '';
 }
 
-export function setCookie(c_name, c_value, c_expiry = 0, c_path = '/') {
+export function setCookie(c_name, c_value, c_expiry, c_path = '/') {
   let expiry_str = '';
-  const path_str = `; path='${c_path}'`;
+  const path_str = `;path='${c_path}'`;
   if (c_expiry) {
     let expiry_date = new Date();
-    expiry_date.setTime(expiry_date.getTime + c_expiry * 1000);
-    expiry_str = `; expires=${expiry_date.toUTCString()}`;
+    expiry_date.setTime(expiry_date.getTime() + c_expiry * 1000);
+    expiry_str = `;expires=${expiry_date.toGMTString()}`;
   }
   document.cookie = `${c_name}=${c_value}${expiry_str}${path_str}`;
+}
+
+export function getQueryStr(qs) {
+  if (!qs) return {};
+
+  qs = qs.substring(1);
+  let qsList = qs.split('&');
+  let i;
+  let qObj = {};
+  let p;
+  for (i = 0; i < qsList.length; i += 1) {
+    p = decodeURI(qsList[i]).split('=');
+    qObj[p[0]] = p[1];
+  }
+  return qObj;
+}
+
+export function setQueryStr(qObj) {
+  const query = [];
+  Object.entries(qObj).forEach(
+    (arg) => arg[0] && arg[1] && query.push(arg.join('='))
+  );
+  return '?' + encodeURI(query.join('&'));
+}
+
+export function updateQueryStr(qObj) {
+  qObj = { ...getQueryStr(window.location.search), ...qObj };
+  return setQueryStr(qObj);
 }
 
 export const status_code_dict = {
@@ -263,8 +322,20 @@ export const from_global_id = (id) => {
   try {
     return atob(id).split(':');
   } catch (e) {
-    console.log(e);
+    console.log(e, id);
   }
+};
+
+export const withLocale = (link) => {
+  let locale = window.location.pathname.split('/')[1];
+  if (locale !== 'ja' && locale !== 'en') {
+    locale = DEFAULT_LOCALE;
+  }
+  return `/${locale}${link}`;
+};
+
+export const pushWithLocale = (link) => {
+  return push(withLocale(link));
 };
 
 export const to_global_id = (className, rid) => btoa(`${className}:${rid}`);
@@ -275,4 +346,6 @@ export default {
   text2md,
   line2md,
   StartCountdown,
+  getQueryStr,
+  setQueryStr,
 };

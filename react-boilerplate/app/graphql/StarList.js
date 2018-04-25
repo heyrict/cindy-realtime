@@ -2,9 +2,24 @@ import gql from 'graphql-tag';
 import PuzzlePanel from './PuzzlePanel';
 
 export const StarList = gql`
-  query StarList($count: Int, $cursor: String, $orderBy: [String], $user: ID) {
-    allStars(first: $count, after: $cursor, orderBy: $orderBy, user: $user)
-      @connection(key: "StarNode_allStars", filter: ["orderBy", "user"]) {
+  query StarList(
+    $offset: Int
+    $limit: Int
+    $orderBy: [String]
+    $user: ID
+    $puzzle: ID
+  ) {
+    allStars(
+      offset: $offset
+      limit: $limit
+      orderBy: $orderBy
+      user: $user
+      puzzle: $puzzle
+    )
+      @connection(
+        key: "StarNode_allStars"
+        filter: ["orderBy", "user", "offset", "puzzle"]
+      ) {
       edges {
         node {
           id
@@ -14,10 +29,7 @@ export const StarList = gql`
           }
         }
       }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
+      totalCount
     }
   }
   ${PuzzlePanel}

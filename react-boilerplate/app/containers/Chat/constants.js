@@ -4,8 +4,6 @@
  *
  */
 
-import { componentsUserFragment } from 'containers/PuzzleActiveList/constants';
-
 export const defaultChannel = (path) => {
   const match = path.match('/puzzle/show/([0-9]+)');
   if (match) return `puzzle-${match[1]}`;
@@ -55,87 +53,3 @@ export const ADD_FAVCHAN = 'app/Chat/ADD_FAVCHAN';
 export const REMOVE_FAVCHAN = 'app/Chat/REMOVE_FAVCHAN';
 
 export const PublicChannels = ['lobby', 'sp', 'yokoku'];
-
-// {{{ const chatmessageFragment
-const chatmessageFragment = `
-  fragment components_chatmessage on ChatMessageNode {
-    id
-    content
-    created
-    editTimes
-    user {
-      ...components_user
-    }
-  }
-  ${componentsUserFragment}
-`;
-// }}}
-
-// {{{ const chatmessageQuery
-export const chatmessageQuery = `
-  query($chatroom: ID!) {
-    allChatmessages(chatroom: $chatroom, last: 10, orderBy: "id") {
-      pageInfo {
-        startCursor
-        hasPreviousPage
-      }
-      edges {
-        node {
-          ...components_chatmessage
-        }
-      }
-    }
-  }
-  ${chatmessageFragment}
-`;
-// }}}
-
-// {{{ const chatmessageMoreQuery
-export const chatmessageMoreQuery = `
-  query($chatroom: ID!, $before: String!) {
-    allChatmessages(chatroom: $chatroom, last: 10, before: $before, orderBy: "id") {
-      pageInfo {
-        startCursor
-        hasPreviousPage
-      }
-      edges {
-        node {
-          ...components_chatmessage
-        }
-      }
-    }
-  }
-  ${chatmessageFragment}
-`;
-// }}}
-
-// {{{ const chatmessageUpdateQuery
-export const chatmessageUpdateQuery = `
-  query($id: ID!) {
-    chatmessage(id: $id) {
-      ...components_chatmessage
-    }
-  }
-  ${chatmessageFragment}
-`;
-// }}}
-
-// {{{ const chatmessageIdQuery
-export const chatmessageIdQuery = `
-  query($name: String!) {
-    allChatrooms(name: $name) {
-      edges {
-        node {
-          id
-          description
-          created
-          user {
-            ...components_user
-          }
-        }
-      }
-    }
-  }
-  ${componentsUserFragment}
-`;
-// }}}

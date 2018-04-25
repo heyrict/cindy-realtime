@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-17 17:04+0900\n"
+"POT-Creation-Date: 2018-04-02 21:31+0900\n"
 "PO-Revision-Date: 2017-09-27 20:05+0800\n"
 "Last-Translator: heyrict <xiezh0831@yahoo.co.jp>\n"
 "Language: ja\n"
@@ -28,237 +28,333 @@ msgstr "英語"
 msgid "French"
 msgstr "フランス語"
 
-#: sui_hei/models.py:17
+#: sui_hei/models.py:18
 msgid "Award"
 msgstr "称号"
 
-#: sui_hei/models.py:25
-msgid "nick_name"
-msgstr "ニックネーム"
-
-#: sui_hei/models.py:26
-msgid "profile"
-msgstr "プロフィール"
-
-#: sui_hei/models.py:32
-msgid "credit"
-msgstr "クレジット"
-
-#: sui_hei/models.py:33
-msgid "hide bookmark"
-msgstr "ブクマを非公開にする"
-
-#: sui_hei/models.py:50 sui_hei/models.py:74 sui_hei/models.py:115
-#: sui_hei/models.py:131 sui_hei/models.py:146 sui_hei/models.py:163
-msgid "created"
-msgstr "作った時間"
-
-#: sui_hei/models.py:53
-msgid "User-Award"
-msgstr "ユーザー称号"
-
-#: sui_hei/models.py:69
-msgid "title"
-msgstr "タイトル"
-
-#: sui_hei/models.py:70
-msgid "yami"
-msgstr "闇スープ"
-
-#: sui_hei/models.py:71
-msgid "genre"
-msgstr "ジャンル"
-
-#: sui_hei/models.py:72 sui_hei/models.py:129 sui_hei/models.py:144
-#: sui_hei/models.py:181
-msgid "content"
-msgstr "コンテンツ"
-
-#: sui_hei/models.py:73
-msgid "solution"
-msgstr "解説"
-
-#: sui_hei/models.py:75
-msgid "modified"
-msgstr "最後変更時間"
-
-#: sui_hei/models.py:76
+#: sui_hei/models.py:27 sui_hei/models.py:102
 msgid "status"
 msgstr "ステータス"
 
-#: sui_hei/models.py:77
+#: sui_hei/models.py:28
+msgid "comment"
+msgstr "評価・コメント"
+
+#: sui_hei/models.py:30 sui_hei/models.py:76 sui_hei/models.py:100
+#: sui_hei/models.py:141 sui_hei/models.py:157 sui_hei/models.py:172
+#: sui_hei/models.py:189
+msgid "created"
+msgstr "作った時間"
+
+#: sui_hei/models.py:31
+msgid "reviewed"
+msgstr "検証済み"
+
+#: sui_hei/models.py:34
+msgid "Award Application"
+msgstr "称号申請"
+
+#: sui_hei/models.py:36
+msgid "Can review award application"
+msgstr "称号検証権限"
+
+#: sui_hei/models.py:43
+msgid "Waiting"
+msgstr "検証待ち"
+
+#: sui_hei/models.py:44
+msgid "Accepted"
+msgstr "付与済み"
+
+#: sui_hei/models.py:45
+msgid "Denied"
+msgstr "拒否済み"
+
+#: sui_hei/models.py:51
+msgid "nick_name"
+msgstr "ニックネーム"
+
+#: sui_hei/models.py:52
+msgid "profile"
+msgstr "プロフィール"
+
+#: sui_hei/models.py:58
+msgid "credit"
+msgstr "クレジット"
+
+#: sui_hei/models.py:59
+msgid "hide bookmark"
+msgstr "ブクマを非公開にする"
+
+#: sui_hei/models.py:79
+msgid "User-Award"
+msgstr "ユーザー称号"
+
+#: sui_hei/models.py:95
+msgid "title"
+msgstr "タイトル"
+
+#: sui_hei/models.py:96
+msgid "yami"
+msgstr "闇スープ"
+
+#: sui_hei/models.py:97
+msgid "genre"
+msgstr "ジャンル"
+
+#: sui_hei/models.py:98 sui_hei/models.py:155 sui_hei/models.py:170
+#: sui_hei/models.py:207
+msgid "content"
+msgstr "コンテンツ"
+
+#: sui_hei/models.py:99
+msgid "solution"
+msgstr "解説"
+
+#: sui_hei/models.py:101
+msgid "modified"
+msgstr "最後変更時間"
+
+#: sui_hei/models.py:103
 msgid "memo"
 msgstr "メモ"
 
-#: sui_hei/models.py:78
+#: sui_hei/models.py:104
 msgid "score"
 msgstr "スコア"
 
-#: sui_hei/models.py:81
+#: sui_hei/models.py:107
 msgid "Puzzle"
 msgstr "問題"
 
-#: sui_hei/models.py:88
+#: sui_hei/models.py:114
 msgid "Albatross"
 msgstr "ウミガメのスープ"
 
-#: sui_hei/models.py:89
+#: sui_hei/models.py:115
 msgid "20th-Door"
 msgstr "２０の扉"
 
-#: sui_hei/models.py:90
+#: sui_hei/models.py:116
 msgid "Little Albat"
 msgstr "亀夫君"
 
-#: sui_hei/models.py:91
+#: sui_hei/models.py:117
 msgid "Others & Formal"
 msgstr "新・形式"
 
-#: sui_hei/models.py:95
+#: sui_hei/models.py:121
 msgid "Unsolved"
 msgstr "未解決"
 
-#: sui_hei/models.py:96
+#: sui_hei/models.py:122
 msgid "Solved"
 msgstr "解決済み"
 
-#: sui_hei/models.py:97
+#: sui_hei/models.py:123
 msgid "Dazed"
 msgstr "迷宮入り"
 
-#: sui_hei/models.py:98
+#: sui_hei/models.py:124
 msgid "Hidden"
 msgstr "非公開"
 
-#: sui_hei/models.py:99
+#: sui_hei/models.py:125
 msgid "Forced Hidden"
 msgstr "強制非公開"
 
-#: sui_hei/models.py:107
+#: sui_hei/models.py:133
 msgid "question"
 msgstr "質問"
 
-#: sui_hei/models.py:109
+#: sui_hei/models.py:135
 msgid "question edit times"
 msgstr "質問編集回数"
 
-#: sui_hei/models.py:110
+#: sui_hei/models.py:136
 msgid "answer"
 msgstr "回答"
 
-#: sui_hei/models.py:112
+#: sui_hei/models.py:138
 msgid "answer edit times"
 msgstr "回答編集回数"
 
-#: sui_hei/models.py:113
+#: sui_hei/models.py:139
 msgid "good_ques"
 msgstr "良い質問"
 
-#: sui_hei/models.py:114
+#: sui_hei/models.py:140
 msgid "true_ques"
 msgstr "正解"
 
-#: sui_hei/models.py:116
+#: sui_hei/models.py:142
 msgid "answeredtime"
 msgstr "回答時間"
 
-#: sui_hei/models.py:119
+#: sui_hei/models.py:145
 msgid "Question"
 msgstr "質問"
 
-#: sui_hei/models.py:134
+#: sui_hei/models.py:160
 msgid "Hint"
 msgstr "ヒント"
 
-#: sui_hei/models.py:147
+#: sui_hei/models.py:173
 msgid "edit times"
 msgstr "編集回数"
 
-#: sui_hei/models.py:150
+#: sui_hei/models.py:176
 msgid "ChatMessage"
 msgstr "チャットメッセージ"
 
-#: sui_hei/models.py:161
+#: sui_hei/models.py:187
 msgid "channel"
 msgstr "チャンネル"
 
-#: sui_hei/models.py:162
+#: sui_hei/models.py:188
 msgid "description"
 msgstr "説明"
 
-#: sui_hei/models.py:166
+#: sui_hei/models.py:192
 msgid "ChatRoom"
 msgstr "チャットルーム"
 
-#: sui_hei/models.py:182
+#: sui_hei/models.py:208
 msgid "spoiler"
 msgstr "ネタバレ"
 
-#: sui_hei/models.py:185
+#: sui_hei/models.py:211
 msgid "Comment"
 msgstr "評価・コメント"
 
-#: sui_hei/models.py:194 sui_hei/models.py:206
+#: sui_hei/models.py:220 sui_hei/models.py:232
 msgid "Value"
 msgstr "数値"
 
-#: sui_hei/models.py:197
+#: sui_hei/models.py:223
 msgid "Bookmark"
 msgstr "ブクマ"
 
-#: sui_hei/models.py:209
+#: sui_hei/models.py:235
 msgid "Star"
 msgstr "スター"
 
-#: sui_hei/schema.py:395 sui_hei/schema.py:447 sui_hei/schema.py:476
-#: sui_hei/schema.py:508 sui_hei/schema.py:535 sui_hei/schema.py:560
-#: sui_hei/schema.py:585 sui_hei/schema.py:610 sui_hei/schema.py:647
-#: sui_hei/schema.py:679 sui_hei/schema.py:722 sui_hei/schema.py:748
-#: sui_hei/schema.py:775 sui_hei/schema.py:803 sui_hei/schema.py:831
-#: sui_hei/schema.py:860 sui_hei/schema.py:888 sui_hei/schema.py:913
-#: sui_hei/schema.py:936
+#: sui_hei/schema.py:472 sui_hei/schema.py:524 sui_hei/schema.py:553
+#: sui_hei/schema.py:585 sui_hei/schema.py:612 sui_hei/schema.py:637
+#: sui_hei/schema.py:662 sui_hei/schema.py:685 sui_hei/schema.py:724
+#: sui_hei/schema.py:761 sui_hei/schema.py:793 sui_hei/schema.py:836
+#: sui_hei/schema.py:862 sui_hei/schema.py:889 sui_hei/schema.py:917
+#: sui_hei/schema.py:945 sui_hei/schema.py:973 sui_hei/schema.py:1001
+#: sui_hei/schema.py:1065 sui_hei/schema.py:1088
 msgid "Please login!"
 msgstr "ログインしてください"
 
-#: sui_hei/schema.py:453 sui_hei/schema.py:618 sui_hei/schema.py:653
-msgid "Question content cannot be empty!"
-msgstr "質問を入力してください！"
+#: sui_hei/schema.py:481
+msgid "Title cannot be empty!"
+msgstr "タイトルを入力してください！"
 
-#: sui_hei/schema.py:482 sui_hei/schema.py:837
-msgid "Hint content cannot be empty!"
-msgstr "ヒントを入力してください！"
+#: sui_hei/schema.py:483
+msgid "Content cannot be empty!"
+msgstr "問題文を入力してください！"
 
-#: sui_hei/schema.py:488
-msgid "You are not the creator of this puzzle"
-msgstr "あなたはこの問題の作成者ではありません"
-
-#: sui_hei/schema.py:515
-msgid "ChatMessage cannot be empty!"
-msgstr "チャットメッセージを入力してください！"
-
-#: sui_hei/schema.py:688
+#: sui_hei/schema.py:485 sui_hei/schema.py:802
 msgid "Solution cannot be empty!"
 msgstr "解説を入力してください！"
 
-#: sui_hei/schema.py:783 sui_hei/schema.py:920
+#: sui_hei/schema.py:530 sui_hei/schema.py:732 sui_hei/schema.py:767
+msgid "Question content cannot be empty!"
+msgstr "質問を入力してください！"
+
+#: sui_hei/schema.py:559 sui_hei/schema.py:951
+msgid "Hint content cannot be empty!"
+msgstr "ヒントを入力してください！"
+
+#: sui_hei/schema.py:565
+msgid "You are not the creator of this puzzle"
+msgstr "あなたはこの問題の作成者ではありません"
+
+#: sui_hei/schema.py:592
+msgid "ChatMessage cannot be empty!"
+msgstr "チャットメッセージを入力してください！"
+
+#: sui_hei/schema.py:643
+#, python-format
+msgid "Channel %s exists already!"
+msgstr "チャンネル %s はすでに存在しています"
+
+#: sui_hei/schema.py:695
+msgid "You can apply up to 2 awards at the same time!"
+msgstr "あなたは一度で最大２つの称号を申請できます！"
+
+#: sui_hei/schema.py:698
+msgid "You already have this award!"
+msgstr "あなたはすでにこの称号を所有しました！"
+
+#: sui_hei/schema.py:702
+msgid "You already have applied this award!"
+msgstr "あなたはすでにこの称号を申請しました"
+
+#: sui_hei/schema.py:897 sui_hei/schema.py:1072
 msgid "You are not the creator of this bookmark"
 msgstr "あなたはこのブクマの作成者ではありません"
 
-#: sui_hei/schema.py:811
+#: sui_hei/schema.py:925
 msgid "You are not the creator of this chatroom"
 msgstr "あなたはこのチャットルームの作成者ではありません"
 
-#: sui_hei/schema.py:843
+#: sui_hei/schema.py:956
 msgid "You are not the creator of this hint"
 msgstr "あなたはこの問題の作成者ではありません"
 
-#: sui_hei/schema.py:869
+#: sui_hei/schema.py:982
 msgid "You are not the owner of this award"
 msgstr "あなたはこの称号の所有者ではありません"
 
-#: sui_hei/schema.py:961
+#: sui_hei/schema.py:1030
+msgid "You are not authenticated to do this!"
+msgstr "あなたはこの操作を行う権限がありません"
+
+#: sui_hei/schema.py:1042
+msgid "Only staff members can review self-applied award applications"
+msgstr "スタッフ権限を持つ者のみ自ら申請した称号を検証できる"
+
+#: sui_hei/schema.py:1113
 msgid "Login incorrect!"
 msgstr "ログインに失敗しました"
+
+#: sui_hei/schema.py:1148
+msgid ""
+"Characters other than letters,digits and @/./+/-/_ are not allowed in "
+"username"
+msgstr "半角英数字と @/./+/-/_ 以外の文字はユーザー名に使用できません"
+
+#: sui_hei/schema.py:1152
+msgid "Your username is too short (less than 4 characters)"
+msgstr "あなたのユーザー名が短すぎます（４文字以内）！"
+
+#: sui_hei/schema.py:1155
+msgid "Your username is too long (more than 150 characters)"
+msgstr "あなたのユーザー名が長すぎます（１５０文字以上）！"
+
+#: sui_hei/schema.py:1157
+msgid "Username cannot be blank!"
+msgstr "ユーザー名をはめてください！"
+
+#: sui_hei/schema.py:1160
+msgid "Your nickname is too long (more than 64 characters)"
+msgstr "あなたのニックネームが長すぎます（６４文字以上）！"
+
+#: sui_hei/schema.py:1164
+msgid "Password should have both letters and digits"
+msgstr "パスワードに数字と英文字の両方を入れてください"
+
+#: sui_hei/schema.py:1167
+msgid "Your password is too short (less than 8 characters)"
+msgstr "あなたのパスワードは短すぎます（８文字以内）"
+
+#: sui_hei/schema.py:1170
+msgid "Your password is too long (more than 32 characters)"
+msgstr "あなたのパスワードは長すぎます（３２文字以上）"
 
 #: sui_hei/templates/index.html:12
 msgid "Cindy -- the best place for lateral thinking"

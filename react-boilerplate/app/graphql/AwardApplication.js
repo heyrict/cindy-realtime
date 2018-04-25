@@ -6,6 +6,7 @@ export const AwardApplication = gql`
     id
     status
     comment
+    reason
     award {
       id
       name

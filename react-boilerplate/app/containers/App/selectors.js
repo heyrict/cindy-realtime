@@ -2,9 +2,9 @@ import { createSelector } from 'reselect';
 
 const selectRoute = (state) => state.get('route');
 
-const makeSelectLocation = () =>
+export const selectLocation = (state) => state.get('route').get('location');
+
+export const makeSelectLocation = () =>
   createSelector(selectRoute, (routeState) =>
     routeState.get('location').toJS()
   );
-
-export { makeSelectLocation };

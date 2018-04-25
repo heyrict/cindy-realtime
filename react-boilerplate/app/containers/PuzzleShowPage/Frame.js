@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { text2md } from 'common';
+import { text2md, withLocale } from 'common';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import { Box } from 'rebass';
@@ -9,6 +9,7 @@ import { DarkNicknameLink as NicknameLink, PuzzleFrame } from 'style-store';
 import UserAwardPopover from 'components/UserAwardPopover';
 
 import Constrained from 'components/Constrained';
+
 import messages from './messages';
 
 const Label = styled.span`
@@ -35,7 +36,7 @@ const ContentBox = styled(Box)`
 
 function Frame(props) {
   return (
-    <Constrained mt={20} mb={20}>
+    <Constrained mt={2} mb={2}>
       <PuzzleFrame>
         <ContentBox
           pl={10}
@@ -47,7 +48,9 @@ function Frame(props) {
             {(c) => (
               <RightBox>
                 <Label>{c}:</Label>
-                <PuzzleUserLabel to={`/profile/show/${props.user.rowid}`}>
+                <PuzzleUserLabel
+                  to={withLocale(`/profile/show/${props.user.rowid}`)}
+                >
                   {props.user.nickname}
                 </PuzzleUserLabel>
                 <UserAwardPopover

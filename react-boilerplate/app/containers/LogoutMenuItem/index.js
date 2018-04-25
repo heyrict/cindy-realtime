@@ -6,14 +6,14 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import bootbox from 'bootbox';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { graphql } from 'react-apollo';
+import { nAlert } from 'containers/Notifier/actions';
+import { setCurrentUser } from 'containers/UserNavbar/actions';
 
 import { Panel, PanelHeader, NavLink } from 'rebass';
 
-import { setCurrentUser } from 'containers/UserNavbar/actions';
+import { graphql } from 'react-apollo';
 import LogoutMenuItemMutation from 'graphql/LogoutMutation';
 
 export class LogoutMenuItem extends React.PureComponent {
@@ -32,7 +32,7 @@ export class LogoutMenuItem extends React.PureComponent {
         this.props.updateCurrentUser();
       })
       .catch((error) => {
-        bootbox.alert(
+        this.props.alert(
           <Panel key={error.message} color="tomato">
             <PanelHeader>{error.message}</PanelHeader>
           </Panel>
@@ -53,20 +53,19 @@ LogoutMenuItem.propTypes = {
   children: PropTypes.node,
   updateCurrentUser: PropTypes.func.isRequired,
   mutate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-    updateCurrentUser: () =>
-      dispatch(
-        setCurrentUser({
-          userId: null,
-          nickname: null,
-        })
-      ),
-  };
-}
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+  updateCurrentUser: () =>
+    dispatch(
+      setCurrentUser({
+        userId: null,
+        nickname: null,
+      })
+    ),
+});
 
 const withConnect = connect(null, mapDispatchToProps);
 

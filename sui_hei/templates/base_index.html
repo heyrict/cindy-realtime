@@ -1,4 +1,4 @@
-{% load i18n static webpack_loader %}
+{% load i18n static %}
 <!doctype html>
 <html>
   <head>
@@ -10,23 +10,19 @@
     <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <title>{% trans 'Cindy -- the best place for lateral thinking' %}</title>
-    <meta name="description" content={% trans 'Play situation puzzles realtime!' %}>
+    <meta name="description" content="{% trans 'Play situation puzzles realtime!' %}" data-react-helmet="true">
     {% get_current_language as LANGUAGE_CODE %}
     <script type="text/javascript">
         window.django = {
           {% if request.user.is_authenticated %}
           user_id: {{ request.user.id }},
           user_nickname: "{{ request.user.nickname }}",
-          user_favChannels: [
-            {% for favchan in request.user.favoritechatroom_set.all %}
-            "{{ favchan.chatroom.name }}",
-            {% endfor %}
-          ],
           {% endif %}
           LANGUAGE_CODE: "{{ LANGUAGE_CODE }}",
         };
     </script>
-    <script type="text/javascript" src="{% url 'jsi18n' %}"></script>
+    {% block extraHead %}
+    {% endblock extraHead %}
   </head>
   <body>
     <!-- Display a message if JS has been disabled on the browser. -->
@@ -35,7 +31,7 @@
     <!-- The app hooks into this div -->
     <div id="app"></div>
     <!-- A lot of magic happens in this file. HtmlWebpackPlugin automatically includes all assets (e.g. bundle.js, main.css) with the correct HTML tags, which is why they are missing in this HTML file. Don't add any assets here! (Check out webpackconfig.js if you want to know more) -->
-    {% render_bundle 'reactBoilerplateDeps' 'js' 'DLL' %}
-    {% render_bundle 'main' %}
+    {% block bundle %}
+    {% endblock bundle %}
   </body>
 </html>

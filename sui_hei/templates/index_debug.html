@@ -1,0 +1,7 @@
+{% extends 'base_index.html' %}
+{% load webpack_loader %}
+
+{% block bundle %}
+{% render_bundle 'reactBoilerplateDeps' 'js' 'DLL' %}
+{% render_bundle 'main' %}
+{% endblock bundle %}

@@ -77,6 +77,11 @@ def resolveOrderBy(qs, order_by):
             fieldQueries.append(
                 F(fieldName).desc(nulls_last=True)
                 if desc else F(fieldName).asc(nulls_last=True))
+
+        # Fix postgresql disorder
+        if "id" not in fieldQueries and "-id" not in fieldQueries:
+            fieldQueries.append("-id")
+
         return qs.order_by(*fieldQueries)
     else:
         return qs.all()
@@ -87,7 +92,10 @@ def resolveOrderBy(qs, order_by):
 class UserNode(DjangoObjectType):
     class Meta:
         model = User
-        filter_fields = ["username", "nickname"]
+        filter_fields = {
+            "username": ["exact"],
+            "nickname": ["exact", "contains"],
+        }
         interfaces = (relay.Node, )
 
     rowid = graphene.Int()
@@ -336,6 +344,22 @@ class PuzzleConnection(graphene.Connection):
         node = PuzzleNode
 
 
+# {{{2 BookmarkConnection
+class BookmarkConnection(graphene.Connection):
+    total_count = graphene.Int()
+
+    class Meta:
+        node = BookmarkNode
+
+
+# {{{2 StarConnection
+class StarConnection(graphene.Connection):
+    total_count = graphene.Int()
+
+    class Meta:
+        node = StarNode
+
+
 # {{{1 Unions
 # {{{2 PuzzleShowUnion
 class PuzzleShowUnion(graphene.Union):
@@ -504,6 +528,8 @@ class CreatePuzzle(relay.ClientIDMutation):
             existingChatRooms.delete()
         ChatRoom.objects.create(name=crName, user=user)
 
+        # TODO?: Judge soup count and grant awards
+
         return CreatePuzzle(puzzle=puzzle)
 
 
@@ -638,7 +664,7 @@ class CreateChatRoom(graphene.ClientIDMutation):
         description = input["description"]
         existingChatrooms = ChatRoom.objects.filter(name=name)
         if len(existingChatrooms) > 0:
-            raise ValidationError("Channel %s exists already!" % name)
+            raise ValidationError(_("Channel %s exists already!") % name)
 
         chatroom = ChatRoom.objects.create(
             user=user, name=name, description=description)
@@ -662,7 +688,7 @@ class CreateFavoriteChatRoom(graphene.ClientIDMutation):
         chatroomName = input["chatroomName"]
         chatroom = ChatRoom.objects.get(name=chatroomName)
 
-        ind, favchatroom = FavoriteChatRoom.objects.get_or_create(
+        favchatroom, ind = FavoriteChatRoom.objects.get_or_create(
             user=user, chatroom=chatroom)
 
         return CreateFavoriteChatRoom(favchatroom=favchatroom)
@@ -1019,6 +1045,7 @@ class UpdateAwardApplication(relay.ClientIDMutation):
     class Input:
         awardApplicationId = graphene.String()
         status = graphene.Int()
+        reason = graphene.String()
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -1030,6 +1057,7 @@ class UpdateAwardApplication(relay.ClientIDMutation):
         nodeName, awardApplicationId = from_global_id(
             input['awardApplicationId'])
         status = input.get('status')
+        reason = input.get('reason')
 
         assert nodeName == 'AwardApplicationNode'
 
@@ -1042,6 +1070,7 @@ class UpdateAwardApplication(relay.ClientIDMutation):
 
             application.status = status
             application.reviewer = user
+            application.reason = reason
             application.reviewed = timezone.now()
             if status == 1:
                 UserAward.objects.get_or_create(
@@ -1143,29 +1172,29 @@ class UserRegister(relay.ClientIDMutation):
 
         if not re.findall(r"^[a-zA-Z0-9\@+_\-.]+$", username):
             raise ValidationError(
-                "Characters other than letters,"
-                "digits and @/./+/-/_ are not allowed in username")
+                _("Characters other than letters,"
+                  "digits and @/./+/-/_ are not allowed in username"))
         if len(username) < 4:
             raise ValidationError(
-                "Your username is too short (less than 4 characters)")
+                _("Your username is too short (less than 4 characters)"))
         if len(username) > 150:
             raise ValidationError(
-                "Your username is too long (more than 150 characters)")
+                _("Your username is too long (more than 150 characters)"))
         if re.findall("^[ 　]*$", nickname):
-            raise ValidationError("Username cannot be blank!")
+            raise ValidationError(_("Username cannot be blank!"))
         if len(nickname) > 64:
             raise ValidationError(
-                "Your nickname is too long (more than 64 characters)")
+                _("Your nickname is too long (more than 64 characters)"))
         if not (re.findall(r"[0-9]+", password)
                 and re.findall(r"[a-zA-Z]", password)):
             raise ValidationError(
-                "Password should have both letters and digits")
+                _("Password should have both letters and digits"))
         if len(password) < 8:
             raise ValidationError(
-                "Your password is too short (less than 8 characters)")
+                _("Your password is too short (less than 8 characters)"))
         if len(password) > 64:
             raise ValidationError(
-                "Your password is too long (more than 32 characters)")
+                _("Your password is too long (more than 32 characters)"))
 
         user = User.objects.create_user(
             username=username, nickname=nickname, password=password)
@@ -1192,6 +1221,8 @@ class Query(object):
         status=graphene.Float(),
         status__gt=graphene.Float(),
         title__contains=graphene.String(),
+        content__contains=graphene.String(),
+        solution__contains=graphene.String(),
         created__year=graphene.Int(),
         created__month=graphene.Int(),
         limit=graphene.Int(),
@@ -1206,10 +1237,20 @@ class Query(object):
     all_favorite_chatrooms = DjangoFilterConnectionField(FavoriteChatRoomNode)
     all_comments = DjangoFilterConnectionField(
         CommentNode, orderBy=graphene.List(of_type=graphene.String))
-    all_stars = DjangoFilterConnectionField(
-        StarNode, orderBy=graphene.List(of_type=graphene.String))
-    all_bookmarks = DjangoFilterConnectionField(
-        BookmarkNode, orderBy=graphene.List(of_type=graphene.String))
+    all_stars = graphene.ConnectionField(
+        StarConnection,
+        orderBy=graphene.List(of_type=graphene.String),
+        user=graphene.ID(),
+        puzzle=graphene.ID(),
+        limit=graphene.Int(),
+        offset=graphene.Int())
+    all_bookmarks = graphene.ConnectionField(
+        BookmarkConnection,
+        orderBy=graphene.List(of_type=graphene.String),
+        user=graphene.ID(),
+        puzzle=graphene.ID(),
+        limit=graphene.Int(),
+        offset=graphene.Int())
 
     # {{{2 nodes
     user = relay.Node.Field(UserNode)
@@ -1266,6 +1307,8 @@ class Query(object):
                 "created__year",
                 "created__month",
                 "title__contains",
+                "content__contains",
+                "solution__contains",
             ],
             filter_fields={"user": User})
         total_count = qs.count()
@@ -1295,12 +1338,50 @@ class Query(object):
         return resolveOrderBy(Comment.objects, orderBy)
 
     def resolve_all_stars(self, info, **kwargs):
-        orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Star.objects, orderBy)
+        orderBy = kwargs.get("orderBy", [])
+        limit = kwargs.get("limit", None)
+        offset = kwargs.get("offset", None)
+        qs = Star.objects.all()
+        qs = resolveOrderBy(qs, orderBy)
+        qs = resolveFilter(
+            qs,
+            kwargs,
+            filters=[],
+            filter_fields={
+                "user": User,
+                "puzzle": Puzzle
+            })
+        total_count = qs.count()
+        qs = resolveLimitOffset(qs, limit, offset)
+        qs = list(qs)
+        return StarConnection(
+            total_count=total_count,
+            edges=[
+                PuzzleConnection.Edge(node=qs[i], ) for i in range(len(qs))
+            ])
 
     def resolve_all_bookmarks(self, info, **kwargs):
-        orderBy = kwargs.get("orderBy", None)
-        return resolveOrderBy(Bookmark.objects, orderBy)
+        orderBy = kwargs.get("orderBy", [])
+        limit = kwargs.get("limit", None)
+        offset = kwargs.get("offset", None)
+        qs = Bookmark.objects.all()
+        qs = resolveOrderBy(qs, orderBy)
+        qs = resolveFilter(
+            qs,
+            kwargs,
+            filters=[],
+            filter_fields={
+                "user": User,
+                "puzzle": Puzzle
+            })
+        total_count = qs.count()
+        qs = resolveLimitOffset(qs, limit, offset)
+        qs = list(qs)
+        return BookmarkConnection(
+            total_count=total_count,
+            edges=[
+                PuzzleConnection.Edge(node=qs[i], ) for i in range(len(qs))
+            ])
 
     def resolve_all_award_applications(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)

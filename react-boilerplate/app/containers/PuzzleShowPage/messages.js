@@ -91,4 +91,16 @@ export default defineMessages({
     id: 'app.containers.PuzzleShowPage.spoiler',
     defaultMessage: 'Spoiler',
   },
+  zeroStarAlert: {
+    id: 'app.containers.PuzzleShowPage.zeroStarAlert',
+    defaultMessage: 'Please Choose at least one star!',
+  },
+  saveSucceededAlert: {
+    id: 'app.containers.PuzzleShowPage.saveSucceedAlert',
+    defaultMessage: 'Save Succeeded',
+  },
+  commentNoBlankAlert: {
+    id: 'app.containers.PuzzleShowPage.commentNoBlankAlert',
+    defaultMessage: 'Comment cannot be blank!',
+  },
 });

@@ -28,9 +28,10 @@ function PuzzleList(props) {
       {props.loading && <LoadingDots py={props.allPuzzles ? 5 : 50} size={8} />}
       {!props.loading && (
         <PaginatorBar
-          changePage={props.changePage}
+          queryKey={props.queryKey}
           numPages={Math.ceil(props.allPuzzles.totalCount / props.itemsPerPage)}
           currentPage={props.page}
+          changePage={props.changePage}
         />
       )}
     </div>
@@ -46,13 +47,14 @@ PuzzleList.propTypes = {
   page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   // eslint-disable-next-line react/no-unused-prop-types
   itemsPerPage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  changePage: PropTypes.func,
+  queryKey: PropTypes.string.isRequired,
+  changePage: PropTypes.func.isRequired,
 };
 
 PuzzleList.defaultProps = {
   page: 1,
   itemsPerPage: 10,
-  changePage: () => {},
+  queryKey: 'page',
 };
 
 const withPuzzleList = graphql(PuzzleListQuery, {

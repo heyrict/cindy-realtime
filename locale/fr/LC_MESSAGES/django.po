@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-17 17:04+0900\n"
+"POT-Creation-Date: 2018-04-02 21:31+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,256 +30,356 @@ msgstr "Anglais"
 msgid "French"
 msgstr ""
 
-#: sui_hei/models.py:17
+#: sui_hei/models.py:18
 msgid "Award"
 msgstr "Titre"
 
-#: sui_hei/models.py:25
+#: sui_hei/models.py:27 sui_hei/models.py:102
+msgid "status"
+msgstr ""
+
+#: sui_hei/models.py:28
+#, fuzzy
+#| msgid "Comments"
+msgid "comment"
+msgstr "Commentaires"
+
+#: sui_hei/models.py:30 sui_hei/models.py:76 sui_hei/models.py:100
+#: sui_hei/models.py:141 sui_hei/models.py:157 sui_hei/models.py:172
+#: sui_hei/models.py:189
+msgid "created"
+msgstr "Heure créé"
+
+#: sui_hei/models.py:31
+#, fuzzy
+#| msgid "Preview"
+msgid "reviewed"
+msgstr "Aperçu"
+
+#: sui_hei/models.py:34
+msgid "Award Application"
+msgstr ""
+
+#: sui_hei/models.py:36
+msgid "Can review award application"
+msgstr ""
+
+#: sui_hei/models.py:43
+msgid "Waiting"
+msgstr ""
+
+#: sui_hei/models.py:44
+msgid "Accepted"
+msgstr ""
+
+#: sui_hei/models.py:45
+msgid "Denied"
+msgstr ""
+
+#: sui_hei/models.py:51
 msgid "nick_name"
 msgstr "Surnom"
 
-#: sui_hei/models.py:26
+#: sui_hei/models.py:52
 msgid "profile"
 msgstr "Profile"
 
-#: sui_hei/models.py:32
+#: sui_hei/models.py:58
 #, fuzzy
 #| msgid "edit"
 msgid "credit"
 msgstr "Editer"
 
-#: sui_hei/models.py:33
+#: sui_hei/models.py:59
 msgid "hide bookmark"
 msgstr ""
 
-#: sui_hei/models.py:50 sui_hei/models.py:74 sui_hei/models.py:115
-#: sui_hei/models.py:131 sui_hei/models.py:146 sui_hei/models.py:163
-msgid "created"
-msgstr "Heure créé"
-
-#: sui_hei/models.py:53
+#: sui_hei/models.py:79
 #, fuzzy
 #| msgid "Award"
 msgid "User-Award"
 msgstr "Titre"
 
-#: sui_hei/models.py:69
+#: sui_hei/models.py:95
 msgid "title"
 msgstr "Titre"
 
-#: sui_hei/models.py:70
+#: sui_hei/models.py:96
 msgid "yami"
 msgstr "Yami"
 
-#: sui_hei/models.py:71
+#: sui_hei/models.py:97
 msgid "genre"
 msgstr "Genre"
 
-#: sui_hei/models.py:72 sui_hei/models.py:129 sui_hei/models.py:144
-#: sui_hei/models.py:181
+#: sui_hei/models.py:98 sui_hei/models.py:155 sui_hei/models.py:170
+#: sui_hei/models.py:207
 msgid "content"
 msgstr "Contenu"
 
-#: sui_hei/models.py:73
+#: sui_hei/models.py:99
 #, fuzzy
 #| msgid "Question"
 msgid "solution"
 msgstr "Qustion"
 
-#: sui_hei/models.py:75
+#: sui_hei/models.py:101
 msgid "modified"
 msgstr "Heure modifié"
 
-#: sui_hei/models.py:76
-msgid "status"
-msgstr ""
-
-#: sui_hei/models.py:77
+#: sui_hei/models.py:103
 msgid "memo"
 msgstr ""
 
-#: sui_hei/models.py:78
+#: sui_hei/models.py:104
 msgid "score"
 msgstr "Score"
 
-#: sui_hei/models.py:81
+#: sui_hei/models.py:107
 msgid "Puzzle"
 msgstr ""
 
-#: sui_hei/models.py:88
+#: sui_hei/models.py:114
 msgid "Albatross"
 msgstr "Enigme de situaton"
 
-#: sui_hei/models.py:89
+#: sui_hei/models.py:115
 msgid "20th-Door"
 msgstr "20 questions"
 
-#: sui_hei/models.py:90
+#: sui_hei/models.py:116
 msgid "Little Albat"
 msgstr "Petit énigme de situation"
 
-#: sui_hei/models.py:91
+#: sui_hei/models.py:117
 msgid "Others & Formal"
 msgstr "Autres formes d'énigmes"
 
-#: sui_hei/models.py:95
+#: sui_hei/models.py:121
 msgid "Unsolved"
 msgstr ""
 
-#: sui_hei/models.py:96
+#: sui_hei/models.py:122
 msgid "Solved"
 msgstr ""
 
-#: sui_hei/models.py:97
+#: sui_hei/models.py:123
 msgid "Dazed"
 msgstr ""
 
-#: sui_hei/models.py:98
+#: sui_hei/models.py:124
 msgid "Hidden"
 msgstr ""
 
-#: sui_hei/models.py:99
+#: sui_hei/models.py:125
 msgid "Forced Hidden"
 msgstr ""
 
-#: sui_hei/models.py:107
+#: sui_hei/models.py:133
 #, fuzzy
 #| msgid "Question"
 msgid "question"
 msgstr "Qustion"
 
-#: sui_hei/models.py:109
+#: sui_hei/models.py:135
 msgid "question edit times"
 msgstr ""
 
-#: sui_hei/models.py:110
+#: sui_hei/models.py:136
 #, fuzzy
 #| msgid "answeredtime"
 msgid "answer"
 msgstr "Heure répondu"
 
-#: sui_hei/models.py:112
+#: sui_hei/models.py:138
 #, fuzzy
 #| msgid "answeredtime"
 msgid "answer edit times"
 msgstr "Heure répondu"
 
-#: sui_hei/models.py:113
+#: sui_hei/models.py:139
 msgid "good_ques"
 msgstr "Bonne question"
 
-#: sui_hei/models.py:114
+#: sui_hei/models.py:140
 msgid "true_ques"
 msgstr "Bonne réponse"
 
-#: sui_hei/models.py:116
+#: sui_hei/models.py:142
 msgid "answeredtime"
 msgstr "Heure répondu"
 
-#: sui_hei/models.py:119
+#: sui_hei/models.py:145
 msgid "Question"
 msgstr "Qustion"
 
-#: sui_hei/models.py:134
+#: sui_hei/models.py:160
 msgid "Hint"
 msgstr ""
 
-#: sui_hei/models.py:147
+#: sui_hei/models.py:173
 #, fuzzy
 #| msgid "Created time"
 msgid "edit times"
 msgstr "Heure crée"
 
-#: sui_hei/models.py:150
+#: sui_hei/models.py:176
 msgid "ChatMessage"
 msgstr ""
 
-#: sui_hei/models.py:161
+#: sui_hei/models.py:187
 msgid "channel"
 msgstr "Chaîne"
 
-#: sui_hei/models.py:162
+#: sui_hei/models.py:188
 #, fuzzy
 #| msgid "Question"
 msgid "description"
 msgstr "Qustion"
 
-#: sui_hei/models.py:166
+#: sui_hei/models.py:192
 msgid "ChatRoom"
 msgstr ""
 
-#: sui_hei/models.py:182
+#: sui_hei/models.py:208
 msgid "spoiler"
 msgstr ""
 
-#: sui_hei/models.py:185
+#: sui_hei/models.py:211
 #, fuzzy
 #| msgid "Comments"
 msgid "Comment"
 msgstr "Commentaires"
 
-#: sui_hei/models.py:194 sui_hei/models.py:206
+#: sui_hei/models.py:220 sui_hei/models.py:232
 msgid "Value"
 msgstr ""
 
-#: sui_hei/models.py:197
+#: sui_hei/models.py:223
 msgid "Bookmark"
 msgstr ""
 
-#: sui_hei/models.py:209
+#: sui_hei/models.py:235
 msgid "Star"
 msgstr "Etoile"
 
-#: sui_hei/schema.py:395 sui_hei/schema.py:447 sui_hei/schema.py:476
-#: sui_hei/schema.py:508 sui_hei/schema.py:535 sui_hei/schema.py:560
-#: sui_hei/schema.py:585 sui_hei/schema.py:610 sui_hei/schema.py:647
-#: sui_hei/schema.py:679 sui_hei/schema.py:722 sui_hei/schema.py:748
-#: sui_hei/schema.py:775 sui_hei/schema.py:803 sui_hei/schema.py:831
-#: sui_hei/schema.py:860 sui_hei/schema.py:888 sui_hei/schema.py:913
-#: sui_hei/schema.py:936
+#: sui_hei/schema.py:472 sui_hei/schema.py:524 sui_hei/schema.py:553
+#: sui_hei/schema.py:585 sui_hei/schema.py:612 sui_hei/schema.py:637
+#: sui_hei/schema.py:662 sui_hei/schema.py:685 sui_hei/schema.py:724
+#: sui_hei/schema.py:761 sui_hei/schema.py:793 sui_hei/schema.py:836
+#: sui_hei/schema.py:862 sui_hei/schema.py:889 sui_hei/schema.py:917
+#: sui_hei/schema.py:945 sui_hei/schema.py:973 sui_hei/schema.py:1001
+#: sui_hei/schema.py:1065 sui_hei/schema.py:1088
 #, fuzzy
 #| msgid "Last login"
 msgid "Please login!"
 msgstr "Dernier connecte"
 
-#: sui_hei/schema.py:453 sui_hei/schema.py:618 sui_hei/schema.py:653
-msgid "Question content cannot be empty!"
+#: sui_hei/schema.py:481
+msgid "Title cannot be empty!"
 msgstr ""
 
-#: sui_hei/schema.py:482 sui_hei/schema.py:837
-msgid "Hint content cannot be empty!"
+#: sui_hei/schema.py:483
+msgid "Content cannot be empty!"
 msgstr ""
 
-#: sui_hei/schema.py:488
-msgid "You are not the creator of this puzzle"
-msgstr ""
-
-#: sui_hei/schema.py:515
-msgid "ChatMessage cannot be empty!"
-msgstr ""
-
-#: sui_hei/schema.py:688
+#: sui_hei/schema.py:485 sui_hei/schema.py:802
 msgid "Solution cannot be empty!"
 msgstr ""
 
-#: sui_hei/schema.py:783 sui_hei/schema.py:920
+#: sui_hei/schema.py:530 sui_hei/schema.py:732 sui_hei/schema.py:767
+msgid "Question content cannot be empty!"
+msgstr ""
+
+#: sui_hei/schema.py:559 sui_hei/schema.py:951
+msgid "Hint content cannot be empty!"
+msgstr ""
+
+#: sui_hei/schema.py:565
+msgid "You are not the creator of this puzzle"
+msgstr ""
+
+#: sui_hei/schema.py:592
+msgid "ChatMessage cannot be empty!"
+msgstr ""
+
+#: sui_hei/schema.py:643
+#, python-format
+msgid "Channel %s exists already!"
+msgstr ""
+
+#: sui_hei/schema.py:695
+msgid "You can apply up to 2 awards at the same time!"
+msgstr ""
+
+#: sui_hei/schema.py:698
+msgid "You already have this award!"
+msgstr ""
+
+#: sui_hei/schema.py:702
+msgid "You already have applied this award!"
+msgstr ""
+
+#: sui_hei/schema.py:897 sui_hei/schema.py:1072
 msgid "You are not the creator of this bookmark"
 msgstr ""
 
-#: sui_hei/schema.py:811
+#: sui_hei/schema.py:925
 msgid "You are not the creator of this chatroom"
 msgstr ""
 
-#: sui_hei/schema.py:843
+#: sui_hei/schema.py:956
 msgid "You are not the creator of this hint"
 msgstr ""
 
-#: sui_hei/schema.py:869
+#: sui_hei/schema.py:982
 msgid "You are not the owner of this award"
 msgstr ""
 
-#: sui_hei/schema.py:961
+#: sui_hei/schema.py:1030
+msgid "You are not authenticated to do this!"
+msgstr ""
+
+#: sui_hei/schema.py:1042
+msgid "Only staff members can review self-applied award applications"
+msgstr ""
+
+#: sui_hei/schema.py:1113
 msgid "Login incorrect!"
+msgstr ""
+
+#: sui_hei/schema.py:1148
+msgid ""
+"Characters other than letters,digits and @/./+/-/_ are not allowed in "
+"username"
+msgstr ""
+
+#: sui_hei/schema.py:1152
+msgid "Your username is too short (less than 4 characters)"
+msgstr ""
+
+#: sui_hei/schema.py:1155
+msgid "Your username is too long (more than 150 characters)"
+msgstr ""
+
+#: sui_hei/schema.py:1157
+msgid "Username cannot be blank!"
+msgstr ""
+
+#: sui_hei/schema.py:1160
+msgid "Your nickname is too long (more than 64 characters)"
+msgstr ""
+
+#: sui_hei/schema.py:1164
+msgid "Password should have both letters and digits"
+msgstr ""
+
+#: sui_hei/schema.py:1167
+msgid "Your password is too short (less than 8 characters)"
+msgstr ""
+
+#: sui_hei/schema.py:1170
+msgid "Your password is too long (more than 32 characters)"
 msgstr ""
 
 #: sui_hei/templates/index.html:12
@@ -416,9 +516,6 @@ msgstr ""
 
 #~ msgid "Content"
 #~ msgstr "Contenu"
-
-#~ msgid "Preview"
-#~ msgstr "Aperçu"
 
 #~ msgid "True Answer"
 #~ msgstr "La vraie réponse"

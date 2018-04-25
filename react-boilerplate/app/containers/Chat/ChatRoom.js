@@ -4,12 +4,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import bootbox from 'bootbox';
+import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { from_global_id as f, to_global_id as t } from 'common';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
 import { ButtonOutline } from 'style-store';
+import { nAlert } from 'containers/Notifier/actions';
 
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -44,10 +45,33 @@ class ChatRoom extends React.Component {
     this.handleHeightChange = (h, inst) =>
       this.setState({ taHeight: inst._rootDOMNode.clientHeight || h });
     this.handleDPHeightChange = (h) => this.setState({ dpHeight: h });
+    this.scrollToBottom = this.scrollToBottom.bind(this);
   }
 
   componentDidMount() {
     this.props.subscribeChatUpdates();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.allChatmessages && this.props.allChatmessages) {
+      this.scrollToBottom();
+    } else if (
+      this.props.allChatmessages &&
+      prevProps.allChatmessages &&
+      this.props.allChatmessages.edges.length !==
+        prevProps.allChatmessages.edges.length
+    ) {
+      this.scrollToBottom();
+    }
+  }
+
+  scrollToBottom() {
+    const domrect = this.lastcmref.getBoundingClientRect();
+    const windowHeight =
+      window.innerHeight || document.documentElement.clientHeight;
+    if (domrect.top <= windowHeight && domrect.top > 0) {
+      this.btmref.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   handleSubmit(content) {
@@ -91,7 +115,7 @@ class ChatRoom extends React.Component {
             __typename: 'CreateChatMessagePayload',
             chatmessage: {
               __typename: 'ChatMessageNode',
-              id: '-1',
+              id: t('ChatMessageNode', '-1'),
               created: now.toISOString(),
             },
           },
@@ -100,12 +124,14 @@ class ChatRoom extends React.Component {
       .then(() => {})
       .catch((error) => {
         this.input.setContent(content);
-        bootbox.alert(error.message);
+        this.props.alert(error.message);
       });
     this.setState({ loading: false });
   }
 
   render() {
+    if (this.props.hidden) return null;
+
     return (
       <Flex wrap justify="center">
         <DescriptionPanel
@@ -130,10 +156,21 @@ class ChatRoom extends React.Component {
             )
           )}
           {this.props.allChatmessages
-            ? this.props.allChatmessages.edges.map((edge) => (
-                <ChatMessage key={edge.node.id} {...edge.node} />
-              ))
+            ? this.props.allChatmessages.edges.map((edge, i) => {
+                if (i + 1 === this.props.allChatmessages.edges.length) {
+                  return (
+                    <div
+                      ref={(lastcm) => (this.lastcmref = lastcm)}
+                      key={edge.node.id}
+                    >
+                      <ChatMessage {...edge.node} />
+                    </div>
+                  );
+                }
+                return <ChatMessage key={edge.node.id} {...edge.node} />;
+              })
             : null}
+          <div ref={(btm) => (this.btmref = btm)} />
         </MessageWrapper>
         <ChatInput
           ref={(ins) => (this.input = ins)}
@@ -166,7 +203,15 @@ ChatRoom.propTypes = {
   }),
   // eslint-disable-next-line react/no-unused-prop-types
   pathname: PropTypes.string.isRequired,
+  alert: PropTypes.func.isRequired,
+  hidden: PropTypes.bool,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+});
+
+const withConnect = connect(null, mapDispatchToProps);
 
 const withMutation = graphql(CreateChatmessageMutation);
 
@@ -285,4 +330,6 @@ const withCurrentUser = graphql(
   }
 );
 
-export default compose(withCurrentUser, withChat, withMutation)(ChatRoom);
+export default compose(withCurrentUser, withChat, withMutation, withConnect)(
+  ChatRoom
+);

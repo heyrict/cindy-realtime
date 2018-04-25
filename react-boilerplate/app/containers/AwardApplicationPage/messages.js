@@ -34,4 +34,12 @@ export default defineMessages({
     id: 'app.containers.AwardApplicationPage.awardDescription',
     defaultMessage: 'Description',
   },
+  awardRequisition: {
+    id: 'app.containers.AwardApplicationPage.awardRequisition',
+    defaultMessage: 'Requisition',
+  },
+  formBlankAlert: {
+    id: 'app.containers.AwardApplicationPage.formBlankAlert',
+    defaultMessage: 'Please fill in the form.',
+  },
 });

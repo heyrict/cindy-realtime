@@ -5,10 +5,11 @@ import { Button, ButtonOutline } from 'style-store';
 import { Flex } from 'rebass';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import bootbox from 'bootbox';
 import { from_global_id as f } from 'common';
+import { nAlert } from 'containers/Notifier/actions';
 import { createStructuredSelector } from 'reselect';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
+
 import { graphql } from 'react-apollo';
 import ProfileShowQuery from 'graphql/ProfileShowQuery';
 import UpdateCurrentAwardMutation from 'graphql/UpdateCurrentAwardMutation';
@@ -59,10 +60,7 @@ class AwardSwitch extends React.PureComponent {
       })
       .then(() => {})
       .catch((error) => {
-        bootbox.alert({
-          title: 'Error',
-          message: error.message,
-        });
+        this.props.alert(error.message);
       });
   }
 
@@ -123,13 +121,18 @@ AwardSwitch.propTypes = {
     edges: PropTypes.array.isRequired,
   }),
   mutate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentUser: makeSelectUserNavbar(),
 });
 
-const withConnect = connect(mapStateToProps);
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+});
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withMutation = graphql(UpdateCurrentAwardMutation);
 

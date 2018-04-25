@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import bootbox from 'bootbox';
 import { compose } from 'redux';
-import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import { line2md } from 'common';
+import { FormattedMessage, intlShape } from 'react-intl';
 import { Flex, Box } from 'rebass';
 import Select from 'react-select';
 import { RoundedPanel, ButtonOutline, Textarea } from 'style-store';
@@ -12,6 +13,7 @@ import { graphql } from 'react-apollo';
 import CreateAwardApplication from 'graphql/CreateAwardApplicationMutation';
 import AwardApplicationList from 'graphql/AwardApplicationList';
 import AwardList from 'graphql/AwardList';
+import { nAlert } from 'containers/Notifier/actions';
 
 import messages from './messages';
 
@@ -27,9 +29,10 @@ class AwardApplicationForm extends React.Component {
       awardId: null,
       comment: '',
     };
-    this.setAward = ({ value: awardId, description }) => {
+    this.setAward = ({ value: awardId, description, requisition }) => {
       this.setState({ awardId });
       this.currentDescription = description;
+      this.currentRequisition = requisition;
     };
     this.handleCommentChange = (e) => {
       this.setState({ comment: e.target.value });
@@ -37,9 +40,10 @@ class AwardApplicationForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleSubmit() {
+    const _ = this.context.intl.formatMessage;
     const { awardId, comment } = this.state;
     if (!awardId || !comment) {
-      bootbox.alert('Please fill in the form.');
+      this.props.alert(_(messages.formBlankAlert));
       return;
     }
     this.props
@@ -74,7 +78,7 @@ class AwardApplicationForm extends React.Component {
         },
       })
       .catch((error) => {
-        bootbox.alert(error.message);
+        this.props.alert(error.message);
       });
   }
   render() {
@@ -97,14 +101,31 @@ class AwardApplicationForm extends React.Component {
                     value: edge.node.id,
                     label: edge.node.name,
                     description: edge.node.description,
+                    requisition: edge.node.requisition,
                   }))}
                 />
               )}
             </FormattedMessage>
           </Box>
-          <Box w={1} style={{ minHeight: '50px' }}>
-            <FormattedMessage {...messages.awardDescription} />:{' '}
-            {this.currentDescription}
+          <Box w={1} mb={1} style={{ minHeight: '50px' }}>
+            <b>
+              <FormattedMessage {...messages.awardDescription} />:
+            </b>{' '}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: line2md(this.currentDescription || ''),
+              }}
+            />
+          </Box>
+          <Box w={1} mb={1} style={{ minHeight: '50px' }}>
+            <b>
+              <FormattedMessage {...messages.awardRequisition} />:
+            </b>{' '}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: line2md(this.currentRequisition || ''),
+              }}
+            />
           </Box>
           <Box w={1}>
             <FormattedMessage {...messages.commentPlaceholder}>
@@ -126,11 +147,22 @@ class AwardApplicationForm extends React.Component {
   }
 }
 
+AwardApplicationForm.contextTypes = {
+  intl: intlShape,
+};
+
 AwardApplicationForm.propTypes = {
   allAwards: PropTypes.object,
   loading: PropTypes.bool.isRequired,
   mutate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+});
+
+const withConnect = connect(null, mapDispatchToProps);
 
 const withMutation = graphql(CreateAwardApplication);
 
@@ -149,4 +181,6 @@ const withData = graphql(AwardList, {
   },
 });
 
-export default compose(withData, withMutation)(AwardApplicationForm);
+export default compose(withData, withMutation, withConnect)(
+  AwardApplicationForm
+);

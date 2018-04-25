@@ -6,69 +6,68 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { fromJS } from 'immutable';
-import { createSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import { updateQueryStr } from 'common';
+
+import { push } from 'react-router-redux';
 
 import FilterVarSetPanel from './FilterVarSetPanel';
+import { makeSelectQuery } from './selectors';
 
-const getOrder = createSelector(
-  (order) => order.toJS(),
-  (orderList) => orderList.map(({ key, asc }) => (asc ? key : `-${key}`))
-);
+const FilterableList = (props) => {
+  const {
+    component: QueryList,
+    variables,
+    filter,
+    filterList,
+    order,
+    orderList,
+    query,
+    ...others
+  } = props;
+  const curOrder = query.orderBy || order;
+  const curFilter = query.filterValue
+    ? { [query.filterKey]: query.filterValue }
+    : filter || {};
 
-class FilterableList extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      order: fromJS(this.props.order || []),
-      filter: {},
-    };
-    this.setFilter = (filterKey, filterValue) =>
-      this.setState({
-        filter: { [filterKey]: filterValue },
-      });
-    this.handleOrderChange = (order) => {
-      this.setState({ order });
-    };
-  }
-
-  // {{{ render()
-  render() {
-    const {
-      component: QueryList,
-      variables,
-      filter,
-      filterList,
-      order,
-      orderList,
-      ...others
-    } = this.props;
-    return (
-      <div>
-        <FilterVarSetPanel
-          filterList={filterList}
-          orderList={orderList}
-          order={this.state.order}
-          onOrderChange={this.handleOrderChange}
-          onFilterChange={this.setFilter}
-        />
-        <QueryList
-          variables={{
-            orderBy: getOrder(this.state.order) || ['-id'],
-            ...(this.state.filter || this.props.filter || {}),
-            ...variables,
-          }}
-          {...others}
-        />
-      </div>
+  const setFilter = (filterKey, filterValue) =>
+    props.goto(
+      updateQueryStr({
+        filterKey,
+        filterValue,
+        page: 1,
+      })
     );
-  }
-  // }}}
-}
+  const handleOrderChange = (nextOrder) => {
+    props.goto(updateQueryStr({ order: nextOrder, page: 1 }));
+  };
+
+  return (
+    <div>
+      <FilterVarSetPanel
+        filterList={filterList}
+        orderList={orderList}
+        order={curOrder}
+        onOrderChange={handleOrderChange}
+        onFilterChange={setFilter}
+      />
+      <QueryList
+        variables={{
+          orderBy: curOrder || '-id',
+          ...(curFilter || filter),
+          ...variables,
+        }}
+        {...others}
+      />
+    </div>
+  );
+};
 
 FilterableList.defaultProps = {
   variables: {},
-  order: [],
+  order: '',
   orderList: ['id', 'created'],
   filter: {},
   filterList: [],
@@ -77,10 +76,22 @@ FilterableList.defaultProps = {
 FilterableList.propTypes = {
   component: PropTypes.any.isRequired,
   variables: PropTypes.object,
-  order: PropTypes.array,
+  order: PropTypes.string.isRequired,
   orderList: PropTypes.array,
   filter: PropTypes.object,
   filterList: PropTypes.array,
+  query: PropTypes.object,
+  goto: PropTypes.func.isRequired,
 };
 
-export default FilterableList;
+const mapStateToProps = createStructuredSelector({
+  query: makeSelectQuery(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  goto: (link) => dispatch(push(link)),
+});
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
+
+export default compose(withConnect)(FilterableList);

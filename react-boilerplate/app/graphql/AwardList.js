@@ -9,6 +9,7 @@ export const AwardList = gql`
           id
           name
           description
+          requisition
           groupName
         }
       }

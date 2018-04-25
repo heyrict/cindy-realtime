@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import {
   text2md,
   genre_type_dict as genreType,
   from_global_id as f,
+  withLocale,
 } from 'common';
+import { Link } from 'react-router-dom';
 import { FormattedMessage, intlShape } from 'react-intl';
 import { Flex, Box } from 'rebass';
 import {
@@ -76,7 +76,7 @@ function RewardingModalComponent(props, context) {
         />
         <div style={{ textAlign: 'right' }}>
           {'——'}
-          <PuzzleUserLabel to={`/profile/show/${props.user.rowid}`}>
+          <PuzzleUserLabel to={withLocale(`/profile/show/${props.user.rowid}`)}>
             {props.user.nickname}
           </PuzzleUserLabel>
           <UserAwardPopover
@@ -93,13 +93,11 @@ function RewardingModalComponent(props, context) {
       {props.onHide && (
         <Flex wrap>
           <Box w={2 / 3}>
-            <JumpButton
-              px={1}
-              onClick={() => props.jumpToPuzzle(f(props.id)[1])}
-              style={{ borderRadius: '10px 0 0 10px' }}
-            >
-              <FormattedMessage {...messages.jump} />
-            </JumpButton>
+            <Link to={withLocale(`/puzzle/show/${f(props.id)[1]}`)}>
+              <JumpButton px={1} style={{ borderRadius: '10px 0 0 10px' }}>
+                <FormattedMessage {...messages.jump} />
+              </JumpButton>
+            </Link>
           </Box>
           <Box w={1 / 3}>
             <CloseButton
@@ -113,9 +111,11 @@ function RewardingModalComponent(props, context) {
         </Flex>
       )}
       {!props.onHide && (
-        <JumpButton onClick={() => props.jumpToPuzzle(f(props.id)[1])}>
-          <FormattedMessage {...messages.jump} />
-        </JumpButton>
+        <Link to={withLocale(`/puzzle/show/${f(props.id)[1]}`)}>
+          <JumpButton>
+            <FormattedMessage {...messages.jump} />
+          </JumpButton>
+        </Link>
       )}
     </div>
   );
@@ -136,12 +136,7 @@ RewardingModalComponent.propTypes = {
   commentSet: PropTypes.shape({
     edges: PropTypes.array.isRequired,
   }),
-  jumpToPuzzle: PropTypes.func.isRequired,
   onHide: PropTypes.func,
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  jumpToPuzzle: (id) => dispatch(push(`/puzzle/show/${id}`)),
-});
-
-export default connect(null, mapDispatchToProps)(RewardingModalComponent);
+export default RewardingModalComponent;

@@ -16,7 +16,9 @@ import { Heading } from 'style-store';
 import Constrained from 'components/Constrained';
 import FilterableList from 'components/FilterableList';
 import PuzzleList from 'components/PuzzleList';
+import GoogleAd from 'components/GoogleAd';
 import PuzzleActiveList from 'containers/PuzzleActiveList';
+import { googleAdInfo } from 'settings';
 import AddPuzzleBtn from './AddPuzzleBtn';
 
 import saga from './saga';
@@ -36,12 +38,17 @@ function PuzzlePage(props, context) {
         <AddPuzzleBtn />
       </Heading>
       <PuzzleActiveList />
+      <GoogleAd {...googleAdInfo.infieldAd} />
       <FilterableList
         component={PuzzleList}
         variables={{ status__gt: 0 }}
-        order={[{ key: 'modified', asc: false }]}
+        order="-modified"
         orderList={['modified', 'starCount', 'starSum', 'commentCount']}
-        filterList={['title__contains']}
+        filterList={[
+          'title__contains',
+          'content__contains',
+          'solution__contains',
+        ]}
         fetchPolicy="cache-and-network"
       />
     </Constrained>

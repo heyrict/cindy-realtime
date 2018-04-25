@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import bootbox from 'bootbox';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { text2md } from 'common';
+import { nAlert } from 'containers/Notifier/actions';
 import { Tabs, TabItem, Flex, Box } from 'rebass';
 import Constrained from 'components/Constrained';
-import { text2md } from 'common';
 import dialogueMessages from 'containers/Dialogue/messages';
 import PreviewEdit from 'components/PreviewEdit';
 
@@ -111,10 +112,7 @@ class PuzzleModifyBox extends React.Component {
       })
       .then(() => {})
       .catch((error) => {
-        bootbox.alert({
-          title: 'Error',
-          message: error.message,
-        });
+        this.props.alert(error.message);
       });
   }
 
@@ -132,10 +130,7 @@ class PuzzleModifyBox extends React.Component {
       })
       .then(() => {})
       .catch((error) => {
-        bootbox.alert({
-          title: 'Error',
-          message: error.message,
-        });
+        this.props.alert(error.message);
       });
   }
 
@@ -155,10 +150,7 @@ class PuzzleModifyBox extends React.Component {
       })
       .then(() => {})
       .catch((error) => {
-        bootbox.alert({
-          title: 'Error',
-          message: error.message,
-        });
+        this.props.alert(error.message);
       });
   }
 
@@ -177,10 +169,7 @@ class PuzzleModifyBox extends React.Component {
         this.setState({ hint: '' });
       })
       .catch((error) => {
-        bootbox.alert({
-          title: 'Error',
-          message: error.message,
-        });
+        this.props.alert(error.message);
       });
   }
 
@@ -360,7 +349,14 @@ PuzzleModifyBox.propTypes = {
   puzzleId: PropTypes.number.isRequired,
   mutatePuzzleUpdate: PropTypes.func.isRequired,
   mutateHintCreate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+});
+
+const withConnect = connect(null, mapDispatchToProps);
 
 const withPuzzleUpdateMutation = graphql(puzzleUpdateMutation, {
   name: 'mutatePuzzleUpdate',
@@ -370,6 +366,8 @@ const withHintCreateMutation = graphql(createHintMutation, {
   name: 'mutateHintCreate',
 });
 
-export default compose(withPuzzleUpdateMutation, withHintCreateMutation)(
-  PuzzleModifyBox
-);
+export default compose(
+  withPuzzleUpdateMutation,
+  withHintCreateMutation,
+  withConnect
+)(PuzzleModifyBox);

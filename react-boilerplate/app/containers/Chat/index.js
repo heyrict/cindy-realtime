@@ -75,17 +75,16 @@ export function Chat(props) {
           </NavLink>
         )}
       </StyledToolbar>
-      {props.chat.activeTab === TAB_CHAT && (
-        <ChatRoom
-          key={props.chat.channel || defaultChannel(props.location.pathname)}
-          channel={props.chat.channel}
-          favChannels={props.allFavoriteChatrooms}
-          currentUserId={props.currentUser.user.userId}
-          sendPolicy={props.settings.sendChat}
-          pathname={props.location.pathname}
-          height={props.height - 50}
-        />
-      )}
+      <ChatRoom
+        key={props.chat.channel || defaultChannel(props.location.pathname)}
+        channel={props.chat.channel}
+        favChannels={props.allFavoriteChatrooms}
+        currentUserId={props.currentUser.user.userId}
+        sendPolicy={props.settings.sendChat}
+        pathname={props.location.pathname}
+        height={props.height - 50}
+        hidden={props.chat.activeTab !== TAB_CHAT}
+      />
       {props.chat.activeTab === TAB_CHANNEL && (
         <Channels tune={tune} favChannels={props.allFavoriteChatrooms} />
       )}
@@ -149,7 +148,7 @@ const withMemo = graphql(
     options: (props) => {
       const defaultOpt = { fetchPolicy: 'cache-only' };
       if (!props.location) return defaultOpt;
-      const match = props.location.pathname.match(/^\/puzzle\/show\/(\d+)$/);
+      const match = props.location.pathname.match(/\/puzzle\/show\/(\d+)$/);
       if (!match) return defaultOpt;
       const id = t('PuzzleNode', match[1]);
       return {

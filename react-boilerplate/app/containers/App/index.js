@@ -112,7 +112,6 @@ class App extends React.Component {
             <Switch>
               <Route path="/en">{InnerRoutes('en')}</Route>
               <Route path="/ja">{InnerRoutes('ja')}</Route>
-              <Route path="/">{InnerRoutes()}</Route>
               <Route path="*" component={NotFoundPage} />
             </Switch>
           </EasingBox>

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import bootbox from 'bootbox';
-import { line2md, from_global_id as f } from 'common';
+import { line2md, from_global_id as f, withLocale } from 'common';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { nAlert } from 'containers/Notifier/actions';
 import { createStructuredSelector, createSelector } from 'reselect';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
 
@@ -164,7 +164,7 @@ class Answer extends React.PureComponent {
         this.setState({ editMode: false });
       })
       .catch((error) => {
-        bootbox.alert(error.message);
+        this.props.alert(error.message);
       });
   }
 
@@ -207,7 +207,9 @@ class Answer extends React.PureComponent {
       return (
         <PuzzleFrame>
           <Box width={1}>
-            <NicknameLink to={`/profile/show/${this.props.owner.rowid}`}>
+            <NicknameLink
+              to={withLocale(`/profile/show/${this.props.owner.rowid}`)}
+            >
               {this.props.owner.nickname}
             </NicknameLink>
             <UserAwardPopover
@@ -274,6 +276,7 @@ Answer.propTypes = {
   user: PropTypes.object,
   status: PropTypes.number.isRequired,
   sendPolicy: PropTypes.string.isRequired,
+  alert: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -283,7 +286,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatch,
+  alert: (message) => dispatch(nAlert(message)),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

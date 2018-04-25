@@ -26,7 +26,7 @@ function settingsReducer(state = initialState, action) {
     case CHANGE_SETTING:
       return state.set(action.payload.key, action.payload.value);
     case SAVE_SETTINGS:
-      setCookie('cindyuiset', JSON.stringify(state.toJS()), 365 * 24 * 60 * 60);
+      setCookie('cindyuiset', JSON.stringify(state.toJS()), 31536000);
       return state;
     default:
       return state;

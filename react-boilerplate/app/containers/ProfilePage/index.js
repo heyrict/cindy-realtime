@@ -7,11 +7,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage, intlShape } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
+import { createSelector, createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { to_global_id as t } from 'common';
+import { to_global_id as t, text2desc, getQueryStr, setQueryStr } from 'common';
 import { Heading } from 'style-store';
 import Constrained from 'components/Constrained';
 import LoadingDots from 'components/LoadingDots';
@@ -26,94 +27,101 @@ import StarList from 'components/StarList';
 
 import injectSaga from 'utils/injectSaga';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
+import { selectLocation } from 'containers/App/selectors';
+import { nAlert } from 'containers/Notifier/actions';
 import ProfileDisplay from './ProfileDisplay';
 import saga from './saga';
 import messages from './messages';
+import { TAB_NAMES } from './constants';
 
-class ProfilePage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tabIndex: 0,
-    };
-    this.changeTab = (tab) => this.setState({ tabIndex: tab });
-  }
+function ProfilePage(props, context) {
+  const _ = context.intl.formatMessage;
+  const userId = t('UserNode', props.match.params.id);
+  const { loading, error, user } = props.data;
 
-  render() {
-    const _ = this.context.intl.formatMessage;
-    const userId = t('UserNode', this.props.match.params.id);
-    const { loading, error, user } = this.props.data;
-    if (loading) {
-      return (
-        <Helmet>
-          <title>{`Cindy - ${_(messages.title)}`}</title>
-          <meta name="description" content={_(messages.description)} />
-        </Helmet>
-      );
-    } else if (error) {
-      console.log(error);
-      return <LoadingDots />;
-    }
+  if (loading) {
     return (
-      <Constrained level={3}>
-        <Helmet>
-          <title>
-            {`Cindy - ${_(messages.heading, { nickname: user.nickname })}`}
-          </title>
-        </Helmet>
-        <Heading>
-          <FormattedMessage
-            {...messages.heading}
-            values={{ nickname: user.nickname }}
-          />
-        </Heading>
-        <ProfileNavbar
-          userId={parseInt(this.props.match.params.id, 10)}
-          onProfileClick={() => this.changeTab(0)}
-          onPuzzlesClick={() => this.changeTab(1)}
-          onStarsClick={() => this.changeTab(2)}
-          onBookmarksClick={() => this.changeTab(3)}
-          hideBookmark={
-            user.hideBookmark &&
-            t('UserNode', this.props.usernavbar.user.userId) !== userId
+      <Helmet>
+        <title>{`Cindy - ${_(messages.title)}`}</title>
+        <meta
+          name="description"
+          content={
+            (user && user.profile && text2desc(user.profile)) ||
+            _(messages.description)
           }
         />
-        {this.state.tabIndex === 0 && (
-          <ProfileDisplay
-            user={user}
-            userId={userId}
-            currentUserId={t('UserNode', this.props.usernavbar.user.userId)}
-          />
-        )}
-        {this.state.tabIndex === 1 && (
-          <FilterableList
-            component={PuzzleList}
-            variables={{ count: 10, user: userId }}
-            order={[{ key: 'modified', asc: false }]}
-            orderList={['modified', 'starCount', 'starSum']}
-          />
-        )}
-        {this.state.tabIndex === 2 && (
-          <FilterableList
-            component={StarList}
-            variables={{ user: userId }}
-            order={[{ key: 'value', asc: false }]}
-            orderList={['id', 'value']}
-          />
-        )}
-        {this.state.tabIndex === 3 && (
+      </Helmet>
+    );
+  } else if (error) {
+    props.alert(error);
+    return <LoadingDots />;
+  }
+
+  const currentTab = props.display || TAB_NAMES.profile;
+  const changeTab = (display) => {
+    props.goto(setQueryStr({ display }));
+  };
+  const hideBookmark =
+    user.hideBookmark && t('UserNode', props.usernavbar.user.userId) !== userId;
+
+  return (
+    <Constrained level={3}>
+      <Helmet>
+        <title>{`${_(messages.heading, {
+          nickname: user.nickname,
+        })} - Cindy`}</title>
+        <meta name="description" content={_(messages.description)} />
+      </Helmet>
+      <Heading>
+        <FormattedMessage
+          {...messages.heading}
+          values={{ nickname: user.nickname }}
+        />
+      </Heading>
+      <ProfileNavbar
+        userId={parseInt(props.match.params.id, 10)}
+        onProfileClick={() => changeTab(TAB_NAMES.profile)}
+        onPuzzlesClick={() => changeTab(TAB_NAMES.puzzle)}
+        onStarsClick={() => changeTab(TAB_NAMES.star)}
+        onBookmarksClick={() => changeTab(TAB_NAMES.bookmark)}
+        hideBookmark={hideBookmark}
+      />
+      {currentTab === TAB_NAMES.profile && (
+        <ProfileDisplay
+          user={user}
+          userId={userId}
+          currentUserId={t('UserNode', props.usernavbar.user.userId)}
+        />
+      )}
+      {currentTab === TAB_NAMES.puzzle && (
+        <FilterableList
+          component={PuzzleList}
+          variables={{ count: 10, user: userId }}
+          order="-modified"
+          orderList={['modified', 'starCount', 'starSum']}
+        />
+      )}
+      {currentTab === TAB_NAMES.star && (
+        <FilterableList
+          component={StarList}
+          variables={{ user: userId }}
+          order="-value"
+          orderList={['id', 'value']}
+        />
+      )}
+      {currentTab === TAB_NAMES.bookmark &&
+        !hideBookmark && (
           <FilterableList
             component={BookmarkList}
             variables={{ user: userId }}
-            order={[{ key: 'value', asc: false }]}
+            order="-value"
             orderList={['id', 'value']}
             userId={userId}
-            currentUserId={t('UserNode', this.props.usernavbar.user.userId)}
+            currentUserId={t('UserNode', props.usernavbar.user.userId)}
           />
         )}
-      </Constrained>
-    );
-  }
+    </Constrained>
+  );
 }
 
 ProfilePage.contextTypes = {
@@ -136,17 +144,23 @@ ProfilePage.propTypes = {
     error: PropTypes.any,
     user: PropTypes.object,
   }),
+  display: PropTypes.string,
+  goto: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   usernavbar: makeSelectUserNavbar(),
+  display: createSelector(
+    selectLocation,
+    (location) => getQueryStr(location.get('search')).display
+  ),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
+const mapDispatchToProps = (dispatch) => ({
+  goto: (path) => dispatch(push(path)),
+  alert: (msg) => dispatch(nAlert(msg)),
+});
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 

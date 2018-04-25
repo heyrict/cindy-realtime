@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import bootbox from 'bootbox';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { nAlert } from 'containers/Notifier/actions';
+
 import { Flex, Box } from 'rebass';
 import Constrained from 'components/Constrained';
 import Slider from 'components/Slider';
@@ -34,13 +37,10 @@ class BookmarkBox extends React.PureComponent {
         },
       })
       .then(() => {
-        bootbox.alert('Save Succeeded');
+        this.props.alert('Save Succeeded');
       })
       .catch((error) => {
-        bootbox.alert({
-          title: 'Error',
-          message: error.message,
-        });
+        this.props.alert(error.message);
       });
   }
   render() {
@@ -83,8 +83,15 @@ BookmarkBox.propTypes = {
   puzzleId: PropTypes.number.isRequired,
   existingBookmark: PropTypes.array.isRequired,
   mutate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  alert: (message) => dispatch(nAlert(message)),
+});
+
+const withConnect = connect(null, mapDispatchToProps);
 
 const withMutation = graphql(CreateBookmarkMutation);
 
-export default withMutation(BookmarkBox);
+export default compose(withMutation, withConnect)(BookmarkBox);

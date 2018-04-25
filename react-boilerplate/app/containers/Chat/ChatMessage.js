@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Time, DarkNicknameLink as NicknameLink } from 'style-store';
 import UserAwardPopover from 'components/UserAwardPopover';
-import { line2md } from 'common';
+import { line2md, withLocale } from 'common';
 
 const MessageWrapper = styled.div`
   border-radius: 5px;
@@ -18,7 +18,7 @@ const MessageWrapper = styled.div`
 function ChatMessage(props) {
   return (
     <MessageWrapper>
-      <NicknameLink to={`/profile/show/${props.user.rowid}`}>
+      <NicknameLink to={withLocale(`/profile/show/${props.user.rowid}`)}>
         {props.user.nickname}
       </NicknameLink>
       <UserAwardPopover

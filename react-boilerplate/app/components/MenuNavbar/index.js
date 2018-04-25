@@ -12,6 +12,7 @@ import { createSelector } from 'reselect';
 import { RouterLink, SubNavbar, ImgSm } from 'style-store';
 import { NavLink, Group, Button, ButtonOutline } from 'rebass';
 import SponsersMenuItem from 'containers/SponsersMenuItem';
+import { withLocale } from 'common';
 
 import { FormattedMessage } from 'react-intl';
 import githubMark from 'images/GitHub-Mark.svg';
@@ -48,17 +49,17 @@ GroupButton.propTypes = {
 function MenuNavbar(props) {
   return (
     <SubNavbar mx={-2} style={{ display: props.open ? 'block' : 'none' }}>
-      <RouterLink to="/" tabIndex="0">
+      <RouterLink to={withLocale('/')} tabIndex="0">
         <NavLink is="span">
           <FormattedMessage {...messages.hp} />
         </NavLink>
       </RouterLink>
-      <RouterLink to="/puzzle">
+      <RouterLink to={withLocale('/puzzle')}>
         <NavLink is="span">
           <FormattedMessage {...messages.puzzle} />
         </NavLink>
       </RouterLink>
-      <RouterLink to="/puzzle/add">
+      <RouterLink to={withLocale('/puzzle/add')}>
         <NavLink is="span">
           <FormattedMessage {...messages.puzzleAdd} />
         </NavLink>
@@ -75,7 +76,7 @@ function MenuNavbar(props) {
       <SponsersMenuItem>
         <FormattedMessage {...messages.sponsers} />
       </SponsersMenuItem>
-      <RouterLink to="/rules">
+      <RouterLink to={withLocale('/rules')}>
         <NavLink is="span">
           <FormattedMessage {...messages.rules} />
         </NavLink>

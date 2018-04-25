@@ -3,15 +3,22 @@ import PuzzlePanel from './PuzzlePanel';
 
 export const BookmarkListInitQuery = gql`
   query BookmarkListInitQuery(
-    $count: Int
-    $cursor: String
+    $limit: Int
+    $offset: Int
     $orderBy: [String]
     $user: ID
+    $puzzle: ID
   ) {
-    allBookmarks(first: $count, after: $cursor, orderBy: $orderBy, user: $user)
+    allBookmarks(
+      limit: $limit
+      offset: $offset
+      orderBy: $orderBy
+      user: $user
+      puzzle: $puzzle
+    )
       @connection(
         key: "BookmarkNode_allBookmarks"
-        filter: ["orderBy", "user"]
+        filter: ["orderBy", "user", "offset", "puzzle"]
       ) {
       edges {
         node {
@@ -22,10 +29,7 @@ export const BookmarkListInitQuery = gql`
           }
         }
       }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
+      totalCount
     }
   }
   ${PuzzlePanel}
