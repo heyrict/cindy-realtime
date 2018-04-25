@@ -12,9 +12,7 @@
 import MarkdownIt from 'markdown-it';
 import mdEmoji from 'markdown-it-emoji';
 import sanitizeHtml from 'sanitize-html';
-import 'expose-loader?jQuery!expose-loader?$!jquery';
 import moment, * as moments from 'moment';
-import bootstrap from 'bootstrap';
 import { push } from 'react-router-redux';
 import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants';
 
@@ -53,6 +51,27 @@ function _norm_countdown(string) {
   );
 }
 
+const changeTabularTab = (id) => {
+  const tabContents = document.getElementById(id).parentElement;
+  const navtabContents = document.getElementById(`nav${id}`).parentElement;
+  Array.forEach(tabContents.children, (child) => {
+    if (child.id === id) {
+      child.setAttribute('class', 'tab-pane active');
+    } else {
+      child.setAttribute('class', 'tab-pane');
+    }
+  });
+  Array.forEach(navtabContents.children, (child) => {
+    if (child.id === `nav${id}`) {
+      child.setAttribute('class', 'active');
+    } else {
+      child.removeAttribute('class');
+    }
+  });
+};
+
+window.changeTabularTab = changeTabularTab;
+
 function _norm_tabs(string) {
   var _createID = (text, nmspc) =>
     'tab-' + (nmspc ? nmspc + '-' : '') + hash(text);
@@ -62,10 +81,11 @@ function _norm_tabs(string) {
 <ul class="nav nav-tabs"${namespace ? " id='tabs-" + namespace + "'" : ''}>`;
 
     for (var i in tab_titles) {
+      const newId = _createID(tab_contents[i], namespace);
       returns += `
-<li${i == 0 ? " class='active'" : ''}>
-  <a data-toggle="tab" data-target="#${_createID(tab_contents[i], namespace)}"
-    href="javascript:void(0);">
+<li${i == 0 ? " class='active'" : ''} id="nav${newId}">
+  <a data-toggle="tab" data-target="#${newId}"
+    href="javascript:changeTabularTab('${newId}');">
     ${tab_titles[i]}
   </a>
 </li>`;
@@ -119,18 +139,20 @@ function _norm_tabs(string) {
 
 function StartCountdown(selector) {
   return window.setInterval(function() {
-    $(selector || '.countdownobj').each(function() {
-      var until = moment($(this).attr('until')),
-        now = moment();
-      var diff = until.diff(now, 'milliseconds'),
-        diffdays = until.diff(now, 'days');
-      $(this).html(
-        diff < 0
-          ? `<font color='tomato'>${gettext('Time Out')}</font>`
-          : (diffdays ? diffdays + 'd ' : '') +
-            moment(diff).format('H[h]:mm[m]:ss[s]')
-      );
-    });
+    Array.forEach(
+      document.getElementsByClassName(selector || '.countdownobj'),
+      (countdownobj) => {
+        var until = moment(countdownobj.getAttribute('until')),
+          now = moment();
+        var diff = until.diff(now, 'milliseconds'),
+          diffdays = until.diff(now, 'days');
+        countdownobj.innerHtml =
+          diff < 0
+            ? `<font color='tomato'>${gettext('Time Out')}</font>`
+            : (diffdays ? diffdays + 'd ' : '') +
+              moment(diff).format('H[h]:mm[m]:ss[s]');
+      }
+    );
   }, 1000);
 }
 

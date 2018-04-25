@@ -55,10 +55,9 @@ class ChatRoom extends React.Component {
   componentDidUpdate(prevProps) {
     if (!prevProps.allChatmessages && this.props.allChatmessages) {
       this.scrollToBottom();
-    }
-
-    if (
+    } else if (
       this.props.allChatmessages &&
+      prevProps.allChatmessages &&
       this.props.allChatmessages.edges.length !==
         prevProps.allChatmessages.edges.length
     ) {
@@ -116,7 +115,7 @@ class ChatRoom extends React.Component {
             __typename: 'CreateChatMessagePayload',
             chatmessage: {
               __typename: 'ChatMessageNode',
-              id: '-1',
+              id: t('ChatMessageNode', '-1'),
               created: now.toISOString(),
             },
           },
