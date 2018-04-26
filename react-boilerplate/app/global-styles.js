@@ -7,6 +7,10 @@ injectGlobal`
   body {
     height: 100%;
     width: 100%;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   }
 
   body {
@@ -31,6 +35,14 @@ injectGlobal`
     line-height: 1.5em;
   }
 
+  a {
+    text-decoration: none;
+    color: #4877d7;
+  }
+  button, a {
+    cursor: pointer;
+  }
+
   a:focus,
   a:hover {
     color: inherit;
@@ -51,5 +63,63 @@ injectGlobal`
   hr {
     border-top: 1px solid sienna;
     margin: 10px;
+  }
+
+  // bootstrap stuff
+  .nav {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+  }
+  .nav::before, .nav::after {
+    display: table;
+    clear: both;
+  }
+  .nav-tabs {
+    border-bottom: 1px solid #ddd;
+    display: inline-table;
+  }
+  .nav-tabs > li {
+    float: left;
+    margin-bottom: -1px;
+  }
+  .nav > li {
+    position: relative;
+    display: block;
+  }
+  .nav > li > a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+  }
+  .nav-tabs > li > a {
+    margin-right: 2px;
+    line-height: 1.428571;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid transparent;
+  }
+  .nav-tabs > li.active > a,
+  .nav-tabs > li.active > a:focus,
+  .nav-tabs > li.active > a:hover {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+  }
+  .tab-content > .tab-pane {
+    display: none;
+  }
+  .tab-content > .active {
+    display: block;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    line-height: 1.1;
+  }
+  h1, h2, h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
   }
 `;

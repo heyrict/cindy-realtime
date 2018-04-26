@@ -35,8 +35,6 @@ import Chat from 'containers/Chat';
 import makeSelectChat from 'containers/Chat/selectors';
 import common from 'common';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 const EasingBox = styled(Box)`
   height: ${(props) => props.height - 50}px;
   overflow-y: auto;
