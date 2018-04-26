@@ -1,15 +1,15 @@
 /**
-*
-* MarkdownEdit
-*
-*/
+ *
+ * MarkdownEdit
+ *
+ */
 
 import React from 'react';
-import { FormControl } from 'react-bootstrap';
+import { AutoResizeTextarea } from 'style-store';
 // import styled from 'styled-components';
 
 function MarkdownEdit(props) {
-  return <FormControl {...props} componentClass="textarea" />;
+  return <AutoResizeTextarea {...props} />;
 }
 
 MarkdownEdit.propTypes = {};

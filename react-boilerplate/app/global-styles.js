@@ -65,6 +65,52 @@ injectGlobal`
     margin: 10px;
   }
 
+  // modal stuff
+  .modal-shade {
+    display: none;
+    opacity: 0;
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4) 0, rgba(0,0,0,0.8) 100%);
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    will-change: opacity;
+  }
+
+  .modal-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-container > .modal {
+     opacity: 0;
+     box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+     background: #d7c682;
+     border-radius: 5px;
+     padding: 0;
+     display: flex;
+     flex-direction: column;
+     justify-content: space-between;
+     @media (min-width: 400px) {
+       width: 95%;
+     }
+     @media (min-width: 760px) {
+       width: 88%;
+     }
+     @media (min-width: 1024px) {
+       width: 76%;
+     }
+   }
+   .modal-container > .modal-actions { 
+     align-self: flex-end;
+   }
+
   // bootstrap stuff
   .nav {
     padding-left: 0;

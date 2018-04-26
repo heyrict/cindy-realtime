@@ -15,8 +15,9 @@ import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
 import { graphql } from 'react-apollo';
 
-import { Form, FormControl, Panel } from 'react-bootstrap';
+import { Input } from 'style-store';
 import { setCurrentUser } from 'containers/UserNavbar/actions';
+import { nAlert } from 'containers/Notifier/actions';
 import { withModal } from 'components/withModal';
 import LoginFormMutation from 'graphql/LoginFormMutation';
 import messages from './messages';
@@ -28,11 +29,9 @@ export class LoginForm extends React.Component {
     this.state = {
       username: '',
       password: '',
-      errorMsg: null,
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.confirm = this.confirm.bind(this);
   }
   // }}}
@@ -44,12 +43,6 @@ export class LoginForm extends React.Component {
     } else if (target.id === 'formLoginPassword') {
       this.setState({ password: target.value });
     }
-  }
-  // }}}
-  // {{{ handleSubmit
-  handleSubmit(e) {
-    e.preventDefault();
-    this.confirm();
   }
   // }}}
   // {{{ confirm
@@ -67,27 +60,18 @@ export class LoginForm extends React.Component {
         });
       })
       .catch((error) => {
-        this.setState({
-          errorMsg: error,
-        });
+        this.props.alert(error.message);
       });
   }
   // }}}
   // {{{ render
   render() {
     return (
-      <Form horizontal>
-        {this.state.errorMsg ? (
-          <Panel
-            header={this.state.errorMsg.message}
-            bsStyle="danger"
-            key={this.state.errorMsg.message}
-          />
-        ) : null}
+      <div>
         <FieldGroup
           id="formLoginUsername"
           label={<FormattedMessage {...messages.username} />}
-          Ctl={FormControl}
+          Ctl={Input}
           type="text"
           value={this.state.username}
           onChange={this.handleChange}
@@ -95,19 +79,12 @@ export class LoginForm extends React.Component {
         <FieldGroup
           id="formLoginPassword"
           label={<FormattedMessage {...messages.password} />}
-          Ctl={FormControl}
+          Ctl={Input}
           type="password"
           value={this.state.password}
           onChange={this.handleChange}
         />
-        <FormControl
-          id="formModalAddSubmit"
-          type="submit"
-          onClick={this.handleSubmit}
-          value={'Submit'}
-          className="hidden"
-        />
-      </Form>
+      </div>
     );
   }
   // }}}
@@ -116,15 +93,15 @@ export class LoginForm extends React.Component {
 LoginForm.propTypes = {
   updateCurrentUser: PropTypes.func.isRequired,
   mutate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    updateCurrentUser: (user) => {
-      dispatch(setCurrentUser(user));
-    },
-  };
-}
+const mapDispatchToProps = (dispatch) => ({
+  updateCurrentUser: (user) => {
+    dispatch(setCurrentUser(user));
+  },
+  alert: (message) => dispatch(nAlert(message)),
+});
 
 const withConnect = connect(null, mapDispatchToProps);
 

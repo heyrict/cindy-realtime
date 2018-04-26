@@ -9,10 +9,10 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { intlShape } from 'react-intl';
 
-import { Modal } from 'react-bootstrap';
 import { Button } from 'style-store';
 
 import messages from './messages';
+import Modal from './Modal';
 
 const StyledButton = Button.extend`
   padding: 10px;
@@ -20,19 +20,26 @@ const StyledButton = Button.extend`
   margin: 0 5px;
 `;
 
-const ModalBody = styled(Modal.Body)`
-  background-color: #d7c682;
-  overflow: auto;
+const HeaderCloseBtn = styled.button`
+  font-size: 0.8em;
+  float: right;
 `;
 
-const ModalHeader = styled(Modal.Header)`
-  background-color: #c6b571;
-  border-bottom: 1px solid #c6b571 !important;
+const ModalHeader = styled.div`
+  background: #c6b571;
+  border-radius: 5px 5px 0 0;
+  font-size: 1.6em;
+  padding: 10px 20px;
 `;
 
-const ModalFooter = styled(Modal.Footer)`
-  background-color: #d7c682;
-  border-top: 1px solid #c6b571 !important;
+const ModalBody = styled.div`
+  padding: 10px 20px;
+`;
+
+const ModalFooter = styled.div`
+  border-top: 2px solid #c6b571;
+  padding: 5px 10px;
+  text-align: right;
 `;
 
 /* eslint-disable no-undef */
@@ -68,8 +75,9 @@ export function withModal(p) {
             bsSize="large"
           >
             {header && (
-              <ModalHeader closeButton>
-                <Modal.Title>{header}</Modal.Title>
+              <ModalHeader>
+                {header}
+                <HeaderCloseBtn onClick={this.props.onHide}>x</HeaderCloseBtn>
               </ModalHeader>
             )}
             <ModalBody>

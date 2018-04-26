@@ -6,12 +6,30 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Panel, Button } from 'react-bootstrap';
+import { ButtonOutline as Button } from 'style-store';
 import { text2md } from 'common';
+import posed from 'react-pose';
 // import styled from 'styled-components';
 
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
+
+const panelProps = {
+  display: {
+    scaleY: 1,
+    transition: (props) =>
+      tween({
+        ...props,
+        duration: 1000,
+        ease: easing.linear,
+      }),
+  },
+  collapsed: {
+    scaleY: 0,
+  },
+};
+
+const Panel = posed.div(panelProps);
 
 class MarkdownPreview extends React.Component {
   // eslint-disable-line react/prefer-stateless-function
@@ -33,14 +51,14 @@ class MarkdownPreview extends React.Component {
   render() {
     return (
       <div>
-        <Button onClick={this.togglePreview} block>
+        <Button onClick={this.togglePreview} w={1} tabIndex="-1">
           {this.state.open ? (
             <FormattedMessage {...messages.hide} />
           ) : (
             <FormattedMessage {...messages.show} />
           )}
         </Button>
-        <Panel collapsible expanded={this.state.open}>
+        <Panel pose={this.state.open ? 'display' : 'collapsed'}>
           <div
             dangerouslySetInnerHTML={{
               __html: text2md(this.props.content),

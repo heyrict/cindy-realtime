@@ -66,6 +66,9 @@ class ChatRoom extends React.Component {
   }
 
   scrollToBottom() {
+    if (!this.lastcmref || !this.btmref) {
+      return;
+    }
     const domrect = this.lastcmref.getBoundingClientRect();
     const windowHeight =
       window.innerHeight || document.documentElement.clientHeight;

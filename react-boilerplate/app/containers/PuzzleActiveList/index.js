@@ -12,6 +12,8 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { from_global_id as f } from 'common';
+import { easing, tween } from 'popmotion';
+import posed, { PoseGroup } from 'react-pose';
 
 import { graphql } from 'react-apollo';
 import PuzzleListQuery from 'graphql/PuzzleList';
@@ -23,6 +25,25 @@ import LoadingDots from 'components/LoadingDots';
 
 import { PUZZLE_ADDED } from './constants';
 
+const panelProps = {
+  enter: {
+    opacity: 1,
+    scaleY: 1,
+    transition: (props) =>
+      tween({
+        ...props,
+        duration: 1000,
+        ease: easing.anticipate,
+      }),
+  },
+  exit: {
+    opacity: 0,
+    scaleY: 0,
+  },
+};
+
+const AnimatedPanel = posed.div(panelProps);
+
 class PuzzleActiveList extends React.Component {
   componentWillMount() {
     this.props.subscribeToNewPuzzles();
@@ -31,10 +52,14 @@ class PuzzleActiveList extends React.Component {
   render() {
     return (
       <div>
-        {this.props.allPuzzles &&
-          this.props.allPuzzles.edges.map((edge) => (
-            <PuzzlePanel node={edge.node} key={edge.node.id} />
-          ))}
+        <PoseGroup>
+          {this.props.allPuzzles &&
+            this.props.allPuzzles.edges.map((edge) => (
+              <AnimatedPanel key={edge.node.id}>
+                <PuzzlePanel node={edge.node} />
+              </AnimatedPanel>
+            ))}
+        </PoseGroup>
         {this.props.loading && (
           <LoadingDots py={this.props.allPuzzles ? 5 : 50} size={8} />
         )}
@@ -103,7 +128,10 @@ const withPuzzleActiveList = graphql(PuzzleListQuery, {
                 ...prev,
                 allPuzzles: {
                   ...prev.allPuzzles,
-                  edges: prevEdges,
+                  edges: Array.sort(
+                    prevEdges,
+                    (e1, e2) => e1.node.status > e2.node.status
+                  ),
                 },
               };
             }
