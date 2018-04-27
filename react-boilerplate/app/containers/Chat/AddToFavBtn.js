@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { nAlert } from 'containers/Notifier/actions';
-import { Glyphicon } from 'react-bootstrap';
 import { graphql } from 'react-apollo';
 import createFavoriteChatRoomMutation from 'graphql/CreateFavoriteChatRoomMutation';
 import FavoriteChatRoomQuery from 'graphql/FavoriteChatRoomQuery';
@@ -53,11 +52,7 @@ function AddToFavBtn(props) {
       });
   };
 
-  return (
-    <FavBtn onClick={handleSubmit}>
-      <Glyphicon glyph="star-empty" />
-    </FavBtn>
-  );
+  return <FavBtn onClick={handleSubmit}>☆</FavBtn>;
 }
 
 AddToFavBtn.propTypes = {

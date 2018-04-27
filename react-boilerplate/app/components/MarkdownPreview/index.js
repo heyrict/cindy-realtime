@@ -9,27 +9,31 @@ import PropTypes from 'prop-types';
 import { ButtonOutline as Button } from 'style-store';
 import { text2md } from 'common';
 import posed from 'react-pose';
-// import styled from 'styled-components';
+import styled from 'styled-components';
 
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
 const panelProps = {
+  initialPose: 'display',
   display: {
-    scaleY: 1,
-    transition: (props) =>
-      tween({
-        ...props,
-        duration: 1000,
-        ease: easing.linear,
-      }),
+    maxHeight: '400px',
+    borderWidth: '1px',
   },
   collapsed: {
-    scaleY: 0,
+    maxHeight: 0,
+    borderWidth: 0,
   },
 };
 
-const Panel = posed.div(panelProps);
+const Panel = styled(posed.div(panelProps))`
+  border-radius: 0 0 5px 5px;
+  border-color: #2075c7;
+  border-style: solid;
+  padding: 5px 5px;
+  overflow-y: ${({ pose }) => (pose === 'display' ? 'auto' : 'hidden')};
+  overflow-x: auto;
+`;
 
 class MarkdownPreview extends React.Component {
   // eslint-disable-line react/prefer-stateless-function
@@ -51,7 +55,17 @@ class MarkdownPreview extends React.Component {
   render() {
     return (
       <div>
-        <Button onClick={this.togglePreview} w={1} tabIndex="-1">
+        <Button
+          onClick={this.togglePreview}
+          w={1}
+          py={1}
+          tabIndex="-1"
+          style={{
+            borderRadius: this.state.open ? '0' : '0 0 5px 5px',
+            boxShadow: "inset 0 0 0 0",
+            border: '1px solid #2075c7',
+          }}
+        >
           {this.state.open ? (
             <FormattedMessage {...messages.hide} />
           ) : (

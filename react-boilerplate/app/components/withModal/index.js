@@ -46,7 +46,7 @@ const ModalFooter = styled.div`
 
 export function withModal(p) {
   const header = p.header;
-  const footer = p.footer;
+  const footer = p.footer || { close: false, confirm: false };
   return (Wrapped) => {
     /* Change a component to modal.
    * props:
@@ -81,14 +81,18 @@ export function withModal(p) {
               </ModalHeader>
             )}
             <ModalBody>
-              <Wrapped
-                ref={(instance) => {
-                  this.childBody = instance;
-                }}
-                {...this.props}
-              />
+              {footer.confirm ? (
+                <Wrapped
+                  ref={(instance) => {
+                    this.childBody = instance;
+                  }}
+                  {...this.props}
+                />
+              ) : (
+                <Wrapped {...this.props} />
+              )}
             </ModalBody>
-            {footer && (
+            {(footer.confirm || footer.close) && (
               <ModalFooter>
                 {footer.confirm ? (
                   <StyledButton onClick={this.handleConfirm}>

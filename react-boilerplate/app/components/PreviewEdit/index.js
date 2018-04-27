@@ -11,13 +11,13 @@ import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
 function PreviewEdit(props) {
-  const { content, onChange, ...others } = props;
+  const { content, onChange, style, ...others } = props;
   return (
     <div>
       <MarkdownEdit
         value={props.content}
         onChange={props.onChange}
-        style={{ minHeight: '200px' }}
+        style={{ ...style, minHeight: '100px', borderRadius: '5px 5px 0 0' }}
         minRows={3}
         maxRows={7}
         {...others}
@@ -29,8 +29,13 @@ function PreviewEdit(props) {
 
 PreviewEdit.propTypes = {
   id: PropTypes.string,
+  style: PropTypes.object,
   content: PropTypes.string,
   onChange: PropTypes.func,
+};
+
+PreviewEdit.defaultProps = {
+  style: {},
 };
 
 export default PreviewEdit;

@@ -1,4 +1,6 @@
 import 'react-select/dist/react-select.css';
+import 'react-tippy/dist/tippy.css';
+import 'tippy-custom.css';
 import { injectGlobal } from 'styled-components';
 
 /* eslint no-unused-expressions: 0 */

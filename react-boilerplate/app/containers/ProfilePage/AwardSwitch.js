@@ -58,7 +58,9 @@ class AwardSwitch extends React.PureComponent {
           },
         },
       })
-      .then(() => {})
+      .then(() => {
+        this.props.alert('Save Successful');
+      })
       .catch((error) => {
         this.props.alert(error.message);
       });

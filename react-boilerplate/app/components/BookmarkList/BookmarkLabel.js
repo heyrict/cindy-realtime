@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import bootbox from 'bootbox';
 import { FormattedMessage, intlShape } from 'react-intl';
-import { nAlert } from 'containers/Notifier/actions';
+import { nAlert, nMessage } from 'containers/Notifier/actions';
 import { ImgXs, EditButton, Input } from 'style-store';
 import tag from 'images/tag.svg';
 import tick from 'images/tick.svg';
@@ -61,8 +60,7 @@ class BookmarkLabel extends React.PureComponent {
   }
   handleDelete() {
     const _ = this.context.intl.formatMessage;
-    bootbox.confirm(_(messages.deletePrompt), (p) => {
-      if (!p) return;
+    this.props.confirm(_(messages.deletePrompt), () => {
       this.props
         .mutateBookmarkDelete({
           variables: {
@@ -142,10 +140,21 @@ BookmarkLabel.propTypes = {
   mutateBookmarkDelete: PropTypes.func.isRequired,
   mutateBookmarkUpdate: PropTypes.func.isRequired,
   alert: PropTypes.func.isRequired,
+  confirm: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
+  confirm: (message, callback) =>
+    dispatch(
+      nMessage({
+        message,
+        action: {
+          label: 'Confirm',
+          callback,
+        },
+      })
+    ),
 });
 
 const withConnect = connect(null, mapDispatchToProps);
