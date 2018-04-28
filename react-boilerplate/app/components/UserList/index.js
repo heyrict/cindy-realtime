@@ -54,7 +54,7 @@ const withUserList = graphql(UserListQuery, {
       loading,
       allUsers,
       refetch,
-      hasMore: () => allUsers.pageInfo.hasNextPage,
+      hasMore: () => allUsers && allUsers.pageInfo.hasNextPage,
       loadMore: () =>
         fetchMore({
           query: UserListQuery,

@@ -39,8 +39,8 @@ function hash(string) {
 
 function _norm_openchat(string) {
   return string.replace(
-    /\"chat:\/\/([0-9a-zA-Z\-]+)\"/g,
-    '"javascript:window.OpenChat(\'$1\');"'
+    /^chat:\/\/(.+)$/g,
+    "javascript:window.OpenChat('$1');"
   );
 }
 
@@ -156,12 +156,6 @@ function StartCountdown(selector) {
   }, 1000);
 }
 
-function LinkNorm(string) {
-  string = _norm_openchat(string);
-  string = _norm_countdown(string);
-  return string;
-}
-
 function PreNorm(string) {
   string = _norm_tabs(string);
   return string;
@@ -178,16 +172,33 @@ export function line2md(string) {
     .use(mdEmoji);
   string = PreNorm(string);
 
-  return LinkNorm(
+  return sanitizeHtml(
     mdEscape
       .render(string)
       .replace(/<p>/g, '')
       .replace(/<\/p>\s*$/g, '')
-      .replace(/<\/p>/g, '<br style="margin-bottom: 10px" />')
+      .replace(/<\/p>/g, '<br style="margin-bottom: 10px" />'),
+    {
+      allowedTags: false,
+      allowedAttributes: false,
+      allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'chat', 'javascript'],
+      textFilter: _norm_countdown,
+      transformTags: {
+        '*': (tagName, attribs) => ({
+          tagName,
+          attribs: attribs.href
+            ? {
+                ...attribs,
+                href: _norm_openchat(attribs.href),
+              }
+            : attribs,
+        }),
+      },
+    }
   );
 }
 
-export function text2md(string, safe=true) {
+export function text2md(string, safe = true) {
   if (safe) {
     return sanitizeHtml(md.render(PreNorm(string)), {
       allowedTags: false,
@@ -197,35 +208,90 @@ export function text2md(string, safe=true) {
       transformTags: {
         '*': (tagName, attribs) => ({
           tagName,
-          attribs: attribs.href ? {
-            ...attribs,
-            href: _norm_openchat(attribs.href),
-          } : attribs,
+          attribs: attribs.href
+            ? {
+                ...attribs,
+                href: _norm_openchat(attribs.href),
+              }
+            : attribs,
         }),
       },
-    })
+    });
   } else {
     return sanitizeHtml(md.render(PreNorm(string)), {
-      allowedTags: ['h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
-        'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
-        'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'font'],
+      allowedTags: [
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'blockquote',
+        'p',
+        'a',
+        'ul',
+        'ol',
+        'nl',
+        'li',
+        'b',
+        'i',
+        'strong',
+        'em',
+        'strike',
+        'code',
+        'hr',
+        'br',
+        'div',
+        'table',
+        'thead',
+        'caption',
+        'tbody',
+        'tr',
+        'th',
+        'td',
+        'pre',
+        'font',
+      ],
       allowedAttributes: {
         '*': ['style', 'href', 'data-*'],
-        'font': ['style', 'color', 'size'],
+        font: ['style', 'color', 'size'],
       },
       allowedStyles: {
         '*': {
           // Match HEX and RGB
-          'color': [/^\#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+          color: [
+            /^\#(0x)?[0-9a-f]+$/i,
+            /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
+          ],
+          background: [
+            /^\#(0x)?[0-9a-f]+$/i,
+            /^[a-z]+$/i,
+            /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
+          ],
+          'background-color': [
+            /^\#(0x)?[0-9a-f]+$/i,
+            /^[a-z]+$/i,
+            /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
+          ],
           'text-align': [/^left$/, /^right$/, /^center$/],
           // Match any number with px, em, or %
-          'font-size': [/^\d+$[px|em|\%]$/],
-          'border': [".*"],
-          'border-*': [".*"],
+          'font-size': [/^\d+(px|em|\%)?$/],
+          width: [/^\d+(px|em|\%)?$/],
+          height: [/^\d+(px|em|\%)?$/],
+          padding: [/^.*$/],
+          margin: [/^.*$/],
+          border: [/^.*$/],
+          'padding-left': [/^\d+(px|em|\%)?$/],
+          'padding-right': [/^\d+(px|em|\%)?$/],
+          'padding-top': [/^\d+(px|em|\%)?$/],
+          'padding-bottom': [/^\d+(px|em|\%)?$/],
+          'margin-left': [/^\d+(px|em|\%)?$/],
+          'margin-right': [/^\d+(px|em|\%)?$/],
+          'margin-top': [/^\d+(px|em|\%)?$/],
+          'margin-bottom': [/^\d+(px|em|\%)?$/],
+          'border-left': [/^\d+(px|em|\%)?$/],
+          'border-right': [/^\d+(px|em|\%)?$/],
+          'border-top': [/^\d+(px|em|\%)?$/],
+          'border-bottom': [/^\d+(px|em|\%)?$/],
         },
-        'p': {
-          'font-size': [/^\d+rem$/]
-        }
       },
       allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'chat'],
       nonTextTags: ['style', 'script'],
@@ -233,13 +299,15 @@ export function text2md(string, safe=true) {
       transformTags: {
         '*': (tagName, attribs) => ({
           tagName,
-          attribs: attribs.href ? {
-            ...attribs,
-            href: _norm_openchat(attribs.href),
-          } : attribs,
+          attribs: attribs.href
+            ? {
+                ...attribs,
+                href: _norm_openchat(attribs.href),
+              }
+            : attribs,
         }),
       },
-    })
+    });
   }
 }
 
