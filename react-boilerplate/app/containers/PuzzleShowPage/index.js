@@ -14,6 +14,8 @@ import { Helmet } from 'react-helmet';
 import { FormattedMessage, intlShape } from 'react-intl';
 import { createStructuredSelector, createSelector } from 'reselect';
 import { compose } from 'redux';
+import { easing, tween } from 'popmotion';
+import posed, { PoseGroup } from 'react-pose';
 
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
 import makeSelectSettings from 'containers/Settings/selectors';
@@ -50,6 +52,25 @@ const Title = styled.h1`
   font-size: 2em;
   text-align: center;
 `;
+
+const panelProps = {
+  enter: {
+    opacity: 1,
+    scaleY: 1,
+    transition: (props) =>
+      tween({
+        ...props,
+        duration: 1000,
+        ease: easing.anticipate,
+      }),
+  },
+  exit: {
+    opacity: 0,
+    scaleY: 0,
+  },
+};
+
+const AnimatedPanel = posed.div(panelProps);
 
 export class PuzzleShowPage extends React.Component {
   constructor(props) {
@@ -170,42 +191,42 @@ export class PuzzleShowPage extends React.Component {
         {(P.status <= 2 || P.user.rowid === U) && (
           <div>
             {DialoguePaginationBar}
-            {dEdges
-              .slice(
-                dSlices[this.state.currentPage - 1],
-                dSlices[this.state.currentPage]
-              )
-              .map((edge) => {
-                const type = f(edge.node.id)[0];
-                if (type === 'DialogueNode') {
-                  if (
-                    P.yami &&
-                    U !== edge.node.user.rowid &&
-                    U !== P.user.rowid &&
-                    P.status === 0
-                  ) {
-                    return null;
+            <PoseGroup>
+              {dEdges
+                .slice(
+                  dSlices[this.state.currentPage - 1],
+                  dSlices[this.state.currentPage]
+                )
+                .map((edge) => {
+                  const type = f(edge.node.id)[0];
+                  if (type === 'DialogueNode') {
+                    if (
+                      P.yami &&
+                      U !== edge.node.user.rowid &&
+                      U !== P.user.rowid &&
+                      P.status === 0
+                    ) {
+                      return null;
+                    }
+                    return (
+                      <AnimatedPanel key={edge.node.id}>
+                        <Dialogue
+                          index={edge.index}
+                          status={P.status}
+                          node={edge.node}
+                          settings={this.props.settings}
+                          owner={P.user}
+                        />
+                      </AnimatedPanel>
+                    );
                   }
                   return (
-                    <Dialogue
-                      key={edge.node.id}
-                      index={edge.index}
-                      status={P.status}
-                      node={edge.node}
-                      settings={this.props.settings}
-                      owner={P.user}
-                    />
+                    <AnimatedPanel key={edge.node.id}>
+                      <Hint owner={P.user} status={P.status} node={edge.node} />
+                    </AnimatedPanel>
                   );
-                }
-                return (
-                  <Hint
-                    key={edge.node.id}
-                    owner={P.user}
-                    status={P.status}
-                    node={edge.node}
-                  />
-                );
-              })}
+                })}
+            </PoseGroup>
             {DialoguePaginationBar}
           </div>
         )}

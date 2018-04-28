@@ -84,6 +84,7 @@ export function Chat(props) {
         pathname={props.location.pathname}
         height={props.height - 50}
         hidden={props.chat.activeTab !== TAB_CHAT}
+        tune={tune}
       />
       {props.chat.activeTab === TAB_CHANNEL && (
         <Channels tune={tune} favChannels={props.allFavoriteChatrooms} />

@@ -9,7 +9,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { Tooltip } from 'react-tippy';
 
 const PuzzleScore = styled.button`
   background-color: darkorchid;
@@ -39,30 +39,25 @@ function StarLabel(props) {
     }
   });
   const overlay = (
-    <Popover id={`popover-${props.puzzleId}`}>
+    <div>
       {starDict.map(
         (list, index) =>
           list.length > 0 && (
-            <div key={`popover-${props.puzzleId}-${index}`}>
+            <div key={`${props.puzzleId}-${index}`}>
               {index + 1}★: {list.join(', ')}
             </div>
           )
       )}
-    </Popover>
+    </div>
   );
   if (starCount > 0) {
     return (
-      <OverlayTrigger
-        trigger="click"
-        placement="top"
-        rootClose
-        overlay={overlay}
-      >
+      <Tooltip position="top" html={overlay} theme="cindy">
         <PuzzleScore>
           <span className="glyphicon glyphicon-star" />
-          <span>{`${starCount}(${starSum})`}</span>
+          <span>{`★${starCount}(${starSum})`}</span>
         </PuzzleScore>
-      </OverlayTrigger>
+      </Tooltip>
     );
   }
   return null;

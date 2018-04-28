@@ -7,7 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { line2md } from 'common';
-import { Popover, OverlayTrigger } from 'react-bootstrap';
+import { Tooltip } from 'react-tippy';
 // import styled from 'styled-components';
 
 class UserAwardPopover extends React.PureComponent {
@@ -18,7 +18,8 @@ class UserAwardPopover extends React.PureComponent {
       return null;
     }
     const popoverAward = (
-      <Popover id={ua.id} title={ua.award.name}>
+      <div>
+        <h3>{ua.award.name}</h3>
         <span
           dangerouslySetInnerHTML={{ __html: line2md(ua.award.description) }}
         />
@@ -34,19 +35,18 @@ class UserAwardPopover extends React.PureComponent {
             {ua.created}
           </span>
         )}
-      </Popover>
+      </div>
     );
     return (
-      <OverlayTrigger
-        trigger="click"
-        rootClose
-        overlay={popoverAward}
-        placement={this.props.placement || 'top'}
+      <Tooltip
+        position={this.props.placement || 'top'}
+        html={popoverAward}
+        theme="cindy"
       >
         <button style={{ color: 'black', padding: '0', ...this.props.style }}>
           [{ua.award.name}]
         </button>
-      </OverlayTrigger>
+      </Tooltip>
     );
   }
 }

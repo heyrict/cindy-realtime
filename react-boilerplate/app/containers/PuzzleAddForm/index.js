@@ -13,7 +13,7 @@ import { push } from 'react-router-redux';
 import { withLocale } from 'common';
 import { nAlert } from 'containers/Notifier/actions';
 
-import { Button, Form, FormControl } from 'react-bootstrap';
+import { Input, Select, ButtonOutline as Button } from 'style-store';
 import FieldGroup from 'components/FieldGroup';
 import PreviewEdit from 'components/PreviewEdit';
 import genreMessages from 'components/TitleLabel/messages';
@@ -79,23 +79,23 @@ export class PuzzleAddForm extends React.Component {
   // {{{ render
   render() {
     return (
-      <Form horizontal>
+      <div>
         <FieldGroup
           id="formPuzzleAddTitle"
           label={<FormattedMessage {...messages.titleLabel} />}
-          Ctl={FormControl}
+          Ctl={Input}
           type="text"
           value={this.state.puzzleTitle}
           onChange={this.handleChange}
         />
         <FieldGroup
-          id="formPuzzleAddGenre"
           label={<FormattedMessage {...messages.genreLabel} />}
           Ctl={() => (
-            <FormControl
+            <Select
               componentClass="select"
               value={this.state.puzzleGenre}
               onChange={this.handleChange}
+              id="formPuzzleAddGenre"
             >
               <FormattedMessage {...genreMessages.classic}>
                 {(msg) => (
@@ -125,13 +125,13 @@ export class PuzzleAddForm extends React.Component {
                   </option>
                 )}
               </FormattedMessage>
-            </FormControl>
+            </Select>
           )}
         />
         <FieldGroup
           id="formPuzzleAddYami"
           label={<FormattedMessage {...messages.yamiLabel} />}
-          Ctl={FormControl}
+          Ctl={Input}
           type="checkbox"
           checked={this.state.puzzleYami}
           onChange={this.handleChange}
@@ -151,11 +151,11 @@ export class PuzzleAddForm extends React.Component {
           onChange={this.handleChange}
         />
         {!this.state.loading && (
-          <Button type="submit" block onClick={this.handleSubmit}>
+          <Button w={1} py={1} onClick={this.handleSubmit}>
             {<FormattedMessage {...messages.submitLabel} />}
           </Button>
         )}
-      </Form>
+      </div>
     );
   }
   // }}}

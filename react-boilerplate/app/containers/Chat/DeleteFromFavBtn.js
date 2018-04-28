@@ -5,8 +5,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { nAlert } from 'containers/Notifier/actions';
 
-import { Glyphicon } from 'react-bootstrap';
-
 import { graphql } from 'react-apollo';
 import deleteFavoriteChatRoomMutation from 'graphql/DeleteFavoriteChatRoomMutation';
 import FavoriteChatRoomQuery from 'graphql/FavoriteChatRoomQuery';
@@ -55,7 +53,7 @@ function DeleteFromFavBtn(props) {
 
   return (
     <FavBtn onClick={handleSubmit}>
-      <Glyphicon glyph="star" />
+      ★
     </FavBtn>
   );
 }

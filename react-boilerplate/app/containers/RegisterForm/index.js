@@ -14,8 +14,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
 import { graphql } from 'react-apollo';
-import { Form, FormControl, Panel } from 'react-bootstrap';
-import { ButtonOutline } from 'style-store';
+import { ButtonOutline, Input } from 'style-store';
 
 import Constrained from 'components/Constrained';
 import FieldGroup from 'components/FieldGroup';
@@ -23,6 +22,7 @@ import { setCurrentUser } from 'containers/UserNavbar/actions';
 import { withModal } from 'components/withModal';
 import RegisterFormMutation from 'graphql/RegisterFormMutation';
 
+import { nAlert } from 'containers/Notifier/actions';
 import rulesMessages from 'containers/RulesPage/messages';
 import messages from './messages';
 import { registerSucceeded } from './actions';
@@ -37,7 +37,6 @@ export class RegisterForm extends React.Component {
       nickname: '',
       password: '',
       passwordConfirm: '',
-      errorMsg: null,
       username_valid: true,
       nickname_valid: true,
       password_valid: true,
@@ -46,7 +45,6 @@ export class RegisterForm extends React.Component {
 
     this.handlePolicyConfirm = () => this.setState({ displayPolicy: false });
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.confirm = this.confirm.bind(this);
   }
   // }}}
@@ -74,7 +72,8 @@ export class RegisterForm extends React.Component {
           prevState.password.length <= 64 &&
           prevState.password.length >= 8 &&
           prevState.password.match(/[0-9]+/) &&
-          prevState.password.match(/[a-zA-Z]+/),
+          prevState.password.match(/[a-zA-Z]+/) &&
+          prevState.password.match(/^[a-zA-Z0-9@.+\-_]+$/),
       }));
     } else if (target.id === 'formRegisterPasswordConfirm') {
       this.setState({ passwordConfirm: target.value });
@@ -82,12 +81,6 @@ export class RegisterForm extends React.Component {
         passwordConfirm_valid: prevState.passwordConfirm === prevState.password,
       }));
     }
-  }
-  // }}}
-  // {{{ handleSubmit
-  handleSubmit(e) {
-    e.preventDefault();
-    this.confirm();
   }
   // }}}
   // {{{ confirm
@@ -111,8 +104,8 @@ export class RegisterForm extends React.Component {
         nickname_valid: prevState.nickname !== '',
         password_valid: prevState.password !== '',
         passwordConfirm_valid: prevState.passwordConfirm !== '',
-        errorMsg: [{ message: 'There are some errors in your form!' }],
       }));
+      this.props.alert('There are some errors in your form!');
       return;
     }
     // Commit
@@ -128,12 +121,10 @@ export class RegisterForm extends React.Component {
           ...user,
           userId: user.rowid,
         });
-        this.props.dispatch(registerSucceeded(user.rowid));
+        this.props.registerSucceeded(user.rowid);
       })
       .catch((error) => {
-        this.setState({
-          errorMsg: error,
-        });
+        this.props.alert(error.message);
       });
   }
   // }}}
@@ -159,18 +150,11 @@ export class RegisterForm extends React.Component {
       );
     }
     return (
-      <Form horizontal>
-        {this.state.errorMsg ? (
-          <Panel
-            header={this.state.errorMsg.message}
-            bsStyle="danger"
-            key={this.state.errorMsg.message}
-          />
-        ) : null}
+      <div>
         <FieldGroup
           id="formRegisterUsername"
           label={<FormattedMessage {...messages.usernameLabel} />}
-          Ctl={FormControl}
+          Ctl={Input}
           type="text"
           value={this.state.username}
           valid={this.state.username_valid ? null : 'error'}
@@ -180,7 +164,7 @@ export class RegisterForm extends React.Component {
         <FieldGroup
           id="formRegisterNickname"
           label={<FormattedMessage {...messages.nicknameLabel} />}
-          Ctl={FormControl}
+          Ctl={Input}
           type="text"
           value={this.state.nickname}
           valid={this.state.nickname_valid ? null : 'error'}
@@ -190,7 +174,7 @@ export class RegisterForm extends React.Component {
         <FieldGroup
           id="formRegisterPassword"
           label={<FormattedMessage {...messages.passwordLabel} />}
-          Ctl={FormControl}
+          Ctl={Input}
           type="password"
           value={this.state.password}
           valid={this.state.password_valid ? null : 'error'}
@@ -200,40 +184,31 @@ export class RegisterForm extends React.Component {
         <FieldGroup
           id="formRegisterPasswordConfirm"
           label={<FormattedMessage {...messages.passwordConfirmLabel} />}
-          Ctl={FormControl}
+          Ctl={Input}
           type="password"
           value={this.state.passwordConfirm}
           valid={this.state.passwordConfirm_valid ? null : 'error'}
           onChange={this.handleChange}
         />
-        <FormControl
-          id="formRegiterSubmit"
-          type="submit"
-          onClick={this.handleSubmit}
-          value={<FormattedMessage {...messages.submitLabel} />}
-          className="hidden"
-        />
-      </Form>
+      </div>
     );
   }
   // }}}
 }
 
 RegisterForm.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   updateCurrentUser: PropTypes.func.isRequired,
-  mutate: PropTypes.func,
+  mutate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
+  registerSucceeded: PropTypes.func.isRequired,
   // onHide: PropTypes.func,
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-    updateCurrentUser: (user) => {
-      dispatch(setCurrentUser(user));
-    },
-  };
-}
+const mapDispatchToProps = (dispatch) => ({
+  registerSucceeded: (userId) => dispatch(registerSucceeded(userId)),
+  updateCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  alert: (message) => dispatch(nAlert(message)),
+});
 
 const withConnect = connect(null, mapDispatchToProps);
 

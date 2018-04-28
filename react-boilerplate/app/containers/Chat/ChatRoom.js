@@ -53,6 +53,16 @@ class ChatRoom extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    // If chatroom not exist, jump to lobby
+    if (
+      this.props.allChatmessages === undefined &&
+      this.props.loading === false
+    ) {
+      this.props.alert(`Chatroom "${this.props.channel}" does not exist`);
+      this.props.tune('lobby');
+    }
+
+    // scroll to bottom upon update
     if (!prevProps.allChatmessages && this.props.allChatmessages) {
       this.scrollToBottom();
     } else if (
@@ -66,6 +76,9 @@ class ChatRoom extends React.Component {
   }
 
   scrollToBottom() {
+    if (!this.lastcmref || !this.btmref) {
+      return;
+    }
     const domrect = this.lastcmref.getBoundingClientRect();
     const windowHeight =
       window.innerHeight || document.documentElement.clientHeight;
@@ -204,6 +217,7 @@ ChatRoom.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   pathname: PropTypes.string.isRequired,
   alert: PropTypes.func.isRequired,
+  tune: PropTypes.func.isRequired,
   hidden: PropTypes.bool,
 };
 

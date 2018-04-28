@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import withModal from 'components/withModal';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { Input, AutoResizeTextarea as Textarea } from 'style-store';
 import CreateChatRoomMutation from 'graphql/CreateChatRoomMutation';
-import { Form, FormControl, Panel } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { graphql } from 'react-apollo';
 import FieldGroup from 'components/FieldGroup';
+import { nAlert } from 'containers/Notifier/actions';
 import messages from './messages';
 import { updateChannel } from './actions';
 
@@ -20,11 +21,9 @@ export class ChatRoomCreateForm extends React.Component {
     this.state = {
       name: '',
       description: '',
-      errorMsg: null,
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.confirm = this.confirm.bind(this);
   }
   // }}}
@@ -38,12 +37,6 @@ export class ChatRoomCreateForm extends React.Component {
     }
   }
   // }}}
-  // {{{ handleSubmit
-  handleSubmit(e) {
-    e.preventDefault();
-    this.confirm();
-  }
-  // }}}
   // {{{ confirm
   confirm() {
     const { name, description } = this.state;
@@ -52,32 +45,23 @@ export class ChatRoomCreateForm extends React.Component {
         variables: { input: { name, description } },
       })
       .then(({ data }) => {
-        this.props.dispatch(updateChannel(name, data.createChatroom.chatroom));
+        this.props.updateChannel(name, data.createChatroom.chatroom);
         this.props.onHide();
         this.props.tune(name);
       })
       .catch((error) => {
-        this.setState({
-          errorMsg: error,
-        });
+        this.props.alert(error.message);
       });
   }
   // }}}
   // {{{ render
   render() {
     return (
-      <Form horizontal>
-        {this.state.errorMsg ? (
-          <Panel
-            header={this.state.errorMsg.message}
-            bsStyle="danger"
-            key={this.state.errorMsg.message}
-          />
-        ) : null}
+      <div>
         <FieldGroup
           id="formCreateChatRoomName"
           label={<FormattedMessage {...messages.channelName} />}
-          Ctl={FormControl}
+          Ctl={Input}
           type="text"
           value={this.state.name}
           onChange={this.handleChange}
@@ -85,33 +69,28 @@ export class ChatRoomCreateForm extends React.Component {
         <FieldGroup
           id="formCreateChatRoomDescription"
           label={<FormattedMessage {...messages.description} />}
-          Ctl={FormControl}
+          Ctl={Textarea}
           type="description"
           value={this.state.description}
           onChange={this.handleChange}
         />
-        <FormControl
-          id="formCreateChatRoomSubmit"
-          type="submit"
-          onClick={this.handleSubmit}
-          value={'Submit'}
-          className="hidden"
-        />
-      </Form>
+      </div>
     );
   }
   // }}}
 }
 
 ChatRoomCreateForm.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  updateChannel: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
   tune: PropTypes.func.isRequired,
   mutate: PropTypes.func.isRequired,
+  alert: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatch,
+  updateChannel: (name, chatroom) => dispatch(updateChannel(name, chatroom)),
+  alert: (message) => dispatch(nAlert(message)),
 });
 
 const withMutation = graphql(CreateChatRoomMutation);
