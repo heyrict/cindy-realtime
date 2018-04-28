@@ -83,6 +83,7 @@ const withPuzzleList = graphql(
               ...UserLabel_user
             }
             content
+            contentSafe
             commentSet {
               edges {
                 node {

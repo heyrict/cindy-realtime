@@ -108,7 +108,7 @@ class ChatRoom extends React.Component {
             query: ChatQuery,
             variables: { chatroomName },
           });
-          data.allChatmessages.edges.push({
+          const responseData = {
             __typename: 'ChatMessageNodeEdge',
             node: {
               content,
@@ -116,22 +116,25 @@ class ChatRoom extends React.Component {
               user: currentUser,
               ...chatmessage,
             },
-          });
+          };
+          let update = false;
+          data.allChatmessages.edges = data.allChatmessages.edges.map(
+            (edge) => {
+              if (edge.node.id === responseData.node.id) {
+                update = true;
+                return responseData;
+              }
+              return edge;
+            }
+          );
+          if (!update) {
+            data.allChatmessages.edges.push(responseData);
+          }
           proxy.writeQuery({
             query: ChatQuery,
             variables: { chatroomName },
             data,
           });
-        },
-        optimisticResponse: {
-          createChatmessage: {
-            __typename: 'CreateChatMessagePayload',
-            chatmessage: {
-              __typename: 'ChatMessageNode',
-              id: t('ChatMessageNode', '-1'),
-              created: now.toISOString(),
-            },
-          },
         },
       })
       .then(() => {})
