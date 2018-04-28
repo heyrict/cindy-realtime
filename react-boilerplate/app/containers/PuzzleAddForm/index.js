@@ -170,7 +170,7 @@ export class PuzzleAddForm extends React.Component {
             w={1}
             py={1}
             onClick={this.handleSubmit}
-            disabled={this.props.currentUser}
+            disabled={!this.props.currentUser}
           >
             {<FormattedMessage {...messages.submitLabel} />}
           </Button>
