@@ -223,6 +223,7 @@ class PuzzleModifyBox extends React.Component {
                 <PreviewEdit
                   content={this.state.solution}
                   onChange={this.handleSolutionChange}
+                  safe={this.props.puzzle.contentSafe}
                 />
                 <Flex>
                   <EditButton

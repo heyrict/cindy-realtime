@@ -11,3 +11,5 @@ export const googleAdInfo = {
     layoutKey: '-gw-3+1f-3d+2z',
   },
 };
+
+export const MIN_CONTENT_SAFE_CREDIT = 1000;

@@ -6,6 +6,7 @@ const UserLabel = gql`
     rowid
     nickname
     dateJoined
+    credit
     currentAward {
       id
       created

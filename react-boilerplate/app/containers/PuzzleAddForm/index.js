@@ -9,16 +9,21 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
+import { createStructuredSelector, createSelector } from 'reselect';
 import { push } from 'react-router-redux';
-import { withLocale } from 'common';
+import { withLocale, to_global_id as t } from 'common';
 import { nAlert } from 'containers/Notifier/actions';
+import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
+import { MIN_CONTENT_SAFE_CREDIT } from 'settings';
 
 import { Input, Select, ButtonOutline as Button } from 'style-store';
 import FieldGroup from 'components/FieldGroup';
 import PreviewEdit from 'components/PreviewEdit';
 import genreMessages from 'components/TitleLabel/messages';
 import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import PuzzleAddFormMutation from 'graphql/PuzzleAddFormMutation';
+import UserLabel from 'graphql/UserLabel';
 
 import messages from './messages';
 
@@ -142,6 +147,11 @@ export class PuzzleAddForm extends React.Component {
           Ctl={PreviewEdit}
           content={this.state.puzzleContent}
           onChange={this.handleChange}
+          safe={
+            this.props.currentUser
+              ? this.props.currentUser.credit > MIN_CONTENT_SAFE_CREDIT
+              : true
+          }
         />
         <FieldGroup
           id="formPuzzleAddSolution"
@@ -149,9 +159,19 @@ export class PuzzleAddForm extends React.Component {
           Ctl={PreviewEdit}
           content={this.state.puzzleSolution}
           onChange={this.handleChange}
+          safe={
+            this.props.currentUser
+              ? this.props.currentUser.credit > MIN_CONTENT_SAFE_CREDIT
+              : true
+          }
         />
         {!this.state.loading && (
-          <Button w={1} py={1} onClick={this.handleSubmit}>
+          <Button
+            w={1}
+            py={1}
+            onClick={this.handleSubmit}
+            disabled={this.props.currentUser}
+          >
             {<FormattedMessage {...messages.submitLabel} />}
           </Button>
         )}
@@ -165,15 +185,49 @@ PuzzleAddForm.propTypes = {
   mutate: PropTypes.func.isRequired,
   alert: PropTypes.func.isRequired,
   goto: PropTypes.func.isRequired,
+  currentUser: PropTypes.shape({
+    credit: PropTypes.number,
+  }),
 };
+
+const mapStateToProps = createStructuredSelector({
+  currentUserId: createSelector(
+    makeSelectUserNavbar(),
+    (usernav) => usernav.user && usernav.user.userId
+  ),
+});
 
 const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
   goto: (url) => dispatch(push(url)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withMutation = graphql(PuzzleAddFormMutation);
 
-export default compose(withConnect, withMutation)(PuzzleAddForm);
+const withCurrentUser = graphql(
+  gql`
+    query($id: ID!) {
+      user(id: $id) {
+        ...UserLabel_user
+      }
+    }
+    ${UserLabel}
+  `,
+  {
+    options: ({ currentUserId }) => ({
+      variables: {
+        id: t('UserNode', currentUserId || '-1'),
+      },
+    }),
+    props({ data }) {
+      const { user: currentUser } = data;
+      return { currentUser };
+    },
+  }
+);
+
+export default compose(withConnect, withCurrentUser, withMutation)(
+  PuzzleAddForm
+);
