@@ -25,23 +25,57 @@ const containerProps = {
 const Shader = posed.div(shaderProps);
 const Container = posed.div(containerProps);
 
-const Modal = (props) => (
-  <div style={{ display: 'inline-block' }}>
-    <Shader
-      className="modal-shade"
-      pose={props.show ? 'show' : 'hide'}
-      style={{ display: props.show ? 'block' : 'none' }}
-    />
-    <div
-      className="modal-container"
-      style={{ display: props.show ? 'flex' : 'none' }}
-    >
-      <Container className="modal" pose={props.show ? 'show' : 'hide'}>
-        {props.children}
-      </Container>
-    </div>
-  </div>
-);
+class Modal extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      display: props.show,
+    };
+    this.handlePoseComplete = () => {
+      if (this.state.display && !this.props.show) {
+        this.setState({ display: false });
+      }
+    };
+  }
+  componentWillReceiveProps(nextProps) {
+    if (!this.state.display && nextProps.show) {
+      this.setState({ display: nextProps.show });
+    }
+  }
+  render() {
+    return (
+      <div style={{ display: 'inline-block' }}>
+        <Shader
+          className="modal-shade"
+          pose={this.props.show ? 'show' : 'hide'}
+          style={{ display: this.state.display ? 'flex' : 'none' }}
+          onPoseComplete={this.handlePoseComplete}
+        />
+        <div
+          className="modal-container"
+          style={{
+            display: this.state.display ? 'flex' : 'none',
+            overflowY: 'auto',
+            top: '50px',
+            bottom: 0,
+            alignItems: 'flex-start',
+            padding: '80px 0',
+          }}
+        >
+          <Container
+            className="modal"
+            pose={this.props.show ? 'show' : 'hide'}
+            style={{
+              overflowY: 'auto',
+            }}
+          >
+            {this.props.children}
+          </Container>
+        </div>
+      </div>
+    );
+  }
+}
 
 Modal.propTypes = {
   show: PropTypes.bool.isRequired,
