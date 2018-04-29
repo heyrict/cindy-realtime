@@ -68,7 +68,15 @@ function Sponsers() {
               Openウミガメ R鯖
             </a>
           </td>
-          <td width="245" />
+          <td width="245">
+            <a
+              href="https://utakata-umigame.herokuapp.com/"
+              target="_blank"
+              title="人参さん作成のうたかたウミガメ"
+            >
+              うたかたウミガメ
+            </a>
+          </td>
         </tr>
         <tr>
           <td colSpan="3">
