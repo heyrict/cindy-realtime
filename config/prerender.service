@@ -1,0 +1,13 @@
+[Unit]
+Description=Prerender Application Server handling cindy
+After=network.target
+
+[Service]
+User=username
+Group=www-data
+WorkingDirectory=/path/to/cindy
+ExecStart=node /path/to/cindy/react-boilerplate/prerender-server.js
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
