@@ -54,6 +54,10 @@ injectGlobal`
     color: inherit;
   }
 
+  input:disabled, textarea:disabled {
+    opacity: 0.25;
+  }
+
   table {
     border: 2px solid;
   }

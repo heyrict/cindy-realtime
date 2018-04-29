@@ -34,6 +34,10 @@ export default defineMessages({
     id: 'app.containers.Chat.send',
     defaultMessage: 'Send',
   },
+  sending: {
+    id: 'app.containers.Chat.sending',
+    defaultMessage: 'Sending...',
+  },
   loadMore: {
     id: 'app.containers.Chat.loadMore',
     defaultMessage: 'Load More',

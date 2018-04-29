@@ -12,4 +12,6 @@ export const googleAdInfo = {
   },
 };
 
+export const domainRegex = /^https?:\/\/www\.cindythink\.com(.*)$/;
+
 export const MIN_CONTENT_SAFE_CREDIT = 1000;

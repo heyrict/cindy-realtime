@@ -14,6 +14,7 @@ import mdEmoji from 'markdown-it-emoji';
 import sanitizeHtml from 'sanitize-html';
 import moment, * as moments from 'moment';
 import { push } from 'react-router-redux';
+import { domainRegex } from 'settings';
 import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants';
 
 const md = MarkdownIt({
@@ -37,11 +38,18 @@ function hash(string) {
   return hash;
 }
 
-function _norm_openchat(string) {
-  return string.replace(
-    /^chat:\/\/(.+)$/g,
-    "javascript:window.OpenChat('$1');"
+function _norm_link(string) {
+  const _norm_chat = (s) => s.replace(
+    /^chat:\/\/(.+)$/,
+    "javascript:OpenChat('$1');"
   );
+
+  const _norm_cindy_link = (s) => s.replace(
+    domainRegex,
+    "javascript:goto('$1');"
+  );
+
+  return _norm_chat(string);
 }
 
 function _norm_countdown(string) {
@@ -189,7 +197,7 @@ export function line2md(string) {
           attribs: attribs.href
             ? {
                 ...attribs,
-                href: _norm_openchat(attribs.href),
+                href: _norm_link(attribs.href),
               }
             : attribs,
         }),
@@ -211,7 +219,7 @@ export function text2md(string, safe = true) {
           attribs: attribs.href
             ? {
                 ...attribs,
-                href: _norm_openchat(attribs.href),
+                href: _norm_link(attribs.href),
               }
             : attribs,
         }),
@@ -302,7 +310,7 @@ export function text2md(string, safe = true) {
           attribs: attribs.href
             ? {
                 ...attribs,
-                href: _norm_openchat(attribs.href),
+                href: _norm_link(attribs.href),
               }
             : attribs,
         }),

@@ -51,6 +51,7 @@ import './global-styles';
 
 // Import exposed actions
 import { openChat } from './containers/Chat/actions';
+import { pushWithLocale } from './common';
 
 // Create redux store with history
 const initialState = {};
@@ -61,6 +62,9 @@ const MOUNT_NODE = document.getElementById('app');
 // exposed functions
 window.OpenChat = (channel) => {
   store.dispatch(openChat(channel));
+};
+window.goto = (url) => {
+  store.dispatch(pushWithLocale(url));
 };
 
 const render = (messages) => {

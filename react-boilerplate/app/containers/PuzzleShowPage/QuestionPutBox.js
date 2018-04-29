@@ -129,12 +129,14 @@ class QuestionPutBox extends React.PureComponent {
           proxy.writeQuery({ query, variables: { id }, data });
         },
       })
-      .then(() => {})
+      .then(() => {
+        this.setState({ loading: false });
+      })
       .catch((error) => {
         this.setState({ content });
         this.props.alert(error.message);
+        this.setState({ loading: false });
       });
-    this.setState({ loading: false });
   }
 
   render() {
@@ -148,7 +150,7 @@ class QuestionPutBox extends React.PureComponent {
               <AutoResizeTextarea
                 style={{ minHeight: '48px', borderRadius: '10px 0 0 10px' }}
                 value={this.state.content}
-                disabled={this.props.currentUserId === undefined}
+                disabled={this.props.currentUserId === undefined || this.state.loading}
                 placeholder={msg}
                 onChange={this.handleChange}
                 onKeyUp={this.handleKeyPress}
@@ -156,20 +158,20 @@ class QuestionPutBox extends React.PureComponent {
             )}
           </FormattedMessage>
           <Box>
-            <FormattedMessage {...messages.putQuestion}>
-              {(msg) => (
-                <ButtonOutline
-                  onClick={this.handleSubmit}
-                  disabled={!this.props.currentUserId}
-                  style={{
-                    wordBreak: 'keep-all',
-                    borderRadius: '0 10px 10px 0',
-                  }}
-                >
-                  {msg}
-                </ButtonOutline>
+            <ButtonOutline
+              onClick={this.handleSubmit}
+              disabled={!this.props.currentUserId || this.state.loading}
+              style={{
+                wordBreak: 'keep-all',
+                borderRadius: '0 10px 10px 0',
+              }}
+            >
+              {this.state.loading ? (
+                <FormattedMessage {...messages.puttingQuestion} />
+              ) : (
+                <FormattedMessage {...messages.putQuestion} />
               )}
-            </FormattedMessage>
+            </ButtonOutline>
           </Box>
         </Flex>
       </Constrained>

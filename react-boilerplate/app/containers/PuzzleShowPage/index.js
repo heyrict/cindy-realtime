@@ -26,11 +26,13 @@ import {
   text2desc,
 } from 'common';
 import genreMessages from 'components/TitleLabel/messages';
+import { nAlert } from 'containers/Notifier/actions';
 import Dialogue from 'containers/Dialogue/Loadable';
 import Hint from 'containers/Hint';
 import Constrained from 'components/Constrained';
 import LoadingDots from 'components/LoadingDots';
 import GoogleAd from 'components/GoogleAd';
+import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import top from 'images/top.svg';
 import bottom from 'images/bottom.svg';
 import { ImgXs as Img } from 'style-store';
@@ -98,7 +100,11 @@ export class PuzzleShowPage extends React.Component {
     const U = this.props.user.userId;
     const puzzleId = parseInt(this.props.match.params.id, 10);
 
-    if (this.props.loading || P === null) {
+    if (this.props.error) {
+      this.props.alert(this.props.error.message);
+      return <NotFoundPage />;
+    }
+    if (this.props.loading || !P) {
       return (
         <div style={{ paddingTop: '100px' }}>
           <LoadingDots />
@@ -296,6 +302,8 @@ PuzzleShowPage.propTypes = {
   allStars: PropTypes.object,
   allBookmarks: PropTypes.object,
   loading: PropTypes.bool.isRequired,
+  error: PropTypes.object,
+  alert: PropTypes.func.isRequired,
   subscribeToPuzzleUpdates: PropTypes.func.isRequired,
   subscribeToUnionUpdates: PropTypes.func.isRequired,
 };
@@ -307,11 +315,9 @@ const mapStateToProps = createStructuredSelector({
   settings: makeSelectSettings(),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
+const mapDispatchToProps = (dispatch) => ({
+  alert: (msg) => dispatch(nAlert(msg)),
+});
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
@@ -331,6 +337,7 @@ const withData = graphql(PuzzleShowQuery, {
       allStars,
       allBookmarks,
       loading,
+      error,
       subscribeToMore,
     } = data;
     return {
@@ -340,6 +347,7 @@ const withData = graphql(PuzzleShowQuery, {
       allStars,
       allBookmarks,
       loading,
+      error,
       subscribeToPuzzleUpdates: ({ id }) =>
         subscribeToMore({
           document: PuzzleShowSubscription,

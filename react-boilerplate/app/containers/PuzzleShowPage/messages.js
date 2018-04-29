@@ -38,6 +38,10 @@ export default defineMessages({
     id: 'app.containers.PuzzleShowPage.putQuestion',
     defaultMessage: 'Put',
   },
+  puttingQuestion: {
+    id: 'app.containers.PuzzleShowPage.puttingQuestion',
+    defaultMessage: 'Sending...',
+  },
   putSolution: {
     id: 'app.containers.PuzzleShowPage.putSolution',
     defaultMessage: 'Put Solution',

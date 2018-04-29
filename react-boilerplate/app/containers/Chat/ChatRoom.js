@@ -58,7 +58,9 @@ class ChatRoom extends React.Component {
       this.props.allChatmessages === undefined &&
       this.props.loading === false
     ) {
-      this.props.alert(`Chatroom "${this.props.channel}" does not exist`);
+      if (this.props.channel !== null) {
+        this.props.alert(`Chatroom "${this.props.channel}" does not exist`);
+      }
       this.props.tune('lobby');
     }
 
@@ -90,7 +92,6 @@ class ChatRoom extends React.Component {
   handleSubmit(content) {
     if (this.state.loading) return;
     const { channel, currentUser, pathname } = this.props;
-    const now = new Date();
     const chatroomName = channel || defaultChannel(pathname);
     this.setState({ loading: true });
     this.input.setContent('');
@@ -117,19 +118,7 @@ class ChatRoom extends React.Component {
               ...chatmessage,
             },
           };
-          let update = false;
-          data.allChatmessages.edges = data.allChatmessages.edges.map(
-            (edge) => {
-              if (edge.node.id === responseData.node.id) {
-                update = true;
-                return responseData;
-              }
-              return edge;
-            }
-          );
-          if (!update) {
-            data.allChatmessages.edges.push(responseData);
-          }
+          data.allChatmessages.edges.push(responseData);
           proxy.writeQuery({
             query: ChatQuery,
             variables: { chatroomName },
@@ -137,12 +126,14 @@ class ChatRoom extends React.Component {
           });
         },
       })
-      .then(() => {})
+      .then(() => {
+        this.setState({ loading: false });
+      })
       .catch((error) => {
         this.input.setContent(content);
         this.props.alert(error.message);
+        this.setState({ loading: false });
       });
-    this.setState({ loading: false });
   }
 
   render() {
@@ -194,6 +185,7 @@ class ChatRoom extends React.Component {
           disabled={this.props.currentUserId === null}
           onSubmit={this.handleSubmit}
           onHeightChange={this.handleHeightChange}
+          loading={this.state.loading}
         />
       </Flex>
     );

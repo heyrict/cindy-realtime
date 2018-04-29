@@ -50,17 +50,21 @@ class ChatInput extends React.Component {
           onChange={this.handleChange}
           onKeyUp={this.handleKeyPress}
           onHeightChange={this.props.onHeightChange}
-          disabled={this.props.disabled}
+          disabled={this.props.disabled || this.props.loading}
           minRows={1}
           maxRows={5}
         />
         <ButtonOutline
           onClick={() => this.props.onSubmit(this.state.content)}
           p={10}
-          disabled={this.props.disabled}
+          disabled={this.props.disabled || this.props.loading}
           style={{ wordBreak: 'keep-all', borderRadius: '0 10px 10px 0' }}
         >
-          <FormattedMessage {...messages.send} />
+          {this.props.loading ? (
+            <FormattedMessage {...messages.sending} />
+          ) : (
+            <FormattedMessage {...messages.send} />
+          )}
         </ButtonOutline>
       </Flex>
     );
@@ -72,6 +76,11 @@ ChatInput.propTypes = {
   disabled: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func.isRequired,
   onHeightChange: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
+};
+
+ChatInput.defaultProps = {
+  loading: false,
 };
 
 export default ChatInput;
