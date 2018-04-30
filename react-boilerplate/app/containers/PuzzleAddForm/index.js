@@ -220,6 +220,7 @@ const withCurrentUser = graphql(
       variables: {
         id: t('UserNode', currentUserId || '-1'),
       },
+      fetchPolicy: 'cache-first',
     }),
     props({ data }) {
       const { user: currentUser } = data;

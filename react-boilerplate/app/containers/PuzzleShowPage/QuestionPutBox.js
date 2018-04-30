@@ -150,7 +150,9 @@ class QuestionPutBox extends React.PureComponent {
               <AutoResizeTextarea
                 style={{ minHeight: '48px', borderRadius: '10px 0 0 10px' }}
                 value={this.state.content}
-                disabled={this.props.currentUserId === undefined || this.state.loading}
+                disabled={
+                  this.props.currentUserId === undefined || this.state.loading
+                }
                 placeholder={msg}
                 onChange={this.handleChange}
                 onKeyUp={this.handleKeyPress}
@@ -210,6 +212,7 @@ const withCurrentUser = graphql(
       variables: {
         id: t('UserNode', currentUserId || '-1'),
       },
+      fetchPolicy: 'cache-first',
     }),
     props({ data }) {
       const { user: currentUser } = data;

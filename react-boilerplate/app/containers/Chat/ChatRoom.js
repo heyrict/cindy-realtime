@@ -118,12 +118,40 @@ class ChatRoom extends React.Component {
               ...chatmessage,
             },
           };
-          data.allChatmessages.edges.push(responseData);
-          proxy.writeQuery({
-            query: ChatQuery,
-            variables: { chatroomName },
-            data,
+
+          let update = false;
+          const prevEdges = data.allChatmessages.edges.map((edge) => {
+            if (edge.node.id === responseData.id) {
+              update = true;
+              return { ...edge, node: responseData };
+            }
+            const pk = (id) => id && parseInt(f(id)[1], 10);
+            if (pk(edge.node.id) > pk(responseData.id)) {
+              update = true;
+            }
+            return edge;
           });
+
+          if (update) {
+            return {
+              ...data,
+              allChatmessages: {
+                ...data.allChatmessages,
+                edges: prevEdges,
+              },
+            };
+          }
+
+          return {
+            ...data,
+            allChatmessages: {
+              ...data.allChatmessages,
+              edges: [
+                ...data.allChatmessages.edges,
+                { __typename: 'ChatMessageNodeEdge', node: responseData },
+              ],
+            },
+          };
         },
       })
       .then(() => {
@@ -284,7 +312,7 @@ const withChat = graphql(ChatQuery, {
                 update = true;
                 return { ...edge, node: newNode };
               }
-              const pk = (id) => parseInt(f(id)[1], 10);
+              const pk = (id) => id && parseInt(f(id)[1], 10);
               if (pk(edge.node.id) > pk(newNode.id)) {
                 update = true;
               }
@@ -331,8 +359,10 @@ const withCurrentUser = graphql(
       variables: {
         id: t('UserNode', currentUserId || '-1'),
       },
+      fetchPolicy: 'cache-first',
     }),
     props({ data }) {
+      console.log(data);
       const { user: currentUser } = data;
       return { currentUser };
     },

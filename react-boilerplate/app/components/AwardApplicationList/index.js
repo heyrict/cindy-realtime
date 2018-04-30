@@ -38,7 +38,7 @@ function AwardApplicationList(props) {
       {!props.loading &&
         props.hasMore() &&
         props.allowPagination && (
-          <ButtonOutline onClick={props.loadMore} w={1} py="10px">
+          <ButtonOutline onClick={props.loadMore} w={1} py="10px" mb={2}>
             <FormattedMessage {...chatMessages.loadMore} />
           </ButtonOutline>
         )}
@@ -118,6 +118,7 @@ const withCurrentUser = graphql(
       variables: {
         id: currentUserId,
       },
+      fetchPolicy: 'cache-first',
     }),
     props({ data }) {
       if (data.loading) return {};

@@ -241,7 +241,6 @@
     "intl": "1.2.5",
     "invariant": "2.2.2",
     "ip": "1.1.5",
-    "jquery": "^3.2.1",
     "lodash": "4.17.4",
     "markdown-it": "^8.4.0",
     "markdown-it-emoji": "^1.4.0",

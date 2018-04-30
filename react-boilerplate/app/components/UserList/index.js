@@ -29,7 +29,7 @@ function UserList(props) {
       {props.loading && <LoadingDots py={props.allUsers ? 5 : 50} size={8} />}
       {!props.loading &&
         props.hasMore() && (
-          <ButtonOutline onClick={props.loadMore} w={1} py="10px">
+          <ButtonOutline onClick={props.loadMore} w={1} py="10px" mb={2}>
             <FormattedMessage {...chatMessages.loadMore} />
           </ButtonOutline>
         )}
