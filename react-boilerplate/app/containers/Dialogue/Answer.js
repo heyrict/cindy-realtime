@@ -221,38 +221,39 @@ class Answer extends React.PureComponent {
             </Time>
           </Box>
           <Splitter />
-          {this.props.good && (
-            <Img style={{ padding: '5px 2px' }} src={bulb} alt="Good!" />
-          )}
-          {this.props.true && <Img src={cracker} alt="Congratulations!" />}
-          <span
-            style={{
-              fontSize:
-                (this.props.true && '1.3em') ||
-                (this.props.good && '1.15em') ||
-                '1em',
-              overflow: 'auto',
-            }}
-            dangerouslySetInnerHTML={{ __html: line2md(this.props.answer) }}
-          />
-          {this.props.answerEditTimes > 0 && (
-            <Time>
-              <FormattedMessage
-                {...messages.edited}
-                values={{ times: this.props.answerEditTimes }}
-              />
-            </Time>
-          )}
-          {this.props.owner.rowid === this.props.user.userId &&
-            this.props.status === 0 && (
-              <FormattedMessage {...messages.edit}>
-                {(msg) => (
-                  <EditButton onClick={() => this.toggleEditMode(true)}>
-                    {msg}
-                  </EditButton>
-                )}
-              </FormattedMessage>
+          <Box width={1} style={{ overflow: 'auto' }}>
+            {this.props.good && (
+              <Img style={{ padding: '5px 2px' }} src={bulb} alt="Good!" />
             )}
+            {this.props.true && <Img src={cracker} alt="Congratulations!" />}
+            <span
+              style={{
+                fontSize:
+                  (this.props.true && '1.3em') ||
+                  (this.props.good && '1.15em') ||
+                  '1em',
+              }}
+              dangerouslySetInnerHTML={{ __html: line2md(this.props.answer) }}
+            />
+            {this.props.answerEditTimes > 0 && (
+              <Time>
+                <FormattedMessage
+                  {...messages.edited}
+                  values={{ times: this.props.answerEditTimes }}
+                />
+              </Time>
+            )}
+            {this.props.owner.rowid === this.props.user.userId &&
+              this.props.status === 0 && (
+                <FormattedMessage {...messages.edit}>
+                  {(msg) => (
+                    <EditButton onClick={() => this.toggleEditMode(true)}>
+                      {msg}
+                    </EditButton>
+                  )}
+                </FormattedMessage>
+              )}
+          </Box>
         </PuzzleFrame>
       );
     }

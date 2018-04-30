@@ -23,7 +23,7 @@ import messages from './messages';
 
 const SqBtn = ButtonOutline.extend`
   padding: 5px;
-  margin: 5px;
+  margin: 5px 0;
   max-width: 40px;
   max-height: 40px;
 `;
@@ -41,7 +41,7 @@ const SqInput = styled.input`
 `;
 
 const SqSubmit = styled.button`
-  border: 1px solid #2075c7;
+  border: 2px solid #2075c7;
   border-radius: 0 10px 10px 0;
   border-left: 0;
   color: blanchedalmond;
@@ -52,8 +52,8 @@ const SqSubmit = styled.button`
   max-width: 40px;
   max-height: 40px;
   &:hover {
-    border: 1px solid #0f64b6;
-    background-color: 1px solid #0f64b6;
+    border: 2px solid #0f64b6;
+    background-color: #0f64b6;
   }
 `;
 

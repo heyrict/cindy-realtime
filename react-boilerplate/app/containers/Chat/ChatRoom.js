@@ -91,6 +91,10 @@ class ChatRoom extends React.Component {
 
   handleSubmit(content) {
     if (this.state.loading) return;
+    if (!content.trim()) {
+      this.input.setContent('');
+      return;
+    }
     const { channel, currentUser, pathname } = this.props;
     const chatroomName = channel || defaultChannel(pathname);
     this.setState({ loading: true });
@@ -362,7 +366,6 @@ const withCurrentUser = graphql(
       fetchPolicy: 'cache-first',
     }),
     props({ data }) {
-      console.log(data);
       const { user: currentUser } = data;
       return { currentUser };
     },

@@ -140,9 +140,8 @@ class Question extends React.PureComponent {
           <Time>{moment(this.props.created).format('YYYY-MM-DD HH:mm')}</Time>
         </Box>
         <Splitter />
-        <Box width={1}>
+        <Box width={1} style={{ overflow: 'auto' }}>
           <span
-            style={{ overflow: 'auto' }}
             dangerouslySetInnerHTML={{ __html: line2md(this.props.question) }}
           />
           {this.props.questionEditTimes > 0 && (
