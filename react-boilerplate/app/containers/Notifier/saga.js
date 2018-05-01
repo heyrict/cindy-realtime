@@ -1,7 +1,7 @@
 import { put, select, takeEvery } from 'redux-saga/effects';
 import { selectChatDomain } from 'containers/Chat/selectors';
 
-import { ADD_DIRECTCHAT_MESSAGE } from 'containers/Chat/constants';
+import { DIRECTCHAT_RECEIVED } from 'containers/Chat/constants';
 import { DIRECTCHAT_NOTIFY } from './constants';
 
 function* handleDirectchatNotify(action) {
@@ -9,7 +9,7 @@ function* handleDirectchatNotify(action) {
   if (
     chat.get('open') !== 'chat' ||
     chat.get('activeTab') !== 'TAB_DIRECTCHAT' ||
-    chat.get('activeDirectChat') !== String(action.chat)
+    chat.get('activeDirectChat') !== String(action.payload.sender.id)
   ) {
     yield put({ ...action, type: DIRECTCHAT_NOTIFY });
   }
@@ -17,5 +17,5 @@ function* handleDirectchatNotify(action) {
 
 // Individual exports for testing
 export default function* defaultSaga() {
-  yield [takeEvery(ADD_DIRECTCHAT_MESSAGE, handleDirectchatNotify)];
+  yield [takeEvery(DIRECTCHAT_RECEIVED, handleDirectchatNotify)];
 }

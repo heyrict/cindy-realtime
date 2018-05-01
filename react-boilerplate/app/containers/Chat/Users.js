@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import { Flex, Border } from 'rebass';
-import { FormattedMessage } from 'react-intl';
 import { ButtonOutline } from 'style-store';
+import { FormattedMessage } from 'react-intl';
+import LoadingDots from 'components/LoadingDots';
 
 import { changeDirectchat } from './actions';
 import messages from './messages';
@@ -14,52 +16,50 @@ const StyledButton = ButtonOutline.extend`
 `;
 
 function Users(props) {
-  const C = props.chat;
+  const sessions = {};
+  const { currentUser, loading } = props;
+  if (props.allDirectmessages) {
+    props.allDirectmessages.edges.forEach((edge) => {
+      const user =
+        edge.node.sender.id === currentUser.id
+          ? edge.node.receiver
+          : edge.node.sender;
+      sessions[user.id] = user;
+    });
+  }
   return (
     <div>
-      {Object.keys(C.directMessages).length !== 0 && (
+      {props.allDirectmessages && (
         <Border top bottom py={1} my={1}>
           <FormattedMessage {...messages.recent} />
         </Border>
       )}
-      <Flex wrap>
-        {Object.entries(C.directMessages).map((u) => (
-          <StyledButton key={u[0]} onClick={() => props.openChat(u[0])}>
-            {C.onlineUsers[u[0]] || `User ${u[0]} (Offline)`}
-          </StyledButton>
-        ))}
-      </Flex>
-      <Border top bottom py={1} my={1}>
-        <FormattedMessage {...messages.onlineUsers} />
-      </Border>
-      <Flex wrap>
-        {Object.entries(C.onlineUsers).map((u) => {
-          const userId = parseInt(u[0], 10);
-          if (userId !== props.currentUser.userId) {
-            return (
-              <StyledButton key={u[0]} onClick={() => props.openChat(u[0])}>
-                {u[1]}
-              </StyledButton>
-            );
-          }
-          return null;
-        })}
-      </Flex>
+      {loading && <LoadingDots />}
+      {props.allDirectmessages && (
+        <Flex wrap>
+          {Object.entries(sessions).map(([userId, user]) => (
+            <StyledButton key={userId} onClick={() => props.openChat(userId)}>
+              {user.nickname}
+            </StyledButton>
+          ))}
+        </Flex>
+      )}
     </div>
   );
 }
 
 Users.propTypes = {
-  chat: PropTypes.shape({
-    directMessages: PropTypes.object.isRequired,
-    onlineUsers: PropTypes.object.isRequired,
-  }),
   currentUser: PropTypes.object,
+  loading: PropTypes.bool.isRequired,
+  allDirectmessages: PropTypes.object,
+  // eslint-disable-next-line react/no-unused-prop-types
+  openChat: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatch,
   openChat: (chat) => dispatch(changeDirectchat(chat)),
 });
 
-export default connect(null, mapDispatchToProps)(Users);
+const withConnect = connect(null, mapDispatchToProps);
+
+export default compose(withConnect)(Users);

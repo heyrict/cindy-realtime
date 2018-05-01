@@ -1,17 +1,24 @@
 /* eslint-disable no-underscore-dangle */
+/* eslint-disable indent */
 
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { Flex, Box } from 'rebass';
 import { Button } from 'style-store';
+import { nAlert } from 'containers/Notifier/actions';
+
+import { graphql } from 'react-apollo';
+import CreateDirectmessageMutation from 'graphql/CreateDirectmessageMutation';
+import DirectmessageQuery from 'graphql/DirectmessageQuery';
 
 import Wrapper from './Wrapper';
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
-import { changeDirectchat, sendDirectchat } from './actions';
+import { changeDirectchat } from './actions';
 import messages from './messages';
 
 const MessageWrapper = Wrapper.extend`
@@ -44,6 +51,7 @@ class DirectChat extends React.Component {
     this.state = {
       content: '',
       taHeight: 36,
+      loading: false,
     };
     this.handleHeightChange = (h, inst) =>
       this.setState({ taHeight: inst._rootDOMNode.clientHeight });
@@ -51,47 +59,97 @@ class DirectChat extends React.Component {
   }
 
   handleSubmit(content) {
+    if (this.state.loading) return;
+    if (!content.trim()) {
+      this.input.setContent('');
+      return;
+    }
+    const receiver = this.props.chat.activeDirectChat;
+    const currentUser = this.props.currentUser;
+    this.setState({ loading: true });
     this.input.setContent('');
-    if (!content) return;
-    this.props.sendMessage({
-      from: this.props.currentUser,
-      to: parseInt(this.props.chat.activeDirectChat, 10),
-      message: content,
-    });
+
+    this.props
+      .mutate({
+        variables: {
+          input: {
+            content,
+            receiver,
+          },
+        },
+        update(proxy, { data: { createDirectmessage: { directmessage } } }) {
+          const data = proxy.readQuery({
+            query: DirectmessageQuery,
+            variables: { userId: currentUser.id },
+          });
+          const responseData = {
+            __typename: 'DirectMessageNodeEdge',
+            node: {
+              content,
+              sender: currentUser,
+              ...directmessage,
+            },
+          };
+          data.allDirectmessages.edges.push(responseData);
+          proxy.writeQuery({
+            query: DirectmessageQuery,
+            variables: { userId: currentUser.id },
+            data,
+          });
+        },
+      })
+      .then(() => {
+        this.setState({ loading: false });
+      })
+      .catch((error) => {
+        this.input.setContent(content);
+        this.props.alert(error.message);
+        this.setState({ loading: false });
+      });
   }
 
   render() {
-    const C = this.props.chat;
+    const userId = this.props.chat.activeDirectChat;
+    let userNickname = `Unknown User <${userId}>`;
+    const filteredMessages = this.props.allDirectmessages
+      ? this.props.allDirectmessages.edges.filter((edge, index) => {
+          if (index < 1) {
+            userNickname =
+              edge.node.sender.id === userId
+                ? edge.node.sender.nickname
+                : edge.node.receiver.nickname;
+          }
+          return (
+            edge.node.sender.id === userId || edge.node.receiver.id === userId
+          );
+        })
+      : null;
     return (
       <Flex wrap justify="center">
         <Topbar w={1}>
           <BackBtn onClick={this.props.back}>
             <FormattedMessage {...messages.back} />
           </BackBtn>
-          <Box m="auto">
-            {C.onlineUsers[C.activeDirectChat] ||
-              `User ${C.activeDirectChat} (Offline)`}
-          </Box>
+          <Box m="auto">{userNickname}</Box>
         </Topbar>
         <MessageWrapper height={this.props.height - this.state.taHeight - 50}>
-          {C.activeDirectChat in C.directMessages &&
-            C.directMessages[C.activeDirectChat].map((msg) => (
+          {filteredMessages &&
+            filteredMessages.map((edge) => (
               <ChatMessage
-                user={{ rowid: msg.from.userId, nickname: msg.from.nickname }}
-                key={`DirectChat:${msg.from.userId}:${msg.created}`}
-                content={msg.message}
+                user={edge.node.sender}
+                key={edge.node.id}
+                content={edge.node.content}
+                created={edge.node.created}
               />
             ))}
         </MessageWrapper>
         <ChatInput
           ref={(ins) => (this.input = ins)}
           sendPolicy={this.props.sendPolicy}
+          disabled={!this.props.currentUser}
           onSubmit={this.handleSubmit}
           onHeightChange={this.handleHeightChange}
-          disabled={
-              C.onlineUsers[C.activeDirectChat] === undefined ||
-              !this.props.currentUser.userId
-          }
+          loading={this.state.loading}
         />
       </Flex>
     );
@@ -100,21 +158,24 @@ class DirectChat extends React.Component {
 
 DirectChat.propTypes = {
   back: PropTypes.func.isRequired,
-  sendMessage: PropTypes.func.isRequired,
+  mutate: PropTypes.func.isRequired,
   chat: PropTypes.shape({
-    directMessages: PropTypes.object.isRequired,
     activeDirectChat: PropTypes.string.isRequired,
-    onlineUsers: PropTypes.object.isRequired,
   }),
   currentUser: PropTypes.object,
+  allDirectmessages: PropTypes.object,
   height: PropTypes.number.isRequired,
   sendPolicy: PropTypes.string.isRequired,
+  alert: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatch,
   back: () => dispatch(changeDirectchat(null)),
-  sendMessage: (data) => dispatch(sendDirectchat(data)),
+  alert: (message) => dispatch(nAlert(message)),
 });
 
-export default connect(null, mapDispatchToProps)(DirectChat);
+const withConnect = connect(null, mapDispatchToProps);
+
+const withMutation = graphql(CreateDirectmessageMutation);
+
+export default compose(withConnect, withMutation)(DirectChat);

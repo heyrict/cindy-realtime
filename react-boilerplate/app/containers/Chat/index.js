@@ -16,6 +16,7 @@ import { Toolbar, NavLink } from 'rebass';
 
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import UserLabel from 'graphql/UserLabel';
 import FavoriteChatRoomQuery from 'graphql/FavoriteChatRoomQuery';
 
 import injectSaga from 'utils/injectSaga';
@@ -69,7 +70,7 @@ export function Chat(props) {
         <NavLink onClick={() => setActiveTab(TAB_CHANNEL)}>
           <FormattedMessage {...messages.channel} />
         </NavLink>
-        {props.currentUser.user.userId && (
+        {props.usernavbar.user.userId && (
           <NavLink onClick={() => setActiveTab(TAB_DIRECTCHAT)}>
             <FormattedMessage {...messages.direct} />
           </NavLink>
@@ -79,7 +80,7 @@ export function Chat(props) {
         key={props.chat.channel || defaultChannel(props.location.pathname)}
         channel={props.chat.channel}
         favChannels={props.allFavoriteChatrooms}
-        currentUserId={props.currentUser.user.userId}
+        currentUser={props.currentUser}
         sendPolicy={props.settings.sendChat}
         pathname={props.location.pathname}
         height={props.height - 50}
@@ -89,12 +90,16 @@ export function Chat(props) {
       {props.chat.activeTab === TAB_CHANNEL && (
         <Channels tune={tune} favChannels={props.allFavoriteChatrooms} />
       )}
-      {props.chat.activeTab === TAB_DIRECTCHAT && (
+      {props.currentUser && (
         <Direct
-          currentUser={props.currentUser.user}
-          chat={props.chat}
+          currentUser={props.currentUser}
           sendPolicy={props.settings.sendChat}
           height={props.height - 50}
+          chat={props.chat}
+          display={
+            props.chat.activeTab === TAB_DIRECTCHAT &&
+            Boolean(props.currentUser)
+          }
         />
       )}
     </div>
@@ -104,6 +109,7 @@ export function Chat(props) {
 Chat.propTypes = {
   chat: PropTypes.object.isRequired,
   currentUser: PropTypes.object,
+  usernavbar: PropTypes.object,
   settings: PropTypes.shape({
     sendChat: PropTypes.string.isRequired,
   }),
@@ -121,7 +127,7 @@ Chat.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   chat: makeSelectChat(),
-  currentUser: makeSelectUserNavbar(),
+  usernavbar: makeSelectUserNavbar(),
   settings: makeSelectSettings(),
   location: makeSelectLocation(),
 });
@@ -169,9 +175,9 @@ const withMemo = graphql(
 );
 
 const withFavChannels = graphql(FavoriteChatRoomQuery, {
-  options: ({ currentUser }) => ({
+  options: ({ usernavbar }) => ({
     variables: {
-      userId: t('UserNode', currentUser.user.userId || '-1'),
+      userId: t('UserNode', usernavbar.user.userId || '-1'),
     },
   }),
   props({ data }) {
@@ -182,4 +188,33 @@ const withFavChannels = graphql(FavoriteChatRoomQuery, {
   },
 });
 
-export default compose(withSaga, withConnect, withMemo, withFavChannels)(Chat);
+const withCurrentUser = graphql(
+  gql`
+    query($id: ID!) {
+      user(id: $id) {
+        ...UserLabel_user
+      }
+    }
+    ${UserLabel}
+  `,
+  {
+    options: ({ usernavbar: { user: { userId } } }) => ({
+      variables: {
+        id: t('UserNode', userId || '-1'),
+      },
+      fetchPolicy: 'cache-first',
+    }),
+    props({ data }) {
+      const { user: currentUser } = data;
+      return { currentUser };
+    },
+  }
+);
+
+export default compose(
+  withSaga,
+  withConnect,
+  withCurrentUser,
+  withMemo,
+  withFavChannels
+)(Chat);

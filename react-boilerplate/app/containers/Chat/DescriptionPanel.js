@@ -10,7 +10,7 @@ import {
   Textarea,
 } from 'style-store';
 import { Flex, Box } from 'rebass';
-import { line2md, from_global_id as f, to_global_id as t } from 'common';
+import { line2md, from_global_id as f } from 'common';
 import { FormattedMessage } from 'react-intl';
 import { graphql } from 'react-apollo';
 import { UserLabel } from 'components/UserLabel';
@@ -61,7 +61,7 @@ class DescriptionPanel extends React.Component {
     this.state = {
       show: false,
       editMode: false,
-      description: '',
+      description: props.channel ? props.channel.description : '',
     };
     this.toggleDescription = this.toggleDescription.bind(this);
     this.handleChange = (e) => this.setState({ description: e.target.value });
@@ -86,13 +86,27 @@ class DescriptionPanel extends React.Component {
   }
   handleSubmit() {
     const id = parseInt(f(this.props.channel.id)[1], 10);
+    const { name } = this.props;
+    const newDescription = this.state.description;
     this.props
       .mutate({
         variables: {
           input: {
-            description: this.state.description,
+            description: newDescription,
             chatroomId: id,
           },
+        },
+        update(proxy) {
+          const data = proxy.readQuery({
+            query: ChatRoomQuery,
+            variables: { chatroomName: name },
+          });
+          data.allChatrooms.edges[0].node.description = newDescription;
+          proxy.writeQuery({
+            query: ChatRoomQuery,
+            variables: { chatroomName: name },
+            data,
+          });
         },
       })
       .then(() => {
@@ -135,28 +149,30 @@ class DescriptionPanel extends React.Component {
                   <FormattedMessage {...messages.owner} />:{' '}
                   <UserLabel user={this.props.channel.user} />
                 </Box>
-                <Box ml="auto">
-                  {inFavorite ? (
-                    <DeleteFromFavBtn
-                      chatroomName={this.props.name}
-                      userId={t('UserNode', this.props.currentUserId)}
-                    />
-                  ) : (
-                    <AddToFavBtn
-                      chatroomName={this.props.name}
-                      userId={t('UserNode', this.props.currentUserId)}
-                    />
-                  )}
-                </Box>
+                {this.props.currentUserId && (
+                  <Box ml="auto">
+                    {inFavorite ? (
+                      <DeleteFromFavBtn
+                        chatroomName={this.props.name}
+                        userId={this.props.currentUserId}
+                      />
+                    ) : (
+                      <AddToFavBtn
+                        chatroomName={this.props.name}
+                        userId={this.props.currentUserId}
+                      />
+                    )}
+                  </Box>
+                )}
               </Flex>
               <hr style={{ margin: '3px 0 7px 0' }} />
               <span
                 style={{ overflow: 'auto' }}
                 dangerouslySetInnerHTML={{
-                  __html: line2md(this.state.description),
+                  __html: line2md(this.props.channel.description),
                 }}
               />
-              {this.props.currentUserId === this.props.channel.user.rowid && (
+              {this.props.currentUserId === this.props.channel.user.id && (
                 <FormattedMessage {...dialogueMessages.edit}>
                   {(msg) => (
                     <EditButton onClick={this.toggleEditMode}>{msg}</EditButton>
@@ -206,7 +222,7 @@ DescriptionPanel.propTypes = {
   channel: PropTypes.object,
   height: PropTypes.number.isRequired,
   changeHeight: PropTypes.func.isRequired,
-  currentUserId: PropTypes.number,
+  currentUserId: PropTypes.string,
   favChannels: PropTypes.shape({
     edges: PropTypes.array.isRequired,
   }),

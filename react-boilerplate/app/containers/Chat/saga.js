@@ -8,8 +8,6 @@ import {
   OPEN_MEMO,
   CLOSE_MEMO,
   OPEN_CHAT,
-  SEND_DIRECTCHAT,
-  DIRECTCHAT_RECEIVED,
   ADD_FAVCHAN,
   REMOVE_FAVCHAN,
 } from './constants';
@@ -43,16 +41,6 @@ function* handleToggleMemo(action) {
   }
 }
 
-function* handleDirectchatSend(action) {
-  yield put(addDirectchatMessage({ data: action.data, chat: action.data.to }));
-}
-
-function* handleDirectchatReceive(action) {
-  yield put(
-    addDirectchatMessage({ data: action.data, chat: action.data.from.userId })
-  );
-}
-
 function* handleOpenChat(action) {
   yield put(toggleChat('chat'));
   yield put(changeChannel(action.channel));
@@ -69,8 +57,6 @@ export default function* defaultSaga() {
     takeLatest('@@router/LOCATION_CHANGE', onChangeLocation),
     takeEvery(TOGGLE_MINICHAT, handleToggleChat),
     takeEvery(TOGGLE_MEMO, handleToggleMemo),
-    takeEvery(SEND_DIRECTCHAT, handleDirectchatSend),
-    takeEvery(DIRECTCHAT_RECEIVED, handleDirectchatReceive),
     takeLatest(OPEN_CHAT, handleOpenChat),
     takeEvery([ADD_FAVCHAN, REMOVE_FAVCHAN], syncFavChannels),
   ];

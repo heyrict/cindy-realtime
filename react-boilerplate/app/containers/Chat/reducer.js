@@ -18,7 +18,6 @@ import {
   CLOSE_MEMO,
   CHANGE_TAB,
   CHANGE_DIRECTCHAT,
-  ADD_DIRECTCHAT_MESSAGE,
   ADD_FAVCHAN,
   REMOVE_FAVCHAN,
 } from './constants';
@@ -59,10 +58,6 @@ function chatReducer(state = initialState, action) {
       return state.setIn(['onlineUsers'], action.data.onlineUsers);
     case CHANGE_DIRECTCHAT:
       return state.setIn(['activeDirectChat'], action.chat);
-    case ADD_DIRECTCHAT_MESSAGE:
-      return state.updateIn(['directMessages', action.chat], (prev) =>
-        Array.concat(prev || [], [action.data])
-      );
     case ADD_FAVCHAN:
       return state.updateIn(['favChannels'], (prev) =>
         prev.concat([action.chatroomName])

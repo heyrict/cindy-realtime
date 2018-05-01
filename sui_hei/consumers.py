@@ -43,7 +43,8 @@ from rx import Observable
 from cindy.settings import REDIS_HOST
 from schema import schema
 
-from .models import ChatMessage, Dialogue, Hint, Puzzle, User, UserAward
+from .models import (ChatMessage, Dialogue, DirectMessage, Hint, Puzzle, User,
+                     UserAward)
 
 rediscon = redis.Redis(host=REDIS_HOST["host"], port=REDIS_HOST["port"])
 rediscon.set("onlineUsers", b'\x80\x03}q\x00.')
@@ -322,3 +323,4 @@ notify_on_model_changes(ChatMessage)
 notify_on_model_changes(Dialogue)
 notify_on_model_changes(Hint)
 notify_on_model_changes(Puzzle)
+notify_on_model_changes(DirectMessage)

@@ -4,7 +4,6 @@
  *
  */
 
-import moment from 'moment';
 import {
   TOGGLE_MINICHAT,
   TOGGLE_MEMO,
@@ -14,8 +13,7 @@ import {
   CHATROOM_DISCONNECT,
   MINICHAT_MORE,
   CHANGE_DIRECTCHAT,
-  SEND_DIRECTCHAT,
-  ADD_DIRECTCHAT_MESSAGE,
+  DIRECTCHAT_RECEIVED,
   OPEN_CHAT,
   OPEN_DIRECTCHAT,
   GOTID_MINICHAT,
@@ -78,20 +76,6 @@ export function changeDirectchat(chat) {
   };
 }
 
-export function sendDirectchat(data) {
-  return {
-    type: SEND_DIRECTCHAT,
-    data: { ...data, created: moment() },
-  };
-}
-
-export function addDirectchatMessage(data) {
-  return {
-    type: ADD_DIRECTCHAT_MESSAGE,
-    ...data,
-  };
-}
-
 export function openChat(channel) {
   return {
     type: OPEN_CHAT,
@@ -125,5 +109,12 @@ export function removeFavoriteChatRoom(chatroomName) {
   return {
     type: REMOVE_FAVCHAN,
     chatroomName,
+  };
+}
+
+export function directchatReceived(payload) {
+  return {
+    type: DIRECTCHAT_RECEIVED,
+    payload,
   };
 }

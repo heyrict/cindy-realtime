@@ -52,8 +52,7 @@ class Answer extends React.PureComponent {
       content: props.answer || '',
       good: props.good,
       true: props.true,
-      editMode:
-        props.owner.rowid === props.user.userId && props.answer === null,
+      editMode: props.owner.rowid === props.user.userId && !props.answer,
     };
 
     this.handleChange = (e) => this.setState({ content: e.target.value });

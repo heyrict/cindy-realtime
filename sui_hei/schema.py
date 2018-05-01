@@ -1,3 +1,4 @@
+from collections import Counter
 from itertools import chain
 
 import django_filters
@@ -104,6 +105,7 @@ class UserNode(DjangoObjectType):
     goodQuesCount = graphene.Int()
     trueQuesCount = graphene.Int()
     commentCount = graphene.Int()
+    dmCount = graphene.Int()
 
     can_review_award_application = graphene.Boolean()
 
@@ -127,6 +129,9 @@ class UserNode(DjangoObjectType):
 
     def resolve_can_review_award_application(self, info):
         return self.has_perm("sui_hei.can_review_award_application")
+
+    def resolve_dmCount(self, info):
+        return self.dm_count
 
 
 # {{{2 AwardNode
@@ -255,6 +260,14 @@ class ChatMessageNode(DjangoObjectType):
 
     def resolve_rowid(self, info):
         return self.id
+
+
+# {{{2 DirectMessageNode
+class DirectMessageNode(DjangoObjectType):
+    class Meta:
+        model = DirectMessage
+        filter_fields = ['sender', 'receiver']
+        interfaces = (relay.Node, )
 
 
 # {{{2 ChatRoomNode
@@ -386,16 +399,6 @@ class PuzzleSubscription(SubscriptionType):
         return [Puzzle]
 
     @classmethod
-    def next(cls, pk_model, info, *, chatroomName=None):
-        if model_label == 'sui_hei.chatmessage':
-            obj = ChatMessage.objects.get(id=pk)
-            if chatroomName:
-                if chatroomName == obj.chatroom.name:
-                    return obj
-                return
-            return obj
-
-    @classmethod
     def next(cls, pk_model, info, *, id=None):
         pk, model_label = pk_model
         if model_label == 'sui_hei.puzzle':
@@ -475,6 +478,32 @@ class ChatMessageSubscription(SubscriptionType):
                     return obj
                 return
             return obj
+
+
+# {{{2 DirectMessageSubscription
+class DirectMessageSubscription(SubscriptionType):
+    class Meta:
+        output = DirectMessageNode
+
+    class Arguments:
+        receiver = graphene.ID()
+
+    @classmethod
+    def subscribe(cls, info):
+        return [DirectMessage]
+
+    @classmethod
+    def next(cls, pk_model, info, *, receiver=None):
+        if receiver == None:
+            return
+
+        pk, model_label = pk_model
+        if model_label == 'sui_hei.directmessage':
+            obj = DirectMessage.objects.get(id=pk)
+            className, receiver_id = from_global_id(receiver)
+            if receiver_id == str(obj.receiver.id):
+                return obj
+            return
 
 
 # {{{1 Mutations
@@ -619,6 +648,35 @@ class CreateChatMessage(graphene.ClientIDMutation):
             content=content, user=user, chatroom=chatroom)
 
         return CreateChatMessage(chatmessage=chatmessage)
+
+
+# {{{2 CreateDirectMessage
+class CreateDirectMessage(graphene.ClientIDMutation):
+    directmessage = graphene.Field(DirectMessageNode)
+
+    class Input:
+        content = graphene.String()
+        receiver = graphene.ID()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        content = input['content']
+        className, receiverId = from_global_id(input['receiver'])
+        assert className == 'UserNode'
+
+        if not content:
+            raise ValidationError(_("DirectMessage cannot be empty!"))
+
+        directmessage = DirectMessage.objects.create(
+            content=content,
+            sender=user,
+            receiver=User.objects.get(pk=receiverId))
+
+        return CreateDirectMessage(directmessage=directmessage)
 
 
 # {{{2 CreateBookmark
@@ -1233,6 +1291,8 @@ class Query(object):
         ChatMessageNode,
         orderBy=graphene.List(of_type=graphene.String),
         chatroomName=graphene.String())
+    all_directmessages = DjangoFilterConnectionField(
+        DirectMessageNode, userId=graphene.ID(), limit=graphene.Int())
     all_chatrooms = DjangoFilterConnectionField(ChatRoomNode)
     all_favorite_chatrooms = DjangoFilterConnectionField(FavoriteChatRoomNode)
     all_comments = DjangoFilterConnectionField(
@@ -1260,6 +1320,7 @@ class Query(object):
     hint = relay.Node.Field(HintNode)
     dialogue = relay.Node.Field(DialogueNode)
     chatmessage = relay.Node.Field(ChatMessageNode)
+    chatroom = relay.Node.Field(ChatRoomNode)
     comment = relay.Node.Field(CommentNode)
     star = relay.Node.Field(StarNode)
     bookmark = relay.Node.Field(BookmarkNode)
@@ -1333,6 +1394,17 @@ class Query(object):
             return qs.filter(chatroom=chatroom)
         return qs
 
+    def resolve_all_directmessages(self, info, **kwargs):
+        userId = kwargs.get("userId", None)
+        limit = kwargs.get("limit", None)
+        if userId:
+            className, userId = from_global_id(userId)
+            assert className == 'UserNode'
+            qs = DirectMessage.objects.filter(
+                Q(sender_id=userId) | Q(receiver_id=userId))
+            return qs
+        return qs[:limit]
+
     def resolve_all_comments(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
         return resolveOrderBy(Comment.objects, orderBy)
@@ -1389,7 +1461,8 @@ class Query(object):
 
     # {{{3 resolve union
     def resolve_puzzle_show_union(self, info, **kwargs):
-        _, puzzleId = from_global_id(kwargs["id"])
+        className, puzzleId = from_global_id(kwargs["id"])
+        assert className == 'PuzzleNode'
         puzzle = Puzzle.objects.get(id=puzzleId)
         dialogue_list = Dialogue.objects.filter(puzzle__exact=puzzle)
         hint_list = Hint.objects.filter(puzzle__exact=puzzle)
@@ -1402,6 +1475,7 @@ class Mutation(graphene.ObjectType):
     create_question = CreateQuestion.Field()
     create_hint = CreateHint.Field()
     create_chatmessage = CreateChatMessage.Field()
+    create_directmessage = CreateDirectMessage.Field()
     create_bookmark = CreateBookmark.Field()
     create_chatroom = CreateChatRoom.Field()
     create_favorite_chatroom = CreateFavoriteChatRoom.Field()
@@ -1430,3 +1504,4 @@ class Subscription(graphene.ObjectType):
     dialogue_sub = DialogueSubscription.Field()
     puzzle_show_union_sub = PuzzleShowUnionSubscription.Field()
     chatmessage_sub = ChatMessageSubscription.Field()
+    directmessage_sub = DirectMessageSubscription.Field()
