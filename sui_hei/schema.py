@@ -815,7 +815,7 @@ class UpdateAnswer(graphene.ClientIDMutation):
 
         dialogue = Dialogue.objects.get(id=dialogueId)
 
-        if dialogue.answer is None:
+        if not dialogue.answer:
             dialogue.answeredtime = timezone.now()
         else:
             dialogue.answerEditTimes += 1
