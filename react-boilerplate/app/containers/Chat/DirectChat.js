@@ -64,7 +64,7 @@ class DirectChat extends React.Component {
       this.input.setContent('');
       return;
     }
-    const receiver = this.props.chat.activeDirectChat;
+    const receiver = this.props.chat.activeDirectChat.split(':', 1)[0];
     const currentUser = this.props.currentUser;
     this.setState({ loading: true });
     this.input.setContent('');
@@ -109,21 +109,15 @@ class DirectChat extends React.Component {
   }
 
   render() {
-    const userId = this.props.chat.activeDirectChat;
-    let userNickname = `Unknown User <${userId}>`;
-    const filteredMessages = this.props.allDirectmessages
-      ? this.props.allDirectmessages.edges.filter((edge, index) => {
-          if (index < 1) {
-            userNickname =
-              edge.node.sender.id === userId
-                ? edge.node.sender.nickname
-                : edge.node.receiver.nickname;
-          }
-          return (
-            edge.node.sender.id === userId || edge.node.receiver.id === userId
-          );
-        })
-      : null;
+    const user = this.props.chat.activeDirectChat.split(':');
+    const userId = user[0];
+    const userNickname = user.slice(1).join('');
+    const filteredMessages =
+      this.props.allDirectmessages &&
+      this.props.allDirectmessages.edges.filter(
+        (edge) =>
+          edge.node.sender.id === userId || edge.node.receiver.id === userId
+      );
     return (
       <Flex wrap justify="center">
         <Topbar w={1}>
@@ -146,7 +140,9 @@ class DirectChat extends React.Component {
         <ChatInput
           ref={(ins) => (this.input = ins)}
           sendPolicy={this.props.sendPolicy}
-          disabled={!this.props.currentUser}
+          disabled={
+            !this.props.currentUser || this.props.currentUser.id === userId
+          }
           onSubmit={this.handleSubmit}
           onHeightChange={this.handleHeightChange}
           loading={this.state.loading}

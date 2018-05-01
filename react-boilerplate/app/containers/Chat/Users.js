@@ -38,7 +38,10 @@ function Users(props) {
       {props.allDirectmessages && (
         <Flex wrap>
           {Object.entries(sessions).map(([userId, user]) => (
-            <StyledButton key={userId} onClick={() => props.openChat(userId)}>
+            <StyledButton
+              key={userId}
+              onClick={() => props.openChat(`${userId}:${user.nickname}`)}
+            >
               {user.nickname}
             </StyledButton>
           ))}

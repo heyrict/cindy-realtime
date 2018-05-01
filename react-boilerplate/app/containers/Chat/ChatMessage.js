@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Time, DarkNicknameLink as NicknameLink } from 'style-store';
-import UserAwardPopover from 'components/UserAwardPopover';
-import { line2md, withLocale } from 'common';
+import { Time } from 'style-store';
+import UserLabel from 'components/UserLabel';
+import { line2md } from 'common';
 
 const MessageWrapper = styled.div`
   border-radius: 5px;
@@ -18,13 +18,7 @@ const MessageWrapper = styled.div`
 function ChatMessage(props) {
   return (
     <MessageWrapper>
-      <NicknameLink to={withLocale(`/profile/show/${props.user.rowid}`)}>
-        {props.user.nickname}
-      </NicknameLink>
-      <UserAwardPopover
-        userAward={props.user.currentAward}
-        style={{ color: '#23527c', fontSize: '0.9em' }}
-      />
+      <UserLabel user={props.user} />
       {props.created && (
         <Time>{moment(props.created).format('YYYY-MM-DD HH:mm')}</Time>
       )}

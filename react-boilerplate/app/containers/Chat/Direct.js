@@ -46,7 +46,7 @@ const withConnect = connect(null, mapDispatchToProps);
 
 const withDirectMessages = graphql(DirectmessageQuery, {
   options: ({ currentUser }) => ({
-    variables: { userId: currentUser.id, limit: 250 },
+    variables: { userId: currentUser.id, limit: 200 },
     fetchPolicy: 'cache-and-network',
   }),
   props({ data, ownProps }) {
