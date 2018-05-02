@@ -224,7 +224,13 @@ class GraphqlSubcriptionConsumer(SyncConsumer):
                 group_discard('django.%s' % group, self.channel_name)
 
     def _send_result(self, id, result):
+        # Don't send results if no useful data is generated
         errors = result.errors
+        if not errors:
+            if not isinstance(result.data, dict):
+                return
+            if sum(map(lambda x: x != None, result.data.values())) == 0:
+                return
 
         self.send({
             'type':
