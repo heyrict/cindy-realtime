@@ -119,8 +119,9 @@ schema.json
 # apollo client stuff
 fragmentTypes.json
 
-# security
+# setting files
 security.py
+schedule_settings.yml
 
 # Database dumps (backup)
 /*.json
