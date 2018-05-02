@@ -5,10 +5,10 @@ import { text2md, withLocale } from 'common';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import { Box } from 'rebass';
-import { DarkNicknameLink as NicknameLink, PuzzleFrame } from 'style-store';
-import UserAwardPopover from 'components/UserAwardPopover';
+import { PuzzleFrame } from 'style-store';
 
 import Constrained from 'components/Constrained';
+import UserLabel from 'components/UserLabel';
 
 import messages from './messages';
 
@@ -16,12 +16,6 @@ const Label = styled.span`
   padding: 5px;
   font-size: 1.1em;
   color: #4877d7;
-`;
-
-const PuzzleUserLabel = NicknameLink.extend`
-  padding: 5px;
-  font-size: 1.1em;
-  color: #033393;
 `;
 
 const RightBox = styled(Box)`
@@ -48,15 +42,7 @@ function Frame(props) {
             {(c) => (
               <RightBox>
                 <Label>{c}:</Label>
-                <PuzzleUserLabel
-                  to={withLocale(`/profile/show/${props.user.rowid}`)}
-                >
-                  {props.user.nickname}
-                </PuzzleUserLabel>
-                <UserAwardPopover
-                  style={{ color: '#033393' }}
-                  userAward={props.user.currentAward}
-                />
+                <UserLabel user={props.user} />
               </RightBox>
             )}
           </FormattedMessage>

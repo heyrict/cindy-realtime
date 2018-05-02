@@ -4,7 +4,7 @@ import moment from 'moment';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { line2md, from_global_id as f, withLocale } from 'common';
+import { line2md, from_global_id as f } from 'common';
 import { nAlert } from 'containers/Notifier/actions';
 import { createStructuredSelector, createSelector } from 'reselect';
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
@@ -13,10 +13,8 @@ import { graphql } from 'react-apollo';
 import updateQuestionMutation from 'graphql/UpdateQuestionMutation';
 
 import { Flex, Box } from 'rebass';
-import UserAwardPopover from 'components/UserAwardPopover';
 import { OPTIONS_SEND } from 'containers/Settings/constants';
 import {
-  DarkNicknameLink as NicknameLink,
   EditButton,
   ButtonOutline,
   ImgXs,
@@ -26,6 +24,7 @@ import {
   Splitter,
   Time,
 } from 'style-store';
+import UserLabel from 'components/UserLabel';
 import tick from 'images/tick.svg';
 import cross from 'images/cross.svg';
 
@@ -128,15 +127,7 @@ class Question extends React.PureComponent {
       <PuzzleFrame>
         <Box width={1}>
           <Indexer>{this.props.index}</Indexer>
-          <NicknameLink
-            to={withLocale(`/profile/show/${this.props.user.rowid}`)}
-          >
-            {this.props.user.nickname}
-          </NicknameLink>
-          <UserAwardPopover
-            style={{ color: '#006388', fontSize: '1em' }}
-            userAward={this.props.user.currentAward}
-          />
+          <UserLabel user={this.props.user} />
           <Time>{moment(this.props.created).format('YYYY-MM-DD HH:mm')}</Time>
         </Box>
         <Splitter />

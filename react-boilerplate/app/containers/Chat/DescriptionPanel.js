@@ -13,7 +13,7 @@ import { Flex, Box } from 'rebass';
 import { line2md, from_global_id as f } from 'common';
 import { FormattedMessage } from 'react-intl';
 import { graphql } from 'react-apollo';
-import { UserLabel } from 'components/UserLabel';
+import UserLabel from 'components/UserLabel';
 import dialogueMessages from 'containers/Dialogue/messages';
 import { nAlert } from 'containers/Notifier/actions';
 import tick from 'images/tick.svg';

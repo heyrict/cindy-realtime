@@ -22,7 +22,7 @@ const Linked = styled.button`
   }
 `;
 
-export class UserLabel extends React.PureComponent {
+class UserLabel extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -61,7 +61,7 @@ export class UserLabel extends React.PureComponent {
         {needBreak && <br />}
         <UserAwardPopover
           userAward={user.currentAward}
-          style={{ color: '#23527c', fontSize: '0.9em' }}
+          style={{ color: '#23527c', fontSize: '0.92em' }}
         />
       </span>
     );

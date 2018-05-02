@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { line2md, from_global_id as f, withLocale } from 'common';
+import { line2md, from_global_id as f } from 'common';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -16,6 +16,7 @@ import answerMutation from 'graphql/UpdateAnswerMutation';
 import tick from 'images/tick.svg';
 import bulb from 'images/bulb.svg';
 import cracker from 'images/cracker.svg';
+import UserLabel from 'components/UserLabel';
 import { Box, Flex } from 'rebass';
 import {
   AutoResizeTextarea,
@@ -25,13 +26,11 @@ import {
   ImgXs,
   Switch,
   Splitter,
-  DarkNicknameLink as NicknameLink,
   Time,
   PuzzleFrame,
 } from 'style-store';
 
 import { OPTIONS_SEND } from 'containers/Settings/constants';
-import UserAwardPopover from 'components/UserAwardPopover';
 
 import messages from './messages';
 
@@ -206,15 +205,7 @@ class Answer extends React.PureComponent {
       return (
         <PuzzleFrame>
           <Box width={1}>
-            <NicknameLink
-              to={withLocale(`/profile/show/${this.props.owner.rowid}`)}
-            >
-              {this.props.owner.nickname}
-            </NicknameLink>
-            <UserAwardPopover
-              style={{ color: '#006388', fontSize: '1em' }}
-              userAward={this.props.owner.currentAward}
-            />
+            <UserLabel user={this.props.owner} />
             <Time>
               {moment(this.props.answeredtime).format('YYYY-MM-DD HH:mm')}
             </Time>
