@@ -47,27 +47,10 @@ from .models import (ChatMessage, Dialogue, DirectMessage, Hint, Puzzle, User,
                      UserAward)
 
 rediscon = redis.Redis(host=REDIS_HOST["host"], port=REDIS_HOST["port"])
-rediscon.set("onlineUsers", b'\x80\x03}q\x00.')
+rediscon.set("onlineUsers", pickle.dumps(set()))
 
 # {{{1 Constants
-PUZZLE_CONNECT = "app/containers/PuzzleShowPage/PUZZLE_SHOWN"
-PUZZLE_DISCONNECT = "app/containers/PuzzleShowPage/PUZZLE_HID"
-
-PUZZLE_ADDED = "ws/PUZZLE_ADDED"
-PUZZLE_UPDATED = "ws/PUZZLE_UPDATED"
 SET_CURRENT_USER = "app/UserNavbar/SET_CURRENT_USER"
-DIALOGUE_ADDED = "ws/DIALOGUE_ADDED"
-DIALOGUE_UPDATED = "ws/DIALOGUE_UPDATED"
-HINT_ADDED = "ws/HINT_ADDED"
-HINT_UPDATED = "ws/HINT_UPDATED"
-CHATMESSAGE_ADDED = "ws/CHATMESSAGE_ADDED"
-CHATMESSAGE_UPDATED = "ws/CHATMESSAGE_UPDATED"
-
-CHATROOM_CONNECT = "ws/CHATROOM_CONNECT"
-CHATROOM_DISCONNECT = "ws/CHATROOM_DISCONNECT"
-
-SEND_DIRECTCHAT = "ws/SEND_DIRECTCHAT"
-DIRECTCHAT_RECEIVED = "ws/DIRECTCHAT_RECEIVED"
 
 UPDATE_ONLINE_VIEWER_COUNT = "ws/UPDATE_ONLINE_VIEWER_COUNT"
 
@@ -80,14 +63,10 @@ class MainConsumer(AsyncJsonWebsocketConsumer):
         await self.channel_layer.group_add("viewer", self.channel_name)
 
         onlineUsers = rediscon.get("onlineUsers")
-        onlineUsers = pickle.loads(onlineUsers) if onlineUsers else {}
+        onlineUsers = pickle.loads(onlineUsers) if onlineUsers else set()
         self.user = self.scope['user']
         if not self.user.is_anonymous:
-            await self.channel_layer.group_add("User-%s" % self.user.id,
-                                               self.channel_name)
-            onlineUsers.update({
-                str(self.channel_name): (self.user.id, self.user.nickname)
-            })
+            onlineUsers.add(str(self.channel_name))
             rediscon.set("onlineUsers", pickle.dumps(onlineUsers))
 
         await self.broadcast_status()
@@ -96,25 +75,19 @@ class MainConsumer(AsyncJsonWebsocketConsumer):
         await self.channel_layer.group_discard("viewer", self.channel_name)
 
         onlineUsers = rediscon.get("onlineUsers")
-        onlineUsers = pickle.loads(onlineUsers) if onlineUsers else {}
-        if str(self.channel_name) in onlineUsers.keys():
-            await self.channel_layer.group_discard(
-                "User-%s" % onlineUsers[str(self.channel_name)][0],
-                self.channel_name)
-            onlineUsers.pop(str(self.channel_name))
+        onlineUsers = pickle.loads(onlineUsers) if onlineUsers else set()
+        if str(self.channel_name) in onlineUsers:
+            onlineUsers.remove(str(self.channel_name))
             rediscon.set("onlineUsers", pickle.dumps(onlineUsers))
-
-        await self.broadcast_status()
+            await self.broadcast_status()
 
     async def broadcast_status(self):
         onlineUsers = rediscon.get("onlineUsers")
-        onlineUsers = pickle.loads(onlineUsers) if onlineUsers else {}
-        onlineUserList = dict(set(onlineUsers.values()))
+        onlineUsers = pickle.loads(onlineUsers) if onlineUsers else set()
         text = {
             "type": UPDATE_ONLINE_VIEWER_COUNT,
             "data": {
                 "onlineViewerCount": len(onlineUsers),
-                "onlineUsers": onlineUserList,
             }
         }
         await self.channel_layer.group_send("viewer", {
@@ -128,46 +101,18 @@ class MainConsumer(AsyncJsonWebsocketConsumer):
     async def receive_json(self, content):
         if content.get("type") == SET_CURRENT_USER:
             await self.user_change(content)
-        elif content.get("type") == PUZZLE_CONNECT:
-            self.channel_layer.group_add(
-                "puzzle-%s" % content["data"]["puzzleId"], self.channel_name)
-        elif content.get("type") == PUZZLE_DISCONNECT:
-            self.channel_layer.group_discard(
-                "puzzle-%s" % content["data"]["puzzleId"], self.channel_name)
-        elif content.get("type") == CHATROOM_CONNECT:
-            self.channel_layer.group_add("chatroom-%s" % content["channel"],
-                                         self.channel_name)
-        elif content.get("type") == CHATROOM_DISCONNECT:
-            self.channel_layer.group_discard(
-                "chatroom-%s" % content["channel"], self.channel_name)
-        elif content.get("type") == SEND_DIRECTCHAT:
-            content["type"] = DIRECTCHAT_RECEIVED
-            await self.channel_layer.group_send(
-                "User-%s" % content["data"]["to"], {
-                    "type": "viewer.message",
-                    "content": content
-                })
 
     async def user_change(self, content):
         onlineUsers = rediscon.get("onlineUsers")
-        onlineUsers = pickle.loads(onlineUsers) if onlineUsers else {}
+        onlineUsers = pickle.loads(onlineUsers) if onlineUsers else set()
         update = False
 
-        if str(self.channel_name) in onlineUsers.keys():
-            await self.channel_layer.group_discard(
-                "User-%s" % onlineUsers[str(self.channel_name)][0],
-                self.channel_name)
-            onlineUsers.pop(str(self.channel_name))
+        if str(self.channel_name) in onlineUsers:
+            onlineUsers.remove(str(self.channel_name))
             update = True
 
         if content.get('currentUser') and content['currentUser']['userId']:
-            await self.channel_layer.group_add(
-                "User-%s" % content['currentUser']['userId'],
-                self.channel_name)
-            onlineUsers.update({
-                str(self.channel_name): (content['currentUser']['userId'],
-                                         content['currentUser']['nickname'])
-            })
+            onlineUsers.add(str(self.channel_name))
             update = True
 
         if update:

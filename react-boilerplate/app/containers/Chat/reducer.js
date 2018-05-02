@@ -6,7 +6,6 @@
 
 import { fromJS } from 'immutable';
 import {
-  UPDATE_ONLINE_VIEWER_COUNT,
   SET_CURRENT_USER,
 } from 'containers/UserNavbar/constants';
 import {
@@ -31,8 +30,6 @@ const initialState = fromJS({
   chatMessages: [],
   // User state Stuff
   activeDirectChat: null,
-  onlineUsers: {},
-  directMessages: {},
   favChannels: window.django.user_favChannels || [],
 });
 
@@ -54,8 +51,6 @@ function chatReducer(state = initialState, action) {
       return state.setIn(['activeTab'], action.tab);
     case CHANGE_CHANNEL:
       return state.setIn(['channel'], action.channel);
-    case UPDATE_ONLINE_VIEWER_COUNT:
-      return state.setIn(['onlineUsers'], action.data.onlineUsers);
     case CHANGE_DIRECTCHAT:
       return state.setIn(['activeDirectChat'], action.chat);
     case ADD_FAVCHAN:
