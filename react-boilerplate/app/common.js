@@ -39,15 +39,11 @@ function hash(string) {
 }
 
 function _norm_link(string) {
-  const _norm_chat = (s) => s.replace(
-    /^chat:\/\/(.+)$/,
-    "javascript:OpenChat('$1');"
-  );
+  const _norm_chat = (s) =>
+    s.replace(/^chat:\/\/(.+)$/, "javascript:OpenChat('$1');");
 
-  const _norm_cindy_link = (s) => s.replace(
-    domainRegex,
-    "javascript:goto('$1');"
-  );
+  const _norm_cindy_link = (s) =>
+    s.replace(domainRegex, "javascript:goto('$1');");
 
   return _norm_chat(string);
 }
@@ -228,39 +224,53 @@ export function text2md(string, safe = true) {
   } else {
     return sanitizeHtml(md.render(PreNorm(string)), {
       allowedTags: [
+        'a',
+        'b',
+        'big',
+        'blockquote',
+        'br',
+        'caption',
+        'center',
+        'code',
+        'div',
+        'em',
+        'font',
         'h3',
         'h4',
         'h5',
         'h6',
-        'blockquote',
-        'p',
-        'a',
-        'ul',
-        'ol',
-        'nl',
-        'li',
-        'b',
-        'i',
-        'strong',
-        'em',
-        'strike',
-        'code',
         'hr',
-        'br',
-        'div',
-        'table',
-        'thead',
-        'caption',
-        'tbody',
-        'tr',
-        'th',
-        'td',
+        'i',
+        'li',
+        'nl',
+        'ol',
+        'p',
         'pre',
-        'font',
+        'small',
+        'strike',
+        'strong',
+        'table',
+        'tbody',
+        'td',
+        'th',
+        'thead',
+        'tr',
+        'u',
+        'ul',
       ],
       allowedAttributes: {
-        '*': ['style', 'href', 'data-*'],
-        font: ['style', 'color', 'size'],
+        '*': [
+          'style',
+          'href',
+          'align',
+          'valign',
+          'background',
+          'bgcolor',
+          'color',
+          'size',
+          'width',
+          'height',
+        ],
       },
       allowedStyles: {
         '*': {
