@@ -1292,7 +1292,7 @@ class Query(object):
         orderBy=graphene.List(of_type=graphene.String),
         chatroomName=graphene.String())
     all_directmessages = DjangoFilterConnectionField(
-        DirectMessageNode, userId=graphene.ID(), limit=graphene.Int())
+        DirectMessageNode, userId=graphene.ID())
     all_chatrooms = DjangoFilterConnectionField(ChatRoomNode)
     all_favorite_chatrooms = DjangoFilterConnectionField(FavoriteChatRoomNode)
     all_comments = DjangoFilterConnectionField(
@@ -1396,14 +1396,13 @@ class Query(object):
 
     def resolve_all_directmessages(self, info, **kwargs):
         userId = kwargs.get("userId", None)
-        limit = kwargs.get("limit", None)
         if userId:
             className, userId = from_global_id(userId)
             assert className == 'UserNode'
             qs = DirectMessage.objects.filter(
                 Q(sender_id=userId) | Q(receiver_id=userId))
             return qs
-        return qs[:limit]
+        return qs
 
     def resolve_all_comments(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)

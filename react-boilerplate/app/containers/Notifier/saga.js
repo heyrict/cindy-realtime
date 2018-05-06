@@ -8,8 +8,7 @@ function* handleDirectchatNotify(action) {
   const chat = yield select(selectChatDomain);
   if (
     chat.get('open') !== 'chat' ||
-    chat.get('activeTab') !== 'TAB_DIRECTCHAT' ||
-    chat.get('activeDirectChat') !== String(action.payload.sender.id)
+    chat.get('activeTab') !== 'TAB_DIRECTCHAT'
   ) {
     yield put({ ...action, type: DIRECTCHAT_NOTIFY });
   }

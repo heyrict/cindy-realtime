@@ -19,6 +19,7 @@ import {
   GOTID_MINICHAT,
   ADD_FAVCHAN,
   REMOVE_FAVCHAN,
+  SET_DM_RECEIVER,
 } from './constants';
 
 export function toggleChat(open) {
@@ -116,5 +117,12 @@ export function directchatReceived(payload) {
   return {
     type: DIRECTCHAT_RECEIVED,
     payload,
+  };
+}
+
+export function setDmReceiver({ nickname, id }) {
+  return {
+    type: SET_DM_RECEIVER,
+    payload: { nickname, id },
   };
 }

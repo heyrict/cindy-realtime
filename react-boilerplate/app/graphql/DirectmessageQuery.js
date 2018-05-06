@@ -2,8 +2,16 @@ import gql from 'graphql-tag';
 import UserLabel from './UserLabel';
 
 const DirectmessageQuery = gql`
-  query DirectmessageSessionQuery($userId: ID, $first: Int) {
-    allDirectmessages(userId: $userId, limit: $first) {
+  query DirectmessageSessionQuery($userId: ID, $last: Int, $before: String) {
+    allDirectmessages(userId: $userId, last: $last, before: $before)
+      @connection(
+        key: "DirectMessageNode_DirectmessageQuery"
+        filter: ["userId"]
+      ) {
+      pageInfo {
+        startCursor
+        hasPreviousPage
+      }
       edges {
         node {
           id

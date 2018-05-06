@@ -5,9 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
-import {
-  SET_CURRENT_USER,
-} from 'containers/UserNavbar/constants';
+import { SET_CURRENT_USER } from 'containers/UserNavbar/constants';
 import {
   OPEN_DIRECTCHAT,
   CHANGE_CHANNEL,
@@ -19,6 +17,7 @@ import {
   CHANGE_DIRECTCHAT,
   ADD_FAVCHAN,
   REMOVE_FAVCHAN,
+  SET_DM_RECEIVER,
 } from './constants';
 
 const initialState = fromJS({
@@ -30,6 +29,7 @@ const initialState = fromJS({
   chatMessages: [],
   // User state Stuff
   activeDirectChat: null,
+  dmReceiver: null,
   favChannels: window.django.user_favChannels || [],
 });
 
@@ -39,7 +39,7 @@ function chatReducer(state = initialState, action) {
       return state
         .setIn(['open'], 'chat')
         .setIn(['activeTab'], 'TAB_DIRECTCHAT')
-        .setIn(['activeDirectChat'], action.chat);
+        .setIn(['dmReceiver'], action.chat);
     case OPEN_MINICHAT:
       return state.setIn(['open'], 'chat');
     case OPEN_MEMO:
@@ -52,7 +52,7 @@ function chatReducer(state = initialState, action) {
     case CHANGE_CHANNEL:
       return state.setIn(['channel'], action.channel);
     case CHANGE_DIRECTCHAT:
-      return state.setIn(['activeDirectChat'], action.chat);
+      return state.setIn(['dmReceiver'], action.chat);
     case ADD_FAVCHAN:
       return state.updateIn(['favChannels'], (prev) =>
         prev.concat([action.chatroomName])
@@ -71,6 +71,8 @@ function chatReducer(state = initialState, action) {
           (e) => e.node.chatroom.name
         )
       );
+    case SET_DM_RECEIVER:
+      return state.setIn(['dmReceiver'], action.payload);
     default:
       return state;
   }

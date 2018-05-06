@@ -15,9 +15,17 @@ const MessageWrapper = styled.div`
   font-size: 1.1em;
 `;
 
+const PrecedingSpan = styled.span`
+  color: chocolate;
+  font-family: consolas, inconsolata, monaco, sans-serif;
+`;
+
 function ChatMessage(props) {
   return (
     <MessageWrapper>
+      {props.precedingStr && (
+        <PrecedingSpan>{props.precedingStr}</PrecedingSpan>
+      )}
       <UserLabel user={props.user} />
       {props.created && (
         <Time>{moment(props.created).format('YYYY-MM-DD HH:mm')}</Time>
@@ -36,6 +44,7 @@ ChatMessage.propTypes = {
     nickname: PropTypes.string.isRequired,
     currentAward: PropTypes.object,
   }),
+  precedingStr: PropTypes.string,
   created: PropTypes.string,
   content: PropTypes.string.isRequired,
 };

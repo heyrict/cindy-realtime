@@ -52,7 +52,10 @@ class UserLabel extends React.PureComponent {
         {this.state.detail && (
           <Linked
             onClick={() =>
-              this.props.openDirectChat(`${user.id}:${user.nickname}`)
+              this.props.openDirectChat({
+                id: user.id,
+                nickname: user.nickname,
+              })
             }
           >
             <ImgXs alt="DM" src={chat} />
@@ -79,7 +82,7 @@ UserLabel.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  openDirectChat: (id) => dispatch(openDirectChat({ chat: id })),
+  openDirectChat: (chat) => dispatch(openDirectChat({ chat })),
 });
 
 const withConnect = connect(null, mapDispatchToProps);

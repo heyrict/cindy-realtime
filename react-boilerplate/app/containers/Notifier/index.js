@@ -53,7 +53,10 @@ class Notifier extends React.Component {
             callback: () =>
               this.props.dispatch(
                 openDirectChat({
-                  chat: String(nextProps.notification.payload.sender.id),
+                  chat: {
+                    id: nextProps.notification.payload.sender.id,
+                    nickname: nextProps.notification.payload.sender.nickname,
+                  },
                 })
               ),
           })

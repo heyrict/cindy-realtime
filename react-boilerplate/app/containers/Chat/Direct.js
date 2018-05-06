@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable indent */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -10,7 +12,6 @@ import DirectmessageSubscription from 'graphql/DirectmessageSubscription';
 
 import { directchatReceived } from './actions';
 import DirectChat from './DirectChat';
-import Users from './Users';
 
 class Direct extends React.Component {
   componentWillMount() {
@@ -20,18 +21,11 @@ class Direct extends React.Component {
   }
   render() {
     if (!this.props.currentUser || !this.props.display) return null;
-    return this.props.chat.activeDirectChat ? (
-      <DirectChat {...this.props} />
-    ) : (
-      <Users {...this.props} />
-    );
+    return <DirectChat {...this.props} />;
   }
 }
 
 Direct.propTypes = {
-  chat: PropTypes.shape({
-    activeDirectChat: PropTypes.string,
-  }),
   // eslint-disable-next-line react/no-unused-prop-types
   currentUser: PropTypes.object.isRequired,
   subscribeToDirectmessages: PropTypes.func.isRequired,
@@ -46,15 +40,43 @@ const withConnect = connect(null, mapDispatchToProps);
 
 const withDirectMessages = graphql(DirectmessageQuery, {
   options: ({ currentUser }) => ({
-    variables: { userId: currentUser.id, limit: 200 },
+    variables: { userId: currentUser.id, last: 10 },
     fetchPolicy: 'cache-and-network',
   }),
   props({ data, ownProps }) {
-    const { allDirectmessages, loading, subscribeToMore } = data;
+    const { allDirectmessages, loading, fetchMore, subscribeToMore } = data;
     const { currentUser, notify } = ownProps;
     return {
       allDirectmessages,
       loading,
+      hasPreviousPage:
+        allDirectmessages && allDirectmessages.pageInfo.hasPreviousPage,
+      loadMore: () =>
+        fetchMore({
+          query: DirectmessageQuery,
+          variables: {
+            userId: currentUser.id,
+            last: 10,
+            before: allDirectmessages.pageInfo.startCursor,
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            const newEdges = fetchMoreResult.allDirectmessages.edges;
+            const pageInfo = fetchMoreResult.allDirectmessages.pageInfo;
+
+            return newEdges.length
+              ? {
+                  allDirectmessages: {
+                    __typename: previousResult.allDirectmessages.__typename,
+                    edges: [
+                      ...newEdges,
+                      ...previousResult.allDirectmessages.edges,
+                    ],
+                    pageInfo,
+                  },
+                }
+              : previousResult;
+          },
+        }),
       subscribeToDirectmessages: () =>
         subscribeToMore({
           document: DirectmessageSubscription,
