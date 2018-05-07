@@ -120,7 +120,7 @@ class AwardApplicationPanel extends React.Component {
       </span>
     );
     return (
-      <RoundedPanel wrap p={1} m={1}>
+      <RoundedPanel p={1} m={1}>
         <Flex>
           <Box w={1}>
             {this.state.mode === this.MODE.DISPLAY && (

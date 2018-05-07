@@ -39,9 +39,7 @@ export const MORE_MINICHAT = 'app/Chat/MORE_MINICHAT';
 export const INIT_MINICHAT = 'app/Chat/INIT_MINICHAT';
 
 export const CHANGE_DIRECTCHAT = 'app/Chat/CHANGE_DIRECTCHAT';
-export const SEND_DIRECTCHAT = 'ws/SEND_DIRECTCHAT';
-export const DIRECTCHAT_RECEIVED = 'ws/DIRECTCHAT_RECEIVED';
-export const ADD_DIRECTCHAT_MESSAGE = 'app/Chat/ADD_DIRECTCHAT_MESSAGE';
+export const DIRECTCHAT_RECEIVED = 'app/Chat/DIRECTCHAT_RECEIVED';
 
 export const OPEN_CHAT = 'app/Chat/OPEN_CHAT';
 export const OPEN_DIRECTCHAT = 'app/Chat/OPEN_DIRECTCHAT';
@@ -53,3 +51,5 @@ export const ADD_FAVCHAN = 'app/Chat/ADD_FAVCHAN';
 export const REMOVE_FAVCHAN = 'app/Chat/REMOVE_FAVCHAN';
 
 export const PublicChannels = ['lobby', 'sp', 'yokoku'];
+
+export const SET_DM_RECEIVER = 'app/Chat/SET_DM_RECEIVER';

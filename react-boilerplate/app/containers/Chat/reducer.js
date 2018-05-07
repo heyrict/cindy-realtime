@@ -5,10 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
-import {
-  UPDATE_ONLINE_VIEWER_COUNT,
-  SET_CURRENT_USER,
-} from 'containers/UserNavbar/constants';
+import { SET_CURRENT_USER } from 'containers/UserNavbar/constants';
 import {
   OPEN_DIRECTCHAT,
   CHANGE_CHANNEL,
@@ -18,9 +15,9 @@ import {
   CLOSE_MEMO,
   CHANGE_TAB,
   CHANGE_DIRECTCHAT,
-  ADD_DIRECTCHAT_MESSAGE,
   ADD_FAVCHAN,
   REMOVE_FAVCHAN,
+  SET_DM_RECEIVER,
 } from './constants';
 
 const initialState = fromJS({
@@ -32,8 +29,7 @@ const initialState = fromJS({
   chatMessages: [],
   // User state Stuff
   activeDirectChat: null,
-  onlineUsers: {},
-  directMessages: {},
+  dmReceiver: null,
   favChannels: window.django.user_favChannels || [],
 });
 
@@ -43,7 +39,7 @@ function chatReducer(state = initialState, action) {
       return state
         .setIn(['open'], 'chat')
         .setIn(['activeTab'], 'TAB_DIRECTCHAT')
-        .setIn(['activeDirectChat'], action.chat);
+        .setIn(['dmReceiver'], action.chat);
     case OPEN_MINICHAT:
       return state.setIn(['open'], 'chat');
     case OPEN_MEMO:
@@ -55,14 +51,8 @@ function chatReducer(state = initialState, action) {
       return state.setIn(['activeTab'], action.tab);
     case CHANGE_CHANNEL:
       return state.setIn(['channel'], action.channel);
-    case UPDATE_ONLINE_VIEWER_COUNT:
-      return state.setIn(['onlineUsers'], action.data.onlineUsers);
     case CHANGE_DIRECTCHAT:
-      return state.setIn(['activeDirectChat'], action.chat);
-    case ADD_DIRECTCHAT_MESSAGE:
-      return state.updateIn(['directMessages', action.chat], (prev) =>
-        Array.concat(prev || [], [action.data])
-      );
+      return state.setIn(['dmReceiver'], action.chat);
     case ADD_FAVCHAN:
       return state.updateIn(['favChannels'], (prev) =>
         prev.concat([action.chatroomName])
@@ -81,6 +71,8 @@ function chatReducer(state = initialState, action) {
           (e) => e.node.chatroom.name
         )
       );
+    case SET_DM_RECEIVER:
+      return state.setIn(['dmReceiver'], action.payload);
     default:
       return state;
   }

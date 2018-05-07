@@ -6,16 +6,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { from_global_id as f, to_global_id as t } from 'common';
+import { from_global_id as f } from 'common';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
 import { ButtonOutline } from 'style-store';
 import { nAlert } from 'containers/Notifier/actions';
 
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import ChatQuery from 'graphql/ChatQuery';
-import UserLabel from 'graphql/UserLabel';
 import CreateChatmessageMutation from 'graphql/CreateChatmessageMutation';
 import ChatMessageSubscription from 'graphql/ChatMessageSubscription';
 
@@ -125,37 +123,42 @@ class ChatRoom extends React.Component {
 
           let update = false;
           const prevEdges = data.allChatmessages.edges.map((edge) => {
-            if (edge.node.id === responseData.id) {
+            if (edge.node.id === responseData.node.id) {
               update = true;
-              return { ...edge, node: responseData };
+              return responseData;
             }
             const pk = (id) => id && parseInt(f(id)[1], 10);
-            if (pk(edge.node.id) > pk(responseData.id)) {
+            if (pk(edge.node.id) > pk(responseData.node.id)) {
               update = true;
             }
             return edge;
           });
 
           if (update) {
-            return {
-              ...data,
-              allChatmessages: {
-                ...data.allChatmessages,
-                edges: prevEdges,
+            proxy.writeQuery({
+              query: ChatQuery,
+              variables: { chatroomName },
+              data: {
+                ...data,
+                allChatmessages: {
+                  ...data.allChatmessages,
+                  edges: prevEdges,
+                },
               },
-            };
+            });
+          } else {
+            proxy.writeQuery({
+              query: ChatQuery,
+              variables: { chatroomName },
+              data: {
+                ...data,
+                allChatmessages: {
+                  ...data.allChatmessages,
+                  edges: [...prevEdges, responseData],
+                },
+              },
+            });
           }
-
-          return {
-            ...data,
-            allChatmessages: {
-              ...data.allChatmessages,
-              edges: [
-                ...data.allChatmessages.edges,
-                { __typename: 'ChatMessageNodeEdge', node: responseData },
-              ],
-            },
-          };
         },
       })
       .then(() => {
@@ -177,7 +180,7 @@ class ChatRoom extends React.Component {
           height={this.state.dpHeight}
           changeHeight={this.handleDPHeightChange}
           name={this.props.channel || defaultChannel(this.props.pathname)}
-          currentUserId={this.props.currentUserId}
+          currentUserId={this.props.currentUser && this.props.currentUser.id}
           favChannels={this.props.favChannels}
         />
         <MessageWrapper
@@ -214,7 +217,7 @@ class ChatRoom extends React.Component {
         <ChatInput
           ref={(ins) => (this.input = ins)}
           sendPolicy={this.props.sendPolicy}
-          disabled={this.props.currentUserId === null}
+          disabled={this.props.currentUser === null}
           onSubmit={this.handleSubmit}
           onHeightChange={this.handleHeightChange}
           loading={this.state.loading}
@@ -235,7 +238,6 @@ ChatRoom.propTypes = {
   hasPreviousPage: PropTypes.bool,
   channel: PropTypes.string,
   height: PropTypes.number.isRequired,
-  currentUserId: PropTypes.number,
   currentUser: PropTypes.object,
   sendPolicy: PropTypes.string.isRequired,
   favChannels: PropTypes.shape({
@@ -314,7 +316,7 @@ const withChat = graphql(ChatQuery, {
             const prevEdges = prev.allChatmessages.edges.map((edge) => {
               if (edge.node.id === newNode.id) {
                 update = true;
-                return { ...edge, node: newNode };
+                return { __typename: 'ChatMessageNodeEdge', node: newNode };
               }
               const pk = (id) => id && parseInt(f(id)[1], 10);
               if (pk(edge.node.id) > pk(newNode.id)) {
@@ -349,29 +351,4 @@ const withChat = graphql(ChatQuery, {
   },
 });
 
-const withCurrentUser = graphql(
-  gql`
-    query($id: ID!) {
-      user(id: $id) {
-        ...UserLabel_user
-      }
-    }
-    ${UserLabel}
-  `,
-  {
-    options: ({ currentUserId }) => ({
-      variables: {
-        id: t('UserNode', currentUserId || '-1'),
-      },
-      fetchPolicy: 'cache-first',
-    }),
-    props({ data }) {
-      const { user: currentUser } = data;
-      return { currentUser };
-    },
-  }
-);
-
-export default compose(withCurrentUser, withChat, withMutation, withConnect)(
-  ChatRoom
-);
+export default compose(withChat, withMutation, withConnect)(ChatRoom);

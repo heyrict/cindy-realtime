@@ -49,7 +49,7 @@ const directMessageReceivedMsg = (context) => ({
   message: (
     <FormattedMessage
       {...messages.directMessageReceived}
-      values={{ nickname: context.from.nickname }}
+      values={{ nickname: context.sender.nickname }}
     />
   ),
 });

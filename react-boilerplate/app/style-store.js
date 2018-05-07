@@ -12,16 +12,15 @@ import {
 
 export const AutoResizeTextarea = styled(ReactTextareaAutosize)`
   border-radius: 10px;
-  border-color: #2075c7;
+  border: 1px solid #2075c7;
   color: #073642;
   font-size: 1.1em;
   margin: 0;
   max-height: 120px;
   padding: 5px;
   width: 100%;
-  box-shadow: inset 0 0 0 1px #2075c7;
   &:focus {
-    box-shadow: inset 0 0 0 2px #2075c7;
+    border: 2px solid #2075c7;
   }
 `;
 
@@ -142,28 +141,26 @@ export const ButtonOutline = styled(RebassButtonOutline)`
 
 export const Select = styled.select`
   border-radius: 10px;
-  border-color: #2075c7;
+  border: 1px solid #2075c7;
   background-color: rgba(255, 255, 255, 60);
   padding: 5px;
   width: 100%;
   color: #073642;
   font-size: 1.1em;
-  box-shadow: inset 0 0 0 1px #2075c7;
   &:focus {
-    box-shadow: inset 0 0 0 2px #2075c7;
+    border: 2px solid #2075c7;
   }
 `;
 
 export const Input = styled.input`
   border-radius: 10px;
-  border-color: #2075c7;
+  border: 1px solid #2075c7;
   padding: 5px;
   width: 100%;
   color: #073642;
   font-size: 1.1em;
-  box-shadow: inset 0 0 0 1px #2075c7;
   &:focus {
-    box-shadow: inset 0 0 0 2px #2075c7;
+    border: 2px solid #2075c7;
   }
 `;
 
@@ -182,16 +179,15 @@ export const PuzzleFrame = styled.div`
 
 export const Textarea = styled.textarea`
   border-radius: 10px;
-  border-color: #2075c7;
+  border: 1px solid #2075c7;
   margin-bottom: 5px;
   padding: 5px;
   width: 100%;
   min-height: 75px;
   color: #073642;
   font-size: 1.1em;
-  box-shadow: inset 0 0 0 1px #2075c7;
   &:focus {
-    box-shadow: inset 0 0 0 2px #2075c7;
+    border: 2px solid #2075c7;
   }
 `;
 

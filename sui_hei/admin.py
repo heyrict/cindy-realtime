@@ -24,7 +24,8 @@ class SuiheiUserChangeForm(UserChangeForm):
         fields = UserCreationForm.Meta.fields + (
             'nickname',
             'profile',
-            'current_award', )
+            'current_award',
+        )
 
     def __init__(self, *args, **kwargs):
         super(SuiheiUserChangeForm, self).__init__(*args, **kwargs)
@@ -49,7 +50,8 @@ class SuiheiUserAdmin(UserAdmin):
         'fields': (
             'nickname',
             'profile',
-            'current_award', )
+            'current_award',
+        )
     }), )
 
 
@@ -68,7 +70,7 @@ class SuiheiPuzzleChangeForm(forms.ModelForm):
 
 
 class SuiheiPuzzleAdmin(admin.ModelAdmin):
-    list_display = ('title', 'user', 'status', 'created', 'modified', 'score')
+    list_display = ('title', 'user', 'status', 'created', 'modified')
     form = SuiheiPuzzleChangeForm
 
 
@@ -104,3 +106,4 @@ admin.site.register(Hint)
 admin.site.register(Star)
 admin.site.register(Bookmark)
 admin.site.register(Comment, SuiheiCommentAdmin)
+admin.site.register(DirectMessage)

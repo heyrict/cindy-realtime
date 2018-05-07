@@ -12,7 +12,7 @@ import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import { RoundedPanel } from 'style-store';
 
-import { UserLabel as UserLabelPlain } from 'components/UserLabel';
+import UserLabel from 'components/UserLabel';
 import sortMessages from 'components/FilterableList/messages';
 
 const UserCol = styled(Box)`
@@ -35,7 +35,7 @@ export class UserPanel extends React.Component {
       <RoundedPanel my={10}>
         <Row mx={10} py={10}>
           <UserCol px={10}>
-            <UserLabelPlain user={node} />
+            <UserLabel user={node} />
           </UserCol>
           <Box ml="auto" px={10}>
             <FormattedMessage {...sortMessages.date_joined} />:{' '}

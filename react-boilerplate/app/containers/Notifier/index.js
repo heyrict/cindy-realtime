@@ -49,11 +49,14 @@ class Notifier extends React.Component {
       case DIRECTCHAT_NOTIFY:
         this.notif.addNotification(
           directMessageReceivedMsg({
-            ...nextProps.notification.data,
+            ...nextProps.notification.payload,
             callback: () =>
               this.props.dispatch(
                 openDirectChat({
-                  chat: String(nextProps.notification.data.from.userId),
+                  chat: {
+                    id: nextProps.notification.payload.sender.id,
+                    nickname: nextProps.notification.payload.sender.nickname,
+                  },
                 })
               ),
           })
@@ -65,9 +68,7 @@ class Notifier extends React.Component {
         );
         break;
       case NOTIFIER_MESSAGE:
-        this.notif.addNotification(
-          notifierMsg(nextProps.notification)
-        );
+        this.notif.addNotification(notifierMsg(nextProps.notification));
         break;
       default:
     }

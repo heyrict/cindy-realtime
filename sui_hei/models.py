@@ -10,8 +10,8 @@ from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
 class Award(models.Model):
-    name = models.CharField(max_length=255, null=False)
-    groupName = models.CharField(max_length=255, null=False, default="default")
+    name = models.CharField(max_length=255)
+    groupName = models.CharField(max_length=255, default="default")
     description = models.TextField(default="")
     requisition = models.TextField(default="")
 
@@ -26,11 +26,11 @@ class AwardApplication(models.Model):
     award = models.ForeignKey(Award, on_delete=CASCADE)
     applier = models.ForeignKey(
         "User", related_name="applier", on_delete=CASCADE)
-    status = models.IntegerField(_("status"), default=0, null=False)
-    comment = models.TextField(_("comment"), null=True)
+    status = models.IntegerField(_("status"), default=0)
+    comment = models.TextField(_("comment"), blank=True)
     reviewer = models.ForeignKey(
         "User", related_name="reviewer", on_delete=CASCADE, null=True)
-    reason = models.TextField(_("reason"), null=True)
+    reason = models.TextField(_("reason"), blank=True)
     created = models.DateTimeField(_("created"), default=timezone.now)
     reviewed = models.DateTimeField(_("reviewed"), null=True)
 
@@ -52,7 +52,7 @@ awardapplication_status_enum = {
 
 class User(AbstractUser):
     nickname = models.CharField(
-        _('nick_name'), max_length=255, null=False, unique=True)
+        _('nick_name'), max_length=255, unique=True)
     profile = models.TextField(_('profile'), default="")
     current_award = models.ForeignKey(
         "UserAward",
@@ -77,7 +77,7 @@ class User(AbstractUser):
 class UserAward(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
     award = models.ForeignKey(Award, on_delete=CASCADE)
-    created = models.DateField(_("created"), null=False, default=timezone.now)
+    created = models.DateField(_("created"), default=timezone.now)
 
     class Meta:
         verbose_name = _("User-Award")
@@ -94,19 +94,19 @@ class Puzzle(models.Model):
       2: kameo
       3: shin-keshiki
     '''
-    id = models.AutoField(max_length=11, null=False, primary_key=True)
+    id = models.AutoField(max_length=11, primary_key=True)
     user = models.ForeignKey(User, on_delete=CASCADE)
-    title = models.CharField(_('title'), max_length=255, null=False)
-    yami = models.BooleanField(_('yami'), default=False, null=False)
-    genre = models.IntegerField(_('genre'), default=0, null=False)
-    content = models.TextField(_('content'), null=False)
-    solution = models.TextField(_('solution'), null=False)
-    content_safe = models.BooleanField(_('allow safe rendering'), default=False)
-    created = models.DateTimeField(_('created'), null=False)
-    modified = models.DateTimeField(_('modified'), null=False)
-    status = models.IntegerField(_('status'), default=0, null=False)
-    memo = models.TextField(_('memo'), default="")
-    score = models.FloatField(_('score'), default=0, null=False)
+    title = models.CharField(_('title'), max_length=255)
+    yami = models.BooleanField(_('yami'), default=False)
+    genre = models.IntegerField(_('genre'), default=0)
+    content = models.TextField(_('content'))
+    solution = models.TextField(_('solution'))
+    content_safe = models.BooleanField(
+        _('allow safe rendering'), default=False)
+    created = models.DateTimeField(_('created'))
+    modified = models.DateTimeField(_('modified'))
+    status = models.IntegerField(_('status'), default=0)
+    memo = models.TextField(_('memo'), blank=True)
 
     class Meta:
         verbose_name = _("Puzzle")
@@ -132,18 +132,18 @@ puzzle_status_enum = {
 
 
 class Dialogue(models.Model):
-    id = models.AutoField(max_length=11, null=False, primary_key=True)
+    id = models.AutoField(max_length=11, primary_key=True)
     user = models.ForeignKey(User, on_delete=CASCADE)
     puzzle = models.ForeignKey(Puzzle, on_delete=CASCADE)
-    question = models.TextField(_('question'), null=False)
+    question = models.TextField(_('question'))
     questionEditTimes = models.IntegerField(
-        _("question edit times"), null=False, default=0)
-    answer = models.TextField(_('answer'), null=True)
+        _("question edit times"), default=0)
+    answer = models.TextField(_('answer'), blank=True)
     answerEditTimes = models.IntegerField(
-        _("answer edit times"), null=False, default=0)
-    good = models.BooleanField(_('good_ques'), default=False, null=False)
-    true = models.BooleanField(_('true_ques'), default=False, null=False)
-    created = models.DateTimeField(_('created'), null=False)
+        _("answer edit times"), default=0)
+    good = models.BooleanField(_('good_ques'), default=False)
+    true = models.BooleanField(_('true_ques'), default=False)
+    created = models.DateTimeField(_('created'))
     answeredtime = models.DateTimeField(_('answeredtime'), null=True)
 
     class Meta:
@@ -155,11 +155,11 @@ class Dialogue(models.Model):
 
 
 class Hint(models.Model):
-    id = models.AutoField(max_length=11, null=False, primary_key=True)
+    id = models.AutoField(max_length=11, primary_key=True)
     puzzle = models.ForeignKey(Puzzle, on_delete=CASCADE)
-    content = models.TextField(_('content'), null=False)
+    content = models.TextField(_('content'))
     created = models.DateTimeField(
-        _('created'), null=False, default=timezone.now)
+        _('created'), default=timezone.now)
 
     class Meta:
         verbose_name = _("Hint")
@@ -169,13 +169,13 @@ class Hint(models.Model):
 
 
 class ChatMessage(models.Model):
-    id = models.AutoField(max_length=11, null=False, primary_key=True)
+    id = models.AutoField(max_length=11, primary_key=True)
     user = models.ForeignKey(User, on_delete=CASCADE)
     chatroom = models.ForeignKey('ChatRoom', on_delete=CASCADE)
-    content = models.TextField(_('content'), null=False)
+    content = models.TextField(_('content'))
     created = models.DateTimeField(
         _("created"), null=True, default=timezone.now)
-    editTimes = models.IntegerField(_("edit times"), null=False, default=0)
+    editTimes = models.IntegerField(_("edit times"), default=0)
 
     class Meta:
         verbose_name = _("ChatMessage")
@@ -185,13 +185,28 @@ class ChatMessage(models.Model):
                                            self.content)
 
 
+class DirectMessage(models.Model):
+    id = models.AutoField(max_length=11, primary_key=True)
+    sender = models.ForeignKey(User, related_name="sender", on_delete=CASCADE)
+    receiver = models.ForeignKey(
+        User, related_name="receiver", on_delete=CASCADE)
+    content = models.TextField(_('content'))
+    created = models.DateTimeField(_("created"), default=timezone.now)
+
+    class Meta:
+        verbose_name = _("DirectMessage")
+
+    def __str__(self):
+        return "[%s] sends a DM to [%s]" % (self.sender, self.receiver)
+
+
 class ChatRoom(models.Model):
-    id = models.AutoField(max_length=11, null=False, primary_key=True)
+    id = models.AutoField(max_length=11, primary_key=True)
     user = models.ForeignKey(User, on_delete=CASCADE)
     name = models.CharField(
-        _('channel'), max_length=255, null=False, unique=True)
-    description = models.TextField(_('description'), null=True)
-    created = models.DateField(_("created"), null=False, default=timezone.now)
+        _('channel'), max_length=255, unique=True)
+    description = models.TextField(_('description'))
+    created = models.DateField(_("created"), default=timezone.now)
 
     class Meta:
         verbose_name = _("ChatRoom")
@@ -201,7 +216,7 @@ class ChatRoom(models.Model):
 
 
 class FavoriteChatRoom(models.Model):
-    id = models.AutoField(max_length=11, null=False, primary_key=True)
+    id = models.AutoField(max_length=11, primary_key=True)
     user = models.ForeignKey(User, on_delete=CASCADE)
     chatroom = models.ForeignKey(ChatRoom, on_delete=CASCADE)
 
@@ -209,7 +224,7 @@ class FavoriteChatRoom(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
     puzzle = models.ForeignKey(Puzzle, on_delete=CASCADE)
-    content = models.TextField(_('content'), null=False)
+    content = models.TextField(_('content'))
     spoiler = models.BooleanField(_('spoiler'), default=False)
 
     class Meta:
@@ -222,7 +237,7 @@ class Comment(models.Model):
 class Bookmark(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
     puzzle = models.ForeignKey(Puzzle, on_delete=CASCADE)
-    value = models.FloatField(_('Value'), null=False, default=0)
+    value = models.FloatField(_('Value'), default=0)
 
     class Meta:
         verbose_name = _("Bookmark")
@@ -234,7 +249,7 @@ class Bookmark(models.Model):
 class Star(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
     puzzle = models.ForeignKey(Puzzle, on_delete=CASCADE)
-    value = models.FloatField(_('Value'), null=False, default=0)
+    value = models.FloatField(_('Value'), default=0)
 
     class Meta:
         verbose_name = _("Star")

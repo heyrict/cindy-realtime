@@ -20,10 +20,8 @@ import RegisterMenuItem from 'containers/RegisterMenuItem';
 import SettingsMenuItem from 'containers/Settings/SettingsMenuItem';
 
 import injectReducer from 'utils/injectReducer';
-import injectSaga from 'utils/injectSaga';
 import makeSelectUserNavbar from './selectors';
 import reducer from './reducer';
-import saga from './saga';
 import messages from './messages';
 
 function UserNavbar(props) {
@@ -108,6 +106,5 @@ const mapStateToProps = createStructuredSelector({
 const withConnect = connect(mapStateToProps);
 
 const withReducer = injectReducer({ key: 'userNavbar', reducer });
-const withSaga = injectSaga({ key: 'userNavbar', saga });
 
-export default compose(withReducer, withSaga, withConnect)(UserNavbar);
+export default compose(withReducer, withConnect)(UserNavbar);
