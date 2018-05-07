@@ -59,6 +59,14 @@ const history = createHistory();
 const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
 
+// Google Analytics stuff
+if (window.ga) {
+  history.listen((location) => {
+    window.ga('set', 'page', location.pathname + location.search);
+    window.ga('send', 'pageview', location.pathname + location.search);
+  });
+}
+
 // exposed functions
 window.OpenChat = (channel) => {
   store.dispatch(openChat(channel));
