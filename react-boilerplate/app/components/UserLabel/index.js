@@ -8,12 +8,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { withLocale, from_global_id as f } from 'common';
-import { DarkNicknameLink as NicknameLink, ImgXs } from 'style-store';
+import { pushWithLocale, from_global_id as f } from 'common';
+import { ImgXs } from 'style-store';
+import { Tooltip } from 'react-tippy';
 
 import { openDirectChat } from 'containers/Chat/actions';
 import UserAwardPopover from 'components/UserAwardPopover';
 import chat from 'images/chat.svg';
+import home from 'images/home.svg';
 
 const Linked = styled.button`
   color: #006388;
@@ -22,53 +24,43 @@ const Linked = styled.button`
   }
 `;
 
-class UserLabel extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      detail: false,
-    };
-    this.handleClick = () => {
-      window.clearInterval(this.countdownHdl);
-      this.setState(({ detail }) => ({ detail: !detail }));
-      this.countdownHdl = window.setTimeout(
-        () => this.setState({ detail: false }),
-        10000
-      );
-    };
-  }
-  render() {
-    const { user, break: needBreak } = this.props;
-    return (
-      <span>
-        {!this.state.detail && (
-          <Linked onClick={this.handleClick}>{user.nickname}</Linked>
-        )}
-        {this.state.detail && (
-          <NicknameLink to={withLocale(`/profile/show/${f(user.id)[1]}`)}>
-            {user.nickname}
-          </NicknameLink>
-        )}
-        {this.state.detail && (
-          <Linked
-            onClick={() =>
-              this.props.openDirectChat({
-                id: user.id,
-                nickname: user.nickname,
-              })
-            }
-          >
-            <ImgXs alt="DM" src={chat} />
-          </Linked>
-        )}
-        {needBreak && <br />}
-        <UserAwardPopover
-          userAward={user.currentAward}
-          style={{ color: '#23527c', fontSize: '0.92em' }}
-        />
-      </span>
-    );
-  }
+function UserLabel(props) {
+  const { user, break: needBreak } = props;
+  const popoverDetail = (
+    <div>
+      <button onClick={() => props.goto(`/profile/show/${f(user.id)[1]}`)}>
+        <ImgXs alt="home" src={home} />
+      </button>
+      <button
+        onClick={() =>
+          props.openDirectChat({
+            id: user.id,
+            nickname: user.nickname,
+          })
+        }
+      >
+        <ImgXs alt="direct-message" src={chat} />
+      </button>
+    </div>
+  );
+  return (
+    <span>
+      <Tooltip
+        position={props.placement || 'top'}
+        html={popoverDetail}
+        trigger="focus click"
+        interactive="true"
+        theme="cindy"
+      >
+        <Linked>{user.nickname}</Linked>
+      </Tooltip>
+      {needBreak && <br />}
+      <UserAwardPopover
+        userAward={user.currentAward}
+        style={{ color: '#23527c', fontSize: '0.92em' }}
+      />
+    </span>
+  );
 }
 
 UserLabel.propTypes = {
@@ -79,10 +71,13 @@ UserLabel.propTypes = {
   }),
   break: PropTypes.bool,
   openDirectChat: PropTypes.func.isRequired,
+  goto: PropTypes.func.isRequired,
+  placement: PropTypes.string,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  openDirectChat: (chat) => dispatch(openDirectChat({ chat })),
+  openDirectChat: (chatObj) => dispatch(openDirectChat({ chat: chatObj })),
+  goto: (uri) => dispatch(pushWithLocale(uri)),
 });
 
 const withConnect = connect(null, mapDispatchToProps);
