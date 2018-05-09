@@ -51,8 +51,7 @@ awardapplication_status_enum = {
 
 
 class User(AbstractUser):
-    nickname = models.CharField(
-        _('nick_name'), max_length=255, unique=True)
+    nickname = models.CharField(_('nick_name'), max_length=255, unique=True)
     profile = models.TextField(_('profile'), default="")
     current_award = models.ForeignKey(
         "UserAward",
@@ -61,6 +60,11 @@ class User(AbstractUser):
         related_name="current_award")
     credit = models.IntegerField(_('credit'), default=0)
     hide_bookmark = models.BooleanField(_('hide bookmark'), default=True)
+    last_read_dm = models.ForeignKey(
+        'DirectMessage',
+        null=True,
+        on_delete=SET_NULL,
+        related_name="last_read_dm")
 
     REQUIRED_FIELDS = ['nickname']
 
@@ -139,8 +143,7 @@ class Dialogue(models.Model):
     questionEditTimes = models.IntegerField(
         _("question edit times"), default=0)
     answer = models.TextField(_('answer'), blank=True)
-    answerEditTimes = models.IntegerField(
-        _("answer edit times"), default=0)
+    answerEditTimes = models.IntegerField(_("answer edit times"), default=0)
     good = models.BooleanField(_('good_ques'), default=False)
     true = models.BooleanField(_('true_ques'), default=False)
     created = models.DateTimeField(_('created'))
@@ -158,8 +161,7 @@ class Hint(models.Model):
     id = models.AutoField(max_length=11, primary_key=True)
     puzzle = models.ForeignKey(Puzzle, on_delete=CASCADE)
     content = models.TextField(_('content'))
-    created = models.DateTimeField(
-        _('created'), default=timezone.now)
+    created = models.DateTimeField(_('created'), default=timezone.now)
 
     class Meta:
         verbose_name = _("Hint")
@@ -203,8 +205,7 @@ class DirectMessage(models.Model):
 class ChatRoom(models.Model):
     id = models.AutoField(max_length=11, primary_key=True)
     user = models.ForeignKey(User, on_delete=CASCADE)
-    name = models.CharField(
-        _('channel'), max_length=255, unique=True)
+    name = models.CharField(_('channel'), max_length=255, unique=True)
     description = models.TextField(_('description'))
     created = models.DateField(_("created"), default=timezone.now)
 

@@ -6,6 +6,9 @@ const LoginFormMutation = gql`
       user {
         rowid
         nickname
+        lastReadDm {
+          id
+        }
         favoritechatroomSet {
           edges {
             node {

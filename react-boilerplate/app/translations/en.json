@@ -62,6 +62,7 @@
   "app.containers.Chat.description": "Description",
   "app.containers.Chat.direct": "Direct Messages",
   "app.containers.Chat.loadMore": "Load More",
+  "app.containers.Chat.notifyOfflineDms": "New Direct Message received when you were offline!",
   "app.containers.Chat.onlineUsers": "Online Users",
   "app.containers.Chat.owner": "Owner",
   "app.containers.Chat.recent": "Recent Sessions",

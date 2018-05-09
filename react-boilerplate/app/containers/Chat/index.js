@@ -25,7 +25,7 @@ import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
 import makeSelectSettings from 'containers/Settings/selectors';
 import ChatRoom from './ChatRoom';
 import Channels from './Channels';
-import Direct from './Direct';
+import DirectChat from './DirectChat';
 import Wrapper from './Wrapper';
 import makeSelectChat from './selectors';
 import saga from './saga';
@@ -91,7 +91,7 @@ export function Chat(props) {
         <Channels tune={tune} favChannels={props.allFavoriteChatrooms} />
       )}
       {props.currentUser && (
-        <Direct
+        <DirectChat
           currentUser={props.currentUser}
           sendPolicy={props.settings.sendChat}
           height={props.height - 50}
@@ -193,6 +193,9 @@ const withCurrentUser = graphql(
     query($id: ID!) {
       user(id: $id) {
         ...UserLabel_user
+        lastReadDm {
+          id
+        }
       }
     }
     ${UserLabel}

@@ -1068,6 +1068,32 @@ class UpdateCurrentAward(relay.ClientIDMutation):
         return UpdateCurrentAward()
 
 
+# {{{2 UpdateLastReadDm
+class UpdateLastReadDm(relay.ClientIDMutation):
+    class Input:
+        directmessageId = graphene.ID()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        directmessageId = input.get('directmessageId')
+        if not directmessageId:
+            raise ValidationError(
+                "Server Error: No DirectMessage passed in operation UpdateLastReadDm"
+            )
+        className, directmessageId = from_global_id(directmessageId)
+
+        assert className == 'DirectMessageNode'
+        directmessage = DirectMessage.objects.get(id=directmessageId)
+        user.last_read_dm = directmessage
+
+        user.save()
+        return UpdateLastReadDm()
+
+
 # {{{2 UpdateUser
 class UpdateUser(relay.ClientIDMutation):
     user = graphene.Field(UserNode)
@@ -1489,6 +1515,7 @@ class Mutation(graphene.ObjectType):
     update_hint = UpdateHint.Field()
     update_current_award = UpdateCurrentAward.Field()
     update_user = UpdateUser.Field()
+    update_last_read_dm = UpdateLastReadDm.Field()
     update_award_application = UpdateAwardApplication.Field()
     delete_bookmark = DeleteBookmark.Field()
     delete_favorite_chatroom = DeleteFavoriteChatRoom.Field()

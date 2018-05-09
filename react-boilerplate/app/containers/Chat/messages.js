@@ -66,4 +66,8 @@ export default defineMessages({
     id: 'app.containers.Chat.description',
     defaultMessage: 'Description',
   },
+  notifyOfflineDms: {
+    id: 'app.containers.Chat.notifyOfflineDms',
+    defaultMessage: 'New Direct Message received when you were offline!',
+  },
 });

@@ -62,6 +62,7 @@
   "app.containers.Chat.description": "説明",
   "app.containers.Chat.direct": "ダイレクト",
   "app.containers.Chat.loadMore": "もっとロードする",
+  "app.containers.Chat.notifyOfflineDms": "あなたがオフラインしている時、ダイレクトメッセージを受信しました",
   "app.containers.Chat.onlineUsers": "オンラインユーザー",
   "app.containers.Chat.owner": "所有者",
   "app.containers.Chat.recent": "最近の会話",
