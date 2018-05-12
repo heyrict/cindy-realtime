@@ -1,5 +1,5 @@
 import { put, select, takeLatest, takeEvery } from 'redux-saga/effects';
-import { addDirectchatMessage, toggleChat, changeChannel } from './actions';
+import { toggleChat, changeChannel } from './actions';
 import {
   TOGGLE_MINICHAT,
   OPEN_MINICHAT,

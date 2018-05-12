@@ -62,7 +62,7 @@ class MarkdownPreview extends React.Component {
           tabIndex="-1"
           style={{
             borderRadius: this.state.open ? '0' : '0 0 5px 5px',
-            boxShadow: "inset 0 0 0 0",
+            boxShadow: 'inset 0 0 0 0',
             border: '1px solid #2075c7',
           }}
         >
