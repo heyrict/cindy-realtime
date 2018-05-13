@@ -11,5 +11,26 @@ POSTGREDB_SETTINGS = {
 
 HOSTS = [
     'cindythink.com',
+    'www.cindythink.com',
     '139.59.247.106',
 ]
+
+REDIS_HOST = {
+    "host": "localhost",
+    "port": "6379",
+}
+
+# Channels
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [
+                (REDIS_HOST["host"], REDIS_HOST["port"]),
+            ],
+        },
+    },
+}
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False

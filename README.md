@@ -36,14 +36,23 @@ Requisitories
 - [Python3.5](http://www.python.org)
 
     ```bash
-    # Windows
     pip install -r requirements.txt
-
-    # Mac or Linux
-    sudo -H pip install -r requirements.txt
     ```
 - Postgresql (you can opt to use mysql server using mysql.cnf)
-- nodejs manager (latest npm or bower)
+
+    ```bash
+    # Debian-based systems
+    apt-get install postgresql
+    ```
+
+- Redis DB
+
+    ```bash
+    # Debian-based systems
+    apt-get install redis-server
+    ```
+
+- nodejs manager (latest npm or bower, optional if you would like to use `assets.7z`)
 
     ```bash
     cd ./react-boilerplate && npm install
@@ -105,15 +114,27 @@ Deploy
 **Note**: This is one method of deployment using nginx under ubuntu16.04LTS. It's definitely OK to use other methods.
 Also, note that all the configuration files need to be adjusted to you system (e.g. change username and /path/to/cindy, etc.)
 
-1. Go through step 1 to 3 in [Develop](#Develop)
+1. Get production javascript assets
+    - Method 1
 
-2. Build Production bundles for nodejs
+      1. Go through step 1 to 3 in [Develop](#develop). **Note that nodejs is optional in production**
+      2. Collect javascript assets
 
-   ```bash
-   cd ./react-boilerplate && npm run build
-   ```
+       Download assets.7z [here](https://github.com/heyrict/cindy-realtime/releases) and unpack it.
 
-3. Configure Nginx
+       ```bash
+       wget https://github.com/heyrict/cindy-realtime/releases/download/$CINDY_VERSION/assets.7z
+       7zr x assets.7z
+       ```
+
+       or optionally if you want to build javascript assets yourself.
+
+       ```bash
+       cd ./react-boilerplate && npm run build
+       ../manage.py collectstatic
+       ```
+
+2. Configure Nginx
 
    ```bash
    # Note that you may need su privileges to do this
@@ -126,7 +147,7 @@ Also, note that all the configuration files need to be adjusted to you system (e
    service nginx restart
    ```
 
-4. Configure daphne
+3. Configure daphne
 
    ```bash
    cp ./config/daphne.service /etc/systemd/system/
@@ -134,7 +155,7 @@ Also, note that all the configuration files need to be adjusted to you system (e
    service daphne start
    ```
 
-5. (Optionally) Configure Nginx with prerender instead of step 3 to 4
+4. (Optionally, require [nodejs](#requisitories)) Configure Nginx with prerender instead of step 3 to 4
 
    ```bash
    # Note that you may need su privileges to do this

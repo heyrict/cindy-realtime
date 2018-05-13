@@ -15,6 +15,7 @@ addons:
     packages:
     - python3.6
     - python3.6-dev
+    - p7zip
 before_install:
 - export CHROME_BIN=chromium-browser
 - export DISPLAY=:99.0
@@ -28,20 +29,20 @@ install:
 - cd $CINDYDIR && pip install -r requirements.txt
 - cd $CINDYDIR/react-boilerplate && npm i
 script:
-- cp $CINDYDIR/cindy/security.py.template $CINDYDIR/cindy/security.py
+- mv $CINDYDIR/cindy/security.py.template $CINDYDIR/cindy/security.py
+- mv $CINDYDIR/schedule_settings.yml.template $CINDYDIR/schedule_settings.yml
 - cd $CINDYDIR && python manage.py graphql_schema --indent=2 && python dumpFragmentType.py
   > $CINDYDIR/react-boilerplate/fragmentTypes.json
 - cd $CINDYDIR/react-boilerplate && npm run build
 - cd $CINDYDIR && python manage.py collectstatic -c --no-input
 before_deploy: 
-- rm -rf $CINDYDIR/react-boilerplate/node_modules
-- rm $(find -name "*.py[cod]")
+- 7zr a assets.7z collected_static/
 deploy:
   provider: releases
   api_key:
     secure: UJ954gKM74vpJ0loRTOeE3Y+hLaNgUyGd7zibHt6GgtUZExWdq6t5PDPH3SXWdWfBCU5FyckdTObcCd5WGGhca9aB3buc6SkaJEkacn/bpIHTgr4JzgI4IMMiEJ5LhIeFHYGegMGFBuHxYciHrXlpOBg2Z05HC/r3Vrev//Azx+Yn+pM1AUGCCQCaYIOfazqbKUBpeiOQqhmVa3mHGhH40TsetSHF7wux9YNPCqQsxw0a02KfiYiuzkQthGFJ9c3nvklA7JKU2ZuWPNYyuwZEwRJdcsZGkpqK2xUQ9SKYjKp2a3Xxbjd0KSBCltThItFFKXG9qoNlNdueXan9Icn0K0lG9qC3EhfEZNBu6wcBWJZa+2JL8BQ1V9vE7FbSSsNQKdMYeNEXSsq5tu2FmHEQKg0hVBz4wv5WbfMrUEQj/x+LJlQymdACq40vQu43S5xTdP9FbrISKzFQ5s8Opbwy2HeUxroF/S9pMVN+6gvn2bnCkF8Cpn7zwlSe1/s/e8vbL6aKH8VfuLa39hb8fORNDXuVjJoSj06ekk7WE2O47KbM7h6554XuEFRFQd/DGxKYsdObrnQbV6LEsC6RT6zqrfvc1HPcO9AWvz93Mry29iqvP3zQTkEWMaRR0r68dbwOlYxGa5SVYoJlXeoa6OBIKTCE9G/rBZMP0ZjtL/eavA=
   file_glob: true
-  file: "*"
+  file: assets.7z
   skip_cleanup: true
   on:
     repo: heyrict/cindy-realtime

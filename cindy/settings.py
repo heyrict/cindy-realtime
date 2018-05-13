@@ -14,7 +14,7 @@ import os
 
 from django.utils.translation import ugettext_lazy as _
 
-from .security import HOSTS, POSTGREDB_SETTINGS, SECRET_KEY
+from .security import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,13 +22,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'cindythink.com',
 ] + HOSTS
 
 # Application definition
@@ -50,7 +46,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
+    'sui_hei.middleware.GraphQLLocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -148,21 +144,31 @@ LANGUAGES = [
 
 # Authentiation
 AUTH_USER_MODEL = 'sui_hei.User'
-LOGIN_REDIRECT_URL = '/mondai'
-LOGOUT_REDIRECT_URL = '/mondai'
-LOGIN_URL = '/users/login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/'
 APPEND_SLASH = False
 
 # Webpack Loader
+if DEBUG:
+    DLL_STATS_FILE = os.path.join(
+        BASE_DIR, "./react-boilerplate/build/webpack-stats.dll.json")
+    DEFAULT_STATS_FILE = os.path.join(
+        BASE_DIR, "react-boilerplate/build/webpack-stats.json")
+else:
+    DLL_STATS_FILE = os.path.join(BASE_DIR,
+                                  "collected_static/webpack-stats.dll.json")
+    DEFAULT_STATS_FILE = os.path.join(BASE_DIR,
+                                      "collected_static/webpack-stats.json")
+
 WEBPACK_LOADER = {
     "DLL": {
         "BUNDLE_DIR_NAME": "",
-        "STATS_FILE": os.path.join(BASE_DIR, "react-boilerplate/build/webpack-stats.dll.json")
+        "STATS_FILE": DLL_STATS_FILE
     },
     "DEFAULT": {
         "BUNDLE_DIR_NAME": "",
-        #"STATS_FILE": os.path.join(BASE_DIR, "static/js/dist/webpack-stats.json")
-        "STATS_FILE": os.path.join(BASE_DIR, "react-boilerplate/build/webpack-stats.json")
+        "STATS_FILE": DEFAULT_STATS_FILE
     }
 } # yapf: disable
 
@@ -175,22 +181,5 @@ GRAPHENE = {
 CHANNELS_WS_PROTOCOLS = [
     "graphql-ws",
 ]
-
-# Channels
-REDIS_HOST = {
-    "host": "localhost",
-    "port": "6379",
-}
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [
-                (REDIS_HOST["host"], REDIS_HOST["port"]),
-            ],
-        },
-    },
-}
 
 ASGI_APPLICATION = "sui_hei.routing.application"
