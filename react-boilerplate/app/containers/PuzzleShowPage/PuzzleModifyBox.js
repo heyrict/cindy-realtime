@@ -39,8 +39,6 @@ class PuzzleModifyBox extends React.Component {
 
     this.state = {
       activeTab: props.puzzle.status === 0 ? 0 : 1,
-      solution: props.puzzle.solution,
-      memo: props.puzzle.memo,
       solutionEditMode: false,
       memoEditMode: props.puzzle.memo === '',
       solve: props.puzzle.status === 3,
@@ -56,12 +54,6 @@ class PuzzleModifyBox extends React.Component {
     };
     this.toggleMemoEditMode = () => {
       this.setState((p) => ({ memoEditMode: !p.memoEditMode }));
-    };
-    this.handleSolutionChange = (e) => {
-      this.setState({ solution: e.target.value });
-    };
-    this.handleMemoChange = (e) => {
-      this.setState({ memo: e.target.value });
     };
     this.handleHintChange = (e) => {
       this.setState({ hint: e.target.value });
@@ -89,9 +81,10 @@ class PuzzleModifyBox extends React.Component {
       this.props.puzzle.memo !== nextProps.puzzle.memo ||
       this.props.puzzle.solution !== nextProps.puzzle.solution
     ) {
+      this.memoTextarea && this.memoTextarea.setContent(nextProps.puzzle.memo);
+      this.solutionTextarea &&
+        this.solutionTextarea.setContent(nextProps.puzzle.solution);
       this.setState({
-        memo: nextProps.puzzle.memo,
-        solution: nextProps.puzzle.solution,
         solutionEditMode: false,
         memoEditMode: false,
       });
@@ -100,13 +93,15 @@ class PuzzleModifyBox extends React.Component {
 
   handleSaveSolution() {
     this.toggleSolutionEditMode();
-    if (this.state.solution === this.props.puzzle.solution) return;
+    const solution =
+      this.solutionTextarea && this.solutionTextarea.getContent();
+    if (!solution || solution === this.props.puzzle.solution) return;
     this.props
       .mutatePuzzleUpdate({
         variables: {
           input: {
             puzzleId: this.props.puzzleId,
-            solution: this.state.solution,
+            solution,
           },
         },
       })
@@ -118,13 +113,14 @@ class PuzzleModifyBox extends React.Component {
 
   handleSaveMemo() {
     this.toggleMemoEditMode();
-    if (this.state.memo === this.props.puzzle.memo) return;
+    const memo = this.memoTextarea && this.memoTextarea.getContent();
+    if (!memo || memo === this.props.puzzle.memo) return;
     this.props
       .mutatePuzzleUpdate({
         variables: {
           input: {
             puzzleId: this.props.puzzleId,
-            memo: this.state.memo,
+            memo,
           },
         },
       })
@@ -221,8 +217,8 @@ class PuzzleModifyBox extends React.Component {
               </div>
               <div hidden={!this.state.solutionEditMode}>
                 <PreviewEdit
-                  content={this.state.solution}
-                  onChange={this.handleSolutionChange}
+                  content={this.props.puzzle.solution}
+                  ref={(ref) => (this.solutionTextarea = ref)}
                   safe={this.props.puzzle.contentSafe}
                 />
                 <Flex>
@@ -256,8 +252,8 @@ class PuzzleModifyBox extends React.Component {
               </div>
               <div hidden={!this.state.memoEditMode}>
                 <PreviewEdit
-                  content={this.state.memo}
-                  onChange={this.handleMemoChange}
+                  content={this.props.puzzle.memo}
+                  ref={(ref) => (this.memoTextarea = ref)}
                 />
                 <Flex>
                   <EditButton

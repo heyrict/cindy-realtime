@@ -17,7 +17,7 @@ import PuzzleAddForm from 'containers/PuzzleAddForm';
 
 import messages from './messages';
 
-const Heading = styled.h1`
+const Heading = styled.div`
   font-size: 3em;
   color: darkolivegreen;
   margin-top: 0;

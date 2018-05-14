@@ -50,8 +50,11 @@ import PuzzleModifyBox from './PuzzleModifyBox';
 import RewardingBox from './RewardingBox';
 import BookmarkBox from './BookmarkBox';
 
-const Title = styled.h1`
+const Title = styled.div`
   font-size: 2em;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  line-height: 1.1;
   text-align: center;
 `;
 

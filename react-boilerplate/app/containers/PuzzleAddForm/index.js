@@ -36,8 +36,6 @@ export class PuzzleAddForm extends React.Component {
       puzzleTitle: '',
       puzzleGenre: 0,
       puzzleYami: false,
-      puzzleContent: '',
-      puzzleSolution: '',
       loading: false,
     };
 
@@ -48,11 +46,7 @@ export class PuzzleAddForm extends React.Component {
   // {{{ handleChange
   handleChange(e) {
     const target = e.target;
-    if (target.id === 'formPuzzleAddContent') {
-      this.setState({ puzzleContent: target.value });
-    } else if (target.id === 'formPuzzleAddSolution') {
-      this.setState({ puzzleSolution: target.value });
-    } else if (target.id === 'formPuzzleAddTitle') {
+    if (target.id === 'formPuzzleAddTitle') {
       this.setState({ puzzleTitle: target.value });
     } else if (target.id === 'formPuzzleAddGenre') {
       this.setState({ puzzleGenre: target.value });
@@ -64,12 +58,24 @@ export class PuzzleAddForm extends React.Component {
   // {{{ handleSubmit
   handleSubmit(e) {
     e.preventDefault();
-    const { loading, ...input } = this.state;
+    const { loading, puzzleTitle, puzzleGenre, puzzleYami } = this.state;
+    const puzzleContent =
+      this.contentTextarea && this.contentTextarea.getContent();
+    const puzzleSolution =
+      this.solutionTextarea && this.solutionTextarea.getContent();
     if (loading) return;
     this.setState({ loading: true });
     this.props
       .mutate({
-        variables: { input: { ...input } },
+        variables: {
+          input: {
+            puzzleTitle,
+            puzzleGenre,
+            puzzleYami,
+            puzzleContent,
+            puzzleSolution,
+          },
+        },
       })
       .then(({ data }) => {
         const puzzleId = data.createPuzzle.puzzle.rowid;
@@ -95,7 +101,7 @@ export class PuzzleAddForm extends React.Component {
         />
         <FieldGroup
           label={<FormattedMessage {...messages.genreLabel} />}
-          Ctl={() => (
+          CtlElement={
             <Select
               componentClass="select"
               value={this.state.puzzleGenre}
@@ -131,7 +137,7 @@ export class PuzzleAddForm extends React.Component {
                 )}
               </FormattedMessage>
             </Select>
-          )}
+          }
         />
         <FieldGroup
           id="formPuzzleAddYami"
@@ -144,25 +150,29 @@ export class PuzzleAddForm extends React.Component {
         <FieldGroup
           id="formPuzzleAddContent"
           label={<FormattedMessage {...messages.contentLabel} />}
-          Ctl={PreviewEdit}
-          content={this.state.puzzleContent}
-          onChange={this.handleChange}
-          safe={
-            this.props.currentUser
-              ? this.props.currentUser.credit > MIN_CONTENT_SAFE_CREDIT
-              : true
+          CtlElement={
+            <PreviewEdit
+              ref={(ref) => (this.contentTextarea = ref)}
+              safe={
+                this.props.currentUser
+                  ? this.props.currentUser.credit > MIN_CONTENT_SAFE_CREDIT
+                  : true
+              }
+            />
           }
         />
         <FieldGroup
           id="formPuzzleAddSolution"
           label={<FormattedMessage {...messages.solutionLabel} />}
-          Ctl={PreviewEdit}
-          content={this.state.puzzleSolution}
-          onChange={this.handleChange}
-          safe={
-            this.props.currentUser
-              ? this.props.currentUser.credit > MIN_CONTENT_SAFE_CREDIT
-              : true
+          CtlElement={
+            <PreviewEdit
+              ref={(ref) => (this.solutionTextarea = ref)}
+              safe={
+                this.props.currentUser
+                  ? this.props.currentUser.credit > MIN_CONTENT_SAFE_CREDIT
+                  : true
+              }
+            />
           }
         />
         {!this.state.loading && (

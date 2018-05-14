@@ -17,12 +17,10 @@ class PreviewEdit extends React.Component {
       content: this.props.content,
     };
 
-    this.getContent = this.getContent.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSetHeader = this.handleSetHeader.bind(this);
-  }
-  getContent() {
-    return this.state.content;
+    this.getContent = () => this.state.content;
+    this.setContent = (c) => this.setState({ content: c });
   }
   handleChange(e) {
     this.setState({ content: e.target.value });
@@ -103,7 +101,7 @@ class PreviewEdit extends React.Component {
 PreviewEdit.propTypes = {
   id: PropTypes.string,
   style: PropTypes.object,
-  content: PropTypes.string,
+  content: PropTypes.string.isRequired,
   onChange: PropTypes.func,
   safe: PropTypes.bool,
 };
@@ -111,6 +109,7 @@ PreviewEdit.propTypes = {
 PreviewEdit.defaultProps = {
   style: {},
   safe: true,
+  content: '',
 };
 
 export default PreviewEdit;

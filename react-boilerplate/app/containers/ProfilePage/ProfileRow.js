@@ -27,19 +27,16 @@ class ProfileRow extends React.PureComponent {
     super(props);
     this.state = {
       editMode: false,
-      content: this.props.profile,
     };
     this.toggleEdit = (mode) =>
       this.setState((p) => ({ editMode: mode || !p.editMode }));
-    this.handleChange = (e) => {
-      this.setState({ content: e.target.value });
-    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit() {
-    const content = this.state.content;
+    const content = this.profileTextarea && this.profileTextarea.getContent();
     const currentUserId = this.props.currentUserId;
+    console.log(content, currentUserId);
     this.props
       .mutate({
         variables: { input: { profile: content } },
@@ -88,8 +85,8 @@ class ProfileRow extends React.PureComponent {
           this.state.editMode ? (
             <div>
               <PreviewEdit
-                content={this.state.content}
-                onChange={this.handleChange}
+                content={this.props.profile}
+                ref={(ref) => (this.profileTextarea = ref)}
               />
               <Flex w={1}>
                 <EditButton onClick={this.handleSubmit} w={1 / 2}>

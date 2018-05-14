@@ -110,11 +110,12 @@ export const Indexer = styled.span`
   border-radius: 100px;
 `;
 
-export const Heading = styled.h1`
+export const Heading = styled.div`
   font-size: 3em;
   color: chocolate;
   margin-left: 0.5em;
   margin-top: 0;
+  margin-bottom: 0.5em;
   padding-top: 0.5em;
 `;
 

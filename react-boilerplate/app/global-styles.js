@@ -35,6 +35,10 @@ injectGlobal`
     background-color: blanchedalmond;
   }
 
+  h1 { font-size: 1.8em }
+  h2 { font-size: 1.5em }
+  h3 { font-size: 1.2em }
+
   p,
   label {
     //font-family: Georgia, Times, 'Times New Roman', serif;
