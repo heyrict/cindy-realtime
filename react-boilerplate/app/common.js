@@ -235,6 +235,8 @@ export function text2md(string, safe = true) {
         'div',
         'em',
         'font',
+        'h1',
+        'h2',
         'h3',
         'h4',
         'h5',
