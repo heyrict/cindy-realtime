@@ -12,7 +12,11 @@ import { googleAdClientToken } from 'settings';
 
 class GoogleAd extends React.PureComponent {
   componentDidMount() {
-    (window.adsbygoogle = window.adsbygoogle || []).push({});
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.log(e);
+    }
   }
   render() {
     const optionalAttr = {
