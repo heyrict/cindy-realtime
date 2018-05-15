@@ -1,0 +1,19 @@
+{
+  "user": {
+    "id": "VXNlck5vZGU6MQ==",
+    "canReviewAwardApplication": true,
+    "rowid": 1,
+    "nickname": "testUser",
+    "dateJoined": "2000-00-00T00:00:00.000000+00:00",
+    "credit": 0,
+    "currentAward": {
+      "id": "VXNlckF3YXJkTm9kZTox",
+      "created": "2000-00-00",
+      "award": {
+        "id": "QXdhcmROb2RlOjI=",
+        "name": "Admin",
+        "description": "Description for Admin"
+      }
+    }
+  }
+}

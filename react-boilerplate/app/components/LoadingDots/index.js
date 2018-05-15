@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Flex } from 'rebass';
 
-const Dot = styled.span`
+export const Dot = styled.span`
   padding: ${(props) => props.size || 5}px;
   margin: ${(props) => props.size || 5}px;
   border-radius: 9999px;

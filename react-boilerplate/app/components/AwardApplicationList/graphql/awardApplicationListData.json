@@ -1,0 +1,85 @@
+{
+  "allAwardApplications": {
+    "edges": [
+      {
+        "node": {
+          "id": "QXdhcmRBcHBsaWNhdGlvbk5vZGU6MQ==",
+          "status": 2,
+          "comment": "Comment 1",
+          "reason": "Reason 1",
+          "award": {
+            "id": "QXdhcmROb2RlOjE0",
+            "name": "Award No.14",
+            "description": ""
+          },
+          "applier": {
+            "id": "VXNlck5vZGU6MTk=",
+            "rowid": 19,
+            "nickname": "User No.19",
+            "dateJoined": "2000-00-00T00:00:00.000000+00:00",
+            "credit": 0,
+            "currentAward": null
+          },
+          "reviewer": {
+            "id": "VXNlck5vZGU6MQ==",
+            "rowid": 1,
+            "nickname": "test",
+            "dateJoined": "2000-00-00T00:00:00.000000+00:00",
+            "credit": 0,
+            "currentAward": {
+              "id": "VXNlckF3YXJkTm9kZTox",
+              "created": "2000-00-00",
+              "award": {
+                "id": "QXdhcmROb2RlOjI=",
+                "name": "Admin",
+                "description": "Description for Admin"
+              }
+            }
+          },
+          "created": "2000-00-00T00:00:00.000000+00:00",
+          "reviewed": "2000-00-00T00:00:00.000000+00:00"
+        }
+      },
+      {
+        "node": {
+          "id": "QXdhcmRBcHBsaWNhdGlvbk5vZGU6Mg==",
+          "status": 1,
+          "comment": "test",
+          "reason": "test",
+          "award": {
+            "id": "QXdhcmROb2RlOjE=",
+            "name": "Admin",
+            "description": "Description for Admin"
+          },
+          "applier": {
+            "id": "VXNlck5vZGU6Nw==",
+            "rowid": 7,
+            "nickname": "User No.7",
+            "dateJoined": "2000-00-00T00:00:00.000000+00:00",
+            "credit": 0,
+            "currentAward": null
+          },
+          "reviewer": {
+            "id": "VXNlck5vZGU6MQ==",
+            "rowid": 1,
+            "nickname": "Admin",
+            "dateJoined": "2017-09-30T10:03:20.332000+00:00",
+            "credit": 0,
+            "currentAward": {
+              "id": "VXNlckF3YXJkTm9kZTox",
+              "created": "2000-00-00",
+              "award": {
+                "id": "QXdhcmROb2RlOjI=",
+                "name": "Admin",
+                "description": "Description for Admin"
+              }
+            }
+          },
+          "created": "2000-00-00T00:00:00.000000+00:00",
+          "reviewed": "2000-00-00T00:00:00.000000+00:00"
+        }
+      }
+    ],
+    "pageInfo": { "endCursor": "YXJyYXljb25uZWN0aW9uOjE=", "hasNextPage": true }
+  }
+}

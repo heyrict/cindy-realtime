@@ -77,13 +77,23 @@ class PuzzleModifyBox extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const newState = {
+      solutionEditMode: false,
+      memoEditMode: false,
+    };
+
+    if (this.props.puzzle.memo !== nextProps.puzzle.memo && this.memoTextarea) {
+      this.memoTextarea.setContent(nextProps.puzzle.memo);
+    }
+
     if (
-      this.props.puzzle.memo !== nextProps.puzzle.memo ||
-      this.props.puzzle.solution !== nextProps.puzzle.solution
+      this.props.puzzle.solution !== nextProps.puzzle.solution &&
+      this.solutionTextarea
     ) {
-      this.memoTextarea && this.memoTextarea.setContent(nextProps.puzzle.memo);
-      this.solutionTextarea &&
-        this.solutionTextarea.setContent(nextProps.puzzle.solution);
+      this.solutionTextarea.setContent(nextProps.puzzle.solution);
+    }
+
+    if (newState.solutionEditMode || newState.memoEditMode) {
       this.setState({
         solutionEditMode: false,
         memoEditMode: false,

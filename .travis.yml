@@ -31,8 +31,8 @@ install:
 script:
 - mv $CINDYDIR/cindy/security.py.template $CINDYDIR/cindy/security.py
 - mv $CINDYDIR/schedule_settings.yml.template $CINDYDIR/schedule_settings.yml
-- cd $CINDYDIR && python manage.py graphql_schema --indent=2 && python dumpFragmentType.py
-  > $CINDYDIR/react-boilerplate/fragmentTypes.json
+- cd $CINDYDIR && python manage.py graphql_schema --indent=2 && python dumpFragmentType.py > $CINDYDIR/react-boilerplate/fragmentTypes.json
+- cd $CINDYDIR/react-boilerplate && node ./internals/scripts/generate-templates-for-linting && npm run test 
 - cd $CINDYDIR/react-boilerplate && npm run build
 - cd $CINDYDIR && python manage.py collectstatic -c --no-input
 before_deploy: 

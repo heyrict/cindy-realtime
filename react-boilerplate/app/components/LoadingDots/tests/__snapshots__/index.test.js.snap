@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LoadingDots /> <Dot /> With Props 1`] = `
+<span
+  className="LoadingDots__Dot-jTopvB fHIBhv"
+  size={3}
+/>
+`;
+
+exports[`<LoadingDots /> <Dot /> Without Props 1`] = `
+<span
+  className="LoadingDots__Dot-jTopvB jrttWY"
+/>
+`;

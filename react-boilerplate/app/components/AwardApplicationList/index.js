@@ -23,7 +23,7 @@ import chatMessages from 'containers/Chat/messages';
 
 import AwardApplicationPanel from './AwardApplicationPanel';
 
-function AwardApplicationList(props) {
+export function AwardApplicationList(props) {
   return (
     <div>
       {props.allAwardApplications &&
