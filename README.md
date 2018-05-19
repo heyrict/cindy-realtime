@@ -10,23 +10,22 @@ It also used a lot of new features like GraphQL as WebAPI, WebSocket for auto-up
 You can access the **[website](https://www.cindythink.com/ja/)**, or find useful informations in the unofficial **[wiki](https://wiki3.jp/cindy-lat)**.
 
 The name of `Cindy` stands for **Cindy Is Not Dead Yet**,
-which comes from the popular original character of
-[Cindy](http://sui-hei.net/app/webroot/pukiwiki/index.php?%E3%82%B7%E3%83%B3%E3%83%87%E3%82%A3).
-
-<div style="clear:both;" />
+which comes from the popular original character of [Cindy](http://sui-hei.net/app/webroot/pukiwiki/index.php?%E3%82%B7%E3%83%B3%E3%83%87%E3%82%A3).
 
 Differences between Cindy
 -------------------------
 Cindy-Realtime inherit its database from [Cindy][1], but its frontend is completely different from [Cindy][1].
 
 Cindy-Realtime has more features:
-    - WebSocket, to make a realtime chat-like application
-    - React, to UI more convenient, and more convenient for maintainance :smile:
-    - GraphQL & Relay, instead of original REST-like API, to make site load faster.
+
+- WebSocket, to make a realtime chat-like application
+- React, to UI more convenient, and more convenient for maintainance :smile:
+- GraphQL & Relay, instead of original REST-like API, to make site load faster.
 
 Though it has some drawbacks:
-    - Limited old browser support.
-    - Unable to deploy on a single-thread PaaS.
+
+- Limited old browser support.
+- Unable to deploy on a single-thread PaaS.
 
 For these reasons, I decide to separate this repository out from Cindy.
 *Both repos are under support at now*.
@@ -83,9 +82,7 @@ Develop
       GRANT ALL PRIVILEGES ON DATABASE cindy TO cindy;
       \q;
       ```
-
-    - Edit `POSTGREDB_SETTINGS` in `./cindy/security.py` file according to your settings.
-      A template is [here](./cindy/security.py.template).
+    - Edit `POSTGREDB_SETTINGS` in `./cindy/security.py` file according to your settings. A template is [here](./cindy/security.py.template).
     - Have django generate the necessary data for you
 
       ```bash
@@ -115,24 +112,23 @@ Deploy
 Also, note that all the configuration files need to be adjusted to you system (e.g. change username and /path/to/cindy, etc.)
 
 1. Get production javascript assets
-    - Method 1
 
-      1. Go through step 1 to 3 in [Develop](#develop). **Note that nodejs is optional in production**
-      2. Collect javascript assets
+    1. Go through step 1 to 3 in [Develop](#develop). **Note that nodejs is optional in production**
+    2. Collect javascript assets
 
-       Download assets.7z [here](https://github.com/heyrict/cindy-realtime/releases) and unpack it.
+      Download assets.7z [here](https://github.com/heyrict/cindy-realtime/releases) and unpack it.
 
-       ```bash
-       wget https://github.com/heyrict/cindy-realtime/releases/download/$CINDY_VERSION/assets.7z
-       7zr x assets.7z
-       ```
+      ```bash
+      wget https://github.com/heyrict/cindy-realtime/releases/download/$CINDY_VERSION/assets.7z
+      7zr x assets.7z
+      ```
 
-       or optionally if you want to build javascript assets yourself.
+      or optionally if you want to build javascript assets yourself.
 
-       ```bash
-       cd ./react-boilerplate && npm run build
-       ../manage.py collectstatic
-       ```
+      ```bash
+      cd ./react-boilerplate && npm run build
+      ../manage.py collectstatic
+      ```
 
 2. Configure Nginx
 
@@ -155,7 +151,7 @@ Also, note that all the configuration files need to be adjusted to you system (e
    service daphne start
    ```
 
-4. (Optionally, require [nodejs](#requisitories)) Configure Nginx with prerender instead of step 3 to 4
+4. (Optionally, require [nodejs](#requisitories)) Configure Nginx with prerender instead of step 2 to 3
 
    ```bash
    # Note that you may need su privileges to do this
