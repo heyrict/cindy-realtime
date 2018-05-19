@@ -7,7 +7,7 @@ Cindy-Realtime
 Cindy(シンディ)は水平思考ゲームをプレイするためのWebサイトです。バックエンドにPythonのWebフレームワークであるDjango、フロントエンドにNode.jsを用いています。  
 その他の技術的特徴として、WebAPIにGraphQL、リアルタイム更新にWebSocketを用いています。
 
-**[Webサイト](https://www.cindythink.com/ja/)** はこちら  
+**[Webサイト](https://www.cindythink.com/ja/)** はこちら
 Cindyの遊び方については非公式 **[Wiki](https://wiki3.jp/cindy-lat)** をご参照ください。
 
 `Cindy`という名前は**Cindy Is Not Dead Yet**(シンディは死んでいない)の頭文字をとって名付けられました。[Cindy](http://sui-hei.net/app/webroot/pukiwiki/index.php?%E3%82%B7%E3%83%B3%E3%83%87%E3%82%A3)はラテシンのキャラクターです。
@@ -16,14 +16,16 @@ Cindyの遊び方については非公式 **[Wiki](https://wiki3.jp/cindy-lat)**
 -------------------------
 Cindy-Realtimeは旧[Cindy][1] からデータを引き継いでいますが、フロントエンドを刷新しました。
 
-Cindy-Realtimeの変更点  
-    - リアルタイム方式を採用(WebSocket)  
-    - ReactによるUIの改良、保守性の向上 :smile:  
-    - GraphQLとRelayを導入し、RESTライクなAPIより高速な読み込みを実現  
+Cindy-Realtimeの変更点
 
-逆にできなくなったこともあります。  
-    - 古いブラウザのサポートを終了  
-    - シングルスレッドのPaaSにはデプロイ不可能  
+- リアルタイム方式を採用(WebSocket)
+- ReactによるUIの改良、保守性の向上 :smile:
+- GraphQLとRelayを導入し、RESTライクなAPIより高速な読み込みを実現
+
+逆にできなくなったこともあります。
+
+- 古いブラウザのサポートを終了
+- シングルスレッドのPaaSにはデプロイ不可能
 
 これらの大幅な変更のために、旧CindyとCindy-Realtimeは別のリポジトリとして公開しています。
 *今のところ、どちらのリポジトリもサポート中です*
@@ -79,9 +81,8 @@ Cindy-Realtimeの変更点
       GRANT ALL PRIVILEGES ON DATABASE cindy TO cindy;
       \q;
       ```
+    - `./cindy/security.py` ファイルの`POSTGREDB_SETTINGS`をご自身の設定に従って編集します。テンプレートは[こちら](./cindy/security.py.template)。
 
-    - `./cindy/security.py` ファイルの`POSTGREDB_SETTINGS`をご自身の設定に従って編集します。
-      テンプレートは[こちら](./cindy/security.py.template).
     - djangoを使って必要なデータを生成します。
 
       ```bash
@@ -111,24 +112,23 @@ Cindy-Realtimeの変更点
 また、設定ファイルをご自身のシステムに合わせて変更することにご注意ください(例えばユーザー名、パスなど)。
 
 1. JavaScriptのアセットを取得する
-    - Method 1
 
-      1.  [コミットする](#コミットする)の1-3を実行する。**Node.jsは必須ではないこと必須ではないことに注意**
-      2. javascriptのアセットを収集
+    1. [コミットする](#コミットする)の1-3を実行する。**Node.jsは必須ではないことに注意**
+    2. javascriptのアセットを収集
+     
+      [こちら](https://github.com/heyrict/cindy-realtime/releases)からassets.7zをダウンロードして展開します。
 
-       [こちら](https://github.com/heyrict/cindy-realtime/releases)からassets.7zをダウンロードして展開します。
+      ```bash
+      wget https://github.com/heyrict/cindy-realtime/releases/download/$CINDY_VERSION/assets.7z
+      7zr x assets.7z
+      ```
 
-       ```bash
-       wget https://github.com/heyrict/cindy-realtime/releases/download/$CINDY_VERSION/assets.7z
-       7zr x assets.7z
-       ```
-
-       ご自身でビルドする場合
-
-       ```bash
-       cd ./react-boilerplate && npm run build
-       ../manage.py collectstatic
-       ```
+      ご自身でビルドする場合
+      
+      ```bash
+      cd ./react-boilerplate && npm run build
+      ../manage.py collectstatic
+      ```
 
 2. Nginxの設定
 
@@ -151,7 +151,7 @@ Cindy-Realtimeの変更点
    service daphne start
    ```
 
-4. (以下は必須ではありません、 [nodejs](#要件)が必要です) step3-4の代わりにprerenderを使ったNginxの設定
+4. (以下は必須ではありません、 [nodejs](#要件)が必要です) step2-3の代わりにprerenderを使ったNginxの設定
 
    ```bash
    # 管理者権限が必要な場合があることにご注意ください。
