@@ -12,20 +12,18 @@ Cindyの遊び方については非公式 **[Wiki](https://wiki3.jp/cindy-lat)**
 
 `Cindy`という名前は**Cindy Is Not Dead Yet**(シンディは死んでいない)の頭文字をとって名付けられました。[Cindy](http://sui-hei.net/app/webroot/pukiwiki/index.php?%E3%82%B7%E3%83%B3%E3%83%87%E3%82%A3)はラテシンのキャラクターです。
 
-<div style="clear:both;" />
-
 旧Cindyとの違い
 -------------------------
-Cindy-Realtimeは旧[Cindy][1]からデータを引き継いでいますが、フロントエンドを刷新しました。
+Cindy-Realtimeは旧[Cindy][1] からデータを引き継いでいますが、フロントエンドを刷新しました。
 
-Cindy-Realtimeの変更点
-    - リアルタイム方式を採用(WebSocket)
-    - ReactによるUIの改良、保守性の向上 :smile:
-    - GraphQLとRelayを導入し、RESTライクなAPIより高速な読み込みを実現
+Cindy-Realtimeの変更点  
+    - リアルタイム方式を採用(WebSocket)  
+    - ReactによるUIの改良、保守性の向上 :smile:  
+    - GraphQLとRelayを導入し、RESTライクなAPIより高速な読み込みを実現  
 
-逆にできなくなったこともあります。
-    - 古いブラウザのサポートを終了
-    - シングルスレッドのPaaSにはデプロイ不可能
+逆にできなくなったこともあります。  
+    - 古いブラウザのサポートを終了  
+    - シングルスレッドのPaaSにはデプロイ不可能  
 
 これらの大幅な変更のために、旧CindyとCindy-Realtimeは別のリポジトリとして公開しています。
 *今のところ、どちらのリポジトリもサポート中です*
@@ -82,7 +80,7 @@ Cindy-Realtimeの変更点
       \q;
       ```
 
-    - `POSTGREDB_SETTINGS` in `./cindy/security.py` ファイルをご自身の設定に従って編集します。
+    - `./cindy/security.py` ファイルの`POSTGREDB_SETTINGS`をご自身の設定に従って編集します。
       テンプレートは[こちら](./cindy/security.py.template).
     - djangoを使って必要なデータを生成します。
 
