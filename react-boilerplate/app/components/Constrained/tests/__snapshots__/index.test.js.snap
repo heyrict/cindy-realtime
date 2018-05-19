@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Constrained /> Expect to render children properly with level 1 ~ 5 1`] = `
+<Styled(Flex)
+  align="center"
+  justify="center"
+  ml={-2}
+  pl={2}
+  wrap={true}
+>
+  <Styled(Box)
+    width={
+      Array [
+        0.9166666666666666,
+        0.875,
+        0.8333333333333334,
+        0.8,
+      ]
+    }
+  >
+    <div
+      className="test_class"
+    />
+  </Styled(Box)>
+</Styled(Flex)>
+`;

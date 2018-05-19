@@ -14,7 +14,7 @@ class UnhandledTextarea extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: '',
+      content: props.content || '',
     };
 
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -66,6 +66,7 @@ class UnhandledTextarea extends React.Component {
 
 UnhandledTextarea.propTypes = {
   component: PropTypes.any.isRequired,
+  content: PropTypes.string,
   sendPolicy: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
   style: PropTypes.object,

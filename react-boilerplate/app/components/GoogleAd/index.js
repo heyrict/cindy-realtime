@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 
 import { googleAdClientToken } from 'settings';
 
-class GoogleAd extends React.PureComponent {
+export class GoogleAd extends React.PureComponent {
   componentDidMount() {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -51,7 +51,7 @@ GoogleAd.defaultProps = {
   },
 };
 
-const RegisterGoogleAd = (Wrapped) => (props) =>
-  googleAdClientToken && <Wrapped client={googleAdClientToken} {...props} />;
+export const RegisterGoogleAd = ({ clientToken }) => (Wrapped) => (props) =>
+  clientToken && <Wrapped client={clientToken} {...props} />;
 
-export default RegisterGoogleAd(GoogleAd);
+export default RegisterGoogleAd({ clientToken: googleAdClientToken })(GoogleAd);

@@ -8,7 +8,7 @@ import switcher from 'images/switcher.svg';
 import FilterButton from './FilterButton';
 import SearchPanel from './SearchPanel';
 
-const ToggleBtn = Button.extend`
+export const ToggleBtn = Button.extend`
   border-radius: 0;
   padding: 5px;
   min-width: 50px;
@@ -76,8 +76,8 @@ class FilterVarSetPanel extends React.Component {
                     name={name}
                     index={this.curOrder === name ? 0 : undefined}
                     asc={this.curOrder === name ? this.asc : undefined}
-                    onMainButtonClick={this.handleMainButtonClick}
-                    onSortButtonClick={this.handleSortButtonClick}
+                    onMainButtonClick={() => this.handleMainButtonClick(name)}
+                    onSortButtonClick={() => this.handleSortButtonClick(name)}
                   />
                 </Box>
               ))}

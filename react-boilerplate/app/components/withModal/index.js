@@ -46,7 +46,7 @@ const ModalFooter = styled.div`
 
 export function withModal(p) {
   const header = p.header;
-  const footer = p.footer || { close: false, confirm: false };
+  const footer = p.footer || {};
   return (Wrapped) => {
     /* Change a component to modal.
    * props:
@@ -75,12 +75,12 @@ export function withModal(p) {
             bsSize="large"
           >
             {header && (
-              <ModalHeader>
+              <ModalHeader className="cindy-modal-header">
                 {header}
                 <HeaderCloseBtn onClick={this.props.onHide}>x</HeaderCloseBtn>
               </ModalHeader>
             )}
-            <ModalBody>
+            <ModalBody className="cindy-modal-body">
               {footer.confirm ? (
                 <Wrapped
                   ref={(instance) => {
@@ -93,16 +93,22 @@ export function withModal(p) {
               )}
             </ModalBody>
             {(footer.confirm || footer.close) && (
-              <ModalFooter>
+              <ModalFooter className="cindy-modal-footer">
                 {footer.confirm ? (
-                  <StyledButton onClick={this.handleConfirm}>
+                  <StyledButton
+                    className="cindy-modal-footer-confirm"
+                    onClick={this.handleConfirm}
+                  >
                     {footer.confirm === true
                       ? _(messages.confirm)
                       : footer.confirm}
                   </StyledButton>
                 ) : null}
                 {footer.close ? (
-                  <StyledButton onClick={this.props.onHide}>
+                  <StyledButton
+                    className="cindy-modal-footer-close"
+                    onClick={this.props.onHide}
+                  >
                     {footer.close === true ? _(messages.close) : footer.close}
                   </StyledButton>
                 ) : null}

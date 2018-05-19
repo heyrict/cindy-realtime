@@ -1,0 +1,177 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MarkdownPreview /> Expect to render test markdown text properly 1`] = `
+Array [
+  <div>
+    <style-store__ButtonOutline
+      onClick={[Function]}
+      py={1}
+      style={
+        Object {
+          "border": "1px solid #2075c7",
+          "borderRadius": "0",
+          "boxShadow": "inset 0 0 0 0",
+        }
+      }
+      tabIndex="-1"
+      w={1}
+    >
+      <FormattedMessage
+        defaultMessage="Hide Preview"
+        id="app.components.MarkdownPreview.hidePreview"
+        values={Object {}}
+      />
+    </style-store__ButtonOutline>
+    <MarkdownPreview__Panel
+      pose="display"
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "
+<h1>H1</h1>
+<p>text <strong>bold</strong> <em>italic</em></p>
+<blockquote>
+<p>quote</p>
+</blockquote>
+<hr />
+<ol>
+<li>list
+<ul>
+<li>nested</li>
+</ul>
+</li>
+</ol>
+<p><font color=\\"red\\">red</font></p>
+<div>right</div>
+",
+          }
+        }
+        style={
+          Object {
+            "overflow": "auto",
+          }
+        }
+      />
+    </MarkdownPreview__Panel>
+  </div>,
+  <div
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "
+<h1>H1</h1>
+<p>text <strong>bold</strong> <em>italic</em></p>
+<blockquote>
+<p>quote</p>
+</blockquote>
+<hr />
+<ol>
+<li>list
+<ul>
+<li>nested</li>
+</ul>
+</li>
+</ol>
+<p><font color=\\"red\\">red</font></p>
+<div>right</div>
+",
+      }
+    }
+    style={
+      Object {
+        "overflow": "auto",
+      }
+    }
+  />,
+]
+`;
+
+exports[`<MarkdownPreview /> Expect to safely render test markdown text properly 1`] = `
+Array [
+  <div>
+    <style-store__ButtonOutline
+      onClick={[Function]}
+      py={1}
+      style={
+        Object {
+          "border": "1px solid #2075c7",
+          "borderRadius": "0",
+          "boxShadow": "inset 0 0 0 0",
+        }
+      }
+      tabIndex="-1"
+      w={1}
+    >
+      <FormattedMessage
+        defaultMessage="Hide Preview"
+        id="app.components.MarkdownPreview.hidePreview"
+        values={Object {}}
+      />
+    </style-store__ButtonOutline>
+    <MarkdownPreview__Panel
+      pose="display"
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "<style type=\\"text/css\\">
+#test { flow: right; }
+</style>
+<h1>H1</h1>
+<p>text <strong>bold</strong> <em>italic</em></p>
+<blockquote>
+<p>quote</p>
+</blockquote>
+<hr />
+<ol>
+<li>list
+<ul>
+<li>nested</li>
+</ul>
+</li>
+</ol>
+<p><font color=\\"red\\">red</font></p>
+<div id=\\"test\\">right</div>
+",
+          }
+        }
+        style={
+          Object {
+            "overflow": "auto",
+          }
+        }
+      />
+    </MarkdownPreview__Panel>
+  </div>,
+  <div
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<style type=\\"text/css\\">
+#test { flow: right; }
+</style>
+<h1>H1</h1>
+<p>text <strong>bold</strong> <em>italic</em></p>
+<blockquote>
+<p>quote</p>
+</blockquote>
+<hr />
+<ol>
+<li>list
+<ul>
+<li>nested</li>
+</ul>
+</li>
+</ol>
+<p><font color=\\"red\\">red</font></p>
+<div id=\\"test\\">right</div>
+",
+      }
+    }
+    style={
+      Object {
+        "overflow": "auto",
+      }
+    }
+  />,
+]
+`;

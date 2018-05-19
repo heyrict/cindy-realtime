@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<GoogleAd /> GoogleAd Expect to accept all props 1`] = `
+<div
+  style={
+    Object {
+      "width": "100%",
+    }
+  }
+>
+  <ins
+    className="adsbygoogle"
+    data-ad-client="fakeToken"
+    data-ad-format="auto"
+    data-ad-layout-key="-gw-3+1f-3d+2z"
+    data-ad-slot="000000"
+    style={
+      Object {
+        "display": "block",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`<GoogleAd /> GoogleAd Expect to accept required props 1`] = `
+<div
+  style={
+    Object {
+      "overflow": "hidden",
+    }
+  }
+>
+  <ins
+    className="adsbygoogle"
+    data-ad-client="fakeToken"
+    data-ad-format="auto"
+    data-ad-slot="000000"
+    style={
+      Object {
+        "display": "block",
+      }
+    }
+  />
+</div>
+`;

@@ -16,7 +16,7 @@ import { push } from 'react-router-redux';
 import FilterVarSetPanel from './FilterVarSetPanel';
 import { makeSelectQuery } from './selectors';
 
-const FilterableList = (props) => {
+export const FilterableList = (props) => {
   const {
     component: QueryList,
     variables,
@@ -40,7 +40,7 @@ const FilterableList = (props) => {
         page: 1,
       })
     );
-  const handleOrderChange = (nextOrder) => {
+  const setOrder = (nextOrder) => {
     props.goto(updateQueryStr({ order: nextOrder, page: 1 }));
   };
 
@@ -50,7 +50,7 @@ const FilterableList = (props) => {
         filterList={filterList}
         orderList={orderList}
         order={curOrder}
-        onOrderChange={handleOrderChange}
+        onOrderChange={setOrder}
         onFilterChange={setFilter}
       />
       <QueryList
@@ -71,6 +71,7 @@ FilterableList.defaultProps = {
   orderList: ['id', 'created'],
   filter: {},
   filterList: [],
+  query: {},
 };
 
 FilterableList.propTypes = {

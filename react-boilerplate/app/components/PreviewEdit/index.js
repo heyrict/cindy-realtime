@@ -99,8 +99,7 @@ class PreviewEdit extends React.Component {
 }
 
 PreviewEdit.propTypes = {
-  id: PropTypes.string,
-  style: PropTypes.object,
+  style: PropTypes.object.isRequired,
   content: PropTypes.string.isRequired,
   onChange: PropTypes.func,
   safe: PropTypes.bool,
