@@ -1,19 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { RoundedPanel, Button, ImgXs } from 'style-store';
+import { RoundedPanel, Button, ButtonOutline } from 'style-store';
 import { Flex, Box } from 'rebass';
-
-import switcher from 'images/switcher.svg';
 
 import FilterButton from './FilterButton';
 import SearchPanel from './SearchPanel';
 
-export const ToggleBtn = Button.extend`
-  border-radius: 0;
-  padding: 5px;
-  min-width: 50px;
-  min-height: 36px;
-`;
+const ToggleBtn = (props) => {
+  const { on, ...others } = props;
+  return on ? <Button {...others} /> : <ButtonOutline {...others} />;
+};
+
+ToggleBtn.defaultProps = {
+  w: 1,
+  py: '5px',
+  style: {
+    borderRadius: 0,
+  },
+};
+
+ToggleBtn.propTypes = {
+  on: PropTypes.bool,
+};
 
 class FilterVarSetPanel extends React.Component {
   constructor(props) {
@@ -26,11 +34,7 @@ class FilterVarSetPanel extends React.Component {
       display: this.MODE.SORT,
     };
 
-    this.handleToggleButtonClick = () =>
-      this.setState((p) => ({
-        display:
-          p.display === this.MODE.SORT ? this.MODE.SEARCH : this.MODE.SORT,
-      }));
+    this.handleToggleButtonClick = (display) => this.setState({ display });
     this.handleMainButtonClick = this.handleMainButtonClick.bind(this);
     this.handleSortButtonClick = this.handleSortButtonClick.bind(this);
   }
@@ -67,6 +71,22 @@ class FilterVarSetPanel extends React.Component {
     this.curOrder = this.asc ? this.props.order.slice(1) : this.props.order;
     return (
       <RoundedPanel>
+        {this.props.filterList.length > 0 && (
+          <Flex mx="-2px" mt="-2px">
+            <ToggleBtn
+              on={this.state.display === this.MODE.SORT}
+              onClick={() => this.handleToggleButtonClick(this.MODE.SORT)}
+            >
+              Sort
+            </ToggleBtn>
+            <ToggleBtn
+              on={this.state.display === this.MODE.SEARCH}
+              onClick={() => this.handleToggleButtonClick(this.MODE.SEARCH)}
+            >
+              Search
+            </ToggleBtn>
+          </Flex>
+        )}
         <Flex justify="center">
           {this.state.display === this.MODE.SORT && (
             <Flex w={1} px={1} wrap justify="center" align="center">
@@ -88,11 +108,6 @@ class FilterVarSetPanel extends React.Component {
               filterList={this.props.filterList}
               handleSearchButtonClick={this.props.onFilterChange}
             />
-          )}
-          {this.props.filterList.length > 0 && (
-            <ToggleBtn onClick={this.handleToggleButtonClick}>
-              <ImgXs src={switcher} alt="Switch" />
-            </ToggleBtn>
           )}
         </Flex>
       </RoundedPanel>

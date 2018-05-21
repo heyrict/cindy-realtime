@@ -32,7 +32,7 @@ const SearchInput = Input.extend`
   min-height: 36px;
   margin-top: 5px;
   margin-bottom: 5px;
-  border-radius: 0;
+  border-radius: 0 10px 10px 0;
   border: 1px solid #ccc;
   box-shadow: unset;
   &:focus {
@@ -92,7 +92,7 @@ class SearchPanel extends React.PureComponent {
               this.state.filterValue
             )
           }
-          style={{ borderRadius: '0 10px 10px 0' }}
+          style={{ borderRadius: '10px' }}
         >
           <FormattedMessage {...messages.search} />
         </SearchBtn>
