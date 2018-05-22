@@ -203,6 +203,11 @@ class DirectChat extends React.Component {
             <ChatInput
               ref={(ins) => (this.input = ins)}
               sendPolicy={this.props.sendPolicy}
+              placeholder={
+                user ? null : (
+                  <FormattedMessage {...messages.directChatInputPlaceholder} />
+                )
+              }
               disabled={
                 !user ||
                 !this.props.currentUser ||

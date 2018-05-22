@@ -51,6 +51,7 @@ class ChatInput extends React.Component {
           onKeyUp={this.handleKeyPress}
           onHeightChange={this.props.onHeightChange}
           disabled={this.props.disabled || this.props.loading}
+          placeholder={this.props.placeholder}
           minRows={1}
           maxRows={5}
         />
@@ -77,6 +78,7 @@ ChatInput.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onHeightChange: PropTypes.func.isRequired,
   loading: PropTypes.bool,
+  placeholder: PropTypes.any,
 };
 
 ChatInput.defaultProps = {

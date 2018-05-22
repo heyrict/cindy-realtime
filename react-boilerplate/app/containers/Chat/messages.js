@@ -70,4 +70,8 @@ export default defineMessages({
     id: 'app.containers.Chat.notifyOfflineDms',
     defaultMessage: 'New Direct Message received when you were offline!',
   },
+  directChatInputPlaceholder: {
+    id: 'app.containers.Chat.directChatInputPlaceholder',
+    defaultMessage: 'Please select who you want to send DM to.',
+  },
 });
