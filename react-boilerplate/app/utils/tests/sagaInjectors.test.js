@@ -70,9 +70,9 @@ describe('injectors', () => {
       expect(() => ejectSaga(1)).toThrow();
     });
 
-    it('should cancel a saga in a default mode', () => {
+    it('should cancel a saga in RESTART_ON_REMOUNT mode', () => {
       const cancel = jest.fn();
-      store.injectedSagas.test = { task: { cancel } };
+      store.injectedSagas.test = { task: { cancel }, mode: RESTART_ON_REMOUNT };
       ejectSaga('test');
 
       expect(cancel).toHaveBeenCalled();
@@ -195,7 +195,7 @@ describe('injectors', () => {
       injectSaga('test', { saga: testSaga1 });
 
       expect(cancel).toHaveBeenCalledTimes(1);
-      expect(store.runSaga).toHaveBeenCalledWith(testSaga1, undefined);
+      expect(store.runSaga).toHaveBeenCalledWith(testSaga1);
     });
 
     it('should not cancel saga if different implementation in production', () => {

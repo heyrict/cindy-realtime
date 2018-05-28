@@ -14,6 +14,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ApolloProvider } from 'react-apollo';
 import { ConnectedRouter } from 'react-router-redux';
+import FontFaceObserver from 'fontfaceobserver';
 import createHistory from 'history/createBrowserHistory';
 import 'sanitize.css/sanitize.css';
 
@@ -26,20 +27,9 @@ import LanguageProvider from 'containers/LanguageProvider';
 // Import Apollo Environment
 import { client } from 'Environment';
 
-// Load the favicon, the manifest.json file and the .htaccess file
-/* eslint-disable import/no-unresolved, import/extensions */
+// Load the favicon and the .htaccess file
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
-import '!file-loader?name=[name].[ext]!./images/icon-72x72.png';
-import '!file-loader?name=[name].[ext]!./images/icon-96x96.png';
-import '!file-loader?name=[name].[ext]!./images/icon-128x128.png';
-import '!file-loader?name=[name].[ext]!./images/icon-144x144.png';
-import '!file-loader?name=[name].[ext]!./images/icon-152x152.png';
-import '!file-loader?name=[name].[ext]!./images/icon-192x192.png';
-import '!file-loader?name=[name].[ext]!./images/icon-384x384.png';
-import '!file-loader?name=[name].[ext]!./images/icon-512x512.png';
-import '!file-loader?name=[name].[ext]!./manifest.json';
-import 'file-loader?name=[name].[ext]!./.htaccess';
-/* eslint-enable import/no-unresolved, import/extensions */
+import 'file-loader?name=[name].[ext]!./.htaccess'; // eslint-disable-line import/extensions
 
 import configureStore from './configureStore';
 
@@ -52,6 +42,20 @@ import './global-styles';
 // Import exposed actions
 import { openChat } from './containers/Chat/actions';
 import { pushWithLocale } from './common';
+
+// Observe loading of Open Sans (to remove open sans, remove the <link> tag in
+// the index.html file and this observer)
+const openSansObserver = new FontFaceObserver('Open Sans', {});
+
+// When Open Sans is loaded, add a font-family using Open Sans to the body
+openSansObserver
+  .load()
+  .then(() => {
+    document.body.classList.add('fontLoaded');
+  })
+  .catch(() => {
+    console.log('Warning: Font OpenSans Fails to Load');
+  });
 
 // Create redux store with history
 const initialState = {};
@@ -109,7 +113,6 @@ if (!window.Intl) {
       Promise.all([
         import('intl/locale-data/jsonp/en.js'),
         import('intl/locale-data/jsonp/ja.js'),
-        import('intl/locale-data/jsonp/fr.js'),
       ])
     )
     .then(() => render(translationMessages))

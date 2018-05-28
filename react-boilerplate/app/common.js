@@ -15,7 +15,7 @@ import sanitizeHtml from 'sanitize-html';
 import moment, * as moments from 'moment';
 import { push } from 'react-router-redux';
 import { domainRegex } from 'settings';
-import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants';
+import { DEFAULT_LOCALE } from 'containers/App/constants';
 
 const md = MarkdownIt({
   html: true,

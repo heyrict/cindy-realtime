@@ -11,5 +11,5 @@ const querySelect = (searchObj) => ({
 
 export const makeSelectQuery = () =>
   createSelector(selectLocation, (location) =>
-    compose(querySelect, getQueryStr)(location.get('search'))
+    compose(querySelect, getQueryStr)(location.search)
   );

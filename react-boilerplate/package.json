@@ -1,21 +1,22 @@
 {
   "name": "cindy-suihei",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "packaging site for lateral thinking",
   "repository": {
     "type": "git",
     "url": "git://github.com/react-boilerplate/react-boilerplate.git"
   },
   "engines": {
-    "npm": ">=3",
-    "node": ">=5"
+    "npm": ">=5",
+    "node": ">=6"
   },
   "author": "heyrict<github.com/heyrict>",
   "license": "MIT",
   "scripts": {
     "relay": "relay-compiler --src ./app --schema ./schema.json --extensions js jsx",
-    "preserve": "cross-env NODE_ENV=development webpack --config ./internals/webpack/webpack.dev.babel.js -p --progress --hide-modules",
+    "preserve": "cross-env NODE_ENV=development webpack --mode=development --config ./internals/webpack/webpack.dev.babel.js -p --progress --hide-modules",
     "serve": "cross-env NODE_ENV=development node dev-server.js",
+    "precommit": "npm run lint:staged",
     "analyze:clean": "rimraf stats.json",
     "preanalyze": "npm run analyze:clean",
     "analyze": "node ./internals/scripts/analyze.js",
@@ -37,20 +38,25 @@
     "clean": "shjs ./internals/scripts/clean.js",
     "clean:all": "npm run analyze:clean && npm run test:clean && npm run build:clean",
     "generate": "plop --plopfile internals/generators/index.js",
-    "lint": "npm run lint:js",
-    "lint:eslint": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts",
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:eslint": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts --fix",
     "lint:js": "npm run lint:eslint -- . ",
+    "lint:css": "stylelint \"./app/**/*.js\"",
     "lint:staged": "lint-staged",
     "pretest": "npm run test:clean #&& npm run lint",
     "test:clean": "rimraf ./coverage",
     "test": "cross-env NODE_ENV=test jest --coverage",
+    "test:dev": "cross-env NODE_ENV=test jest --watch",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
+  "moduleRoots": "app",
   "lint-staged": {
-    "*.js": "lint:eslint"
+    "*.js": [
+      "lint:eslint",
+      "stylelint"
+    ]
   },
-  "pre-commit": "lint:staged",
   "prettier": {
     "singleQuote": true,
     "trailingComma": "es5",
@@ -71,14 +77,23 @@
       "stage-0"
     ],
     "env": {
+      "development": {
+        "only": [
+          "app",
+          "internals/scripts"
+        ],
+        "plugins": [
+          "transform-react-jsx-source"
+        ]
+      },
       "production": {
         "only": [
           "app"
         ],
         "plugins": [
           "transform-react-remove-prop-types",
-          "transform-react-constant-elements",
-          "transform-react-inline-elements"
+          "transform-react-inline-elements",
+          "transform-react-constant-elements"
         ]
       },
       "test": {
@@ -174,6 +189,15 @@
       }
     }
   },
+  "stylelint": {
+    "processors": [
+      "stylelint-processor-styled-components"
+    ],
+    "extends": [
+      "stylelint-config-standard",
+      "stylelint-config-styled-components"
+    ]
+  },
   "dllPlugin": {
     "path": "node_modules/react-boilerplate-dlls",
     "exclude": [
@@ -218,6 +242,10 @@
       ".*\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/internals/mocks/image.js"
     },
     "setupTestFrameworkScriptFile": "<rootDir>/internals/testing/test-bundler.js",
+    "setupFiles": [
+      "raf/polyfill",
+      "<rootDir>/internals/testing/enzyme-setup.js"
+    ],
     "testRegex": "tests/.*\\.test\\.js$"
   },
   "dependencies": {
@@ -225,63 +253,62 @@
     "apollo-link-batch-http": "^1.2.1",
     "apollo-link-error": "^1.0.5",
     "apollo-link-ws": "^1.0.8",
-    "babel-polyfill": "6.23.0",
-    "chalk": "1.1.3",
-    "compression": "1.6.2",
-    "cross-env": "5.0.0",
+    "babel-polyfill": "6.26.0",
+    "chalk": "2.3.2",
+    "compression": "1.7.2",
+    "cross-env": "5.1.4",
     "django-channels": "^1.1.8",
-    "expose-loader": "^0.7.4",
-    "express": "4.15.3",
-    "fontfaceobserver": "2.0.9",
+    "express": "4.16.3",
+    "fontfaceobserver": "2.0.13",
     "graphql": "^0.12.3",
     "graphql-tag": "^2.7.3",
-    "history": "4.6.3",
-    "hoist-non-react-statics": "2.1.1",
-    "immutable": "^3.8.1",
+    "history": "4.7.2",
+    "hoist-non-react-statics": "2.5.0",
+    "immutable": "3.8.2",
     "intl": "1.2.5",
-    "invariant": "2.2.2",
+    "invariant": "2.2.4",
     "ip": "1.1.5",
-    "lodash": "4.17.4",
+    "lodash": "4.17.5",
     "markdown-it": "^8.4.0",
     "markdown-it-emoji": "^1.4.0",
     "minimist": "1.2.0",
     "moment": "2.19.1",
     "moment-countdown": "0.0.3",
     "popper.js": "^1.12.9",
-    "prop-types": "15.5.10",
-    "react": "^16.3.2",
+    "prop-types": "15.6.1",
+    "react": "16.3.2",
     "react-apollo": "^2.1.3",
-    "react-dom": "^16.3.2",
-    "react-helmet": "5.1.3",
-    "react-intl": "^2.4.0",
-    "react-loadable": "4.0.3",
+    "react-dom": "16.3.2",
+    "react-helmet": "5.2.0",
+    "react-intl": "2.4.0",
+    "react-loadable": "5.3.1",
     "react-notification-system": "^0.2.16",
-    "react-pose": "^1.5.2",
-    "react-redux": "5.0.5",
-    "react-router-dom": "^4.2.2",
-    "react-router-redux": "^5.0.0-alpha.6",
+    "react-pose": "1.5.2",
+    "react-redux": "5.0.7",
+    "react-router-dom": "4.2.2",
+    "react-router-redux": "5.0.0-alpha.9",
     "react-select": "^1.2.1",
     "react-textarea-autosize": "^5.2.1",
     "react-tippy": "^1.2.2",
-    "rebass": "^1.0.4",
-    "recompose": "^0.27.0",
-    "redux": "^3.7.2",
+    "rebass": "^2.0.0-2",
+    "recompose": "0.27.1",
+    "redux": "3.7.2",
     "redux-immutable": "4.0.0",
-    "redux-saga": "0.15.3",
+    "redux-saga": "0.16.0",
     "reselect": "3.0.1",
     "sanitize-html": "^1.16.1",
     "sanitize.css": "4.1.0",
-    "styled-components": "2.0.0",
+    "styled-components": "3.3.0",
     "subscriptions-transport-ws": "^0.9.8",
     "warning": "3.0.0",
-    "whatwg-fetch": "2.0.3"
+    "whatwg-fetch": "2.0.4"
   },
   "devDependencies": {
-    "add-asset-html-webpack-plugin": "2.0.1",
+    "add-asset-html-webpack-plugin": "2.1.3",
     "babel-cli": "6.24.1",
     "babel-core": "6.24.1",
     "babel-eslint": "7.2.3",
-    "babel-loader": "7.1.0",
+    "babel-loader": "7.1.4",
     "babel-plugin-dynamic-import-node": "1.0.2",
     "babel-plugin-graphql-tag": "^1.5.0",
     "babel-plugin-react-intl": "2.3.1",
@@ -290,49 +317,55 @@
     "babel-plugin-transform-es2015-modules-commonjs": "6.24.1",
     "babel-plugin-transform-react-constant-elements": "6.23.0",
     "babel-plugin-transform-react-inline-elements": "6.22.0",
+    "babel-plugin-transform-react-jsx-source": "6.22.0",
     "babel-plugin-transform-react-remove-prop-types": "0.4.5",
     "babel-preset-env": "1.5.1",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-0": "6.24.1",
     "circular-dependency-plugin": "3.0.0",
     "coveralls": "2.13.1",
-    "css-loader": "0.28.4",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1",
+    "css-loader": "0.28.11",
+    "enzyme": "3.3.0",
+    "enzyme-adapter-react-16": "1.1.1",
     "eslint": "3.19.0",
     "eslint-config-airbnb": "15.0.1",
     "eslint-config-airbnb-base": "11.2.0",
-    "eslint-import-resolver-webpack": "0.8.3",
+    "eslint-import-resolver-webpack": "0.8.4",
     "eslint-plugin-import": "2.7.0",
     "eslint-plugin-jsx-a11y": "5.0.3",
     "eslint-plugin-react": "7.0.1",
     "eslint-plugin-redux-saga": "0.3.0",
     "eventsource-polyfill": "0.9.6",
-    "exports-loader": "0.6.4",
-    "file-loader": "0.11.1",
-    "html-loader": "0.4.5",
-    "html-webpack-plugin": "2.29.0",
-    "image-webpack-loader": "2.0.0",
-    "imports-loader": "0.7.1",
-    "jest": "^22.4.3",
-    "jest-enzyme": "^6.0.0",
+    "exports-loader": "0.7.0",
+    "file-loader": "1.1.11",
+    "html-loader": "0.5.5",
+    "html-webpack-plugin": "3.0.6",
+    "husky": "0.14.3",
+    "image-webpack-loader": "4.2.0",
+    "imports-loader": "0.8.0",
+    "jest-cli": "20.0.4",
     "lint-staged": "3.5.1",
     "ngrok": "2.2.9",
     "node-plop": "0.7.0",
     "null-loader": "0.1.1",
-    "offline-plugin": "4.8.1",
+    "offline-plugin": "4.9.0",
     "plop": "1.8.0",
-    "pre-commit": "1.2.2",
-    "prerender": "^5.3.1",
+    "prerender": "5.3.1",
     "react-addons-test-utils": "^15.2.0",
-    "react-hot-loader": "^3.1.3",
-    "react-test-renderer": "15.6.1",
-    "rimraf": "2.6.1",
+    "react-hot-loader": "3.1.3",
+    "rimraf": "2.6.2",
     "shelljs": "0.7.7",
-    "style-loader": "0.18.1",
-    "url-loader": "0.5.8",
-    "webpack": "3.5.5",
-    "webpack-bundle-tracker": "^0.2.0",
-    "webpack-dev-server": "^2.9.7"
+    "style-loader": "0.20.3",
+    "stylelint": "8.3.1",
+    "stylelint-config-standard": "18.2.0",
+    "stylelint-config-styled-components": "0.1.1",
+    "stylelint-processor-styled-components": "1.3.1",
+    "svg-url-loader": "^2.3.2",
+    "url-loader": "1.0.1",
+    "webpack": "4.4.1",
+    "webpack-cli": "2.1.4",
+    "webpack-bundle-tracker": "0.2.0",
+    "webpack-dev-server": "^3.1.4",
+    "webpack-pwa-manifest": "3.6.2"
   }
 }

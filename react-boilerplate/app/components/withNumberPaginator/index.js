@@ -51,7 +51,7 @@ export function withNumberPaginator() {
     const mapStateToProps = createStructuredSelector({
       page: createSelector(
         selectLocation,
-        (location) => getQueryStr(location.get('search')).page
+        (location) => getQueryStr(location.search).page
       ),
     });
 

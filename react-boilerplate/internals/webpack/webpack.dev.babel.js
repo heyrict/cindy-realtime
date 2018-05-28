@@ -1,6 +1,7 @@
 /**
  * DEVELOPMENT WEBPACK CONFIGURATION
  */
+/* eslint-disable indent */
 
 const path = require('path');
 const fs = require('fs');
@@ -41,6 +42,8 @@ plugins.push(new webpack.NoEmitOnErrorsPlugin());
 plugins.push(new BundleTracker({ filename: 'build/webpack-stats.json' }));
 
 module.exports = require('./webpack.base.babel')({
+  mode: 'development',
+
   // Add hot reloading in development
   entry: [
     'webpack-dev-server/client?http://localhost:8001',
@@ -53,6 +56,10 @@ module.exports = require('./webpack.base.babel')({
     filename: '[name].js',
     chunkFilename: '[name].chunk.js',
     publicPath: 'http://localhost:8001/static/',
+  },
+
+  optimization: {
+    minimize: false,
   },
 
   // Add development plugins
@@ -72,8 +79,7 @@ module.exports = require('./webpack.base.babel')({
  * third party dependencies.
  *
  * If there is a dllPlugin key on the project's package.json, the
- * Webpack DLL Plugin will be used.  Otherwise the CommonsChunkPlugin
- * will be used.
+ * Webpack DLL Plugin will be used.
  *
  */
 function dependencyHandlers() {
@@ -82,16 +88,10 @@ function dependencyHandlers() {
     return [];
   }
 
-  // If the package.json does not have a dllPlugin property, use the CommonsChunkPlugin
+  // Don't do anything if package.json does not have a dllPlugin property
+  // Code splitting now included by default in Webpack 4
   if (!dllPlugin) {
-    return [
-      new webpack.optimize.CommonsChunkPlugin({
-        name: 'vendor',
-        children: true,
-        minChunks: 2,
-        async: true,
-      }),
-    ];
+    return [];
   }
 
   const dllPath = path.resolve(

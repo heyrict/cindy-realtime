@@ -13,9 +13,9 @@ import messages from './messages';
 
 const ProfileButton = Button.extend`
   padding: 5px;
-  background-color: ${(props) => props.color || 'darkgoldenrod'};
+  background-color: darkgoldenrod;
   &:hover {
-    background-color: ${(props) => props.hoverColor || 'goldenrod'};
+    background-color: goldenrod;
   }
 `;
 

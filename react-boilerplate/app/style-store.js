@@ -38,13 +38,16 @@ export const Navbar = NavbarBase.extend`
   border-color: #e7e7e7;
   background-color: #c6b571;
   z-index: 1030;
+  position: absolute;
 `;
 
 export const SubNavbar = NavbarBase.extend`
+  top: 50px;
   border-color: #e7e7e7;
   background-color: #d7c682;
   padding: 0 8px;
   z-index: 1029;
+  position: absolute;
 `;
 
 export const RouterLink = styled(Link)`
@@ -69,9 +72,9 @@ export const ImgMd = styled.img`
   margin: 0;
 `;
 
-export const Star = styled(RebassStar)`
+export const Star = RebassStar.extend`
   color: ${(props) =>
-    props.checked ? props.color || 'orange' : 'rgba(0, 0, 0, 0.125)'};
+    props.checked ? 'orange' : 'rgba(0, 0, 0, 0.125)'};
 `;
 
 export const LightNicknameLink = styled(Link)`
@@ -119,7 +122,7 @@ export const Heading = styled.div`
   padding-top: 0.5em;
 `;
 
-export const Button = styled(RebassButton)`
+export const Button = RebassButton.extend`
   border-radius: 10px;
   color: blanchedalmond;
   background-color: #2075c7;
@@ -130,7 +133,7 @@ export const Button = styled(RebassButton)`
   }
 `;
 
-export const ButtonOutline = styled(RebassButtonOutline)`
+export const ButtonOutline = RebassButtonOutline.extend`
   border-radius: 10px;
   color: #2075c7;
   font-weight: bold;
@@ -192,12 +195,12 @@ export const Textarea = styled.textarea`
   }
 `;
 
-export const RoundedPanel = styled(RebassPanel)`
+export const RoundedPanel = RebassPanel.extend`
   border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.382);
 `;
 
-export const Switch = styled(RebassSwitch)`
+export const Switch = RebassSwitch.extend`
   color: #2075c7;
   margin: 2px 5px;
   background-color: ${(props) => (props.checked ? '#2075C7' : 'transparent')};

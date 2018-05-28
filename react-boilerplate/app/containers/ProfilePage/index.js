@@ -153,7 +153,7 @@ const mapStateToProps = createStructuredSelector({
   usernavbar: makeSelectUserNavbar(),
   display: createSelector(
     selectLocation,
-    (location) => getQueryStr(location.get('search')).display
+    (location) => getQueryStr(location.search).display
   ),
 });
 

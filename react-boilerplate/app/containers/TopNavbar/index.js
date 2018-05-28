@@ -61,7 +61,7 @@ function TopNavbar(props) {
   }
 
   return (
-    <Navbar mx={-2}>
+    <Navbar w={1}>
       <Box w={1 / 3} m="auto">
         <NavbarBtn onClick={() => toggle('menu')}>
           <ImgSm src={menuImg} alt="menu" />
@@ -69,8 +69,8 @@ function TopNavbar(props) {
             <FormattedMessage {...messages.menu} />
           </NavbarBtnMsg>
         </NavbarBtn>
-        <MenuNavbar open={props.topnavbar.subnav === 'menu'} />
       </Box>
+      <MenuNavbar open={props.topnavbar.subnav === 'menu'} />
       <Box w={1 / 3} m="auto">
         <NavbarBtn onClick={() => props.dispatch(toggleChat())}>
           <ImgSm src={chatImg} alt="chat" />
@@ -97,8 +97,8 @@ function TopNavbar(props) {
             <FormattedMessage {...messages.profile} />
           </NavbarBtnMsg>
         </NavbarBtn>
-        <UserNavbar open={props.topnavbar.subnav === 'user'} />
       </Box>
+      <UserNavbar open={props.topnavbar.subnav === 'user'} />
     </Navbar>
   );
 }
