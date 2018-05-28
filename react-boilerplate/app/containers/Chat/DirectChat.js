@@ -200,23 +200,23 @@ class DirectChat extends React.Component {
               </Box>
             )}
           <Box w={1}>
-            <ChatInput
-              ref={(ins) => (this.input = ins)}
-              sendPolicy={this.props.sendPolicy}
-              placeholder={
-                user ? null : (
-                  <FormattedMessage {...messages.directChatInputPlaceholder} />
-                )
-              }
-              disabled={
-                !user ||
-                !this.props.currentUser ||
-                this.props.currentUser.id === user.id
-              }
-              onSubmit={this.handleSubmit}
-              onHeightChange={this.handleHeightChange}
-              loading={this.state.loading}
-            />
+            <FormattedMessage {...messages.directChatInputPlaceholder}>
+              {(msg) => (
+                <ChatInput
+                  ref={(ins) => (this.input = ins)}
+                  sendPolicy={this.props.sendPolicy}
+                  placeholder={user ? null : msg}
+                  disabled={
+                    !user ||
+                    !this.props.currentUser ||
+                    this.props.currentUser.id === user.id
+                  }
+                  onSubmit={this.handleSubmit}
+                  onHeightChange={this.handleHeightChange}
+                  loading={this.state.loading}
+                />
+              )}
+            </FormattedMessage>
           </Box>
         </Flex>
       </Flex>
