@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import { NavLink } from 'rebass';
+import { NavLink } from 'style-store';
 
 import LoginModal from 'containers/LoginForm';
 

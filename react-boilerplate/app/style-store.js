@@ -7,6 +7,7 @@ import {
   ButtonOutline as RebassButtonOutline,
   Switch as RebassSwitch,
   Panel as RebassPanel,
+  NavLink as RebassNavLink,
 } from 'rebass';
 
 const formatScalar = (value, defaultValue = 'auto') => {
@@ -162,8 +163,6 @@ Button.defaultProps = {
 };
 
 export const ButtonOutline = RebassButtonOutline.extend`
-  border-radius: 10px;
-  border: 2px solid #2075c7;
   font-weight: bold;
   width: ${(props) => formatScalar(props.w, 'auto')};
   cursor: pointer;
@@ -176,6 +175,8 @@ export const ButtonOutline = RebassButtonOutline.extend`
 ButtonOutline.defaultProps = {
   color: 'cyan',
   bg: 'transparent',
+  border: '2px solid #2075c7',
+  borderRadius: 10,
 };
 
 export const Select = styled.select`
@@ -246,5 +247,11 @@ export const Switch = RebassSwitch.extend`
   &::after {
     background-color: ${(props) =>
       props.checked ? 'blanchedalmond' : '#2075C7'};
+  }
+`;
+
+export const NavLink = RebassNavLink.extend`
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
   }
 `;

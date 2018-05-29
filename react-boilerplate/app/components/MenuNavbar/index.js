@@ -9,8 +9,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { RouterLink, SubNavbar, ImgSm } from 'style-store';
-import { NavLink, Group, Button, ButtonOutline } from 'rebass';
+import { NavLink, RouterLink, SubNavbar, ImgSm } from 'style-store';
+import { Group, Button, ButtonOutline } from 'rebass';
 import SponsersMenuItem from 'containers/SponsersMenuItem';
 import { withLocale } from 'common';
 
@@ -85,23 +85,21 @@ function MenuNavbar(props) {
         <Group>
           <GroupButton
             on={props.locale === 'en'}
-            px="12px"
-            py="12px"
+            p={1}
             onClick={() => props.dispatch(changeLocale('en'))}
           >
             en
           </GroupButton>
           <GroupButton
             on={props.locale === 'ja'}
-            px="12px"
-            py="12px"
+            p={1}
             onClick={() => props.dispatch(changeLocale('ja'))}
           >
             ja
           </GroupButton>
         </Group>
       </NavLink>
-      <NavLink is="span" p={10}>
+      <NavLink is="span" p={1}>
         <a target="_blank" href="https://github.com/heyrict/cindy-realtime">
           <ImgSm alt="GitHub" src={githubMark} />
         </a>

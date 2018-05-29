@@ -10,6 +10,9 @@ const StyledButton = ButtonTransparent.extend`
   border-radius: 10px;
   padding: 10px 5px;
   margin: 0;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 `;
 
 const IndexSpan = styled.span`

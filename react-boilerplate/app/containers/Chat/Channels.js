@@ -36,12 +36,7 @@ class Channels extends React.PureComponent {
   render() {
     return (
       <Flex flexWrap="wrap">
-        <StyledButton
-          w={1}
-          py={20}
-          my={5}
-          onClick={() => this.props.tune(null)}
-        >
+        <StyledButton w={1} py={2} my={1} onClick={() => this.props.tune(null)}>
           <FormattedMessage {...messages.defaultChannel} />
         </StyledButton>
         <Bar open={this.state.publicShown} onClick={this.togglePublicShown}>
@@ -51,8 +46,8 @@ class Channels extends React.PureComponent {
           PublicChannels.map((c) => (
             <StyledButton
               w={1}
-              py={20}
-              my={5}
+              py={2}
+              my={1}
               onClick={() => this.props.tune(c)}
               key={c}
             >
@@ -69,8 +64,8 @@ class Channels extends React.PureComponent {
             return (
               <StyledButton
                 w={1}
-                py={20}
-                my={5}
+                py={2}
+                my={1}
                 onClick={() => this.props.tune(c)}
                 key={c}
               >
@@ -92,7 +87,7 @@ class Channels extends React.PureComponent {
           </FormattedMessage>
           <ButtonOutline
             onClick={() => this.props.tune(this.state.content)}
-            p={10}
+            p={1}
             style={{ wordBreak: 'keep-all', borderRadius: '0 10px 10px 0' }}
           >
             <FormattedMessage {...messages.change} />
@@ -100,7 +95,7 @@ class Channels extends React.PureComponent {
         </Flex>
         <ButtonOutline
           onClick={() => this.toggleCreateModalShow(true)}
-          p={10}
+          p={1}
           m={1}
           w={1}
           style={{ wordBreak: 'keep-all', borderRadius: '10px' }}

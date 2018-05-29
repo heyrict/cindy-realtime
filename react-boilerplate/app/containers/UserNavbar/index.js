@@ -12,8 +12,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { withLocale } from 'common';
 
-import { SubNavbar, RouterLink } from 'style-store';
-import { NavLink } from 'rebass';
+import { NavLink, SubNavbar, RouterLink } from 'style-store';
 import LoginMenuItem from 'containers/LoginMenuItem';
 import LogoutMenuItem from 'containers/LogoutMenuItem';
 import RegisterMenuItem from 'containers/RegisterMenuItem';

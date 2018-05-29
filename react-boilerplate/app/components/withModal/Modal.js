@@ -56,9 +56,6 @@ class Modal extends React.PureComponent {
           style={{
             display: this.state.display ? 'flex' : 'none',
             overflowY: 'auto',
-            top: '50px',
-            bottom: 0,
-            alignItems: 'flex-start',
             padding: '80px 0',
           }}
         >

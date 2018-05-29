@@ -57,9 +57,14 @@ class ChatInput extends React.Component {
         />
         <ButtonOutline
           onClick={() => this.props.onSubmit(this.state.content)}
-          p={10}
+          p={1}
           disabled={this.props.disabled || this.props.loading}
-          style={{ wordBreak: 'keep-all', borderRadius: '0 10px 10px 0' }}
+          borderRadius="0 10px 10px 0"
+          style={{
+            wordBreak: 'keep-all',
+            alignItems: 'center',
+            display: 'flex',
+          }}
         >
           {this.props.loading ? (
             <FormattedMessage {...messages.sending} />

@@ -39,6 +39,9 @@ const NavbarBtn = styled(ButtonTransparent)`
   width: 100%;
   padding: 10px;
   margin: 0;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 `;
 
 const NavbarBtnMsg = styled.span`
@@ -63,7 +66,7 @@ function TopNavbar(props) {
   return (
     <Navbar w={1}>
       <Box w={1 / 3} m="auto">
-        <NavbarBtn onClick={() => toggle('menu')}>
+        <NavbarBtn onClick={() => toggle('menu')} color="gray3">
           <ImgSm src={menuImg} alt="menu" />
           <NavbarBtnMsg>
             <FormattedMessage {...messages.menu} />
@@ -72,7 +75,7 @@ function TopNavbar(props) {
       </Box>
       <MenuNavbar open={props.topnavbar.subnav === 'menu'} />
       <Box w={1 / 3} m="auto">
-        <NavbarBtn onClick={() => props.dispatch(toggleChat())}>
+        <NavbarBtn onClick={() => props.dispatch(toggleChat())} color="gray3">
           <ImgSm src={chatImg} alt="chat" />
           <NavbarBtnMsg>
             <FormattedMessage {...messages.chat} />
@@ -82,7 +85,10 @@ function TopNavbar(props) {
       {props.puzzle &&
         props.puzzle.memo && (
           <Box w={1 / 3} m="auto">
-            <NavbarBtn onClick={() => props.dispatch(toggleMemo())}>
+            <NavbarBtn
+              onClick={() => props.dispatch(toggleMemo())}
+              color="gray3"
+            >
               <ImgSm src={memoImg} alt="memo" />
               <NavbarBtnMsg>
                 <FormattedMessage {...messages.memo} />
@@ -91,7 +97,7 @@ function TopNavbar(props) {
           </Box>
         )}
       <Box w={1 / 3} m="auto">
-        <NavbarBtn onClick={() => toggle('user')}>
+        <NavbarBtn onClick={() => toggle('user')} color="gray3">
           <ImgSm src={loginImg} alt="profile" />
           <NavbarBtnMsg>
             <FormattedMessage {...messages.profile} />

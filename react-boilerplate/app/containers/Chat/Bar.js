@@ -4,14 +4,7 @@ import { Flex, Box } from 'rebass';
 import { ButtonOutline } from 'style-store';
 
 const StyledBar = ButtonOutline.extend`
-  padding: 3px;
-  margin: 5px 0 5px 0;
-  width: 100%;
-  border-radius: 0;
-  box-shadow: 0 0 0 2px sienna;
-  color: brown;
   &:hover {
-    box-shadow: 0 0 0 2px sienna;
     background-color: rgba(0, 0, 0, 0.1);
     color: brown;
   }
@@ -20,7 +13,15 @@ const StyledBar = ButtonOutline.extend`
 function Bar(props) {
   const { open, children, ...others } = props;
   return (
-    <StyledBar {...others}>
+    <StyledBar
+      {...others}
+      color="brown"
+      border="2px solid brown"
+      borderRadius={0}
+      my={1}
+      w={1}
+      p={1}
+    >
       <Flex w={1} mx={1}>
         <Box>{children}</Box>
         <Box ml="auto" mr={2}>

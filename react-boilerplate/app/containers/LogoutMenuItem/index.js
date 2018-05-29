@@ -11,7 +11,8 @@ import { compose } from 'redux';
 import { nAlert } from 'containers/Notifier/actions';
 import { setCurrentUser } from 'containers/UserNavbar/actions';
 
-import { Panel, PanelHeader, NavLink } from 'rebass';
+import { Panel, PanelHeader } from 'rebass';
+import { NavLink } from 'style-store';
 
 import { graphql } from 'react-apollo';
 import LogoutMenuItemMutation from 'graphql/LogoutMutation';

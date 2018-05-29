@@ -33,22 +33,18 @@ const Frame = PuzzleFrame.extend`
 `;
 
 const JumpButton = ButtonOutline.extend`
-  width: 100%;
   background-color: rgba(255, 255, 255, 0.5);
   &:hover {
     background-color: rgba(255, 255, 255, 0.3);
-    box-shadow: inset 0 0 0 2px #2075c7;
     color: #4297e9;
   }
 `;
 
 const CloseButton = ButtonOutline.extend`
-  width: 100%;
   background-color: rgba(255, 255, 255, 0.5);
   color: #aa6644;
   &:hover {
     background-color: rgba(255, 255, 255, 0.3);
-    box-shadow: inset 0 0 0 2px #b58900;
     color: #b58900;
   }
 `;
@@ -94,16 +90,18 @@ function RewardingModalComponent(props, context) {
         <Flex flexWrap="wrap">
           <Box w={2 / 3}>
             <Link to={withLocale(`/puzzle/show/${f(props.id)[1]}`)}>
-              <JumpButton px={1} style={{ borderRadius: '10px 0 0 10px' }}>
+              <JumpButton p={2} style={{ borderRadius: '10px 0 0 10px' }} w={1}>
                 <FormattedMessage {...messages.jump} />
               </JumpButton>
             </Link>
           </Box>
           <Box w={1 / 3}>
             <CloseButton
-              px={1}
               onClick={props.onHide}
-              style={{ borderRadius: '0 10px 10px 0' }}
+              p={2}
+              borderRadius="0 10px 10px 0"
+              border="2px solid #aa6644"
+              w={1}
             >
               <FormattedMessage {...messages.close} />
             </CloseButton>
@@ -112,7 +110,7 @@ function RewardingModalComponent(props, context) {
       )}
       {!props.onHide && (
         <Link to={withLocale(`/puzzle/show/${f(props.id)[1]}`)}>
-          <JumpButton>
+          <JumpButton p={2} w={1}>
             <FormattedMessage {...messages.jump} />
           </JumpButton>
         </Link>

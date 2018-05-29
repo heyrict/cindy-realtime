@@ -12,6 +12,7 @@ import messages from './messages';
 const WarningBtn = ButtonOutline.extend`
   color: tomato;
   width: 100%;
+  border: 2px solid tomato;
   &:hover {
     background-color: tomato;
   }
@@ -37,7 +38,7 @@ class CommentShowPanel extends React.PureComponent {
             />
           </Box>
         ) : (
-          <WarningBtn onClick={this.showComment}>
+          <WarningBtn p={2} onClick={this.showComment}>
             <FormattedMessage {...messages.spoilerWarning} />
           </WarningBtn>
         )}

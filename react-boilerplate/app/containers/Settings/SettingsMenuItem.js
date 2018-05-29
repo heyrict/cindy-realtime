@@ -7,7 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { NavLink } from 'rebass';
+import { NavLink } from 'style-store';
 
 import SettingsModal from './index';
 
