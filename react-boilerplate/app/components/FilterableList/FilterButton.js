@@ -6,7 +6,7 @@ import { ButtonTransparent } from 'rebass';
 
 import messages from './messages';
 
-const StyledButton = styled(ButtonTransparent)`
+const StyledButton = ButtonTransparent.extend`
   border-radius: 10px;
   padding: 10px 5px;
   margin: 0;
@@ -30,14 +30,22 @@ function FilterButton(props) {
 
   return (
     <div>
-      <StyledButton onClick={() => props.onMainButtonClick(name)}>
+      <StyledButton
+        onClick={() => props.onMainButtonClick(name)}
+        color="gray"
+        bg="white"
+      >
         {index !== undefined &&
           index !== null && <IndexSpan>{index + 1}</IndexSpan>}
         {namestr}
       </StyledButton>
       {props.asc !== null &&
         props.asc !== undefined && (
-          <StyledButton onClick={() => props.onSortButtonClick(name)}>
+          <StyledButton
+            onClick={() => props.onSortButtonClick(name)}
+            color="gray"
+            bg="white"
+          >
             {asc === true ? '↓' : '↑'}
           </StyledButton>
         )}

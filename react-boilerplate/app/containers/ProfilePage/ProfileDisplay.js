@@ -18,7 +18,7 @@ import messages from './messages';
 function ProfileDisplay(props, context) {
   const _ = context.intl.formatMessage;
   return (
-    <Flex wrap>
+    <Flex flexWrap="wrap">
       <ProfRow
         heading={_(messages.nickname)}
         content={

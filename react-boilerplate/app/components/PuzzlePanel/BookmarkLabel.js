@@ -12,15 +12,16 @@ import bookmark from 'images/bookmark.svg';
 
 const PuzzleBookmarks = styled.span`
   background-color: limegreen;
-  font-family: monaco;
-  font-weight: bold;
-  font-size: 0.9em;
-  color: #fcf4dc;
-  border: 2px solid limegreen;
   border-radius: 10px;
-  padding: 0 2px;
-  margin-right: 6px;
+  border: 2px solid limegreen;
+  color: #fcf4dc;
+  display: inline-block;
+  font-family: monaco;
+  font-size: 0.9em;
+  font-weight: bold;
   margin-bottom: 3px;
+  margin-right: 6px;
+  padding: 0 2px;
 `;
 
 function BookmarkLabel(props) {

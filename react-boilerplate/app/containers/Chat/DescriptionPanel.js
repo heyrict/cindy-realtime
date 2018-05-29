@@ -182,7 +182,7 @@ class DescriptionPanel extends React.Component {
             </div>
           )}
           {this.state.editMode === true && (
-            <Flex align="center" mx={0} mt={1}>
+            <Flex alignItems="center" mx={0} mt={1}>
               <Box w={[2 / 3, 5 / 6, 7 / 8]} mx={1}>
                 <Textarea
                   value={this.state.description}

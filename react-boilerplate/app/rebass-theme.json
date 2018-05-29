@@ -1,0 +1,28 @@
+{
+  "fonts": {
+    "sans": [
+      "Noto Sans CJK JP",
+      "Dejavu Sans",
+      "Inconsolata",
+      "Consolas",
+      "Helvetica",
+      "Arial",
+      "sans-serif"
+    ]
+  },
+  "colors": {
+    "black": "#777",
+    "blue": "#5856b9",
+    "cyan": "#2075c7",
+    "gray": "#708183",
+    "green": "#259185",
+    "orange": "#bd3612",
+    "purple": "#c61b6e",
+    "red": "#d01b24",
+    "white": "#fcf4dc",
+    "white0": "#fcf4dc",
+    "white1": "#e9e2cb",
+    "yellow": "#a57705",
+    "yellowgreen": "#728905"
+  }
+}

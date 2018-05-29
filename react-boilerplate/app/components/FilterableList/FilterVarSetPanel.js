@@ -87,9 +87,15 @@ class FilterVarSetPanel extends React.Component {
             </ToggleBtn>
           </Flex>
         )}
-        <Flex justify="center">
+        <Flex justifyContent="center">
           {this.state.display === this.MODE.SORT && (
-            <Flex w={1} px={1} wrap justify="center" align="center">
+            <Flex
+              w={1}
+              px={1}
+              flexWrap="wrap"
+              justifyContent="center"
+              alignItems="center"
+            >
               {this.props.orderList.map((name) => (
                 <Box mr={1} key={name}>
                   <FilterButton

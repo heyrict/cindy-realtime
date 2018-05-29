@@ -175,7 +175,7 @@ class ChatRoom extends React.Component {
     if (this.props.hidden) return null;
 
     return (
-      <Flex wrap justify="center">
+      <Flex flexWrap="wrap" justifyContent="center">
         <DescriptionPanel
           height={this.state.dpHeight}
           changeHeight={this.handleDPHeightChange}

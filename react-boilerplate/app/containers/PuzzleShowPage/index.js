@@ -134,7 +134,7 @@ export class PuzzleShowPage extends React.Component {
     dSlices.push(dEdges.length);
 
     const DialoguePaginationBar = (
-      <Constrained wrap mb={2} style={{ textAlign: 'center' }}>
+      <Constrained flexWrap="wrap" mb={2} style={{ textAlign: 'center' }}>
         <button onClick={this.scrollToTop}>
           <Img src={top} alt="Top" />
         </button>

@@ -183,7 +183,7 @@ class Answer extends React.PureComponent {
                 />
               )}
             </FormattedMessage>
-            <Flex align="center" justify="center" wrap>
+            <Flex alignItems="center" justifyContent="center" flexWrap="wrap">
               <Box w={[1, 1 / 2, 5 / 12]}>
                 <FormattedMessage {...messages.good} />
                 <Switch checked={this.state.good} onClick={this.toggleGood} />

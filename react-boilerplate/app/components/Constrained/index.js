@@ -5,11 +5,11 @@ import { Box, Flex } from 'rebass';
 export function Constrained(props) {
   const { children, level = 2, ...others } = props;
   const styles = {
-    wrap: true,
+    flexWrap: 'wrap',
     ml: -2,
     pl: 2,
-    justify: 'center',
-    align: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
     ...others,
   };
   let MW;

@@ -34,8 +34,8 @@ class AddPuzzleBtn extends React.PureComponent {
       <RouterLink to={withLocale('/puzzle/add')}>
         <ButtonCircle
           bg="transparent"
-          px={5}
-          py={5}
+          px={1}
+          py={1}
           style={{ minHeight: '40px' }}
           onMouseEnter={() => this.setState({ tip: true })}
           onMouseLeave={() => this.setState({ tip: false })}

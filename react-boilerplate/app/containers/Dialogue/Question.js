@@ -103,7 +103,7 @@ class Question extends React.PureComponent {
     if (this.state.editMode === true) {
       return (
         <PuzzleFrame>
-          <Flex align="center" mx={-1}>
+          <Flex alignItems="center" mx={-1}>
             <Box w={[2 / 3, 5 / 6, 7 / 8]} mx={1}>
               <Textarea
                 value={this.state.question}

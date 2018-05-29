@@ -12,15 +12,16 @@ import comment from 'images/comment.svg';
 
 const PuzzleComments = styled.span`
   background-color: mediumslateblue;
-  font-family: monaco;
-  font-weight: bold;
-  font-size: 0.9em;
-  color: #fcf4dc;
-  border: 2px solid mediumslateblue;
   border-radius: 10px;
-  padding: 0 2px;
-  margin-right: 6px;
+  border: 2px solid mediumslateblue;
+  color: #fcf4dc;
+  display: inline-block;
+  font-family: monaco;
+  font-size: 0.9em;
+  font-weight: bold;
   margin-bottom: 3px;
+  margin-right: 6px;
+  padding: 0 2px;
 `;
 
 function CommentLabel(props) {

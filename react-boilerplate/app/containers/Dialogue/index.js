@@ -9,7 +9,7 @@ import Answer from './Answer';
 const Dialogue = (props) => (
   <Constrained level={4} my={10}>
     <Row mx={-1}>
-      <Box width={1 / 2} mr={5}>
+      <Box width={1 / 2} mr={1}>
         <Question
           index={props.index}
           question={props.node.question}
@@ -22,7 +22,7 @@ const Dialogue = (props) => (
           sendPolicy={props.settings.modifyQuestion}
         />
       </Box>
-      <Box width={1 / 2} ml={5}>
+      <Box width={1 / 2} ml={1}>
         <Answer
           id={props.node.id}
           answeredtime={props.node.answeredtime}

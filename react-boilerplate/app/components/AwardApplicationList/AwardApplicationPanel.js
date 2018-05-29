@@ -124,7 +124,7 @@ class AwardApplicationPanel extends React.Component {
         <Flex>
           <Box w={1}>
             {this.state.mode === this.MODE.DISPLAY && (
-              <Flex wrap align="center">
+              <Flex flexWrap="wrap" alignItems="center">
                 <Box w={[1, 2 / 3]}>
                   <div>
                     <FormattedMessage {...messages.applier} />:{' '}
@@ -159,7 +159,7 @@ class AwardApplicationPanel extends React.Component {
               </Flex>
             )}
             {this.state.mode === this.MODE.REVIEW && (
-              <Flex wrap align="center" justify="center">
+              <Flex flexWrap="wrap" alignItems="center" justifyContent="center">
                 <Box w={1} p={1}>
                   <div>
                     <FormattedMessage {...messages.applier} />:{' '}
@@ -191,7 +191,7 @@ class AwardApplicationPanel extends React.Component {
                   this.props.currentUser &&
                   this.props.currentUser.canReviewAwardApplication &&
                   this.props.currentUser.id !== node.applier.id && (
-                    <Flex wrap w={1}>
+                    <Flex flexWrap="wrap" w={1}>
                       <Box w={1}>
                         <UnhandledTextarea
                           ref={(ins) => (this.reasonInput = ins)}

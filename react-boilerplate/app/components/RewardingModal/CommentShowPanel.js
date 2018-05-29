@@ -27,7 +27,7 @@ class CommentShowPanel extends React.PureComponent {
   }
   render() {
     return (
-      <Flex wrap>
+      <Flex flexWrap="wrap">
         {this.state.show ? (
           <Box>
             <div
@@ -41,7 +41,7 @@ class CommentShowPanel extends React.PureComponent {
             <FormattedMessage {...messages.spoilerWarning} />
           </WarningBtn>
         )}
-        <Box w={1} mt={5} style={{ textAlign: 'right' }}>
+        <Box w={1} mt={2} style={{ textAlign: 'right' }}>
           —— <UserLabel user={this.props.node.user} />
         </Box>
       </Flex>

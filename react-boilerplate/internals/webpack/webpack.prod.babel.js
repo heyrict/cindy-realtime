@@ -23,8 +23,8 @@ module.exports = require('./webpack.base.babel')({
     nodeEnv: 'production',
     sideEffects: true,
     concatenateModules: true,
-    splitChunks: { chunks: 'all' },
-    runtimeChunk: true,
+    // splitChunks: { chunks: 'all' },
+    // runtimeChunk: true,
   },
 
   plugins: [

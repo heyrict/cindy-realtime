@@ -100,7 +100,7 @@ class RewardingBox extends React.PureComponent {
     return (
       <Constrained>
         <PuzzleFrame>
-          <Flex wrap justify="center" align="center">
+          <Flex flexWrap="wrap" justifyContent="center" alignItems="center">
             <FiveStars
               justify="center"
               align="center"

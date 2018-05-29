@@ -30,7 +30,9 @@ class FiveStars extends React.PureComponent {
     const { value, onSet, starSize, ...others } = this.props;
     if (onSet === null) {
       const UncontrolledStar = ({ v }) => (
-        <Star style={{ fontSize: starSize }} checked={value >= v} />
+        <Star style={{ fontSize: starSize }} checked={value >= v}>
+          ★
+        </Star>
       );
       return (
         <Flex {...others}>
@@ -50,7 +52,9 @@ class FiveStars extends React.PureComponent {
         onMouseEnter={() => this.handleMouseEnter(v)}
         onMouseLeave={() => this.handleMouseLeave(v)}
         onClick={() => this.props.onSet(v)}
-      />
+      >
+        ★
+      </Star>
     );
     return (
       <Flex {...others}>

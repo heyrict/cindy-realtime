@@ -55,7 +55,7 @@ const StartBox = Button.extend`
 function MainFrame(props) {
   return (
     <div>
-      <Flex justify="center">
+      <Flex justifyContent="center">
         <H1>
           <FormattedMessage
             {...messages.header}

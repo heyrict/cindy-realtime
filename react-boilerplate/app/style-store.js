@@ -5,10 +5,21 @@ import {
   Flex,
   Button as RebassButton,
   ButtonOutline as RebassButtonOutline,
-  Star as RebassStar,
   Switch as RebassSwitch,
   Panel as RebassPanel,
 } from 'rebass';
+
+const formatScalar = (value, defaultValue = 'auto') => {
+  if (value) {
+    if (typeof value === 'string') {
+      return value;
+    } else if (typeof value === 'number') {
+      return `${value * 100}%`;
+    }
+    return defaultValue;
+  }
+  return defaultValue;
+};
 
 export const AutoResizeTextarea = styled(ReactTextareaAutosize)`
   border-radius: 10px;
@@ -72,9 +83,21 @@ export const ImgMd = styled.img`
   margin: 0;
 `;
 
-export const Star = RebassStar.extend`
-  color: ${(props) =>
-    props.checked ? 'orange' : 'rgba(0, 0, 0, 0.125)'};
+export const Star = styled.div`
+  position: relative;
+  width: 1em;
+  height: 1em;
+  color: ${(props) => (props.checked ? 'orange' : 'rgba(0, 0, 0, 0.125)')};
+  &::after {
+    display: ${(props) => (props.half ? 'block' : 'none')},
+    content: '★',
+    position: absolute,
+    left: 0,
+    top: 0,
+    width: 1em,
+    height: 1em,
+    clip: rect(0, .45em, 1em, 0)
+  }
 `;
 
 export const LightNicknameLink = styled(Link)`
@@ -124,24 +147,36 @@ export const Heading = styled.div`
 
 export const Button = RebassButton.extend`
   border-radius: 10px;
-  color: blanchedalmond;
-  background-color: #2075c7;
   font-weight: bold;
+  width: ${(props) => formatScalar(props.w, 'auto')};
+  cursor: pointer;
   &:hover {
     color: blanchedalmond;
     background-color: #2075c7;
   }
 `;
 
+Button.defaultProps = {
+  bg: 'cyan',
+  color: 'white',
+};
+
 export const ButtonOutline = RebassButtonOutline.extend`
   border-radius: 10px;
-  color: #2075c7;
+  border: 2px solid #2075c7;
   font-weight: bold;
+  width: ${(props) => formatScalar(props.w, 'auto')};
+  cursor: pointer;
   &:hover {
     color: blanchedalmond;
     background-color: #2075c7;
   }
 `;
+
+ButtonOutline.defaultProps = {
+  color: 'cyan',
+  bg: 'transparent',
+};
 
 export const Select = styled.select`
   border-radius: 10px;
@@ -171,6 +206,7 @@ export const Input = styled.input`
 export const EditButton = ButtonOutline.extend`
   padding: 5px 10px;
   margin: 0 5px;
+  width: auto;
 `;
 
 export const PuzzleFrame = styled.div`

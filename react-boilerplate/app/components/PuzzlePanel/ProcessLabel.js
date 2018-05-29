@@ -9,12 +9,13 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const ProcessBase = styled.span`
-  text-align: center;
   border-radius: 10px;
-  margin-right: 6px;
-  margin-bottom: 3px;
+  display: inline-block;
   font-weight: bold;
+  margin-bottom: 3px;
+  margin-right: 6px;
   padding: 0 6px;
+  text-align: center;
 `;
 
 const styledProcess = (uaquesCount) => {

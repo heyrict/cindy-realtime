@@ -87,7 +87,7 @@ class AwardApplicationForm extends React.Component {
     }
     return (
       <RoundedPanel p={1} m={1}>
-        <Flex wrap>
+        <Flex flexWrap="wrap">
           <Box w={1}>
             <FormattedMessage {...messages.selectPlaceholder}>
               {(text) => (

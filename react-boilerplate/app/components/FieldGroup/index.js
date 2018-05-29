@@ -11,7 +11,7 @@ import { Flex, Box } from 'rebass';
 
 function FieldGroup({ label, help, Ctl, CtlElement, valid, ...props }) {
   return (
-    <Flex wrap mb={1}>
+    <Flex flexWrap="wrap" mb={1}>
       <Box w={[0.28, 0.2, 0.1]}>{label}</Box>
       <Box w={[0.68, 0.75, 0.82]} ml="auto">
         {Ctl && <Ctl {...props} />}

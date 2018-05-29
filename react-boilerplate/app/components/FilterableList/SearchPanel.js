@@ -57,7 +57,13 @@ class SearchPanel extends React.PureComponent {
 
   render() {
     return (
-      <Flex w={1} px={1} wrap justify="center" align="center">
+      <Flex
+        w={1}
+        px={1}
+        flexWrap="wrap"
+        justifyContent="center"
+        alignItems="center"
+      >
         <Box w={[1 / 3, 1 / 4, 1 / 6]}>
           <SearchSelect
             style={{ borderRadius: '10px 0 0 10px' }}
@@ -84,18 +90,20 @@ class SearchPanel extends React.PureComponent {
             onChange={this.handleSearchInputChange}
           />
         </Box>
-        <SearchBtn
-          w={[1, 1, 1 / 12]}
-          onClick={() =>
-            this.props.handleSearchButtonClick(
-              this.state.filterKey,
-              this.state.filterValue
-            )
-          }
-          style={{ borderRadius: '10px' }}
-        >
-          <FormattedMessage {...messages.search} />
-        </SearchBtn>
+        <Box w={[1, 1, 1 / 12]}>
+          <SearchBtn
+            w={1}
+            onClick={() =>
+              this.props.handleSearchButtonClick(
+                this.state.filterKey,
+                this.state.filterValue
+              )
+            }
+            style={{ borderRadius: '10px' }}
+          >
+            <FormattedMessage {...messages.search} />
+          </SearchBtn>
+        </Box>
       </Flex>
     );
   }

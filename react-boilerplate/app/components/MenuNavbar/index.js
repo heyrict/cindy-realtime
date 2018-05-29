@@ -81,20 +81,20 @@ function MenuNavbar(props) {
           <FormattedMessage {...messages.rules} />
         </NavLink>
       </RouterLink>
-      <NavLink p={5}>
+      <NavLink p={1}>
         <Group>
           <GroupButton
             on={props.locale === 'en'}
-            px={12}
-            py={12}
+            px="12px"
+            py="12px"
             onClick={() => props.dispatch(changeLocale('en'))}
           >
             en
           </GroupButton>
           <GroupButton
             on={props.locale === 'ja'}
-            px={12}
-            py={12}
+            px="12px"
+            py="12px"
             onClick={() => props.dispatch(changeLocale('ja'))}
           >
             ja

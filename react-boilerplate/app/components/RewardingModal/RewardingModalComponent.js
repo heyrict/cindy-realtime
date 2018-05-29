@@ -91,7 +91,7 @@ function RewardingModalComponent(props, context) {
         </Frame>
       ))}
       {props.onHide && (
-        <Flex wrap>
+        <Flex flexWrap="wrap">
           <Box w={2 / 3}>
             <Link to={withLocale(`/puzzle/show/${f(props.id)[1]}`)}>
               <JumpButton px={1} style={{ borderRadius: '10px 0 0 10px' }}>

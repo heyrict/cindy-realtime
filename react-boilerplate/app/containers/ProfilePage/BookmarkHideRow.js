@@ -43,7 +43,7 @@ class AwardSwitch extends React.PureComponent {
       <ProfRow
         heading={<FormattedMessage {...messages.hideBookmark} />}
         content={
-          <Flex wrap>
+          <Flex flexWrap="wrap">
             <Switch
               checked={this.state.hideBookmark}
               onClick={() => this.switch()}

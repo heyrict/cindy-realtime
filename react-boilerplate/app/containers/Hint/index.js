@@ -128,7 +128,7 @@ export class Hint extends React.Component {
                 )}
               </FormattedMessage>
             )}
-          <Flex justify="right">
+          <Flex justifyContent="right">
             <Time>
               {moment(this.props.node.created).format('YYYY-MM-DD HH:mm')}
             </Time>

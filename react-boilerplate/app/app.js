@@ -12,6 +12,7 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { Provider as RebassProvider } from 'rebass';
 import { ApolloProvider } from 'react-apollo';
 import { ConnectedRouter } from 'react-router-redux';
 import FontFaceObserver from 'fontfaceobserver';
@@ -38,6 +39,7 @@ import { translationMessages } from './i18n';
 
 // Import CSS reset and Global Styles
 import './global-styles';
+import rebassTheme from './rebass-theme.json';
 
 // Import exposed actions
 import { openChat } from './containers/Chat/actions';
@@ -81,15 +83,17 @@ window.goto = (url) => {
 
 const render = (messages) => {
   ReactDOM.render(
-    <Provider store={store}>
-      <LanguageProvider messages={messages}>
-        <ApolloProvider client={client}>
-          <ConnectedRouter history={history}>
-            <App />
-          </ConnectedRouter>
-        </ApolloProvider>
-      </LanguageProvider>
-    </Provider>,
+    <RebassProvider theme={rebassTheme}>
+      <Provider store={store}>
+        <LanguageProvider messages={messages}>
+          <ApolloProvider client={client}>
+            <ConnectedRouter history={history}>
+              <App />
+            </ConnectedRouter>
+          </ApolloProvider>
+        </LanguageProvider>
+      </Provider>
+    </RebassProvider>,
     MOUNT_NODE
   );
 };

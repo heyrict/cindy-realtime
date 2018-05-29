@@ -72,7 +72,7 @@ class AwardSwitch extends React.PureComponent {
         <ProfRow
           heading={<FormattedMessage {...messages.awardSelect} />}
           content={
-            <Flex wrap>
+            <Flex flexWrap="wrap">
               <ButtonOutline
                 px={1}
                 py={1}

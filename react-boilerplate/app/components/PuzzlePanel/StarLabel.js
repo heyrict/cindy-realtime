@@ -13,15 +13,16 @@ import { Tooltip } from 'react-tippy';
 
 const PuzzleScore = styled.button`
   background-color: darkorchid;
-  font-family: monaco;
-  font-weight: bold;
-  font-size: 0.9em;
-  color: #fcf4dc;
-  border: 2px solid darkorchid;
   border-radius: 10px;
-  padding: 0 2px;
-  margin-right: 6px;
+  border: 2px solid darkorchid;
+  color: #fcf4dc;
+  display: inline-block;
+  font-family: monaco;
+  font-size: 0.9em;
+  font-weight: bold;
   margin-bottom: 3px;
+  margin-right: 6px;
+  padding: 0 2px;
 `;
 
 function StarLabel(props) {

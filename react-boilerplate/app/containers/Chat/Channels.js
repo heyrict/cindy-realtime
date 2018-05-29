@@ -35,7 +35,7 @@ class Channels extends React.PureComponent {
   }
   render() {
     return (
-      <Flex wrap>
+      <Flex flexWrap="wrap">
         <StyledButton
           w={1}
           py={20}

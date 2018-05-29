@@ -101,7 +101,7 @@ class PaginatorBar extends React.Component {
   render() {
     return (
       <Constrained level={4} mb={2}>
-        <Flex align="center">
+        <Flex alignItems="center">
           <Box mr="auto">
             <Link
               rel="prev"

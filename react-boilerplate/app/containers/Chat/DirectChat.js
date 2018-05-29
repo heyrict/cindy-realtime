@@ -159,7 +159,7 @@ class DirectChat extends React.Component {
     if (!this.props.display) return null;
     const user = this.props.chat.dmReceiver;
     return (
-      <Flex wrap justify="center">
+      <Flex flexWrap="wrap" justifyContent="center">
         <MessageWrapper height={this.props.height - this.state.taHeight - 15}>
           {this.props.loading ? (
             <LoadingDots />

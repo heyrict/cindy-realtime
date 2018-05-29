@@ -21,7 +21,7 @@ const ProfileButton = Button.extend`
 
 function ProfileNavbar(props) {
   return (
-    <Flex align="center" justify="center" w={1} my={1}>
+    <Flex alignItems="center" justifyContent="center" w={1} my={1}>
       <ProfileButton w={1} mx="3px" onClick={props.onProfileClick}>
         <FormattedMessage {...messages.profile} />
       </ProfileButton>

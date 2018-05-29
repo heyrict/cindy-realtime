@@ -59,7 +59,7 @@ export class PuzzlePanel extends React.Component {
             {this.props.additional}
           </UserCol>
           <Box w={[3 / 4, 5 / 6]} px={10}>
-            <Flex wrap>
+            <Flex flexWrap="wrap">
               <Box>
                 <TitleLabel
                   genre={node.genre}
@@ -75,7 +75,7 @@ export class PuzzlePanel extends React.Component {
                 </PuzzleDate>
               </Box>
             </Flex>
-            <Divider my={5} />
+            <Divider my={2} />
             <ProcessLabel qCount={node.quesCount} uaCount={node.uaquesCount} />
             <StatusLabel status={node.status} />
             {node.starSet &&

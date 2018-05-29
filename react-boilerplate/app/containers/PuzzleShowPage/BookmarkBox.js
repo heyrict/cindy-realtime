@@ -48,7 +48,7 @@ class BookmarkBox extends React.PureComponent {
     return (
       <Constrained>
         <PuzzleFrame>
-          <Flex wrap justify="center" align="center">
+          <Flex flexWrap="wrap" justifyContent="center" alignItems="center">
             <Box w={[1, 1 / 2]} px={10}>
               <Slider
                 value={this.state.value}

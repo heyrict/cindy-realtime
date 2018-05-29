@@ -6,7 +6,7 @@ import { Flex } from 'rebass';
 function BtnSwitch(props) {
   const { onChange, options, selected } = props;
   return (
-    <Flex wrap>
+    <Flex flexWrap="wrap">
       {options.map((opt) => (
         <span key={opt.id}>
           {opt.id === selected ? (

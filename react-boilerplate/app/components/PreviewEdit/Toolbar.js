@@ -10,7 +10,7 @@ const ToolbarBtn = Button.extend`
 `;
 
 export const Toolbar = ({ options }) => (
-  <Flex wrap>
+  <Flex flexWrap="wrap">
     {options.map((obj) => (
       <Box key={obj.name}>
         <ToolbarBtn onClick={obj.callback}>
