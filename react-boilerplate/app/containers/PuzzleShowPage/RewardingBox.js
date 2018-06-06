@@ -119,7 +119,7 @@ class RewardingBox extends React.PureComponent {
           </Flex>
         </PuzzleFrame>
         <PuzzleFrame>
-          <Flex wrap mt={10}>
+          <Flex flexWrap="wrap" mt={10}>
             <Input
               value={this.state.comment}
               onChange={this.handleCommentChange}
@@ -131,7 +131,7 @@ class RewardingBox extends React.PureComponent {
                 onClick={this.handleSpoilerClick}
               />
             </div>
-            <ButtonOutline w={1} p={1} mt={5} onClick={this.handleSaveComment}>
+            <ButtonOutline w={1} p={1} mt={1} onClick={this.handleSaveComment}>
               <FormattedMessage {...messages.addComment} />
             </ButtonOutline>
           </Flex>
@@ -164,6 +164,8 @@ const withCommentUpdateMutation = graphql(UpdateCommentMutation, {
   name: 'mutateCommentUpdate',
 });
 
-export default compose(withStarUpdateMutation, withCommentUpdateMutation, withConnect)(
-  RewardingBox
-);
+export default compose(
+  withStarUpdateMutation,
+  withCommentUpdateMutation,
+  withConnect
+)(RewardingBox);

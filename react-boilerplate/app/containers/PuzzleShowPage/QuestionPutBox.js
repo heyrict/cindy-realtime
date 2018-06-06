@@ -162,10 +162,14 @@ class QuestionPutBox extends React.PureComponent {
           <Box>
             <ButtonOutline
               onClick={this.handleSubmit}
+              p={1}
               disabled={!this.props.currentUserId || this.state.loading}
               style={{
                 wordBreak: 'keep-all',
                 borderRadius: '0 10px 10px 0',
+                alignItems: 'center',
+                display: 'flex',
+                height: '100%',
               }}
             >
               {this.state.loading ? (

@@ -49,7 +49,7 @@ class BookmarkBox extends React.PureComponent {
       <Constrained>
         <PuzzleFrame>
           <Flex flexWrap="wrap" justifyContent="center" alignItems="center">
-            <Box w={[1, 1 / 2]} px={10}>
+            <Box w={[1, 1 / 2]} px="10px" py="5px">
               <Slider
                 value={this.state.value}
                 onChange={this.handleChange}
@@ -65,13 +65,11 @@ class BookmarkBox extends React.PureComponent {
                 )}
               />
             </Box>
-            <ButtonOutline
-              w={[1, 1 / 2]}
-              p={1}
-              onClick={this.handleSaveBookmark}
-            >
-              <FormattedMessage {...messages.addBookmark} />
-            </ButtonOutline>
+            <Box w={[1, 1 / 2]}>
+              <ButtonOutline w={1} p={1} onClick={this.handleSaveBookmark}>
+                <FormattedMessage {...messages.addBookmark} />
+              </ButtonOutline>
+            </Box>
           </Flex>
         </PuzzleFrame>
       </Constrained>
