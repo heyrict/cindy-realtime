@@ -16,6 +16,7 @@ import { withLocale } from 'common';
 
 import { FormattedMessage } from 'react-intl';
 import githubMark from 'images/GitHub-Mark.svg';
+import twitterMark from 'images/Twitter_Social_Icon_Circle_Color.svg';
 import { changeLocale } from 'containers/LanguageProvider/actions';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 import messages from './messages';
@@ -102,6 +103,11 @@ function MenuNavbar(props) {
       <NavLink is="span" p={1}>
         <a target="_blank" href="https://github.com/heyrict/cindy-realtime">
           <ImgSm alt="GitHub" src={githubMark} />
+        </a>
+      </NavLink>
+      <NavLink is="span" p={1}>
+        <a target="_blank" href="https://twitter.com/CindyRt_Bot">
+          <ImgSm alt="GitHub" src={twitterMark} />
         </a>
       </NavLink>
     </SubNavbar>
