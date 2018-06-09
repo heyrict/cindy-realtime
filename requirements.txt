@@ -11,3 +11,4 @@ hiredis>=0.2.0,<1.0
 markdown>=2.6,<3.0
 psycopg2>=2.0,<3.0
 PyYaml>=3.12
+twitter>=1.18.0,<2.0

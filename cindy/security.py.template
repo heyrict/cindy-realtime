@@ -34,3 +34,12 @@ CHANNEL_LAYERS = {
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+
+# Twitter Bot
+ENABLE_TWITTERBOT = False
+TOKEN = ''
+TOKEN_SECRET = ''
+CONSUMER_KEY = ''
+CONSUMER_SECRET = ''
+TWEET_MESSAGE = '%(user_nickname)sさんがCindyにて新しい問題『%(title)s』を出題しました。\n'\
+                'https://www.cindythink.com/puzzle/show/%(id)d'
