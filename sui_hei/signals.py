@@ -16,7 +16,7 @@ TWEET_MESSAGE = settings.TWEET_MESSAGE
 @receiver(post_save, sender=Puzzle)
 def add_twitter_on_puzzle_created(sender, instance, created, **kwargs):
     if created and ENABLE_TWITTERBOT:
-        auth = OAuth(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET)
+        auth = OAuth(TOKEN, TOKEN_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
         t = Twitter(auth=auth)
         t.statuses.update(
             status=TWEET_MESSAGE % {
