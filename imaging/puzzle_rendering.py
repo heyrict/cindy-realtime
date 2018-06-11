@@ -1,6 +1,7 @@
 import os
-import markdown
+import re
 
+import markdown
 from bs4 import BeautifulSoup
 from PIL import Image, ImageDraw, ImageFont
 
@@ -17,7 +18,10 @@ OUTPUT_IMAGE_NAME = '/tmp/puzzle_render_output.png'
 
 
 def _split_lines(text, stop):
-    return [text[i:i + stop] for i in range(0, len(text), stop)]
+    text = re.split(r'\n+', text)
+    text = [[part[i:i + stop] for i in range(0, len(part), stop)]
+            for part in text if part]
+    return sum(text, [])
 
 
 def render(title, content):
