@@ -1,1 +1,1 @@
-import * from puzzle_rendering
+from .puzzle_rendering import *

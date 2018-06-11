@@ -25,7 +25,7 @@ def add_twitter_on_puzzle_created(sender, instance, created, **kwargs):
             auth = OAuth(TOKEN, TOKEN_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
             t = Twitter(auth=auth)
 
-            imgpath = render(instance.title, instance.content)
+            imgpath = render(instance.title, textify(instance.content))
             with open(imgpath, 'rb') as f:
                 imgdata = f.read()
 
