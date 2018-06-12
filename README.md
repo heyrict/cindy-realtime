@@ -1,6 +1,6 @@
 Cindy-Realtime
 ==============
-<img align="right" height="192" width="192" src="https://github.com/heyrict/cindy-realtime/blob/master/react-boilerplate/app/images/icon-192x192.png" />
+<img align="right" height="192" width="192" src="https://github.com/heyrict/cindy-realtime/blob/master/react-boilerplate/app/images/favicon.png" />
 
 This is a project started in homage to [latethin](http://sui-hei.net) created by [kamisugi(上杉)](http://sui-hei.net/mondai/profile/1).
 
@@ -57,6 +57,12 @@ Requisitories
     cd ./react-boilerplate && npm install
 
     # Use npm (bower is somewhat alike)
+    ```
+
+- Python Image Library and its dependencies (optional, if you want to enable `TWEET_WITH_IMAGE`)
+
+    ```bash
+    cd ./imaging && make setup && pip install -r requirements.txt
     ```
 
 Develop
@@ -166,6 +172,9 @@ Also, note that all the configuration files need to be adjusted to you system (e
    service daphne start
    service prerender start
    ```
+
+5. (Optionally, if you want to enable twitter bot, change settings in `# Twitter Bot` in [security.py](./cindy/security.py).
+   Special [requisitories](#requisitories) are also needed for enabling `TWEET_WITH_PICTURE`.
 
 
 Contributers

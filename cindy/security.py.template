@@ -37,9 +37,10 @@ DEBUG = False
 
 # Twitter Bot
 ENABLE_TWITTERBOT = False
+TWEET_WITH_PICTURE = True
 TOKEN = ''
 TOKEN_SECRET = ''
 CONSUMER_KEY = ''
 CONSUMER_SECRET = ''
 TWEET_MESSAGE = '%(user_nickname)sさんがCindyにて新しい問題『%(title)s』を出題しました。\n'\
-                'https://www.cindythink.com/puzzle/show/%(id)d'
+                'https://www.cindythink.com/puzzle/show/%(id)d\n#ウミガメのスープ'
