@@ -22,6 +22,7 @@ import messages from './messages';
 
 const StyledTabItem = styled(Tab)`
   color: #006388;
+  border-bottom: ${({ active }) => (active ? '3px solid #2075c7' : 'none')};
   cursor: pointer;
   &:hover {
     color: #6c71c4;

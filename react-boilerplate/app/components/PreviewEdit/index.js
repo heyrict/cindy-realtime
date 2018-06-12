@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { AutoResizeTextarea } from 'style-store';
 import MarkdownPreview from 'components/MarkdownPreview';
 import Toolbar from './Toolbar';
+import ColorTooltip from './ColorTooltip';
 
 class PreviewEdit extends React.Component {
   constructor(props) {
@@ -53,6 +54,7 @@ class PreviewEdit extends React.Component {
   }
   render() {
     const { safe, style, onChange, ...others } = this.props;
+
     return (
       <div>
         <Toolbar
@@ -76,6 +78,26 @@ class PreviewEdit extends React.Component {
             {
               name: 'Italic',
               callback: () => this.handleWrapSelection('*'),
+            },
+            {
+              name: 'Color',
+              tooltipEnabled: true,
+              tooltipOptions: {
+                html: (
+                  <ColorTooltip
+                    handleSubmit={(color) =>
+                      this.handleWrapSelection(
+                        `<font color="${color}">`,
+                        '</font>'
+                      )
+                    }
+                  />
+                ),
+                position: 'top',
+                theme: 'cindy',
+                trigger: 'click',
+                interactive: true,
+              },
             },
           ]}
         />

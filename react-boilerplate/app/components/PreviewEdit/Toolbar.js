@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Flex, Box } from 'rebass';
+import { Tooltip } from 'react-tippy';
 import { ImgXs, Button } from 'style-store';
 
 const ToolbarBtn = Button.extend`
@@ -13,9 +14,17 @@ export const Toolbar = ({ options }) => (
   <Flex flexWrap="wrap">
     {options.map((obj) => (
       <Box key={obj.name}>
-        <ToolbarBtn onClick={obj.callback}>
-          {obj.icon ? <ImgXs alt={obj.name} src={obj.icon} /> : obj.name}
-        </ToolbarBtn>
+        {obj.tooltipEnabled ? (
+          <Tooltip {...obj.tooltipOptions}>
+            <ToolbarBtn>
+              {obj.icon ? <ImgXs alt={obj.name} src={obj.icon} /> : obj.name}
+            </ToolbarBtn>
+          </Tooltip>
+        ) : (
+          <ToolbarBtn onClick={obj.callback}>
+            {obj.icon ? <ImgXs alt={obj.name} src={obj.icon} /> : obj.name}
+          </ToolbarBtn>
+        )}
       </Box>
     ))}
   </Flex>
@@ -25,7 +34,9 @@ Toolbar.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
-      callback: PropTypes.func.isRequired,
+      callback: PropTypes.func,
+      tooltipEnabled: PropTypes.bool,
+      tooltipOptions: PropTypes.object,
       icon: PropTypes.any,
     })
   ),
