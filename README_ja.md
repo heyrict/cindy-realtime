@@ -1,10 +1,10 @@
 Cindy-Realtime
 ==============
-<img align="right" height="192" width="192" src="https://github.com/heyrict/cindy-realtime/blob/master/react-boilerplate/app/images/icon-192x192.png" />
+<img align="right" height="192" width="192" src="https://github.com/heyrict/cindy-realtime/blob/master/react-boilerplate/app/images/icon-512x512.png" />
 
 [ラテシン](http://sui-hei.net)(製作者：[上杉さん](http://sui-hei.net/mondai/profile/1))の後継として始まったプロジェクトです。
 
-Cindy(シンディ)は水平思考ゲームをプレイするためのWebサイトです。バックエンドにPythonのWebフレームワークであるDjango、フロントエンドにNode.jsを用いています。  
+Cindy(シンディ)は水平思考ゲームをプレイするためのWebサイトです。バックエンドにPythonのWebフレームワークであるDjango、フロントエンドにNode.jsを用いています。
 その他の技術的特徴として、WebAPIにGraphQL、リアルタイム更新にWebSocketを用いています。
 
 **[Webサイト](https://www.cindythink.com/ja/)** はこちら
@@ -108,14 +108,14 @@ Cindy-Realtimeの変更点
 
 デプロイ
 ------
-**注意**: これはnginx, ubuntu16.04LTSを使った場合の例です。別の方法も可能です。  
+**注意**: これはnginx, ubuntu16.04LTSを使った場合の例です。別の方法も可能です。
 また、設定ファイルをご自身のシステムに合わせて変更することにご注意ください(例えばユーザー名、パスなど)。
 
 1. JavaScriptのアセットを取得する
 
     1. [コミットする](#コミットする)の1-3を実行する。**Node.jsは必須ではないことに注意**
     2. javascriptのアセットを収集
-     
+
       [こちら](https://github.com/heyrict/cindy-realtime/releases)からassets.7zをダウンロードして展開します。
 
       ```bash
@@ -124,7 +124,7 @@ Cindy-Realtimeの変更点
       ```
 
       ご自身でビルドする場合
-      
+
       ```bash
       cd ./react-boilerplate && npm run build
       ../manage.py collectstatic
