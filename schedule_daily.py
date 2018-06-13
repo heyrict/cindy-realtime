@@ -39,7 +39,8 @@ def clean_recent_minichat(chatroomName="lobby", recent=None):
         logger.debug("[ChatRoom:%s]: Delete all objects" % chatroomName)
         cr.chatmessage_set.delete()
     else:
-        logger.debug("[ChatRoom:%s]: Leaving message count: %s" % (chatroomName, recent))
+        logger.debug("[ChatRoom:%s]: Leaving message count: %s" %
+                     (chatroomName, recent))
 
     if count < recent:
         return
@@ -50,7 +51,8 @@ def clean_recent_minichat(chatroomName="lobby", recent=None):
         return
 
     to_delete = cr_messages.filter(id__lt=earliest)
-    logger.debug("[ChatRoom:%s]: Deleting %s objects" % (chatroomName, to_delete.count()))
+    logger.debug("[ChatRoom:%s]: Deleting %s objects" % (chatroomName,
+                                                         to_delete.count()))
     to_delete.delete()
 
 
@@ -58,7 +60,8 @@ def clean_recent_directmessages(recent=90):
     now = timezone.now()
     recent_days_ago = now - timedelta(days=recent)
     outdated = DirectMessage.objects.filter(created__lt=recent_days_ago)
-    logger.debug("[DirectMessage]: Reserve messages in recent %d days" % recent)
+    logger.debug(
+        "[DirectMessage]: Reserve messages in recent %d days" % recent)
     logger.debug("[DirectMessage]: Deleting %s objects" % outdated.count())
     outdated.delete()
 
@@ -68,7 +71,8 @@ def mark_puzzle_as_dazed(recent=14):
     recent_days_ago = now - timedelta(days=recent)
     unsolved = Puzzle.objects.filter(status=0, modified__lt=recent_days_ago)
     for dazed_puzzle in unsolved:
-        logger.debug("[Puzzle]: Mark dazed:", dazed_puzzle.id, "-", dazed_puzzle.title)
+        logger.debug("[Puzzle]: Mark dazed: %d - %s" % (dazed_puzzle.id,
+                                                        dazed_puzzle.title))
         dazed_puzzle.status = 2
         dazed_puzzle.modified = now
         dazed_puzzle.save()
