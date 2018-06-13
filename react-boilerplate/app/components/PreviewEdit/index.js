@@ -10,6 +10,7 @@ import { AutoResizeTextarea } from 'style-store';
 import MarkdownPreview from 'components/MarkdownPreview';
 import Toolbar from './Toolbar';
 import ColorTooltip from './ColorTooltip';
+import TabsTooltip from './TabsTooltip';
 
 class PreviewEdit extends React.Component {
   constructor(props) {
@@ -52,11 +53,21 @@ class PreviewEdit extends React.Component {
       }));
     }
   }
+  handleInsert(s) {
+    const startPos = this.field.selectionStart || 0;
+    const endPos = this.field.selectionEnd || 0;
+    this.setState((prevState) => ({
+      content:
+        prevState.content.slice(0, startPos) +
+        s +
+        prevState.content.slice(endPos),
+    }));
+  }
   render() {
     const { safe, style, onChange, ...others } = this.props;
 
     return (
-      <div>
+      <div style={{ marginBottom: '5px' }}>
         <Toolbar
           options={[
             {
@@ -80,17 +91,32 @@ class PreviewEdit extends React.Component {
               callback: () => this.handleWrapSelection('*'),
             },
             {
-              name: 'Color',
+              name: 'Font',
               tooltipEnabled: true,
               tooltipOptions: {
                 html: (
                   <ColorTooltip
-                    handleSubmit={(color) =>
+                    handleSubmit={({ color, size }) =>
                       this.handleWrapSelection(
-                        `<font color="${color}">`,
-                        '</font>'
+                        `<span style="color:${color};font-size:${size}px">`,
+                        '</span>'
                       )
                     }
+                  />
+                ),
+                position: 'top',
+                theme: 'cindy',
+                trigger: 'click',
+                interactive: true,
+              },
+            },
+            {
+              name: 'Tabs',
+              tooltipEnabled: true,
+              tooltipOptions: {
+                html: (
+                  <TabsTooltip
+                    handleSubmit={(content) => this.handleInsert(content)}
                   />
                 ),
                 position: 'top',
@@ -111,7 +137,7 @@ class PreviewEdit extends React.Component {
             borderRadius: '0',
           }}
           minRows={3}
-          maxRows={7}
+          maxRows={25}
           {...others}
         />
         <MarkdownPreview content={this.state.content} safe={safe} />

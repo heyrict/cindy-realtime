@@ -54,7 +54,7 @@ class MarkdownPreview extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={{ margin: 0 }}>
         <Button
           onClick={this.togglePreview}
           w={1}

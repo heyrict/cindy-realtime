@@ -28,7 +28,6 @@ export const AutoResizeTextarea = styled(ReactTextareaAutosize)`
   color: #073642;
   font-size: 1.1em;
   margin: 0;
-  max-height: 120px;
   padding: 5px;
   width: 100%;
   &:focus {

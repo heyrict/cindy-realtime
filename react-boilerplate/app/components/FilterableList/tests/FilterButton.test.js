@@ -1,5 +1,4 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import { mountWithIntl } from 'test/helpers';
 
 import FilterButton from '../FilterButton';
@@ -35,7 +34,7 @@ describe('<FilterButton />', () => {
   });
 
   it('Expect to contain index', () => {
-    const index = 0
+    const index = 0;
     rendered.setProps({ index });
     expect(rendered.text()).toContain(index + 1);
   });
