@@ -76,4 +76,4 @@ const withPuzzleList = graphql(PuzzleListQuery, {
   },
 });
 
-export default compose(withNumberPaginator(), withPuzzleList)(PuzzleList);
+export default compose(withNumberPaginator({}), withPuzzleList)(PuzzleList);

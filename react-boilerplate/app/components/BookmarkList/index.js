@@ -81,4 +81,4 @@ const withBookmarkList = graphql(BookmarkListQuery, {
   },
 });
 
-export default compose(withNumberPaginator(), withBookmarkList)(BookmarkList);
+export default compose(withNumberPaginator({}), withBookmarkList)(BookmarkList);

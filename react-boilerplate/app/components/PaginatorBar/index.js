@@ -40,6 +40,16 @@ const SqInput = styled.input`
   }
 `;
 
+const SqIndic = styled.span`
+  display: inline-box;
+  color: #465a61;
+  background-color: transparent;
+  font-weight: bold;
+  padding: 3px 3px;
+  max-width: 40px;
+  max-height: 40px;
+`;
+
 const SqSubmit = styled.button`
   border: 2px solid #2075c7;
   border-radius: 0 10px 10px 0;
@@ -99,45 +109,71 @@ class PaginatorBar extends React.Component {
   }
 
   render() {
+    const { useQuery } = this.props;
+    const prevBtn = useQuery ? (
+      <Link
+        rel="prev"
+        to={setQueryStr({
+          ...this.query,
+          page: this.confinePage(this.props.currentPage - 1),
+        })}
+      >
+        <SqBtn disabled={this.props.currentPage === 1}>
+          <FormattedMessage {...messages.prev} />
+        </SqBtn>
+      </Link>
+    ) : (
+      <SqBtn
+        rel="prev"
+        disabled={this.props.currentPage === 1}
+        onClick={() =>
+          this.props.changePage(this.confinePage(this.props.currentPage - 1))
+        }
+      >
+        <FormattedMessage {...messages.prev} />
+      </SqBtn>
+    );
+
+    const nextBtn = useQuery ? (
+      <Link
+        rel="next"
+        to={setQueryStr({
+          ...this.query,
+          page: this.confinePage(this.props.currentPage + 1),
+        })}
+      >
+        <SqBtn disabled={this.props.currentPage === this.props.numPages}>
+          <FormattedMessage {...messages.next} />
+        </SqBtn>
+      </Link>
+    ) : (
+      <SqBtn
+        rel="next"
+        disabled={this.props.currentPage === this.props.numPages}
+        onClick={() =>
+          this.props.changePage(this.confinePage(this.props.currentPage + 1))
+        }
+      >
+        <FormattedMessage {...messages.next} />
+      </SqBtn>
+    );
+
     return (
       <Constrained level={4} mb={2}>
         <Flex alignItems="center">
-          <Box mr="auto">
-            <Link
-              rel="prev"
-              to={setQueryStr({
-                ...this.query,
-                page: this.confinePage(this.props.currentPage - 1),
-              })}
-            >
-              <SqBtn disabled={this.props.currentPage === 1}>
-                <FormattedMessage {...messages.prev} />
-              </SqBtn>
-            </Link>
-          </Box>
+          <Box mr="auto">{prevBtn}</Box>
           <Box mx="auto">
             <SqInput
               value={this.state.value}
               onChange={this.handleChange}
               onKeyDown={this.handleKeyDown}
             />
+            <SqIndic>/ {this.props.numPages}</SqIndic>
             <SqSubmit onClick={() => this.handleSubmit()}>
               <FormattedMessage {...messages.jump} />
             </SqSubmit>
           </Box>
-          <Box ml="auto">
-            <Link
-              rel="next"
-              to={setQueryStr({
-                ...this.query,
-                page: this.confinePage(this.props.currentPage + 1),
-              })}
-            >
-              <SqBtn disabled={this.props.currentPage === this.props.numPages}>
-                <FormattedMessage {...messages.next} />
-              </SqBtn>
-            </Link>
-          </Box>
+          <Box ml="auto">{nextBtn}</Box>
         </Flex>
       </Constrained>
     );
@@ -157,6 +193,11 @@ PaginatorBar.propTypes = {
   location: PropTypes.shape({
     search: PropTypes.string.isRequired,
   }),
+  useQuery: PropTypes.bool,
+};
+
+PaginatorBar.defaultProps = {
+  useQuery: true,
 };
 
 export default compose(withConnect)(PaginatorBar);

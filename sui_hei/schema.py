@@ -365,6 +365,14 @@ class BookmarkConnection(graphene.Connection):
         node = BookmarkNode
 
 
+# {{{2 ChatMessageConnection
+class ChatMessageConnection(graphene.Connection):
+    total_count = graphene.Int()
+
+    class Meta:
+        node = ChatMessageNode
+
+
 # {{{2 StarConnection
 class StarConnection(graphene.Connection):
     total_count = graphene.Int()
@@ -1317,6 +1325,12 @@ class Query(object):
         ChatMessageNode,
         orderBy=graphene.List(of_type=graphene.String),
         chatroomName=graphene.String())
+    all_chatmessages_lo = graphene.ConnectionField(
+        ChatMessageConnection,
+        limit=graphene.Int(),
+        offset=graphene.Int(),
+        orderBy=graphene.List(of_type=graphene.String),
+        chatroomName=graphene.String())
     all_directmessages = DjangoFilterConnectionField(
         DirectMessageNode, userId=graphene.ID())
     all_chatrooms = DjangoFilterConnectionField(ChatRoomNode)
@@ -1410,6 +1424,25 @@ class Query(object):
     def resolve_all_dialogues(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
         return resolveOrderBy(Dialogue.objects, orderBy)
+
+    def resolve_all_chatmessages_lo(self, info, **kwargs):
+        orderBy = kwargs.get("orderBy", None)
+        chatroomName = kwargs.get("chatroomName", None)
+        limit = kwargs.get("limit", None)
+        offset = kwargs.get("offset", None)
+        qs = resolveOrderBy(ChatMessage.objects, orderBy)
+        if chatroomName:
+            chatroom = ChatRoom.objects.get(name=chatroomName)
+            qs = qs.filter(chatroom=chatroom)
+        total_count = qs.count()
+        qs = resolveLimitOffset(qs, limit, offset)
+        qs = list(qs)
+        return ChatMessageConnection(
+            total_count=total_count,
+            edges=[
+                ChatMessageConnection.Edge(node=qs[i], )
+                for i in range(len(qs))
+            ])
 
     def resolve_all_chatmessages(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)

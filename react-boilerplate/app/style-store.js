@@ -152,7 +152,6 @@ export const Button = RebassButton.extend`
   cursor: pointer;
   &:hover {
     color: blanchedalmond;
-    background-color: #2075c7;
   }
 `;
 
@@ -166,14 +165,19 @@ export const ButtonOutline = RebassButtonOutline.extend`
   width: ${(props) => formatScalar(props.w, 'auto')};
   cursor: pointer;
   &:hover {
-    color: blanchedalmond;
-    background-color: #2075c7;
+    color: ${(props) =>
+      props.bg && props.theme
+        ? props.theme.colors[props.bg] || props.bg
+        : 'blanchedalmond'};
+    background-color: ${(props) =>
+      props.color && props.theme
+        ? props.theme.colors[props.color] || props.color
+        : '#2075c7'};
   }
 `;
 
 ButtonOutline.defaultProps = {
   color: 'cyan',
-  bg: 'transparent',
   border: '2px solid #2075c7',
   borderRadius: 10,
 };

@@ -78,4 +78,8 @@ export default defineMessages({
     id: 'app.containers.Chat.puzzleChatDescription',
     defaultMessage: 'Chat Room for {channelName}',
   },
+  log: {
+    id: 'app.containers.Chat.log',
+    defaultMessage: 'Log',
+  },
 });

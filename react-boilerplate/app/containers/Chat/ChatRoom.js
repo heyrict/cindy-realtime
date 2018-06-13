@@ -22,6 +22,7 @@ import LoadingDots from 'components/LoadingDots';
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import DescriptionPanel from './DescriptionPanel';
+import ChatLogModal from './ChatLogList';
 import Wrapper from './Wrapper';
 import messages from './messages';
 
@@ -38,26 +39,34 @@ const MessageWrapper = Wrapper.extend`
 const DescriptionBtn = Button.extend`
   overflow-y: auto;
   height: ${(props) => props.height}px;
-  width: 100%;
   border-radius: 0;
   padding: 0;
-  background-color: sienna;
-  &:hover {
-    color: blanchedalmond;
-    background-color: sienna;
-  }
+`;
+
+const ShowlogBtn = ButtonOutline.extend`
+  overflow-y: auto;
+  height: ${(props) => props.height}px;
+  border-radius: 0;
+  padding: 0;
 `;
 
 class ChatRoom extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { loading: false, taHeight: 36, show: false };
+    this.state = {
+      loading: false,
+      taHeight: 36,
+      show: false,
+      chatLogModalShown: false,
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.toggleChatLogModalShow = (show) =>
+      this.setState({ chatLogModalShown: show });
     this.handleHeightChange = (h, inst) =>
       this.setState({ taHeight: inst._rootDOMNode.clientHeight || h });
-    this.handleToggleShow = (channelName) =>
-      channelName.match(/^puzzle-\d+$/)
+    this.handleToggleShow = (chatroomName) =>
+      chatroomName.match(/^puzzle-\d+$/)
         ? this.setState((p) => ({ show: p.show ? false : 0.3 }))
         : this.setState((p) => ({ show: !p.show }));
     this.scrollToBottom = this.scrollToBottom.bind(this);
@@ -190,22 +199,38 @@ class ChatRoom extends React.Component {
 
   render() {
     if (this.props.hidden) return null;
-    const channelName =
+    const chatroomName =
       this.props.channel || defaultChannel(this.props.pathname);
 
     return (
       <Flex flexWrap="wrap" justifyContent="center">
         <DescriptionBtn
           height={20}
-          onClick={() => this.handleToggleShow(channelName)}
+          w={2 / 3}
+          bg="sienna"
+          onClick={() => this.handleToggleShow(chatroomName)}
         >
-          {channelName}
+          {chatroomName}
         </DescriptionBtn>
+        <ShowlogBtn
+          height={20}
+          w={1 / 3}
+          color="sienna"
+          border="0"
+          onClick={() => this.toggleChatLogModalShow(true)}
+        >
+          <FormattedMessage {...messages.log} />
+        </ShowlogBtn>
+        <ChatLogModal
+          show={this.state.chatLogModalShown}
+          onHide={() => this.toggleChatLogModalShow(false)}
+          variables={{ chatroomName }}
+        />
         {this.state.show && (
           <DescriptionPanel
             show={this.state.show}
             toggleShow={this.handleToggleShow}
-            name={channelName}
+            name={chatroomName}
             currentUserId={this.props.currentUser && this.props.currentUser.id}
             favChannels={this.props.favChannels}
           />

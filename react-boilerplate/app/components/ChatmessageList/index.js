@@ -1,6 +1,6 @@
 /**
  *
- * StarList
+ * ChatmessageList
  *
  */
 
@@ -14,12 +14,12 @@ import { graphql } from 'react-apollo';
 
 import withNumberPaginator from 'components/withNumberPaginator';
 import PuzzlePanel from 'components/PuzzlePanel';
-import StarListQuery from 'graphql/StarList';
+import ChatmessageListQuery from 'graphql/ChatmessageList';
 import LoadingDots from 'components/LoadingDots';
 import FiveStars from 'components/FiveStars';
 import PaginatorBar from 'components/PaginatorBar';
 
-const StarList = (props) => (
+const ChatmessageList = (props) => (
   <div>
     {props.allStars &&
       props.allStars.edges.map((edge) => (
@@ -46,7 +46,7 @@ const StarList = (props) => (
   </div>
 );
 
-StarList.propTypes = {
+ChatmessageList.propTypes = {
   loading: PropTypes.bool.isRequired,
   allStars: PropTypes.shape({
     edges: PropTypes.array.isRequired,
@@ -57,7 +57,7 @@ StarList.propTypes = {
   changePage: PropTypes.func.isRequired,
 };
 
-const withStarList = graphql(StarListQuery, {
+const withChatmessageList = graphql(ChatmessageListQuery, {
   options: ({ variables, page, itemsPerPage }) => ({
     variables: {
       limit: itemsPerPage,
@@ -75,4 +75,6 @@ const withStarList = graphql(StarListQuery, {
   },
 });
 
-export default compose(withNumberPaginator({}), withStarList)(StarList);
+export default compose(withNumberPaginator({}), withChatmessageList)(
+  ChatmessageList
+);
