@@ -66,6 +66,7 @@
   "app.containers.Chat.notifyOfflineDms": "あなたがオフラインしている時、ダイレクトメッセージを受信しました",
   "app.containers.Chat.onlineUsers": "オンラインユーザー",
   "app.containers.Chat.owner": "所有者",
+  "app.containers.Chat.puzzleChatDescription": "{channelName}用のチャットルーム",
   "app.containers.Chat.recent": "最近の会話",
   "app.containers.Chat.send": "送信",
   "app.containers.Chat.sending": "送信中・・・",

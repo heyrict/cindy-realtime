@@ -2,13 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import {
-  Button,
-  ButtonOutline,
-  EditButton,
-  ImgXs,
-  Textarea,
-} from 'style-store';
+import { ButtonOutline, EditButton, ImgXs, Textarea } from 'style-store';
 import { Flex, Box } from 'rebass';
 import { line2md, from_global_id as f } from 'common';
 import { FormattedMessage } from 'react-intl';
@@ -34,19 +28,6 @@ const StyledButton = ButtonOutline.extend`
   width: 100%;
 `;
 
-const DescriptionBtn = Button.extend`
-  overflow-y: auto;
-  height: ${(props) => props.height}px;
-  width: 100%;
-  border-radius: 0;
-  padding: 0;
-  background-color: sienna;
-  &:hover {
-    color: blanchedalmond;
-    background-color: sienna;
-  }
-`;
-
 const DescriptionWrapper = Wrapper.extend`
   overflow-y: auto;
   height: ${(props) => props.height}px;
@@ -59,11 +40,9 @@ class DescriptionPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false,
       editMode: false,
       description: props.channel ? props.channel.description : '',
     };
-    this.toggleDescription = this.toggleDescription.bind(this);
     this.handleChange = (e) => this.setState({ description: e.target.value });
     this.toggleEditMode = () =>
       this.setState((s) => ({ editMode: !s.editMode }));
@@ -77,12 +56,6 @@ class DescriptionPanel extends React.Component {
           : '',
       });
     }
-  }
-  toggleDescription() {
-    this.setState((p) => {
-      this.props.changeHeight(p.show ? 20 : 120);
-      return { show: !p.show };
-    });
   }
   handleSubmit() {
     const id = parseInt(f(this.props.channel.id)[1], 10);
@@ -125,7 +98,35 @@ class DescriptionPanel extends React.Component {
   }
   render() {
     if (!this.props.name || !this.props.channel) return null;
-    if (this.props.name.match(/^puzzle-\d+$/g)) return null;
+    if (this.props.name.match(/^puzzle-\d+$/)) {
+      return (
+        <DescriptionWrapper height={30}>
+          <Flex style={{ fontSize: '0.9em' }}>
+            <Box mr="auto">
+              <FormattedMessage
+                {...messages.puzzleChatDescription}
+                values={{ channelName: this.props.name }}
+              />
+            </Box>
+            {this.props.currentUserId && (
+              <Box ml="auto">
+                {inFavorite ? (
+                  <DeleteFromFavBtn
+                    chatroomName={this.props.name}
+                    userId={this.props.currentUserId}
+                  />
+                ) : (
+                  <AddToFavBtn
+                    chatroomName={this.props.name}
+                    userId={this.props.currentUserId}
+                  />
+                )}
+              </Box>
+            )}
+          </Flex>
+        </DescriptionWrapper>
+      );
+    }
 
     let inFavorite = false;
     if (this.props.favChannels) {
@@ -136,80 +137,66 @@ class DescriptionPanel extends React.Component {
       });
     }
 
-    if (this.state.show) {
-      return (
-        <DescriptionWrapper height={this.props.height}>
-          <DescriptionBtn height={20} onClick={this.toggleDescription}>
-            {this.props.name}
-          </DescriptionBtn>
-          {this.state.editMode === false && (
-            <div>
-              <Flex style={{ fontSize: '0.9em' }}>
-                <Box mr="auto">
-                  <FormattedMessage {...messages.owner} />:{' '}
-                  <UserLabel user={this.props.channel.user} />
-                </Box>
-                {this.props.currentUserId && (
-                  <Box ml="auto">
-                    {inFavorite ? (
-                      <DeleteFromFavBtn
-                        chatroomName={this.props.name}
-                        userId={this.props.currentUserId}
-                      />
-                    ) : (
-                      <AddToFavBtn
-                        chatroomName={this.props.name}
-                        userId={this.props.currentUserId}
-                      />
-                    )}
-                  </Box>
-                )}
-              </Flex>
-              <hr style={{ margin: '3px 0 7px 0' }} />
-              <span
-                style={{ overflow: 'auto' }}
-                dangerouslySetInnerHTML={{
-                  __html: line2md(this.props.channel.description),
-                }}
-              />
-              {this.props.currentUserId === this.props.channel.user.id && (
-                <FormattedMessage {...dialogueMessages.edit}>
-                  {(msg) => (
-                    <EditButton onClick={this.toggleEditMode}>{msg}</EditButton>
-                  )}
-                </FormattedMessage>
-              )}
-            </div>
-          )}
-          {this.state.editMode === true && (
-            <Flex alignItems="center" mx={0} mt={1}>
-              <Box w={[2 / 3, 5 / 6, 7 / 8]} mx={1}>
-                <Textarea
-                  value={this.state.description}
-                  onChange={this.handleChange}
-                  onKeyDown={this.handleKeyDown}
-                />
-              </Box>
-              <Box w={[1 / 3, 1 / 6, 1 / 8]} mr={1}>
-                <StyledButton onClick={this.toggleEditMode}>
-                  <ImgXs src={cross} />
-                </StyledButton>
-                <StyledButton onClick={this.handleSubmit}>
-                  <ImgXs src={tick} />
-                </StyledButton>
-              </Box>
-            </Flex>
-          )}
-        </DescriptionWrapper>
-      );
-    }
     return (
-      <DescriptionBtn
-        height={this.props.height}
-        onClick={this.toggleDescription}
-      >
-        {this.props.name}
-      </DescriptionBtn>
+      <DescriptionWrapper height={100}>
+        {this.state.editMode === true ? (
+          <Flex alignItems="center" mx={0} mt={1}>
+            <Box w={[2 / 3, 5 / 6, 7 / 8]} mx={1}>
+              <Textarea
+                value={this.state.description}
+                onChange={this.handleChange}
+                onKeyDown={this.handleKeyDown}
+              />
+            </Box>
+            <Box w={[1 / 3, 1 / 6, 1 / 8]} mr={1}>
+              <StyledButton onClick={this.toggleEditMode}>
+                <ImgXs src={cross} />
+              </StyledButton>
+              <StyledButton onClick={this.handleSubmit}>
+                <ImgXs src={tick} />
+              </StyledButton>
+            </Box>
+          </Flex>
+        ) : (
+          <div>
+            <Flex style={{ fontSize: '0.9em' }}>
+              <Box mr="auto">
+                <FormattedMessage {...messages.owner} />:{' '}
+                <UserLabel user={this.props.channel.user} />
+              </Box>
+              {this.props.currentUserId && (
+                <Box ml="auto">
+                  {inFavorite ? (
+                    <DeleteFromFavBtn
+                      chatroomName={this.props.name}
+                      userId={this.props.currentUserId}
+                    />
+                  ) : (
+                    <AddToFavBtn
+                      chatroomName={this.props.name}
+                      userId={this.props.currentUserId}
+                    />
+                  )}
+                </Box>
+              )}
+            </Flex>
+            <hr style={{ margin: '3px 0 7px 0' }} />
+            <span
+              style={{ overflow: 'auto' }}
+              dangerouslySetInnerHTML={{
+                __html: line2md(this.props.channel.description),
+              }}
+            />
+            {this.props.currentUserId === this.props.channel.user.id && (
+              <FormattedMessage {...dialogueMessages.edit}>
+                {(msg) => (
+                  <EditButton onClick={this.toggleEditMode}>{msg}</EditButton>
+                )}
+              </FormattedMessage>
+            )}
+          </div>
+        )}
+      </DescriptionWrapper>
     );
   }
 }
@@ -220,8 +207,6 @@ DescriptionPanel.propTypes = {
   mutate: PropTypes.func.isRequired,
   name: PropTypes.string,
   channel: PropTypes.object,
-  height: PropTypes.number.isRequired,
-  changeHeight: PropTypes.func.isRequired,
   currentUserId: PropTypes.string,
   favChannels: PropTypes.shape({
     edges: PropTypes.array.isRequired,

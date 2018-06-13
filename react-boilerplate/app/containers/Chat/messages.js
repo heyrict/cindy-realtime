@@ -74,4 +74,8 @@ export default defineMessages({
     id: 'app.containers.Chat.directChatInputPlaceholder',
     defaultMessage: 'Please select who you want to send DM to.',
   },
+  puzzleChatDescription: {
+    id: 'app.containers.Chat.puzzleChatDescription',
+    defaultMessage: 'Chat Room for {channelName}',
+  },
 });

@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable indent */
+/* eslint-disable no-mixed-operators */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -9,7 +10,7 @@ import { compose } from 'redux';
 import { from_global_id as f } from 'common';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
-import { ButtonOutline } from 'style-store';
+import { Button, ButtonOutline } from 'style-store';
 import { nAlert } from 'containers/Notifier/actions';
 
 import { graphql } from 'react-apollo';
@@ -34,15 +35,31 @@ const MessageWrapper = Wrapper.extend`
   border-radius: 0 0 10px 10px;
 `;
 
+const DescriptionBtn = Button.extend`
+  overflow-y: auto;
+  height: ${(props) => props.height}px;
+  width: 100%;
+  border-radius: 0;
+  padding: 0;
+  background-color: sienna;
+  &:hover {
+    color: blanchedalmond;
+    background-color: sienna;
+  }
+`;
+
 class ChatRoom extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { loading: false, taHeight: 36, dpHeight: 20 };
+    this.state = { loading: false, taHeight: 36, show: false };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleHeightChange = (h, inst) =>
       this.setState({ taHeight: inst._rootDOMNode.clientHeight || h });
-    this.handleDPHeightChange = (h) => this.setState({ dpHeight: h });
+    this.handleToggleShow = (channelName) =>
+      channelName.match(/^puzzle-\d+$/)
+        ? this.setState((p) => ({ show: p.show ? false : 0.3 }))
+        : this.setState((p) => ({ show: !p.show }));
     this.scrollToBottom = this.scrollToBottom.bind(this);
   }
 
@@ -173,19 +190,29 @@ class ChatRoom extends React.Component {
 
   render() {
     if (this.props.hidden) return null;
+    const channelName =
+      this.props.channel || defaultChannel(this.props.pathname);
 
     return (
       <Flex flexWrap="wrap" justifyContent="center">
-        <DescriptionPanel
-          height={this.state.dpHeight}
-          changeHeight={this.handleDPHeightChange}
-          name={this.props.channel || defaultChannel(this.props.pathname)}
-          currentUserId={this.props.currentUser && this.props.currentUser.id}
-          favChannels={this.props.favChannels}
-        />
+        <DescriptionBtn
+          height={20}
+          onClick={() => this.handleToggleShow(channelName)}
+        >
+          {channelName}
+        </DescriptionBtn>
+        {this.state.show && (
+          <DescriptionPanel
+            show={this.state.show}
+            toggleShow={this.handleToggleShow}
+            name={channelName}
+            currentUserId={this.props.currentUser && this.props.currentUser.id}
+            favChannels={this.props.favChannels}
+          />
+        )}
         <MessageWrapper
           height={
-            this.props.height - this.state.taHeight - this.state.dpHeight - 14
+            this.props.height - this.state.taHeight - this.state.show * 100 - 36
           }
         >
           {this.props.loading ? (
