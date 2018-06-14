@@ -9,24 +9,10 @@ import django
 django.setup()
 from django.utils import timezone
 
-from awards import judgers, granters
 from sui_hei.models import Award, ChatMessage, ChatRoom, Puzzle, User, DirectMessage
 
 logger = logging.getLogger(name=__file__)
 logging.basicConfig(datefmt="%Y/%m/%d %H:%M:%S", level=logging.DEBUG)
-
-
-def feedBot(message):
-    try:
-        message = message.strip()
-        user = User.objects.get(username="System")
-        lobby = ChatRoom.objects.get(name="lobby")
-        if message:
-            message = "My Work Today\n" + '=' * 20 + '\n' + message
-            ChatMessage(chatroom=lobby, user=user, content=message).save()
-
-    except Exception as e:
-        logger.debug(e)
 
 
 def clean_recent_minichat(chatroomName="lobby", recent=None):
@@ -93,13 +79,3 @@ if __name__ == "__main__":
     recent = settings.get('direct_message_preserve_days', None)
     if isinstance(recent, int):
         clean_recent_directmessages(recent)
-
-    # mark outdated puzzles as dazed
-    #daily_message = ""
-    #returned = mark_puzzle_as_dazed(14)
-    #if returned:
-    #    daily_message += "## Dazed Soup :coffee:\n" + '- ' + '\n- '.join(
-    #        returned.split('\n')) + '\n'
-
-    # Don't feed to Bot in favor of notification.
-    #feedBot(daily_message)
