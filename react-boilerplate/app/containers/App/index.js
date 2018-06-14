@@ -38,10 +38,6 @@ import { StartCountdown, changeTabularTab } from 'common';
 const EasingBox = styled(Box)`
   height: ${(props) => props.height - 50}px;
   overflow-y: auto;
-  @media (max-width: 31.99em) {
-    display: ${(props) =>
-      props.w === 0 || props.w[0] === 0 ? 'none' : 'block'};
-  }
 `;
 
 class App extends React.Component {

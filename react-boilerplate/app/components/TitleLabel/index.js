@@ -28,10 +28,10 @@ const PuzzleTitle = styled(Link)`
   color: brown;
   padding: 0.05em 0.2em;
   @media (min-width: 760px) {
-    font-size: 1.25em;
+    font-size: 1.4em;
   }
   @media (max-width: 760px) {
-    font-size: 1.15em;
+    font-size: 1.2em;
   }
 `;
 

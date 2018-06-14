@@ -80,18 +80,20 @@ export function withModal(p) {
                 <HeaderCloseBtn onClick={this.props.onHide}>x</HeaderCloseBtn>
               </ModalHeader>
             )}
-            <ModalBody className="cindy-modal-body">
-              {footer.confirm ? (
-                <Wrapped
-                  ref={(instance) => {
-                    this.childBody = instance;
-                  }}
-                  {...this.props}
-                />
-              ) : (
-                <Wrapped {...this.props} />
-              )}
-            </ModalBody>
+            {this.props.show && (
+              <ModalBody className="cindy-modal-body">
+                {footer.confirm ? (
+                  <Wrapped
+                    ref={(instance) => {
+                      this.childBody = instance;
+                    }}
+                    {...this.props}
+                  />
+                ) : (
+                  <Wrapped {...this.props} />
+                )}
+              </ModalBody>
+            )}
             {(footer.confirm || footer.close) && (
               <ModalFooter className="cindy-modal-footer">
                 {footer.confirm ? (

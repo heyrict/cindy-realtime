@@ -70,15 +70,14 @@ const SqSubmit = styled.button`
 class PaginatorBar extends React.Component {
   constructor(props) {
     super(props);
-    this.confinePage = (page, maxNum = props.numPages, minNum = 1) => {
-      let confined = page;
-      if (page < minNum) confined = minNum;
-      if (page > maxNum) confined = maxNum;
-      return confined;
+    this.confinePage = (page, maxNum = this.props.numPages, minNum = 1) => {
+      if (page < minNum) return minNum;
+      if (page > maxNum) return maxNum;
+      return page;
     };
-    this.query = getQueryStr(props.location.search);
+    this.query = getQueryStr(this.props.location.search);
     this.state = {
-      value: props.currentPage || 1,
+      value: this.props.currentPage || 1,
     };
     this.handleChange = (e) => this.setState({ value: e.target.value });
     this.handleKeyDown = (e) => {
@@ -89,7 +88,7 @@ class PaginatorBar extends React.Component {
       if (p === undefined) {
         nextPage = parseInt(this.state.value, 10);
         if (isNaN(nextPage)) {
-          this.setState({ value: props.currentPage });
+          this.setState({ value: this.props.currentPage });
           return;
         }
         nextPage = this.confinePage(nextPage);
@@ -98,7 +97,7 @@ class PaginatorBar extends React.Component {
         this.setState({ value: nextPage });
       }
 
-      props.changePage(nextPage);
+      this.props.changePage(nextPage);
     };
   }
 
@@ -198,6 +197,7 @@ PaginatorBar.propTypes = {
 
 PaginatorBar.defaultProps = {
   useQuery: true,
+  numPages: 1,
 };
 
 export default compose(withConnect)(PaginatorBar);
