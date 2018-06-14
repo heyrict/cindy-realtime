@@ -97,7 +97,13 @@ class DescriptionPanel extends React.Component {
       });
   }
   render() {
-    if (!this.props.name || !this.props.channel) return null;
+    if (!this.props.name) return null;
+    if (!this.props.channel) {
+      if (this.props.name.match(/^puzzle-\d+$/)) {
+        return <DescriptionWrapper height={30} />;
+      }
+      return <DescriptionWrapper height={100} />;
+    }
     if (this.props.name.match(/^puzzle-\d+$/)) {
       return (
         <DescriptionWrapper height={30}>
