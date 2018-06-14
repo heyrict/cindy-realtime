@@ -22,7 +22,10 @@ import {
 
 const initialState = fromJS({
   // Sidebar State Stuff
-  open: window.innerWidth < 576 ? null : 'chat',
+  open:
+    (window.innerWidth || document.documentElement.clientHeight) < 576
+      ? null
+      : 'chat',
   activeTab: 'TAB_CHAT',
   // Chat State Stuff
   channel: null, // default channel
