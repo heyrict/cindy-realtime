@@ -33,7 +33,7 @@ import AwardApplicationPage from 'containers/AwardApplicationPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Chat from 'containers/Chat';
 import makeSelectChat from 'containers/Chat/selectors';
-import common from 'common';
+import { StartCountdown, changeTabularTab } from 'common';
 
 const EasingBox = styled(Box)`
   height: ${(props) => props.height - 50}px;
@@ -54,16 +54,26 @@ class App extends React.Component {
     this.resize();
   }
   componentDidMount() {
-    this.countdownHdl = common.StartCountdown();
+    this.countdownHdl = StartCountdown();
     window.addEventListener('resize', this.resize);
+    window.addEventListener('click', this.eventDelegation);
   }
   componentWillUnmount() {
     window.clearInterval(this.countdownHdl);
     window.removeEventListener('resize', this.resize);
+    window.removeEventListener('click', this.eventDelegation);
   }
   resize() {
     const height = window.innerHeight || document.documentElement.clientHeight;
     this.setState({ height });
+  }
+  eventDelegation(e) {
+    const attr = e.target.attributes;
+    if ('data-toggle' in attr && 'data-target' in attr) {
+      if (attr['data-toggle'].value === 'tab') {
+        changeTabularTab(attr['data-target'].value.replace(/^#/, ''));
+      }
+    }
   }
   render() {
     const tp = (path, locale) => (locale ? `/${locale}${path}` : path);

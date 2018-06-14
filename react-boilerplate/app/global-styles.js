@@ -82,6 +82,7 @@ injectGlobal`
   // modal stuff
   .modal-shade {
     display: none;
+    z-index: 9998;
     opacity: 0;
     background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4) 0, rgba(0,0,0,0.8) 100%);
     position: fixed;
@@ -94,22 +95,15 @@ injectGlobal`
 
   .modal-container {
     position: fixed;
+    z-index: 9999;
     right: 0;
     left: 0;
+    top: 0;
     bottom: 0;
     display: none;
     justify-content: center;
     overflow-y: auto;
     align-items: flex-start;
-    @media (min-width: 400px) {
-      top: 10px;
-    }
-    @media (min-width: 760px) {
-      top: 20px;
-    }
-    @media (min-width: 1020px) {
-      top: 50px;
-    }
   }
   .modal-container > .modal {
      opacity: 0;

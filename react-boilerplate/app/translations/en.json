@@ -13,8 +13,7 @@
   "app.components.AwardApplicationList.reviewed": "Review Time",
   "app.components.AwardApplicationList.reviewer": "Reviewer",
   "app.components.AwardApplicationList.status": "Status",
-  "app.components.BookmarkList.deletePrompt":
-    "Are you sure you want to delete this bookmark?",
+  "app.components.BookmarkList.deletePrompt": "Are you sure you want to delete this bookmark?",
   "app.components.BookmarkList.deleted": "Deleted",
   "app.components.MarkdownPreview.hidePreview": "Hide Preview",
   "app.components.MarkdownPreview.showPreview": "Show Preview",
@@ -28,8 +27,7 @@
   "app.components.MenuNavbar.rules": "User Policy",
   "app.components.MenuNavbar.sponsers": "Links",
   "app.components.MenuNavbar.wiki": "Wiki",
-  "app.components.NotFoundPage.header":
-    "Oops! This page does not exist or is still under construction.",
+  "app.components.NotFoundPage.header": "Oops! This page does not exist or is still under construction.",
   "app.components.PaginatorBar.jump": "jump",
   "app.components.PaginatorBar.next": "next",
   "app.components.PaginatorBar.prev": "prev",
@@ -39,8 +37,7 @@
   "app.components.ProfileNavbar.stars": "Stars",
   "app.components.RewardingModal.close": "Close",
   "app.components.RewardingModal.jump": "View the solution",
-  "app.components.RewardingModal.spoilerWarning":
-    "This comment is a spoiler, click here if you want to view it.",
+  "app.components.RewardingModal.spoilerWarning": "This comment is a spoiler, click here if you want to view it.",
   "app.components.TitleLabel.classic": "Classic",
   "app.components.TitleLabel.littleAlbat": "Little Albat",
   "app.components.TitleLabel.others": "Others & Formal",
@@ -49,17 +46,12 @@
   "app.containers.AwardApplicationPage.apply": "Apply",
   "app.containers.AwardApplicationPage.awardDescription": "Description",
   "app.containers.AwardApplicationPage.awardRequisition": "Requisition",
-  "app.containers.AwardApplicationPage.commentPlaceholder":
-    "Add some comment...",
-  "app.containers.AwardApplicationPage.description":
-    "Lots of award to get in Cindy.",
-  "app.containers.AwardApplicationPage.formBlankAlert":
-    "Please fill in the form.",
+  "app.containers.AwardApplicationPage.commentPlaceholder": "Add some comment...",
+  "app.containers.AwardApplicationPage.description": "Lots of award to get in Cindy.",
+  "app.containers.AwardApplicationPage.formBlankAlert": "Please fill in the form.",
   "app.containers.AwardApplicationPage.header": "Award Application Center",
-  "app.containers.AwardApplicationPage.selectPlaceholder":
-    "Select the award you want to apply...",
-  "app.containers.AwardApplicationPage.title":
-    "Award Application Center - Cindy",
+  "app.containers.AwardApplicationPage.selectPlaceholder": "Select the award you want to apply...",
+  "app.containers.AwardApplicationPage.title": "Award Application Center - Cindy",
   "app.containers.Chat.back": "< Back",
   "app.containers.Chat.change": "Change",
   "app.containers.Chat.channel": "Channel",
@@ -69,11 +61,10 @@
   "app.containers.Chat.defaultChannel": "Default Channel",
   "app.containers.Chat.description": "Description",
   "app.containers.Chat.direct": "Direct Messages",
-  "app.containers.Chat.directChatInputPlaceholder":
-    "Please select who you want to send DM to.",
+  "app.containers.Chat.directChatInputPlaceholder": "Please select who you want to send DM to.",
   "app.containers.Chat.loadMore": "Load More",
-  "app.containers.Chat.notifyOfflineDms":
-    "New Direct Message received when you were offline!",
+  "app.containers.Chat.log": "Log",
+  "app.containers.Chat.notifyOfflineDms": "New Direct Message received when you were offline!",
   "app.containers.Chat.onlineUsers": "Online Users",
   "app.containers.Chat.owner": "Owner",
   "app.containers.Chat.puzzleChatDescription": "Chat Room for {channelName}",
@@ -101,23 +92,17 @@
   "app.containers.FilterableList.starSum": "Star Sum",
   "app.containers.FilterableList.title__contains": "Title",
   "app.containers.FilterableList.value": "Value",
-  "app.containers.HomePage.body":
-    "Cindy is an active community for chatting lateral thinking problems.",
-  "app.containers.HomePage.description":
-    "Find interesting lateral thinking puzzles here, share with your friends, and even create your own lateral thinking puzzle in minites!",
+  "app.containers.HomePage.body": "Cindy is an active community for chatting lateral thinking problems.",
+  "app.containers.HomePage.description": "Find interesting lateral thinking puzzles here, share with your friends, and even create your own lateral thinking puzzle in minites!",
   "app.containers.HomePage.header": "Welcome to {cindy}!",
   "app.containers.HomePage.start": "Start",
-  "app.containers.HomePage.title":
-    "Cindy: A latral thinking salon for every one!",
+  "app.containers.HomePage.title": "Cindy: A latral thinking salon for every one!",
   "app.containers.LoginForm.password": "Password",
   "app.containers.LoginForm.username": "Username",
-  "app.containers.Notifier.chatroomNotExists":
-    "ChatRoom {name} does not exists.",
-  "app.containers.Notifier.directMessageReceived":
-    "{nickname} sends a direct message to you!",
+  "app.containers.Notifier.chatroomNotExists": "ChatRoom {name} does not exists.",
+  "app.containers.Notifier.directMessageReceived": "{nickname} sends a direct message to you!",
   "app.containers.Notifier.open": "Open",
-  "app.containers.Notifier.puzzleAdded":
-    "A New Puzzle {title} is Added by {nickname}!",
+  "app.containers.Notifier.puzzleAdded": "A New Puzzle {title} is Added by {nickname}!",
   "app.containers.Notifier.wsConnect": "Connected to server!",
   "app.containers.ProfilePage.awardApplications": "Recent Award Applications",
   "app.containers.ProfilePage.awardSelect": "Award Select",
@@ -142,31 +127,24 @@
   "app.containers.PuzzleAddForm.submitLabel": "Submit",
   "app.containers.PuzzleAddForm.titleLabel": "Title",
   "app.containers.PuzzleAddForm.yamiLabel": "Yami",
-  "app.containers.PuzzleAddPage.description":
-    "Create a lateral thinking puzzle of your own!",
+  "app.containers.PuzzleAddPage.description": "Create a lateral thinking puzzle of your own!",
   "app.containers.PuzzleAddPage.header": "New Puzzle",
   "app.containers.PuzzleAddPage.title": "Create Puzzle - Cindy",
   "app.containers.PuzzlePage.addPuzzle": "Add a new puzzle",
-  "app.containers.PuzzlePage.description":
-    "Playing lateral thinking puzzles online, and browsering all kinds of lateral thinking puzzles. Tons of lateral thinking puzzles are waiting for you!",
+  "app.containers.PuzzlePage.description": "Playing lateral thinking puzzles online, and browsering all kinds of lateral thinking puzzles. Tons of lateral thinking puzzles are waiting for you!",
   "app.containers.PuzzlePage.header": "Puzzle List",
   "app.containers.PuzzlePage.title": "Puzzles - Cindy",
   "app.containers.PuzzleShowPage.addBookmark": "Add Bookmark",
   "app.containers.PuzzleShowPage.addComment": "Add Comment",
   "app.containers.PuzzleShowPage.addStar": "Add Star",
-  "app.containers.PuzzleShowPage.cancelStar":
-    "Add a star by mistaken? Cancel it.",
-  "app.containers.PuzzleShowPage.commentNoBlankAlert":
-    "Comment cannot be blank!",
+  "app.containers.PuzzleShowPage.cancelStar": "Add a star by mistaken? Cancel it.",
+  "app.containers.PuzzleShowPage.commentNoBlankAlert": "Comment cannot be blank!",
   "app.containers.PuzzleShowPage.controlPanel": "Control Panel",
   "app.containers.PuzzleShowPage.created": "Created",
   "app.containers.PuzzleShowPage.creator": "Creator",
-  "app.containers.PuzzleShowPage.description":
-    "Waiting for page to be rendered",
-  "app.containers.PuzzleShowPage.disableInput":
-    "Please login before playing ^^",
-  "app.containers.PuzzleShowPage.hiddenFrame":
-    "This puzzle is set to hidden, which means you cannot view it",
+  "app.containers.PuzzleShowPage.description": "Waiting for page to be rendered",
+  "app.containers.PuzzleShowPage.disableInput": "Please login before playing ^^",
+  "app.containers.PuzzleShowPage.hiddenFrame": "This puzzle is set to hidden, which means you cannot view it",
   "app.containers.PuzzleShowPage.hint": "Hint",
   "app.containers.PuzzleShowPage.input": "Put your question here",
   "app.containers.PuzzleShowPage.memo": "Memo",
@@ -177,28 +155,21 @@
   "app.containers.PuzzleShowPage.solution": "Solution",
   "app.containers.PuzzleShowPage.solved": "Solved",
   "app.containers.PuzzleShowPage.spoiler": "Spoiler",
-  "app.containers.PuzzleShowPage.title":
-    "Come and play lateral thinking puzzles at Cindy!",
+  "app.containers.PuzzleShowPage.title": "Come and play lateral thinking puzzles at Cindy!",
   "app.containers.PuzzleShowPage.toggleHidden": "Hidden",
   "app.containers.PuzzleShowPage.toggleYami": "Yami",
-  "app.containers.PuzzleShowPage.zeroStarAlert":
-    "Please Choose at least one star!",
-  "app.containers.RegisterForm.nicknameHelp":
-    "Your nickname will be shown in public. Take care not to use some offensive words.",
+  "app.containers.PuzzleShowPage.zeroStarAlert": "Please Choose at least one star!",
+  "app.containers.RegisterForm.nicknameHelp": "Your nickname will be shown in public. Take care not to use some offensive words.",
   "app.containers.RegisterForm.nicknameLabel": "Nickname",
   "app.containers.RegisterForm.passwordConfirmLabel": "Password (Confirm)",
-  "app.containers.RegisterForm.passwordHelp":
-    "Required. 8 characters or more with at least one letter and one digit.",
+  "app.containers.RegisterForm.passwordHelp": "Required. 8 characters or more with at least one letter and one digit.",
   "app.containers.RegisterForm.passwordLabel": "Password",
-  "app.containers.RegisterForm.policyReadPrompt":
-    "I have read the user policy above",
+  "app.containers.RegisterForm.policyReadPrompt": "I have read the user policy above",
   "app.containers.RegisterForm.submitLabel": "Submit",
-  "app.containers.RegisterForm.usernameHelp":
-    "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.You need username to Login but it never shows in public.",
+  "app.containers.RegisterForm.usernameHelp": "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.You need username to Login but it never shows in public.",
   "app.containers.RegisterForm.usernameLabel": "Username",
   "app.containers.RulesPage.description": "Rules in Cindy",
-  "app.containers.RulesPage.rules":
-    "Rules for Cindy in English is still in edit...",
+  "app.containers.RulesPage.rules": "Rules for Cindy in English is still in edit...",
   "app.containers.RulesPage.title": "Rules - Cindy",
   "app.containers.Settings.NONE": "None",
   "app.containers.Settings.ON_RETURN": "Enter",
@@ -209,8 +180,7 @@
   "app.containers.Settings.sendAnswer": "Answer",
   "app.containers.Settings.sendChat": "Chat",
   "app.containers.Settings.sendQuestion": "Question (Send)",
-  "app.containers.UserListPage.description":
-    "Join the large community for lateral thinking puzzle game!",
+  "app.containers.UserListPage.description": "Join the large community for lateral thinking puzzle game!",
   "app.containers.UserListPage.header": "All Users",
   "app.containers.UserListPage.title": "List of Users in Cindy",
   "app.containers.UserNavbar.awardApplication": "Award Application Center",

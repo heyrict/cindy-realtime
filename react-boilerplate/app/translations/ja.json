@@ -63,6 +63,7 @@
   "app.containers.Chat.direct": "ダイレクト",
   "app.containers.Chat.directChatInputPlaceholder": "ＤＭを送りたい相手を選んでください",
   "app.containers.Chat.loadMore": "もっとロードする",
+  "app.containers.Chat.log": "ログ",
   "app.containers.Chat.notifyOfflineDms": "あなたがオフラインしている時、ダイレクトメッセージを受信しました",
   "app.containers.Chat.onlineUsers": "オンラインユーザー",
   "app.containers.Chat.owner": "所有者",

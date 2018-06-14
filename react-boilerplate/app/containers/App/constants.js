@@ -10,3 +10,4 @@
  */
 
 export const DEFAULT_LOCALE = 'en';
+export const DEFAULT_DISPLAY_LOCALE = 'ja';

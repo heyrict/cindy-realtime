@@ -55,27 +55,6 @@ function _norm_countdown(string) {
   );
 }
 
-const changeTabularTab = (id) => {
-  const tabContents = document.getElementById(id).parentElement;
-  const navtabContents = document.getElementById(`nav${id}`).parentElement;
-  Array.forEach(tabContents.children, (child) => {
-    if (child.id === id) {
-      child.setAttribute('class', 'tab-pane active');
-    } else {
-      child.setAttribute('class', 'tab-pane');
-    }
-  });
-  Array.forEach(navtabContents.children, (child) => {
-    if (child.id === `nav${id}`) {
-      child.setAttribute('class', 'active');
-    } else {
-      child.removeAttribute('class');
-    }
-  });
-};
-
-window.changeTabularTab = changeTabularTab;
-
 function _norm_tabs(string) {
   var _createID = (text, nmspc) =>
     'tab-' + (nmspc ? nmspc + '-' : '') + hash(text);
@@ -88,8 +67,7 @@ function _norm_tabs(string) {
       const newId = _createID(tab_contents[i], namespace);
       returns += `
 <li${i == 0 ? " class='active'" : ''} id="nav${newId}">
-  <a data-toggle="tab" data-target="#${newId}"
-    href="javascript:changeTabularTab('${newId}');">
+  <a data-toggle="tab" data-target="#${newId}">
     ${tab_titles[i]}
   </a>
 </li>`;
@@ -141,7 +119,7 @@ function _norm_tabs(string) {
   );
 }
 
-function StartCountdown(selector) {
+export function StartCountdown(selector) {
   return window.setInterval(function() {
     Array.forEach(
       document.getElementsByClassName(selector || '.countdownobj'),
@@ -249,6 +227,7 @@ export function text2md(string, safe = true) {
         'p',
         'pre',
         'small',
+        'span',
         'strike',
         'strong',
         'table',
@@ -262,33 +241,37 @@ export function text2md(string, safe = true) {
       ],
       allowedAttributes: {
         '*': [
-          'style',
-          'href',
           'align',
-          'valign',
           'background',
           'bgcolor',
+          'class',
           'color',
-          'size',
-          'width',
+          'data-*',
           'height',
+          'href',
+          'id',
+          'size',
+          'style',
+          'valign',
+          'width',
         ],
       },
       allowedStyles: {
         '*': {
           // Match HEX and RGB
           color: [
+            /^[a-z]+$/i,
             /^\#(0x)?[0-9a-f]+$/i,
             /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
           ],
           background: [
-            /^\#(0x)?[0-9a-f]+$/i,
             /^[a-z]+$/i,
+            /^\#(0x)?[0-9a-f]+$/i,
             /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
           ],
           'background-color': [
-            /^\#(0x)?[0-9a-f]+$/i,
             /^[a-z]+$/i,
+            /^\#(0x)?[0-9a-f]+$/i,
             /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
           ],
           'text-align': [/^left$/, /^right$/, /^center$/],
@@ -337,6 +320,25 @@ export function text2desc(string) {
     allowedAttributes: [],
   }).substr(0, 250);
 }
+
+export const changeTabularTab = (id) => {
+  const tabContents = document.getElementById(id).parentElement;
+  const navtabContents = document.getElementById(`nav${id}`).parentElement;
+  Array.forEach(tabContents.children, (child) => {
+    if (child.id === id) {
+      child.setAttribute('class', 'tab-pane active');
+    } else {
+      child.setAttribute('class', 'tab-pane');
+    }
+  });
+  Array.forEach(navtabContents.children, (child) => {
+    if (child.id === `nav${id}`) {
+      child.setAttribute('class', 'active');
+    } else {
+      child.removeAttribute('class');
+    }
+  });
+};
 
 export function getCookie(c_name) {
   var c_start, c_end;
