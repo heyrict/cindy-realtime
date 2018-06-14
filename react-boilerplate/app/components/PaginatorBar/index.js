@@ -70,7 +70,7 @@ const SqSubmit = styled.button`
 class PaginatorBar extends React.Component {
   constructor(props) {
     super(props);
-    this.confinePage = (page, maxNum, minNum) => {
+    this.confinePage = (page, maxNum = props.numPages, minNum = 1) => {
       let confined = page;
       if (page < minNum) confined = minNum;
       if (page > maxNum) confined = maxNum;
@@ -92,9 +92,9 @@ class PaginatorBar extends React.Component {
           this.setState({ value: props.currentPage });
           return;
         }
-        nextPage = this.confinePage(nextPage, props.numPages, 1);
+        nextPage = this.confinePage(nextPage);
       } else {
-        nextPage = this.confinePage(p, props.numPages, 1);
+        nextPage = this.confinePage(p);
         this.setState({ value: nextPage });
       }
 
