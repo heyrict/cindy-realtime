@@ -1,5 +1,5 @@
 from django.conf.urls import include
-from django.conf.urls.i18n import i18n_patterns
+#from django.conf.urls.i18n import i18n_patterns
 from django.urls import path, re_path
 from django.views.generic import RedirectView, TemplateView
 from graphene_django.views import GraphQLView
@@ -8,10 +8,11 @@ from . import views
 
 app_name = "sui_hei"
 
-contentpatterns = i18n_patterns(
+contentpatterns = [
+    re_path("(en|ja)", views.remove_i18n_pattern),
     re_path("(puzzle|profile|rules)", views.main, name="main"),
     path("", views.main, name="main"),
-) # yapf: disable
+] # yapf: disable
 
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),

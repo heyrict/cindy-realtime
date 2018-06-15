@@ -419,7 +419,8 @@ export const from_global_id = (id) => {
 export const withLocale = (link) => {
   let locale = window.location.pathname.split('/')[1];
   if (locale !== 'ja' && locale !== 'en') {
-    locale = DEFAULT_LOCALE;
+    // No i18n pattern
+    return link;
   }
   return `/${locale}${link}`;
 };
