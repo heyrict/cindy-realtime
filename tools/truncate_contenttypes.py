@@ -9,6 +9,8 @@ fn = sys.argv[1]
 def set_authperm_contenttype_one(s):
     if s['model'] == 'auth.permission':
         s['fields']['content_type'] = 1
+    if s['model'] == 'admin.logentry':
+        s['fields']['content_type'] = 1
     return s
 
 
