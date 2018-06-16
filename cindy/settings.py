@@ -38,9 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'sui_hei',
+] # yapf: disable
+
+if ENABLE_OPEN:
+    INSTALLED_APPS += ['open']
+
+INSTALLED_APPS += [
     "channels",
     "webpack_loader",
-] # yapf: disable
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
