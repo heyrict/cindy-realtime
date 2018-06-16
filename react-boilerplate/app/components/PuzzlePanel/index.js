@@ -10,11 +10,6 @@ import { Box, Row, Divider } from 'rebass';
 import { RoundedPanel } from 'style-store';
 import styled from 'styled-components';
 
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
-import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
-
 import TitleLabel from 'components/TitleLabel';
 import UserLabel from 'components/UserLabel';
 import RewardingModal from 'components/RewardingModal/Loadable';
@@ -94,17 +89,6 @@ export class PuzzlePanel extends React.Component {
 PuzzlePanel.propTypes = {
   node: PropTypes.object.isRequired,
   additional: PropTypes.any,
-  locale: PropTypes.string.isRequired,
 };
 
-PuzzlePanel.defaultProps = {
-  locale: 'ja',
-};
-
-const mapStateToProps = createStructuredSelector({
-  locale: makeSelectLocale(),
-});
-
-const withConnect = connect(mapStateToProps);
-
-export default compose(withConnect)(PuzzlePanel);
+export default PuzzlePanel;

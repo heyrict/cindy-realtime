@@ -11,10 +11,11 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
-import { Button } from 'style-store';
+import { Switch, Button } from 'style-store';
 
 import withModal from 'components/withModal';
 import Bar from 'containers/Chat/Bar';
+import ProfRow from 'containers/ProfilePage/ProfRow';
 
 import SendPolicySwitch from './SendPolicySwitch';
 import makeSelectSettings from './selectors';
@@ -65,6 +66,22 @@ function Settings(props) {
         curVal={settings.modifyQuestion}
         onChange={({ id }) => dispatch(changeSetting('modifyQuestion', id))}
       />
+      <Bar open>
+        <FormattedMessage {...messages.display} />
+      </Bar>
+      <ProfRow
+        heading={<FormattedMessage {...messages.enableGenreIcon} />}
+        content={
+          <Switch
+            checked={settings.enableGenreIcon}
+            onClick={() =>
+              dispatch(
+                changeSetting('enableGenreIcon', !settings.enableGenreIcon)
+              )
+            }
+          />
+        }
+      />
       <StyledButton
         w={1}
         py={1}
@@ -94,7 +111,10 @@ const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps
+);
 
 export default compose(
   withConnect,

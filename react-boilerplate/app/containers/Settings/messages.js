@@ -42,4 +42,12 @@ export default defineMessages({
     id: 'app.containers.Settings.msgSendPolicy',
     defaultMessage: 'Message Send Policy',
   },
+  display: {
+    id: 'app.containers.Settings.display',
+    defaultMessage: 'Display',
+  },
+  enableGenreIcon: {
+    id: 'app.containers.Settings.enableGenreIcon',
+    defaultMessage: 'Enable Genre Icon',
+  },
 });

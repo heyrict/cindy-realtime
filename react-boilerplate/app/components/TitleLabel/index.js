@@ -14,6 +14,12 @@ import { ImgMd as Img } from 'style-store';
 import { FormattedMessage } from 'react-intl';
 import { withLocale } from 'common';
 
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
+import makeSelectSettings from 'containers/Settings/selectors';
+
 import classicJp from 'images/classicJp.svg';
 import twentyQuestionsJp from 'images/twentyQuestionsJp.svg';
 import littleAlbatJp from 'images/littleAlbatJp.svg';
@@ -28,10 +34,10 @@ const PuzzleTitle = styled(Link)`
   color: brown;
   padding: 0.05em 0.2em;
   @media (min-width: 760px) {
-    font-size: 1.4em;
+    font-size: 1.25em;
   }
   @media (max-width: 760px) {
-    font-size: 1.2em;
+    font-size: 1.1em;
   }
 `;
 
@@ -81,8 +87,8 @@ TranslatedGenre.propTypes = {
 };
 
 function TitleLabel(props) {
-  const { yami, locale, puzzleId, genre, title, created } = props;
-  if (locale === 'ja') {
+  const { yami, locale, puzzleId, genre, title, created, settings } = props;
+  if (locale === 'ja' && settings.enableGenreIcon) {
     return (
       <Flex alignItems="center">
         <Img src={genreInfo[genre].pictureJp} alt={genreInfo[genre].name} />
@@ -131,6 +137,20 @@ TitleLabel.propTypes = {
   title: PropTypes.string.isRequired,
   locale: PropTypes.string.isRequired,
   created: PropTypes.string.isRequired,
+  settings: PropTypes.shape({
+    enableGenreIcon: PropTypes.bool.isRequired,
+  }),
 };
 
-export default TitleLabel;
+TitleLabel.defaultProps = {
+  locale: 'ja',
+};
+
+const mapStateToProps = createStructuredSelector({
+  locale: makeSelectLocale(),
+  settings: makeSelectSettings(),
+});
+
+const withConnect = connect(mapStateToProps);
+
+export default compose(withConnect)(TitleLabel);

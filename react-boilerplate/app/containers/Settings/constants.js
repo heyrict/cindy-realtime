@@ -14,8 +14,11 @@ export const OPTIONS_SEND = {
 };
 
 export const defaultSettings = {
+  // Send Options
   sendChat: 'NONE',
   sendQuestion: 'ONRETURN',
   sendAnswer: 'ONRETURN',
   modifyQuestion: 'NONE',
+  // Genre Icon Options
+  enableGenreIcon: true,
 };
