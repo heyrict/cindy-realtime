@@ -49,6 +49,7 @@ def add_twitter_on_puzzle_created(sender, instance, created, **kwargs):
 
 def add_twitter_on_best_of_month_determined(puzzle_list, useraward):
     try:
+        from imaging import render
         auth = OAuth(TOKEN, TOKEN_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
         t = Twitter(auth=auth)
         last_month = timezone.now() - timedelta(days=30)
@@ -75,7 +76,7 @@ def add_twitter_on_best_of_month_determined(puzzle_list, useraward):
         with open(imgpath, 'rb') as f:
             imgdata = f.read()
         params = {
-            'status': status_message[0],
+            'status': status_messages[0],
             'media[]': imgdata,
         }
 
