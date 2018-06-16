@@ -39,5 +39,4 @@ urlpatterns = [
 ] + jstranslation_patterns + sui_hei_patterns
 
 if settings.ENABLE_OPEN:
-    from open.urls import contentpatterns as open_patterns
-    urlpatterns += open_patterns
+    urlpatterns += [path('', include('open.urls'))]
