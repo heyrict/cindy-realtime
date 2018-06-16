@@ -69,12 +69,17 @@ def add_twitter_on_best_of_month_determined(puzzle_list, useraward):
             ]),
         } # yapf: disable
         print(status_message)
+        status_messages = status_message.split('\n\n', 1)
 
+        imgpath = render(**status_messages)
+        with open(imgpath, 'rb') as f:
+            imgdata = f.read()
         params = {
-            'status': status_message,
+            'status': status_message[0],
+            'media[]': imgdata,
         }
 
-        t.statuses.update(**params)
+        t.statuses.update_with_media(**params)
 
     except Exception as e:
         logger.warning("Error update twitter status: %s" % e)
