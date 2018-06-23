@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { text2md } from 'common';
 import { nAlert } from 'containers/Notifier/actions';
-import { Tabs, Tab, Flex, Box } from 'rebass';
+import { Tabs, Flex, Box } from 'rebass';
 import Constrained from 'components/Constrained';
 import dialogueMessages from 'containers/Dialogue/messages';
 import PreviewEdit from 'components/PreviewEdit';
@@ -20,8 +20,9 @@ import cross from 'images/cross.svg';
 import { ImgXs, PuzzleFrame, EditButton, Switch, Textarea } from 'style-store';
 import messages from './messages';
 
-const StyledTabItem = styled(Tab)`
+const StyledTabItem = styled.button`
   color: #006388;
+  padding: 5px;
   border-bottom: ${({ active }) => (active ? '3px solid #2075c7' : 'none')};
   cursor: pointer;
   &:hover {

@@ -43,6 +43,7 @@ import PuzzleShowQuery from 'graphql/PuzzleShow';
 import PuzzleShowSubscription from 'graphql/PuzzleShowSubscription';
 import PuzzleShowUnionSubscription from 'graphql/PuzzleShowUnionSubscription';
 
+import { dialogueSlicer } from './constants';
 import Frame from './Frame';
 import messages from './messages';
 import QuestionPutBox from './QuestionPutBox';
@@ -120,18 +121,11 @@ export class PuzzleShowPage extends React.Component {
     const genre = translateGenreCode(P.genre);
     const yami = P.yami ? ` x ${_(genreMessages.yami)}` : '';
 
-    let index = 0;
     const numItems = 50;
-    const dSlices = [];
-    const dEdges = D.edges.map((edge, i) => {
-      if (f(edge.node.id)[0] === 'DialogueNode') {
-        index += 1;
-        if (index % numItems === 1 && index !== 1) dSlices.push(i);
-        return { ...edge, index };
-      }
-      return edge;
+    const { slices: dSlices, edges: dEdges, lastIndex } = dialogueSlicer({
+      numItems,
+      puzzleShowUnion: D,
     });
-    dSlices.push(dEdges.length);
 
     const DialoguePaginationBar = (
       <Constrained flexWrap="wrap" mb={2} style={{ textAlign: 'center' }}>
@@ -147,7 +141,7 @@ export class PuzzleShowPage extends React.Component {
             key={dSlice}
             onClick={() => this.changePage(i)}
           >
-            {numItems * i + 1} - {Math.min(numItems * (i + 1), index)}
+            {numItems * i + 1} - {Math.min(numItems * (i + 1), lastIndex)}
           </button>
         ))}
         <button onClick={this.scrollToBottom}>
@@ -322,7 +316,10 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (msg) => dispatch(nAlert(msg)),
 });
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps
+);
 
 const withData = graphql(PuzzleShowQuery, {
   options: (props) => ({
@@ -419,4 +416,7 @@ const withData = graphql(PuzzleShowQuery, {
   },
 });
 
-export default compose(withConnect, withData)(PuzzleShowPage);
+export default compose(
+  withConnect,
+  withData
+)(PuzzleShowPage);
