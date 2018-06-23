@@ -100,10 +100,11 @@ export class RegisterForm extends React.Component {
       )
     ) {
       this.setState((prevState) => ({
-        username_valid: prevState.username !== '',
-        nickname_valid: prevState.nickname !== '',
-        password_valid: prevState.password !== '',
-        passwordConfirm_valid: prevState.passwordConfirm !== '',
+        username_valid: prevState.username !== '' && prevState.username_valid,
+        nickname_valid: prevState.nickname !== '' && prevState.nickname_valid,
+        password_valid: prevState.password !== '' && prevState.password_valid,
+        passwordConfirm_valid:
+          prevState.passwordConfirm !== '' && prevState.passwordConfirm_valid,
       }));
       this.props.alert('There are some errors in your form!');
       return;
@@ -210,7 +211,10 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps
+);
 
 const withMutation = graphql(RegisterFormMutation);
 

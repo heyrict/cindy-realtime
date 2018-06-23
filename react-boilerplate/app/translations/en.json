@@ -40,6 +40,8 @@
   "app.components.RewardingModal.spoilerWarning": "This comment is a spoiler, click here if you want to view it.",
   "app.components.TitleLabel.classic": "Classic",
   "app.components.TitleLabel.littleAlbat": "Little Albat",
+  "app.components.TitleLabel.longtermYami": "Long-term Yami",
+  "app.components.TitleLabel.none": "None",
   "app.components.TitleLabel.others": "Others & Formal",
   "app.components.TitleLabel.twentyQuestions": "Twenty Questions",
   "app.components.TitleLabel.yami": "Yami",

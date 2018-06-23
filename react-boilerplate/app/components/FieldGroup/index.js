@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { Flex, Box } from 'rebass';
 // import styled from 'styled-components';
 
-function FieldGroup({ label, help, Ctl, CtlElement, valid, ...props }) {
+function FieldGroup({ label, help, Ctl, CtlElement, ...props }) {
   return (
     <Flex flexWrap="wrap" mb={1}>
       <Box w={[0.28, 0.2, 0.1]}>{label}</Box>
@@ -28,7 +28,6 @@ FieldGroup.propTypes = {
   Ctl: PropTypes.any,
   CtlElement: PropTypes.any,
   style: PropTypes.object,
-  valid: PropTypes.string,
 };
 
 FieldGroup.defaultProps = {

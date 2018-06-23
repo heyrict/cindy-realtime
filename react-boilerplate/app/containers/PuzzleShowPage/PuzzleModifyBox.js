@@ -67,7 +67,7 @@ class PuzzleModifyBox extends React.Component {
       }));
     };
     this.handleYamiChange = () => {
-      this.setState((p) => ({ yami: !p.yami }));
+      this.setState((p) => ({ yami: 1 - p.yami }));
     };
     this.handleHiddenChange = () => {
       this.setState((p) => ({ hidden: !p.hidden }));
@@ -307,7 +307,7 @@ class PuzzleModifyBox extends React.Component {
           {this.state.activeTab === 3 && (
             <div>
               <Flex mx={1}>
-                <Box w={1 / 3} hidden={this.props.puzzle.status !== 0}>
+                <Box w={1} hidden={this.props.puzzle.status !== 0}>
                   <FormattedMessage {...messages.putSolution} />
                   <Switch
                     checked={this.state.solve}
@@ -315,7 +315,7 @@ class PuzzleModifyBox extends React.Component {
                   />
                 </Box>
                 <Box
-                  w={1 / 3}
+                  w={1}
                   hidden={
                     this.props.puzzle.status !== 1 &&
                     this.props.puzzle.status !== 3 &&
@@ -329,14 +329,16 @@ class PuzzleModifyBox extends React.Component {
                     onClick={this.handleHiddenChange}
                   />
                 </Box>
-                <Box w={1 / 3}>
-                  <FormattedMessage {...messages.toggleYami} />
-                  <Switch
-                    checked={this.state.yami}
-                    onClick={this.handleYamiChange}
-                  />
-                </Box>
-                <Box w={1 / 3}>
+                {this.props.puzzle.yami < 2 && (
+                  <Box w={1}>
+                    <FormattedMessage {...messages.toggleYami} />
+                    <Switch
+                      checked={this.state.yami}
+                      onClick={this.handleYamiChange}
+                    />
+                  </Box>
+                )}
+                <Box w={1}>
                   <EditButton
                     onClick={this.handleSaveControl}
                     style={{ width: '100%' }}
@@ -365,7 +367,10 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps
+);
 
 const withPuzzleUpdateMutation = graphql(puzzleUpdateMutation, {
   name: 'mutatePuzzleUpdate',

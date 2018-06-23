@@ -16,7 +16,7 @@ import { easing, tween } from 'popmotion';
 import posed, { PoseGroup } from 'react-pose';
 
 import { graphql } from 'react-apollo';
-import PuzzleListQuery from 'graphql/PuzzleList';
+import PuzzleActiveListQuery from 'graphql/PuzzleActiveList';
 import PuzzleSubscription from 'graphql/PuzzleSubscription';
 import DialogueCountSubscription from 'graphql/DialogueCountSubscription';
 
@@ -85,7 +85,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const withConnect = connect(null, mapDispatchToProps);
 
-const withPuzzleActiveList = graphql(PuzzleListQuery, {
+const withPuzzleActiveList = graphql(PuzzleActiveListQuery, {
   options: {
     variables: {
       status: 0,

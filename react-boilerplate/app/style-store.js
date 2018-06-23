@@ -197,13 +197,13 @@ export const Select = styled.select`
 
 export const Input = styled.input`
   border-radius: 10px;
-  border: 1px solid #2075c7;
+  border: 1px solid ${({ valid }) => (valid === 'error' ? 'tomato' : '#2075c7')};
   padding: 5px;
   width: 100%;
   color: #073642;
   font-size: 1.1em;
   &:focus {
-    border: 2px solid #2075c7;
+    border-width: 2px;
   }
 `;
 

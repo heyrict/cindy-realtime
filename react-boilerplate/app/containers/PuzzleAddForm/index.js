@@ -35,7 +35,7 @@ export class PuzzleAddForm extends React.Component {
     this.state = {
       puzzleTitle: '',
       puzzleGenre: 0,
-      puzzleYami: false,
+      puzzleYami: 0,
       loading: false,
     };
 
@@ -51,7 +51,7 @@ export class PuzzleAddForm extends React.Component {
     } else if (target.id === 'formPuzzleAddGenre') {
       this.setState({ puzzleGenre: target.value });
     } else if (target.id === 'formPuzzleAddYami') {
-      this.setState({ puzzleYami: target.checked });
+      this.setState({ puzzleYami: target.value });
     }
   }
   // }}}
@@ -140,12 +140,37 @@ export class PuzzleAddForm extends React.Component {
           }
         />
         <FieldGroup
-          id="formPuzzleAddYami"
           label={<FormattedMessage {...messages.yamiLabel} />}
-          Ctl={Input}
-          type="checkbox"
-          checked={this.state.puzzleYami}
-          onChange={this.handleChange}
+          CtlElement={
+            <Select
+              componentClass="select"
+              value={this.state.puzzleYami}
+              onChange={this.handleChange}
+              id="formPuzzleAddYami"
+            >
+              <FormattedMessage {...genreMessages.none}>
+                {(msg) => (
+                  <option value={0} key={0}>
+                    {msg}
+                  </option>
+                )}
+              </FormattedMessage>
+              <FormattedMessage {...genreMessages.yami}>
+                {(msg) => (
+                  <option value={1} key={1}>
+                    {msg}
+                  </option>
+                )}
+              </FormattedMessage>
+              <FormattedMessage {...genreMessages.longtermYami}>
+                {(msg) => (
+                  <option value={2} key={2}>
+                    {msg}
+                  </option>
+                )}
+              </FormattedMessage>
+            </Select>
+          }
         />
         <FieldGroup
           id="formPuzzleAddContent"
@@ -212,7 +237,10 @@ const mapDispatchToProps = (dispatch) => ({
   goto: (url) => dispatch(push(url)),
 });
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps
+);
 
 const withMutation = graphql(PuzzleAddFormMutation);
 
@@ -239,6 +267,8 @@ const withCurrentUser = graphql(
   }
 );
 
-export default compose(withConnect, withCurrentUser, withMutation)(
-  PuzzleAddForm
-);
+export default compose(
+  withConnect,
+  withCurrentUser,
+  withMutation
+)(PuzzleAddForm);

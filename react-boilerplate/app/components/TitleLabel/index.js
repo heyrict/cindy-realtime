@@ -25,6 +25,7 @@ import twentyQuestionsJp from 'images/twentyQuestionsJp.svg';
 import littleAlbatJp from 'images/littleAlbatJp.svg';
 import othersJp from 'images/othersJp.svg';
 import yamiJp from 'images/yamiJp.svg';
+import longtermYamiJp from 'images/longtermYamiJp.svg';
 
 import sortMessages from 'components/FilterableList/messages';
 import messages from './messages';
@@ -48,21 +49,6 @@ const PuzzleDate = styled.span`
   }
 `;
 
-const TranslatedGenre = ({ genre }) => {
-  switch (genre) {
-    case 0:
-      return <FormattedMessage {...messages.classic} />;
-    case 1:
-      return <FormattedMessage {...messages.twentyQuestions} />;
-    case 2:
-      return <FormattedMessage {...messages.littleAlbat} />;
-    case 3:
-      return <FormattedMessage {...messages.others} />;
-    default:
-      return null;
-  }
-};
-
 const genreInfo = [
   {
     name: 'classic',
@@ -82,9 +68,17 @@ const genreInfo = [
   },
 ];
 
-TranslatedGenre.propTypes = {
-  genre: PropTypes.number.isRequired,
-};
+const yamiInfo = [
+  null,
+  {
+    name: 'yami',
+    pictureJp: yamiJp,
+  },
+  {
+    name: 'longtermYami',
+    pictureJp: longtermYamiJp,
+  },
+];
 
 function TitleLabel(props) {
   const { yami, locale, puzzleId, genre, title, created, settings } = props;
@@ -92,7 +86,9 @@ function TitleLabel(props) {
     return (
       <Flex alignItems="center">
         <Img src={genreInfo[genre].pictureJp} alt={genreInfo[genre].name} />
-        {yami && <Img src={yamiJp} alt="yami" />}
+        {yami ? (
+          <Img src={yamiInfo[yami].pictureJp} alt={yamiInfo[yami].name} />
+        ) : null}
         <Flex w={1} ml={1} flexWrap="wrap">
           <Box>
             <PuzzleTitle to={withLocale(`/puzzle/show/${puzzleId}`)}>
@@ -116,7 +112,7 @@ function TitleLabel(props) {
         <PuzzleTitle to={withLocale(`/puzzle/show/${puzzleId}`)}>
           [{<FormattedMessage {...messages[genreInfo[genre].name]} />}
           {yami ? ' x ' : null}
-          {yami ? <FormattedMessage {...messages.yami} /> : null}]
+          {yami ? <FormattedMessage {...messages[yamiInfo[yami].name]} /> : null}]
           {title}
         </PuzzleTitle>
       </Box>
@@ -132,7 +128,7 @@ function TitleLabel(props) {
 
 TitleLabel.propTypes = {
   genre: PropTypes.number.isRequired,
-  yami: PropTypes.bool.isRequired,
+  yami: PropTypes.number.isRequired,
   puzzleId: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   locale: PropTypes.string.isRequired,

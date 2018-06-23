@@ -101,7 +101,7 @@ class Puzzle(models.Model):
     id = models.AutoField(max_length=11, primary_key=True)
     user = models.ForeignKey(User, on_delete=CASCADE)
     title = models.CharField(_('title'), max_length=255)
-    yami = models.BooleanField(_('yami'), default=False)
+    yami = models.IntegerField(_('yami'), default=0)
     genre = models.IntegerField(_('genre'), default=0)
     content = models.TextField(_('content'))
     solution = models.TextField(_('solution'))
@@ -132,6 +132,12 @@ puzzle_status_enum = {
     2: _("Dazed"),
     3: _("Hidden"),
     4: _("Forced Hidden")
+}
+
+puzzle_yami_enum = {
+    0: _("Normal"),
+    1: _("Yami"),
+    2: _("Long-term Yami")
 }
 
 

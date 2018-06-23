@@ -101,7 +101,7 @@ export class PuzzleShowPage extends React.Component {
   render() {
     const P = this.props.puzzle;
     const D = this.props.puzzleShowUnion;
-    const U = this.props.user.userId;
+    const U = t('UserNode', this.props.user.userId);
     const puzzleId = parseInt(this.props.match.params.id, 10);
 
     if (this.props.error) {
@@ -122,10 +122,17 @@ export class PuzzleShowPage extends React.Component {
     const yami = P.yami ? ` x ${_(genreMessages.yami)}` : '';
 
     const numItems = 50;
-    const { slices: dSlices, edges: dEdges, lastIndex } = dialogueSlicer({
+    const {
+      slices: dSlices,
+      edges: dEdges,
+      lastIndex,
+      participants,
+    } = dialogueSlicer({
       numItems,
       puzzleShowUnion: D,
     });
+    const getTrueAnswInLtYami =
+      P.yami === 2 && U && U in participants && participants[U].trueansw;
 
     const DialoguePaginationBar = (
       <Constrained flexWrap="wrap" mb={2} style={{ textAlign: 'center' }}>
@@ -169,7 +176,7 @@ export class PuzzleShowPage extends React.Component {
         <Constrained>
           <Title>{`[${genre}${yami}] ${P.title}`}</Title>
         </Constrained>
-        {(P.status <= 2 || P.user.rowid === U) && (
+        {(P.status <= 2 || P.user.id === U) && (
           <Frame
             user={P.user}
             text={P.content}
@@ -178,7 +185,7 @@ export class PuzzleShowPage extends React.Component {
           />
         )}
         {P.status >= 3 &&
-          P.user.rowid !== U && (
+          P.user.id !== U && (
             <FormattedMessage {...messages.hiddenFrame}>
               {(msg) => (
                 <Frame
@@ -191,7 +198,7 @@ export class PuzzleShowPage extends React.Component {
               )}
             </FormattedMessage>
           )}
-        {(P.status <= 2 || P.user.rowid === U) && (
+        {(P.status <= 2 || P.user.id === U) && (
           <div>
             {DialoguePaginationBar}
             <PoseGroup>
@@ -205,8 +212,8 @@ export class PuzzleShowPage extends React.Component {
                   if (type === 'DialogueNode') {
                     if (
                       P.yami &&
-                      U !== edge.node.user.rowid &&
-                      U !== P.user.rowid &&
+                      U !== edge.node.user.id &&
+                      U !== P.user.id &&
                       P.status === 0
                     ) {
                       return null;
@@ -233,37 +240,37 @@ export class PuzzleShowPage extends React.Component {
             {DialoguePaginationBar}
           </div>
         )}
-        {(P.status <= 2 || P.user.rowid === U) &&
-          P.status !== 0 && (
-            <Frame text={P.solution} solved={P.modified} safe={P.contentSafe} />
-          )}
         {P.status === 0 &&
-          U !== P.user.rowid && (
+          U !== P.user.id && (
             <QuestionPutBox
               puzzleId={puzzleId}
               currentUserId={this.props.user.userId}
               sendPolicy={this.props.settings.sendQuestion}
             />
           )}
-        {(P.status === 1 || P.status === 2) &&
+        {(P.status === 1 ||
+          P.status === 2 ||
+          P.user.rowid === U ||
+          getTrueAnswInLtYami) && (
+          <Frame text={P.solution} solved={P.modified} safe={P.contentSafe} />
+        )}
+        {(P.status === 1 || P.status === 2 || getTrueAnswInLtYami) &&
           U && (
             <BookmarkBox
               puzzleId={puzzleId}
               existingBookmark={this.props.allBookmarks.edges}
             />
           )}
-        {(P.status === 1 || P.status === 2) &&
+        {(P.status === 1 || P.status === 2 || getTrueAnswInLtYami) &&
           U &&
-          U !== P.user.rowid && (
+          U !== P.user.id && (
             <RewardingBox
               puzzleId={puzzleId}
               existingComment={this.props.allComments.edges}
               existingStar={this.props.allStars.edges}
             />
           )}
-        {U === P.user.rowid && (
-          <PuzzleModifyBox puzzle={P} puzzleId={puzzleId} />
-        )}
+        {U === P.user.id && <PuzzleModifyBox puzzle={P} puzzleId={puzzleId} />}
         <Constrained>
           <GoogleAd {...googleAdInfo.textAd} />
         </Constrained>

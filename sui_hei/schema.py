@@ -522,7 +522,7 @@ class CreatePuzzle(relay.ClientIDMutation):
     class Input:
         puzzleTitle = graphene.String(required=True)
         puzzleGenre = graphene.Int(required=True)
-        puzzleYami = graphene.Boolean(required=True)
+        puzzleYami = graphene.Int(required=True)
         puzzleContent = graphene.String(required=True)
         puzzleSolution = graphene.String(required=True)
 
@@ -871,7 +871,7 @@ class UpdatePuzzle(graphene.ClientIDMutation):
 
     class Input:
         puzzleId = graphene.Int()
-        yami = graphene.Boolean()
+        yami = graphene.Int()
         solution = graphene.String()
         memo = graphene.String()
         status = graphene.Int()

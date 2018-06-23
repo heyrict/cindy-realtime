@@ -89,6 +89,11 @@ export class PuzzlePanel extends React.Component {
 PuzzlePanel.propTypes = {
   node: PropTypes.object.isRequired,
   additional: PropTypes.any,
+  locale: PropTypes.string.isRequired,
+};
+
+PuzzlePanel.defaultProps = {
+  locale: 'ja',
 };
 
 export default PuzzlePanel;

@@ -26,9 +26,24 @@ export const UPDATE_HINT = 'app/containers/PuzzleShowPage/UPDATE_HINT';
 export const dialogueSlicer = ({ numItems = 50, puzzleShowUnion: D }) => {
   let index = 0;
   const slices = [];
+  const participants = {};
   const edges = D.edges.map((edge, i) => {
     if (f(edge.node.id)[0] === 'DialogueNode') {
       index += 1;
+
+      if (edge.node.user.id in participants) {
+        participants[edge.node.user.id].count += 1;
+      } else {
+        participants[edge.node.user.id] = {
+          user: edge.node.user,
+          count: 1,
+          trueansw: false,
+        };
+      }
+      if (edge.node.true) {
+        participants[edge.node.user.id].trueansw = true;
+      }
+
       if (index % numItems === 1 && index !== 1) slices.push(i);
       return { ...edge, index };
     }
@@ -38,6 +53,7 @@ export const dialogueSlicer = ({ numItems = 50, puzzleShowUnion: D }) => {
   return {
     slices,
     edges,
+    participants,
     lastIndex: index,
   };
 };
