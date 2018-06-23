@@ -35,6 +35,9 @@ CHANNEL_LAYERS = {
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+# Enable Legacy Openumigame UI
+ENABLE_OPEN = False
+
 # Twitter Bot
 ENABLE_TWITTERBOT = False
 TWEET_WITH_PICTURE = True

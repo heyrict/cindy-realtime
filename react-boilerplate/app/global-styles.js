@@ -79,6 +79,10 @@ injectGlobal`
     margin: 10px;
   }
 
+  .widthfull {
+    width: 100%;
+  }
+
   // modal stuff
   .modal-shade {
     display: none;

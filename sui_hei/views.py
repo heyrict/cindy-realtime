@@ -1,11 +1,11 @@
 import re
 
+from django.conf import settings
 from django.shortcuts import redirect, render, render_to_response
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from cindy.settings import DEBUG
-
 I18N_PATTERN_REGEX = re.compile(r'^/(en|ja)')
+DEBUG = settings.DEBUG
 
 
 @ensure_csrf_cookie

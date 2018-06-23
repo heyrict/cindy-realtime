@@ -197,6 +197,7 @@ export function text2md(string, safe = true) {
               }
             : attribs,
         }),
+        img: sanitizeHtml.simpleTransform('img', { class: 'widthfull' }),
       },
     });
   } else {
@@ -221,6 +222,7 @@ export function text2md(string, safe = true) {
         'h6',
         'hr',
         'i',
+        'img',
         'li',
         'nl',
         'ol',
@@ -255,6 +257,7 @@ export function text2md(string, safe = true) {
           'valign',
           'width',
         ],
+        img: ['src', 'alt'],
       },
       allowedStyles: {
         '*': {
@@ -309,6 +312,7 @@ export function text2md(string, safe = true) {
               }
             : attribs,
         }),
+        img: sanitizeHtml.simpleTransform('img', { class: 'widthfull' }),
       },
     });
   }

@@ -1,0 +1,3 @@
+[submodule "open"]
+	path = open
+	url = ../cindy-openumigame-submodule
