@@ -40,7 +40,7 @@ class PuzzleModifyBox extends React.Component {
     super(props);
 
     this.state = {
-      activeTab: props.puzzle.status === 0 ? 0 : 1,
+      activeTab: props.puzzle.status === 0 && props.puzzle.yami !== 2 ? 0 : 1,
       solutionEditMode: false,
       memoEditMode: props.puzzle.memo === '',
       solve: props.puzzle.status === 3,
@@ -67,7 +67,7 @@ class PuzzleModifyBox extends React.Component {
       }));
     };
     this.handleYamiChange = () => {
-      this.setState((p) => ({ yami: 1 - p.yami }));
+      this.setState((p) => ({ yami: p.yami === 0 ? 1 : 0 }));
     };
     this.handleHiddenChange = () => {
       this.setState((p) => ({ hidden: !p.hidden }));
@@ -186,14 +186,15 @@ class PuzzleModifyBox extends React.Component {
       <Constrained level={3}>
         <PuzzleFrame>
           <StyledTabs>
-            {this.props.puzzle.status === 0 && (
-              <StyledTabItem
-                active={this.state.activeTab === 0}
-                onClick={() => this.changeTab(0)}
-              >
-                <FormattedMessage {...messages.solution} />
-              </StyledTabItem>
-            )}
+            {this.props.puzzle.status === 0 &&
+              this.props.puzzle.yami !== 2 && (
+                <StyledTabItem
+                  active={this.state.activeTab === 0}
+                  onClick={() => this.changeTab(0)}
+                >
+                  <FormattedMessage {...messages.solution} />
+                </StyledTabItem>
+              )}
             <StyledTabItem
               active={this.state.activeTab === 1}
               onClick={() => this.changeTab(1)}
@@ -306,8 +307,8 @@ class PuzzleModifyBox extends React.Component {
           )}
           {this.state.activeTab === 3 && (
             <div>
-              <Flex mx={1}>
-                <Box w={1} hidden={this.props.puzzle.status !== 0}>
+              <Flex flexWrap="wrap" mx={1}>
+                <Box w={[1 / 3, 1 / 5]} hidden={this.props.puzzle.status !== 0}>
                   <FormattedMessage {...messages.putSolution} />
                   <Switch
                     checked={this.state.solve}
@@ -315,7 +316,7 @@ class PuzzleModifyBox extends React.Component {
                   />
                 </Box>
                 <Box
-                  w={1}
+                  w={[1 / 3, 1 / 5]}
                   hidden={
                     this.props.puzzle.status !== 1 &&
                     this.props.puzzle.status !== 3 &&
@@ -330,7 +331,7 @@ class PuzzleModifyBox extends React.Component {
                   />
                 </Box>
                 {this.props.puzzle.yami < 2 && (
-                  <Box w={1}>
+                  <Box w={[1 / 3, 1 / 5]}>
                     <FormattedMessage {...messages.toggleYami} />
                     <Switch
                       checked={this.state.yami}
@@ -338,7 +339,7 @@ class PuzzleModifyBox extends React.Component {
                     />
                   </Box>
                 )}
-                <Box w={1}>
+                <Box ml="auto" w={[1, 1 / 5]}>
                   <EditButton
                     onClick={this.handleSaveControl}
                     style={{ width: '100%' }}

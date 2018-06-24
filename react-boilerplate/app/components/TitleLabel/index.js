@@ -20,14 +20,8 @@ import { createStructuredSelector } from 'reselect';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 import makeSelectSettings from 'containers/Settings/selectors';
 
-import classicJp from 'images/classicJp.svg';
-import twentyQuestionsJp from 'images/twentyQuestionsJp.svg';
-import littleAlbatJp from 'images/littleAlbatJp.svg';
-import othersJp from 'images/othersJp.svg';
-import yamiJp from 'images/yamiJp.svg';
-import longtermYamiJp from 'images/longtermYamiJp.svg';
-
 import sortMessages from 'components/FilterableList/messages';
+import { genreInfo, yamiInfo } from './constants';
 import messages from './messages';
 
 const PuzzleTitle = styled(Link)`
@@ -48,37 +42,6 @@ const PuzzleDate = styled.span`
     font-size: 0.9em;
   }
 `;
-
-const genreInfo = [
-  {
-    name: 'classic',
-    pictureJp: classicJp,
-  },
-  {
-    name: 'twentyQuestions',
-    pictureJp: twentyQuestionsJp,
-  },
-  {
-    name: 'littleAlbat',
-    pictureJp: littleAlbatJp,
-  },
-  {
-    name: 'others',
-    pictureJp: othersJp,
-  },
-];
-
-const yamiInfo = [
-  null,
-  {
-    name: 'yami',
-    pictureJp: yamiJp,
-  },
-  {
-    name: 'longtermYami',
-    pictureJp: longtermYamiJp,
-  },
-];
 
 function TitleLabel(props) {
   const { yami, locale, puzzleId, genre, title, created, settings } = props;
@@ -112,7 +75,9 @@ function TitleLabel(props) {
         <PuzzleTitle to={withLocale(`/puzzle/show/${puzzleId}`)}>
           [{<FormattedMessage {...messages[genreInfo[genre].name]} />}
           {yami ? ' x ' : null}
-          {yami ? <FormattedMessage {...messages[yamiInfo[yami].name]} /> : null}]
+          {yami ? (
+            <FormattedMessage {...messages[yamiInfo[yami].name]} />
+          ) : null}]
           {title}
         </PuzzleTitle>
       </Box>

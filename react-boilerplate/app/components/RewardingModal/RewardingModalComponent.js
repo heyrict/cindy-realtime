@@ -1,12 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {
-  text2md,
-  genre_type_dict as genreType,
-  from_global_id as f,
-  withLocale,
-} from 'common';
+import { text2md, from_global_id as f, withLocale } from 'common';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, intlShape } from 'react-intl';
 import { Flex, Box } from 'rebass';
@@ -17,6 +12,7 @@ import {
   DarkNicknameLink as NicknameLink,
 } from 'style-store';
 import genreMessages from 'components/TitleLabel/messages';
+import { genreInfo, yamiInfo } from 'components/TitleLabel/constants';
 import UserAwardPopover from 'components/UserAwardPopover';
 
 import CommentShowPanel from './CommentShowPanel';
@@ -57,9 +53,10 @@ const PuzzleUserLabel = NicknameLink.extend`
 
 function RewardingModalComponent(props, context) {
   const _ = context.intl.formatMessage;
-  const translateGenreCode = (x) => _(genreMessages[genreType[x]]);
-  const genre = translateGenreCode(props.genre);
-  const yami = props.yami ? ` x ${_(genreMessages.yami)}` : '';
+  const genre = _(genreMessages[genreInfo[props.genre].name]);
+  const yami = props.yami
+    ? ` x ${_(genreMessages[yamiInfo[props.yami].name])}`
+    : '';
   return (
     <div>
       <Frame>

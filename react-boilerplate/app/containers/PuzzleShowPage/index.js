@@ -20,12 +20,7 @@ import { Flex } from 'rebass';
 
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
 import makeSelectSettings from 'containers/Settings/selectors';
-import {
-  from_global_id as f,
-  to_global_id as t,
-  genre_type_dict as genreType,
-  text2desc,
-} from 'common';
+import { from_global_id as f, to_global_id as t, text2desc } from 'common';
 import genreMessages from 'components/TitleLabel/messages';
 import { nAlert } from 'containers/Notifier/actions';
 import Dialogue from 'containers/Dialogue/Loadable';
@@ -44,6 +39,7 @@ import PuzzleShowQuery from 'graphql/PuzzleShow';
 import PuzzleShowSubscription from 'graphql/PuzzleShowSubscription';
 import PuzzleShowUnionSubscription from 'graphql/PuzzleShowUnionSubscription';
 
+import { genreInfo, yamiInfo } from 'components/TitleLabel/constants';
 import { dialogueSlicer } from './constants';
 import Frame from './Frame';
 import messages from './messages';
@@ -154,9 +150,8 @@ export class PuzzleShowPage extends React.Component {
     }
 
     const _ = this.context.intl.formatMessage;
-    const translateGenreCode = (x) => _(genreMessages[genreType[x]]);
-    const genre = translateGenreCode(P.genre);
-    const yami = P.yami ? ` x ${_(genreMessages.yami)}` : '';
+    const genre = _(genreMessages[genreInfo[P.genre].name]);
+    const yami = P.yami ? ` x ${_(genreMessages[yamiInfo[P.yami].name])}` : '';
 
     const numItems = 50;
     const { slices: dSlices, edges: dEdges, participants } = dialogueSlicer({
