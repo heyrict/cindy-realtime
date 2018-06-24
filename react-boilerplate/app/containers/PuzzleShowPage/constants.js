@@ -28,6 +28,7 @@ export const dialogueSlicer = ({
   puzzleShowUnion: D,
   userFilter: F,
   page,
+  extraFilter = null,
 }) => {
   let index = 0;
   const slices = [];
@@ -50,7 +51,10 @@ export const dialogueSlicer = ({
         participants[edge.node.user.id].trueansw = true;
       }
 
-      if (F.indexOf(edge.node.user.id) === -1) {
+      if (
+        F.indexOf(edge.node.user.id) === -1 &&
+        (extraFilter === null ? true : extraFilter(edge))
+      ) {
         filteredEdges.push({ ...edge, index });
       }
     } else {

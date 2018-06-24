@@ -154,11 +154,14 @@ export class PuzzleShowPage extends React.Component {
     const yami = P.yami ? ` x ${_(genreMessages[yamiInfo[P.yami].name])}` : '';
 
     const numItems = 50;
+    const isNotParticipantInYami = (edge) =>
+      !(P.yami && U !== edge.node.user.id && U !== P.user.id && P.status === 0);
     const { slices: dSlices, edges: dEdges, participants } = dialogueSlicer({
       numItems,
       puzzleShowUnion: D,
       userFilter: this.state.userFilter,
       page: this.state.currentPage,
+      extraFilter: isNotParticipantInYami,
     });
     const getTrueAnswInLtYami =
       P.yami === 2 && U && U in participants && participants[U].trueansw;
@@ -275,14 +278,6 @@ export class PuzzleShowPage extends React.Component {
               {dEdges.map((edge) => {
                 const type = f(edge.node.id)[0];
                 if (type === 'DialogueNode') {
-                  if (
-                    P.yami &&
-                    U !== edge.node.user.id &&
-                    U !== P.user.id &&
-                    P.status === 0
-                  ) {
-                    return null;
-                  }
                   return (
                     <AnimatedPanel key={edge.node.id}>
                       <Dialogue
