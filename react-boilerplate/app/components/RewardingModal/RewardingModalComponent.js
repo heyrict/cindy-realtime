@@ -127,7 +127,7 @@ RewardingModalComponent.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   genre: PropTypes.number.isRequired,
-  yami: PropTypes.bool.isRequired,
+  yami: PropTypes.number.isRequired,
   user: PropTypes.object.isRequired,
   content: PropTypes.string.isRequired,
   contentSafe: PropTypes.bool.isRequired,

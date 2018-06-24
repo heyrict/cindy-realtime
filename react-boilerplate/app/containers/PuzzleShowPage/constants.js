@@ -23,11 +23,17 @@ export const ADD_QUESTION = 'app/containers/PuzzleShowPage/ADD_QUESTION';
 export const ADD_HINT = 'app/containers/PuzzleShowPage/ADD_HINT';
 export const UPDATE_HINT = 'app/containers/PuzzleShowPage/UPDATE_HINT';
 
-export const dialogueSlicer = ({ numItems = 50, puzzleShowUnion: D }) => {
+export const dialogueSlicer = ({
+  numItems = 50,
+  puzzleShowUnion: D,
+  userFilter: F,
+  page,
+}) => {
   let index = 0;
   const slices = [];
   const participants = {};
-  const edges = D.edges.map((edge, i) => {
+  const filteredEdges = [];
+  D.edges.forEach((edge) => {
     if (f(edge.node.id)[0] === 'DialogueNode') {
       index += 1;
 
@@ -44,16 +50,22 @@ export const dialogueSlicer = ({ numItems = 50, puzzleShowUnion: D }) => {
         participants[edge.node.user.id].trueansw = true;
       }
 
-      if (index % numItems === 1 && index !== 1) slices.push(i);
-      return { ...edge, index };
+      if (F.indexOf(edge.node.user.id) === -1) {
+        filteredEdges.push({ ...edge, index });
+      }
+    } else {
+      filteredEdges.push(edge);
     }
-    return edge;
+
+    if (filteredEdges.length !== 0 && filteredEdges.length % numItems === 0) {
+      slices.push(index);
+    }
   });
-  slices.push(edges.length);
+
+  slices.push(index);
   return {
     slices,
-    edges,
+    edges: filteredEdges.slice(page * numItems, (page + 1) * numItems),
     participants,
-    lastIndex: index,
   };
 };

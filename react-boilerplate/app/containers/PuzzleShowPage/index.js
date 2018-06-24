@@ -16,6 +16,7 @@ import { createStructuredSelector, createSelector } from 'reselect';
 import { compose } from 'redux';
 import { easing, tween } from 'popmotion';
 import posed, { PoseGroup } from 'react-pose';
+import { Flex } from 'rebass';
 
 import { selectUserNavbarDomain } from 'containers/UserNavbar/selectors';
 import makeSelectSettings from 'containers/Settings/selectors';
@@ -35,7 +36,7 @@ import GoogleAd from 'components/GoogleAd';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import top from 'images/top.svg';
 import bottom from 'images/bottom.svg';
-import { ImgXs as Img } from 'style-store';
+import { ImgXs as Img, ButtonOutline } from 'style-store';
 import { googleAdInfo } from 'settings';
 
 import { graphql } from 'react-apollo';
@@ -50,6 +51,18 @@ import QuestionPutBox from './QuestionPutBox';
 import PuzzleModifyBox from './PuzzleModifyBox';
 import RewardingBox from './RewardingBox';
 import BookmarkBox from './BookmarkBox';
+
+const FilterButton = styled.button`
+  border-bottom: ${({ enabled }) => (enabled ? '3px solid #2075c7' : '0')};
+`;
+
+const FilterFrame = styled.div`
+  border: 2px solid #c6b571;
+  background-color: rgba(214, 197, 113, 0.6);
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+`;
 
 const Title = styled.div`
   font-size: 2em;
@@ -83,8 +96,10 @@ export class PuzzleShowPage extends React.Component {
     super(props);
     this.state = {
       currentPage: 0,
+      userFilter: [],
     };
     this.changePage = (p) => this.setState({ currentPage: p });
+    this.toggleUserFilter = this.toggleUserFilter.bind(this);
     this.scrollToBottom = () => {
       this.adref.scrollIntoView({ behavior: 'smooth' });
     };
@@ -96,6 +111,28 @@ export class PuzzleShowPage extends React.Component {
     const puzzleId = t('PuzzleNode', this.props.match.params.id);
     this.props.subscribeToPuzzleUpdates({ id: puzzleId });
     this.props.subscribeToUnionUpdates({ id: puzzleId });
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.user.userId !== nextProps.user.userId) {
+      this.setState({
+        userFilter: [],
+        currentPage: 0,
+      });
+    }
+  }
+
+  toggleUserFilter(user) {
+    this.setState(({ userFilter: prevUserFilter }) => {
+      if (prevUserFilter.indexOf(user) === -1) {
+        return {
+          userFilter: [...prevUserFilter, user],
+        };
+      }
+      return {
+        userFilter: Array.filter(prevUserFilter, (v) => v !== user),
+        currentPage: 0,
+      };
+    });
   }
 
   render() {
@@ -122,38 +159,72 @@ export class PuzzleShowPage extends React.Component {
     const yami = P.yami ? ` x ${_(genreMessages.yami)}` : '';
 
     const numItems = 50;
-    const {
-      slices: dSlices,
-      edges: dEdges,
-      lastIndex,
-      participants,
-    } = dialogueSlicer({
+    const { slices: dSlices, edges: dEdges, participants } = dialogueSlicer({
       numItems,
       puzzleShowUnion: D,
+      userFilter: this.state.userFilter,
+      page: this.state.currentPage,
     });
     const getTrueAnswInLtYami =
       P.yami === 2 && U && U in participants && participants[U].trueansw;
 
+    const UserFilterBar = (
+      <Constrained level={3}>
+        <FilterFrame>
+          <Flex flexWrap="wrap" mb={1} justifyContent="center">
+            {Object.values(participants).map((participant) => (
+              <FilterButton
+                enabled={
+                  this.state.userFilter.indexOf(participant.user.id) === -1
+                }
+                key={participant.user.id}
+                onClick={() => this.toggleUserFilter(participant.user.id)}
+              >
+                {participant.user.nickname}({participant.count})
+              </FilterButton>
+            ))}
+          </Flex>
+          <Flex flexWrap="wrap" mb={1} justifyContent="center">
+            <ButtonOutline
+              mt={1}
+              p={1}
+              onClick={() =>
+                this.setState({ userFilter: Object.keys(participants) })
+              }
+            >
+              Remove All
+            </ButtonOutline>
+            <ButtonOutline
+              mt={1}
+              p={1}
+              onClick={() => this.setState({ userFilter: [] })}
+            >
+              Add All
+            </ButtonOutline>
+          </Flex>
+        </FilterFrame>
+      </Constrained>
+    );
+
     const DialoguePaginationBar = (
-      <Constrained flexWrap="wrap" mb={2} style={{ textAlign: 'center' }}>
-        <button onClick={this.scrollToTop}>
-          <Img src={top} alt="Top" />
-        </button>
-        {dSlices.map((dSlice, i) => (
-          <button
-            style={{
-              borderBottom:
-                this.state.currentPage === i ? '3px solid #2075c7' : undefined,
-            }}
-            key={dSlice}
-            onClick={() => this.changePage(i)}
-          >
-            {numItems * i + 1} - {Math.min(numItems * (i + 1), lastIndex)}
+      <Constrained>
+        <Flex flexWrap="wrap" mb={2} justifyContent="center">
+          <button onClick={this.scrollToTop}>
+            <Img src={top} alt="Top" />
           </button>
-        ))}
-        <button onClick={this.scrollToBottom}>
-          <Img src={bottom} alt="Bottom" />
-        </button>
+          {dSlices.map((dSlice, i) => (
+            <FilterButton
+              enabled={this.state.currentPage === i}
+              key={dSlice}
+              onClick={() => this.changePage(i)}
+            >
+              {i === 0 ? 1 : dSlices[i - 1] + 1} - {dSlice}
+            </FilterButton>
+          ))}
+          <button onClick={this.scrollToBottom}>
+            <Img src={bottom} alt="Bottom" />
+          </button>
+        </Flex>
       </Constrained>
     );
 
@@ -198,44 +269,43 @@ export class PuzzleShowPage extends React.Component {
               )}
             </FormattedMessage>
           )}
+        {(P.status === 1 ||
+          P.status === 2 ||
+          P.user.id === U ||
+          (P.status === 0 && P.yami === 0)) && <div>{UserFilterBar}</div>}
         {(P.status <= 2 || P.user.id === U) && (
           <div>
             {DialoguePaginationBar}
             <PoseGroup>
-              {dEdges
-                .slice(
-                  dSlices[this.state.currentPage - 1],
-                  dSlices[this.state.currentPage]
-                )
-                .map((edge) => {
-                  const type = f(edge.node.id)[0];
-                  if (type === 'DialogueNode') {
-                    if (
-                      P.yami &&
-                      U !== edge.node.user.id &&
-                      U !== P.user.id &&
-                      P.status === 0
-                    ) {
-                      return null;
-                    }
-                    return (
-                      <AnimatedPanel key={edge.node.id}>
-                        <Dialogue
-                          index={edge.index}
-                          status={P.status}
-                          node={edge.node}
-                          settings={this.props.settings}
-                          owner={P.user}
-                        />
-                      </AnimatedPanel>
-                    );
+              {dEdges.map((edge) => {
+                const type = f(edge.node.id)[0];
+                if (type === 'DialogueNode') {
+                  if (
+                    P.yami &&
+                    U !== edge.node.user.id &&
+                    U !== P.user.id &&
+                    P.status === 0
+                  ) {
+                    return null;
                   }
                   return (
                     <AnimatedPanel key={edge.node.id}>
-                      <Hint owner={P.user} status={P.status} node={edge.node} />
+                      <Dialogue
+                        index={edge.index}
+                        status={P.status}
+                        node={edge.node}
+                        settings={this.props.settings}
+                        owner={P.user}
+                      />
                     </AnimatedPanel>
                   );
-                })}
+                }
+                return (
+                  <AnimatedPanel key={edge.node.id}>
+                    <Hint owner={P.user} status={P.status} node={edge.node} />
+                  </AnimatedPanel>
+                );
+              })}
             </PoseGroup>
             {DialoguePaginationBar}
           </div>
