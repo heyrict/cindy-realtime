@@ -187,7 +187,10 @@ export class PuzzleShowPage extends React.Component {
               mt={1}
               p={1}
               onClick={() =>
-                this.setState({ userFilter: Object.keys(participants) })
+                this.setState({
+                  userFilter: Object.keys(participants),
+                  currentPage: 0,
+                })
               }
             >
               Remove All
@@ -195,7 +198,7 @@ export class PuzzleShowPage extends React.Component {
             <ButtonOutline
               mt={1}
               p={1}
-              onClick={() => this.setState({ userFilter: [] })}
+              onClick={() => this.setState({ userFilter: [], currentPage: 0 })}
             >
               Add All
             </ButtonOutline>
