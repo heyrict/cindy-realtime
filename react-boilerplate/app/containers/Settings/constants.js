@@ -21,4 +21,5 @@ export const defaultSettings = {
   modifyQuestion: 'NONE',
   // Genre Icon Options
   enableGenreIcon: true,
+  canFilterMultipleUser: false,
 };

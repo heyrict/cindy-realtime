@@ -50,4 +50,12 @@ export default defineMessages({
     id: 'app.containers.Settings.enableGenreIcon',
     defaultMessage: 'Enable Genre Icon',
   },
+  others: {
+    id: 'app.containers.Settings.others',
+    defaultMessage: 'Other Settings',
+  },
+  canFilterMultipleUser: {
+    id: 'app.containers.Settings.canFilterMultipleUser',
+    defaultMessage: 'Enable Multiple User Filtering',
+  },
 });

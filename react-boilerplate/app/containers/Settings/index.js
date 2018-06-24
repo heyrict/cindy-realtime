@@ -82,6 +82,25 @@ function Settings(props) {
           />
         }
       />
+      <Bar open>
+        <FormattedMessage {...messages.others} />
+      </Bar>
+      <ProfRow
+        heading={<FormattedMessage {...messages.canFilterMultipleUser} />}
+        content={
+          <Switch
+            checked={settings.canFilterMultipleUser}
+            onClick={() =>
+              dispatch(
+                changeSetting(
+                  'canFilterMultipleUser',
+                  !settings.canFilterMultipleUser
+                )
+              )
+            }
+          />
+        }
+      />
       <StyledButton
         w={1}
         py={1}

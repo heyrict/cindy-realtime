@@ -5,6 +5,7 @@
  */
 
 /* eslint-disable no-mixed-operators */
+/* eslint-disable indent */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -122,6 +123,7 @@ export class PuzzleShowPage extends React.Component {
       if (prevUserFilter.indexOf(user) === -1) {
         return {
           userFilter: [...prevUserFilter, user],
+          currentPage: 0,
         };
       }
       return {
@@ -176,31 +178,50 @@ export class PuzzleShowPage extends React.Component {
                   this.state.userFilter.indexOf(participant.user.id) === -1
                 }
                 key={participant.user.id}
-                onClick={() => this.toggleUserFilter(participant.user.id)}
+                onClick={() =>
+                  this.props.settings.canFilterMultipleUser
+                    ? this.toggleUserFilter(participant.user.id)
+                    : this.setState({
+                        userFilter: Array.filter(
+                          Object.keys(participants),
+                          (v) => v !== participant.user.id
+                        ),
+                        currentPage: 0,
+                      })
+                }
               >
                 {participant.user.nickname}({participant.count})
               </FilterButton>
             ))}
           </Flex>
-          <Flex flexWrap="wrap" mb={1} justifyContent="center">
+          <Flex
+            flexWrap="wrap"
+            mb={1}
+            justifyContent="center"
+            alignItems="center"
+          >
+            {this.props.settings.canFilterMultipleUser && (
+              <ButtonOutline
+                mt={1}
+                p={1}
+                w={1 / 3}
+                onClick={() =>
+                  this.setState({
+                    userFilter: Object.keys(participants),
+                    currentPage: 0,
+                  })
+                }
+              >
+                Remove All
+              </ButtonOutline>
+            )}
             <ButtonOutline
               mt={1}
               p={1}
-              onClick={() =>
-                this.setState({
-                  userFilter: Object.keys(participants),
-                  currentPage: 0,
-                })
-              }
-            >
-              Remove All
-            </ButtonOutline>
-            <ButtonOutline
-              mt={1}
-              p={1}
+              w={1 / 3}
               onClick={() => this.setState({ userFilter: [], currentPage: 0 })}
             >
-              Add All
+              Reset
             </ButtonOutline>
           </Flex>
         </FilterFrame>
@@ -357,6 +378,7 @@ PuzzleShowPage.propTypes = {
     sendQuestion: PropTypes.string.isRequired,
     sendAnswer: PropTypes.string.isRequired,
     modifyQuestion: PropTypes.string.isRequired,
+    canFilterMultipleUser: PropTypes.bool.isRequired,
   }),
   match: PropTypes.shape({
     params: PropTypes.shape({
