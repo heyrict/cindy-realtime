@@ -34,17 +34,19 @@ from channels.consumer import SyncConsumer
 from channels.exceptions import StopConsumer
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from channels.layers import get_channel_layer
+from django.conf import settings
 from django.core.cache import cache
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from graphql_relay import from_global_id, to_global_id
 from rx import Observable
 
-from cindy.settings import REDIS_HOST
 from schema import schema
 
 from .models import (ChatMessage, Dialogue, DirectMessage, Hint, Puzzle, User,
                      UserAward)
+
+REDIS_HOST = settings.REDIS_HOST
 
 rediscon = redis.Redis(host=REDIS_HOST["host"], port=REDIS_HOST["port"])
 rediscon.set("onlineUsers", pickle.dumps(set()))
