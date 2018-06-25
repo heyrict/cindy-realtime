@@ -190,7 +190,12 @@ export class PuzzleShowPage extends React.Component {
                       })
                 }
               >
-                {participant.user.nickname}({participant.count})
+                {participant.user.nickname}
+                <sup>
+                  {participant.uacount > 0
+                    ? `${participant.uacount}/${participant.count}`
+                    : participant.count}
+                </sup>
               </FilterButton>
             ))}
           </Flex>

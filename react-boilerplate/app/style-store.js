@@ -49,7 +49,7 @@ export const Navbar = NavbarBase.extend`
   border-color: #e7e7e7;
   background-color: #c6b571;
   z-index: 1030;
-  position: absolute;
+  position: fixed;
 `;
 
 export const SubNavbar = NavbarBase.extend`
@@ -58,7 +58,7 @@ export const SubNavbar = NavbarBase.extend`
   background-color: #d7c682;
   padding: 0 8px;
   z-index: 1029;
-  position: absolute;
+  position: fixed;
 `;
 
 export const RouterLink = styled(Link)`

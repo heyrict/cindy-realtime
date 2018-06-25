@@ -40,10 +40,14 @@ export const dialogueSlicer = ({
 
       if (edge.node.user.id in participants) {
         participants[edge.node.user.id].count += 1;
+        if (!edge.node.answer) {
+          participants[edge.node.user.id].uacount += 1;
+        }
       } else {
         participants[edge.node.user.id] = {
           user: edge.node.user,
           count: 1,
+          uacount: edge.node.answer ? 0 : 1,
           trueansw: false,
         };
       }
