@@ -168,7 +168,7 @@ export class PuzzleShowPage extends React.Component {
     const getTrueAnswInLtYami =
       P.yami === 2 && U && U in participants && participants[U].trueansw;
 
-    const UserFilterBar = (
+    const UserFilterBar = D.edges.length > 0 && (
       <Constrained level={3}>
         <FilterFrame>
           <Flex flexWrap="wrap" mb={1} justifyContent="center">
@@ -233,7 +233,7 @@ export class PuzzleShowPage extends React.Component {
       </Constrained>
     );
 
-    const DialoguePaginationBar = (
+    const DialoguePaginationBar = D.edges.length > 0 && (
       <Constrained>
         <Flex flexWrap="wrap" mb={2} justifyContent="center">
           <button onClick={this.scrollToTop}>
