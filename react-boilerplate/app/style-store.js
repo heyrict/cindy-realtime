@@ -66,19 +66,19 @@ export const RouterLink = styled(Link)`
 `;
 
 export const ImgSm = styled.img`
-  max-height: 30px;
+  max-height: 2.1em;
   padding: 0;
   margin: 0;
 `;
 
 export const ImgXs = styled.img`
-  max-height: 18px;
+  max-height: 1.4em;
   padding: 0;
   margin: 0;
 `;
 
 export const ImgMd = styled.img`
-  max-height: 60px;
+  max-height: 4em;
   padding: 0;
   margin: 0;
 `;

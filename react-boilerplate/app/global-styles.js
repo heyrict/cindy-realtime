@@ -12,11 +12,15 @@ injectGlobal`
     font-size: 14px;
     line-height: 1.42857143;
     color: #333;
+    background-color: blanchedalmond;
     font-family: 'Noto Sans CJK JP','Dejavu Sans',Inconsolata,Consolas,Helvetica,Arial,sans-serif;
+    overscroll-behavior: contain;
+    @media (max-width: 400px) {
+      font-size: 13px;
+    }
   }
 
   body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     line-height: normal;
     padding-top: 50px;
   }
