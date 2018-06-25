@@ -15,7 +15,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Switch, Route, withRouter } from 'react-router-dom';
-import { Flex, Box } from 'rebass';
+import { Box } from 'rebass';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 
@@ -35,9 +35,10 @@ import Chat from 'containers/Chat';
 import makeSelectChat from 'containers/Chat/selectors';
 import { StartCountdown, changeTabularTab } from 'common';
 
-const EasingBox = styled(Box)`
-  height: ${(props) => props.height - 50}px;
-  overflow-y: auto;
+const BodyBox = styled(Box)`
+  @media (max-width: 31.99em) {
+    display: none;
+  }
 `;
 
 class App extends React.Component {
@@ -101,24 +102,24 @@ class App extends React.Component {
         <Notifier />
         <WebSocketInterface />
         <TopNavbar />
-        <Flex>
-          <EasingBox
-            w={this.props.chat.open ? [1, 0.382, 0.3] : 0}
-            height={this.state.height}
-            hidden={!this.props.chat.open}
-          >
-            <Chat height={this.state.height - 50} />
-          </EasingBox>
-          <EasingBox
-            w={this.props.chat.open ? [0, 0.618, 0.7] : 1}
-            height={this.state.height}
-          >
-            <Switch>
-              {InnerRoutes()}
-              <Route path="*" component={NotFoundPage} />
-            </Switch>
-          </EasingBox>
-        </Flex>
+        <Box
+          w={this.props.chat.open ? [1, 0.382, 0.3] : 0}
+          height={this.state.height}
+          hidden={!this.props.chat.open}
+          style={{ position: 'fixed' }}
+        >
+          <Chat height={this.state.height - 50} />
+        </Box>
+        <BodyBox
+          w={this.props.chat.open ? [0, 0.618, 0.7] : 1}
+          ml={this.props.chat.open ? ['100%', '39.2%', '30%'] : 0}
+          height={this.state.height}
+        >
+          <Switch>
+            {InnerRoutes()}
+            <Route path="*" component={NotFoundPage} />
+          </Switch>
+        </BodyBox>
       </div>
     );
   }

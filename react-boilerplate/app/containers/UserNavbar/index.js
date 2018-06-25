@@ -42,11 +42,7 @@ function UserNavbar(props) {
   );
   if (props.usernavbar.user.userId) {
     return (
-      <SubNavbar
-        mx={-1}
-        w={1}
-        style={{ display: props.open ? 'block' : 'none' }}
-      >
+      <SubNavbar w={1} style={{ display: props.open ? 'block' : 'none' }}>
         <RouterLink
           to={withLocale(`/profile/show/${props.usernavbar.user.userId}`)}
           tabIndex="0"
@@ -110,4 +106,7 @@ const withConnect = connect(mapStateToProps);
 
 const withReducer = injectReducer({ key: 'userNavbar', reducer });
 
-export default compose(withReducer, withConnect)(UserNavbar);
+export default compose(
+  withReducer,
+  withConnect
+)(UserNavbar);

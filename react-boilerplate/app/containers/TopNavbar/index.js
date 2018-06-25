@@ -39,6 +39,7 @@ const NavbarBtn = styled(ButtonTransparent)`
   width: 100%;
   padding: 10px;
   margin: 0;
+  overflow: hidden;
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
   }
