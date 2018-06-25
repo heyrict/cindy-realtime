@@ -35,7 +35,10 @@ class Channels extends React.PureComponent {
   }
   render() {
     return (
-      <Flex flexWrap="wrap">
+      <Flex
+        flexWrap="wrap"
+        style={{ maxHeight: this.props.height, overflowY: 'auto' }}
+      >
         <StyledButton w={1} py={2} my={1} onClick={() => this.props.tune(null)}>
           <FormattedMessage {...messages.defaultChannel} />
         </StyledButton>
@@ -115,6 +118,7 @@ class Channels extends React.PureComponent {
 Channels.propTypes = {
   tune: PropTypes.func.isRequired,
   favChannels: PropTypes.object,
+  height: PropTypes.number.isRequired,
 };
 
 export default Channels;

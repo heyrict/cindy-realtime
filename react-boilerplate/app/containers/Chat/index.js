@@ -46,7 +46,7 @@ const StyledToolbar = styled(Toolbar)`
 export function Chat(props) {
   if (props.chat.open === 'memo' && props.puzzle) {
     return (
-      <Wrapper style={{ height: '100%', overflow: 'auto' }}>
+      <Wrapper style={{ height: `${props.height}px`, overflow: 'auto' }}>
         <div dangerouslySetInnerHTML={{ __html: text2md(props.puzzle.memo) }} />
       </Wrapper>
     );
@@ -88,7 +88,11 @@ export function Chat(props) {
         tune={tune}
       />
       {props.chat.activeTab === TAB_CHANNEL && (
-        <Channels tune={tune} favChannels={props.allFavoriteChatrooms} />
+        <Channels
+          tune={tune}
+          favChannels={props.allFavoriteChatrooms}
+          height={props.height - 50}
+        />
       )}
       {props.currentUser && (
         <DirectChat
@@ -138,7 +142,10 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps
+);
 
 const withSaga = injectSaga({ key: 'chat', saga });
 
@@ -201,7 +208,11 @@ const withCurrentUser = graphql(
     ${UserLabel}
   `,
   {
-    options: ({ usernavbar: { user: { userId } } }) => ({
+    options: ({
+      usernavbar: {
+        user: { userId },
+      },
+    }) => ({
       variables: {
         id: t('UserNode', userId || '-1'),
       },
