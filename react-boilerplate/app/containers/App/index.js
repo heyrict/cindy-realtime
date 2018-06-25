@@ -36,9 +36,8 @@ import makeSelectChat from 'containers/Chat/selectors';
 import { StartCountdown, changeTabularTab } from 'common';
 
 const BodyBox = styled(Box)`
-  @media (max-width: 31.99em) {
-    display: none;
-  }
+  ${({ chatopen }) =>
+    chatopen && '@media (max-width: 31.99em) { display: none; }'};
 `;
 
 class App extends React.Component {
@@ -114,6 +113,7 @@ class App extends React.Component {
           w={this.props.chat.open ? [0, 0.618, 0.7] : 1}
           ml={this.props.chat.open ? ['100%', '39.2%', '30%'] : 0}
           height={this.state.height}
+          chatopen={this.props.chat.open}
         >
           <Switch>
             {InnerRoutes()}
