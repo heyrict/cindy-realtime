@@ -18,6 +18,7 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 import { Box } from 'rebass';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 import WebSocketInterface from 'containers/WebSocketInterface';
 import Notifier from 'containers/Notifier';
@@ -33,7 +34,8 @@ import AwardApplicationPage from 'containers/AwardApplicationPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Chat from 'containers/Chat';
 import makeSelectChat from 'containers/Chat/selectors';
-import { StartCountdown, changeTabularTab } from 'common';
+import { StartCountdown, changeTabularTab, pushWithLocale } from 'common';
+import { domainFilter } from 'settings';
 
 const BodyBox = styled(Box)`
   ${({ chatopen }) =>
@@ -45,6 +47,7 @@ class App extends React.Component {
     super(props);
 
     this.resize = this.resize.bind(this);
+    this.eventDelegation = this.eventDelegation.bind(this);
   }
   componentWillMount() {
     this.resize();
@@ -68,6 +71,13 @@ class App extends React.Component {
     if ('data-toggle' in attr && 'data-target' in attr) {
       if (attr['data-toggle'].value === 'tab') {
         changeTabularTab(attr['data-target'].value.replace(/^#/, ''));
+      }
+    }
+    if ('href' in attr) {
+      const { selfDomain, url } = domainFilter(attr.href.value);
+      if (selfDomain && e.button === 0 /* left cick */) {
+        this.props.goto(url);
+        e.preventDefault();
       }
     }
   }
@@ -129,10 +139,23 @@ App.propTypes = {
   chat: PropTypes.shape({
     open: PropTypes.string,
   }),
+  goto: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  goto: (url) => dispatch(pushWithLocale(url)),
+});
 
 const mapStateToProps = createStructuredSelector({
   chat: makeSelectChat(),
 });
 
-export default withRouter(connect(mapStateToProps)(App));
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps
+);
+
+export default compose(
+  withRouter,
+  withConnect
+)(App);

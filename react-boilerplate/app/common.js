@@ -14,7 +14,6 @@ import mdEmoji from 'markdown-it-emoji';
 import sanitizeHtml from 'sanitize-html';
 import moment, * as moments from 'moment';
 import { push } from 'react-router-redux';
-import { domainRegex } from 'settings';
 import { DEFAULT_LOCALE } from 'containers/App/constants';
 
 const md = MarkdownIt({
@@ -41,9 +40,6 @@ function hash(string) {
 function _norm_link(string) {
   const _norm_chat = (s) =>
     s.replace(/^chat:\/\/(.+)$/, "javascript:OpenChat('$1');");
-
-  const _norm_cindy_link = (s) =>
-    s.replace(domainRegex, "javascript:goto('$1');");
 
   return _norm_chat(string);
 }
