@@ -103,7 +103,6 @@ injectGlobal`
 
   .modal-container {
     position: fixed;
-    z-index: 9999;
     right: 0;
     left: 0;
     top: 0;
@@ -112,6 +111,7 @@ injectGlobal`
     justify-content: center;
     overflow-y: auto;
     align-items: flex-start;
+    z-index: 9997;
   }
   .modal-container > .modal {
      opacity: 0;
@@ -122,6 +122,7 @@ injectGlobal`
      display: flex;
      flex-direction: column;
      justify-content: space-between;
+     z-index: 9999;
      @media (min-width: 400px) {
        width: 95%;
      }
