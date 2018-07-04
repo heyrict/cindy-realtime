@@ -76,7 +76,7 @@ function UserNavbar(props) {
     );
   }
   return (
-    <SubNavbar mx={-1} w={1} style={{ display: props.open ? 'block' : 'none' }}>
+    <SubNavbar w={1} style={{ display: props.open ? 'block' : 'none' }}>
       <RouterLink to={withLocale('/profile')} tabIndex="0">
         <NavLink is="span">
           <FormattedMessage {...messages.userlist} />

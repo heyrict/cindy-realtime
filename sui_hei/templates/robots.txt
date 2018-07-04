@@ -1,4 +1,2 @@
 User-agent: *
-Disallow: /profile
-Disallow: /ja/profile
-Disallow: /en/profile
+Disallow: /admin/
