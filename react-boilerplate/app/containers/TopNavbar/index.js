@@ -65,48 +65,50 @@ function TopNavbar(props) {
   }
 
   return (
-    <Navbar w={1}>
-      <Box w={1 / 3} m="auto">
-        <NavbarBtn onClick={() => toggle('menu')} color="gray3">
-          <ImgSm src={menuImg} alt="menu" />
-          <NavbarBtnMsg>
-            <FormattedMessage {...messages.menu} />
-          </NavbarBtnMsg>
-        </NavbarBtn>
-      </Box>
+    <div>
+      <Navbar w={1}>
+        <Box w={1 / 3} m="auto">
+          <NavbarBtn onClick={() => toggle('menu')} color="gray3">
+            <ImgSm src={menuImg} alt="menu" />
+            <NavbarBtnMsg>
+              <FormattedMessage {...messages.menu} />
+            </NavbarBtnMsg>
+          </NavbarBtn>
+        </Box>
+        <Box w={1 / 3} m="auto">
+          <NavbarBtn onClick={() => props.dispatch(toggleChat())} color="gray3">
+            <ImgSm src={chatImg} alt="chat" />
+            <NavbarBtnMsg>
+              <FormattedMessage {...messages.chat} />
+            </NavbarBtnMsg>
+          </NavbarBtn>
+        </Box>
+        {props.puzzle &&
+          props.puzzle.memo && (
+            <Box w={1 / 3} m="auto">
+              <NavbarBtn
+                onClick={() => props.dispatch(toggleMemo())}
+                color="gray3"
+              >
+                <ImgSm src={memoImg} alt="memo" />
+                <NavbarBtnMsg>
+                  <FormattedMessage {...messages.memo} />
+                </NavbarBtnMsg>
+              </NavbarBtn>
+            </Box>
+          )}
+        <Box w={1 / 3} m="auto">
+          <NavbarBtn onClick={() => toggle('user')} color="gray3">
+            <ImgSm src={loginImg} alt="profile" />
+            <NavbarBtnMsg>
+              <FormattedMessage {...messages.profile} />
+            </NavbarBtnMsg>
+          </NavbarBtn>
+        </Box>
+      </Navbar>
       <MenuNavbar open={props.topnavbar.subnav === 'menu'} />
-      <Box w={1 / 3} m="auto">
-        <NavbarBtn onClick={() => props.dispatch(toggleChat())} color="gray3">
-          <ImgSm src={chatImg} alt="chat" />
-          <NavbarBtnMsg>
-            <FormattedMessage {...messages.chat} />
-          </NavbarBtnMsg>
-        </NavbarBtn>
-      </Box>
-      {props.puzzle &&
-        props.puzzle.memo && (
-          <Box w={1 / 3} m="auto">
-            <NavbarBtn
-              onClick={() => props.dispatch(toggleMemo())}
-              color="gray3"
-            >
-              <ImgSm src={memoImg} alt="memo" />
-              <NavbarBtnMsg>
-                <FormattedMessage {...messages.memo} />
-              </NavbarBtnMsg>
-            </NavbarBtn>
-          </Box>
-        )}
-      <Box w={1 / 3} m="auto">
-        <NavbarBtn onClick={() => toggle('user')} color="gray3">
-          <ImgSm src={loginImg} alt="profile" />
-          <NavbarBtnMsg>
-            <FormattedMessage {...messages.profile} />
-          </NavbarBtnMsg>
-        </NavbarBtn>
-      </Box>
       <UserNavbar open={props.topnavbar.subnav === 'user'} />
-    </Navbar>
+    </div>
   );
 }
 
@@ -133,7 +135,10 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps
+);
 
 const withSaga = injectSaga({ key: 'topNavBar', saga });
 
@@ -169,4 +174,8 @@ const withData = graphql(
   }
 );
 
-export default compose(withSaga, withConnect, withData)(TopNavbar);
+export default compose(
+  withSaga,
+  withConnect,
+  withData
+)(TopNavbar);
