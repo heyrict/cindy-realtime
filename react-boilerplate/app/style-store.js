@@ -35,16 +35,26 @@ export const AutoResizeTextarea = styled(ReactTextareaAutosize)`
   }
 `;
 
-export const Navbar = styled(Flex)`
+const NavbarBase = styled(Flex)`
+  min-height: 50px;
+  margin-bottom: 20px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  border-radius: 0;
+`;
+
+export const Navbar = NavbarBase.extend`
   top: 0;
+  border-color: #e7e7e7;
   background-color: #c6b571;
   z-index: 1030;
   position: fixed;
-  min-height: 50px;
 `;
 
-export const SubNavbar = styled(Flex)`
+export const SubNavbar = NavbarBase.extend`
   top: 50px;
+  border-color: #e7e7e7;
   background-color: #d7c682;
   padding: 0 8px;
   z-index: 1029;

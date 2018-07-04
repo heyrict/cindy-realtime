@@ -44,30 +44,31 @@ class Modal extends React.PureComponent {
   }
   render() {
     return (
-      <div
-        className="modal-container"
-        style={{
-          display: this.state.display ? 'flex' : 'none',
-          overflowY: 'auto',
-          padding: '80px 0',
-        }}
-      >
+      <div style={{ display: 'inline-block' }}>
         <Shader
           className="modal-shade"
           pose={this.props.show ? 'show' : 'hide'}
           style={{ display: this.state.display ? 'flex' : 'none' }}
           onPoseComplete={this.handlePoseComplete}
-          onClick={this.props.onHide}
         />
-        <Container
-          className="modal"
-          pose={this.props.show ? 'show' : 'hide'}
+        <div
+          className="modal-container"
           style={{
+            display: this.state.display ? 'flex' : 'none',
             overflowY: 'auto',
+            padding: '80px 0',
           }}
         >
-          {this.props.children}
-        </Container>
+          <Container
+            className="modal"
+            pose={this.props.show ? 'show' : 'hide'}
+            style={{
+              overflowY: 'auto',
+            }}
+          >
+            {this.props.children}
+          </Container>
+        </div>
       </div>
     );
   }
@@ -76,7 +77,6 @@ class Modal extends React.PureComponent {
 Modal.propTypes = {
   show: PropTypes.bool.isRequired,
   children: PropTypes.any,
-  onHide: PropTypes.func.isRequired,
 };
 
 export default Modal;
