@@ -1,12 +1,12 @@
-export const googleAdClientToken = 'ca-pub-6496929238779694';
+export const googleAdClientToken = 'ca-pub-7445097696449097';
 
 export const googleAdInfo = {
   textAd: {
-    slot: '1635090774',
+    slot: '8869334804',
     format: 'auto',
   },
   infieldAd: {
-    slot: '4585414090',
+    slot: '7269312674',
     format: 'fluid',
     layoutKey: '-gw-3+1f-3d+2z',
   },
