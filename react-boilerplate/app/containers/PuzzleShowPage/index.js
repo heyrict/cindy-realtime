@@ -51,6 +51,7 @@ import BookmarkBox from './BookmarkBox';
 
 const FilterButton = styled.button`
   border-bottom: ${({ enabled }) => (enabled ? '3px solid #2075c7' : '0')};
+  color: ${({ accent }) => (accent ? '#cb4b16' : 'inherit')};
 `;
 
 const FilterFrame = styled.div`
@@ -177,6 +178,7 @@ export class PuzzleShowPage extends React.Component {
                 enabled={
                   this.state.userFilter.indexOf(participant.user.id) === -1
                 }
+                accent={participant.uacount > 0}
                 key={participant.user.id}
                 onClick={() =>
                   this.props.settings.canFilterMultipleUser

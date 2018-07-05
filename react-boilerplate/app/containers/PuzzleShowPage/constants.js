@@ -60,6 +60,8 @@ export const dialogueSlicer = ({
         (extraFilter === null ? true : extraFilter(edge))
       ) {
         filteredEdges.push({ ...edge, index });
+      } else {
+        return;
       }
     } else {
       filteredEdges.push(edge);
