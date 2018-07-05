@@ -40,7 +40,7 @@ class PuzzleModifyBox extends React.Component {
     super(props);
 
     this.state = {
-      activeTab: props.puzzle.status === 0 && props.puzzle.yami !== 2 ? 0 : 1,
+      activeTab: props.puzzle.status === 0 ? 0 : 1,
       solutionEditMode: false,
       memoEditMode: props.puzzle.memo === '',
       solve: props.puzzle.status === 3,
@@ -186,15 +186,14 @@ class PuzzleModifyBox extends React.Component {
       <Constrained level={3}>
         <PuzzleFrame>
           <StyledTabs>
-            {this.props.puzzle.status === 0 &&
-              this.props.puzzle.yami !== 2 && (
-                <StyledTabItem
-                  active={this.state.activeTab === 0}
-                  onClick={() => this.changeTab(0)}
-                >
-                  <FormattedMessage {...messages.solution} />
-                </StyledTabItem>
-              )}
+            {this.props.puzzle.status === 0 && (
+              <StyledTabItem
+                active={this.state.activeTab === 0}
+                onClick={() => this.changeTab(0)}
+              >
+                <FormattedMessage {...messages.solution} />
+              </StyledTabItem>
+            )}
             <StyledTabItem
               active={this.state.activeTab === 1}
               onClick={() => this.changeTab(1)}
@@ -224,31 +223,35 @@ class PuzzleModifyBox extends React.Component {
                     __html: text2md(this.props.puzzle.solution),
                   }}
                 />
-                <EditButton onClick={this.toggleSolutionEditMode}>
-                  <FormattedMessage {...dialogueMessages.edit} />
-                </EditButton>
-              </div>
-              <div hidden={!this.state.solutionEditMode}>
-                <PreviewEdit
-                  content={this.props.puzzle.solution}
-                  ref={(ref) => (this.solutionTextarea = ref)}
-                  safe={this.props.puzzle.contentSafe}
-                />
-                <Flex>
-                  <EditButton
-                    onClick={this.handleSaveSolution}
-                    style={{ width: '100%' }}
-                  >
-                    <ImgXs src={tick} />
+                {this.props.puzzle.yami !== 2 && (
+                  <EditButton onClick={this.toggleSolutionEditMode}>
+                    <FormattedMessage {...dialogueMessages.edit} />
                   </EditButton>
-                  <EditButton
-                    onClick={this.toggleSolutionEditMode}
-                    style={{ width: '100%' }}
-                  >
-                    <ImgXs src={cross} />
-                  </EditButton>
-                </Flex>
+                )}
               </div>
+              {this.props.puzzle.yami !== 2 && (
+                <div hidden={!this.state.solutionEditMode}>
+                  <PreviewEdit
+                    content={this.props.puzzle.solution}
+                    ref={(ref) => (this.solutionTextarea = ref)}
+                    safe={this.props.puzzle.contentSafe}
+                  />
+                  <Flex>
+                    <EditButton
+                      onClick={this.handleSaveSolution}
+                      style={{ width: '100%' }}
+                    >
+                      <ImgXs src={tick} />
+                    </EditButton>
+                    <EditButton
+                      onClick={this.toggleSolutionEditMode}
+                      style={{ width: '100%' }}
+                    >
+                      <ImgXs src={cross} />
+                    </EditButton>
+                  </Flex>
+                </div>
+              )}
             </div>
           )}
           {this.state.activeTab === 1 && (
