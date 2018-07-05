@@ -73,7 +73,7 @@ class App extends React.Component {
         changeTabularTab(attr['data-target'].value.replace(/^#/, ''));
       }
     }
-    if ('href' in attr) {
+    if (typeof e.target.onclick !== 'function' && 'href' in attr) {
       const { selfDomain, url } = domainFilter(attr.href.value);
       if (selfDomain && e.button === 0 /* left cick */) {
         this.props.goto(url);
