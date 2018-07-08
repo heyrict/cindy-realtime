@@ -31,6 +31,7 @@ class Notifier extends React.Component {
       DIRECTCHAT_NOTIFY,
       GOTID_MINICHAT,
       NOTIFIER_MESSAGE,
+      BROADCAST_MESSAGE,
     } = NOTE_NEEDED;
     const {
       wsConnectedMsg,
@@ -39,6 +40,7 @@ class Notifier extends React.Component {
       directMessageReceivedMsg,
       chatroomNotExistsMsg,
       notifierMsg,
+      broadcastMsg,
     } = NOTE_MSG;
 
     switch (nextProps.notification.type) {
@@ -74,6 +76,9 @@ class Notifier extends React.Component {
         break;
       case NOTIFIER_MESSAGE:
         this.notif.addNotification(notifierMsg(nextProps.notification));
+        break;
+      case BROADCAST_MESSAGE:
+        this.notif.addNotification(broadcastMsg(nextProps.notification));
         break;
       default:
     }

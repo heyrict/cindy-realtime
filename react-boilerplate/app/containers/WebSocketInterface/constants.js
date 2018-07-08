@@ -4,13 +4,11 @@
  *
  */
 
-import {
-  SET_CURRENT_USER,
-} from 'containers/UserNavbar/constants';
+import { SET_CURRENT_USER } from 'containers/UserNavbar/constants';
 
-export const INTERNAL_ACTIONS = [
-  SET_CURRENT_USER,
-];
+import { SEND_BROADCAST } from 'containers/Chat/constants';
+
+export const INTERNAL_ACTIONS = [SET_CURRENT_USER, SEND_BROADCAST];
 
 export const WS_CONNECT = 'app/WebSocketInterface/WS_CONNECT';
 export const WS_DISCONNECT = 'app/WebSocketInterface/WS_DISCONNECT';

@@ -26,6 +26,7 @@ import makeSelectSettings from 'containers/Settings/selectors';
 import ChatRoom from './ChatRoom';
 import Channels from './Channels';
 import DirectChat from './DirectChat';
+import Broadcast from './Broadcast';
 import Wrapper from './Wrapper';
 import makeSelectChat from './selectors';
 import saga from './saga';
@@ -33,7 +34,7 @@ import messages from './messages';
 import { changeChannel, changeTab } from './actions';
 import { defaultChannel, TABS } from './constants';
 
-const { TAB_CHAT, TAB_CHANNEL, TAB_DIRECTCHAT } = TABS;
+const { TAB_CHAT, TAB_CHANNEL, TAB_DIRECTCHAT, TAB_BROADCAST } = TABS;
 
 const StyledToolbar = styled(Toolbar)`
   background-color: sienna;
@@ -75,6 +76,12 @@ export function Chat(props) {
             <FormattedMessage {...messages.direct} />
           </NavLink>
         )}
+        {props.currentUser &&
+          props.currentUser.canSendGlobalNotification && (
+            <NavLink onClick={() => setActiveTab(TAB_BROADCAST)}>
+              <FormattedMessage {...messages.broadcast} />
+            </NavLink>
+          )}
       </StyledToolbar>
       <ChatRoom
         key={props.chat.channel || defaultChannel(props.location.pathname)}
@@ -105,6 +112,9 @@ export function Chat(props) {
             Boolean(props.currentUser)
           }
         />
+      )}
+      {props.chat.activeTab === TAB_BROADCAST && (
+        <Broadcast height={props.height - 50} />
       )}
     </div>
   );
@@ -200,6 +210,7 @@ const withCurrentUser = graphql(
     query($id: ID!) {
       user(id: $id) {
         ...UserLabel_user
+        canSendGlobalNotification
         lastReadDm {
           id
         }

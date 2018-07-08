@@ -36,8 +36,7 @@ class AwardApplication(models.Model):
 
     class Meta:
         verbose_name = _("Award Application")
-        permissions = (("can_review_award_application",
-                        _("Can review award application")), )
+        permissions = [("can_review_award_application", _("Can review award application")), ] # yapf: disable
 
     def __str__(self):
         return "[%s]: %s" % (str(self.applier), str(self.award))
@@ -67,6 +66,9 @@ class User(AbstractUser):
         related_name="last_read_dm")
 
     REQUIRED_FIELDS = ['nickname']
+
+    class Meta:
+        permissions = [("can_send_global_notification", _("Can send global notification")),] # yapf: disable
 
     def get_full_name(self):
         return self.nickname
@@ -134,11 +136,7 @@ puzzle_status_enum = {
     4: _("Forced Hidden")
 }
 
-puzzle_yami_enum = {
-    0: _("Normal"),
-    1: _("Yami"),
-    2: _("Long-term Yami")
-}
+puzzle_yami_enum = {0: _("Normal"), 1: _("Yami"), 2: _("Long-term Yami")}
 
 
 class Dialogue(models.Model):

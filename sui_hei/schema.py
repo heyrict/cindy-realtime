@@ -108,6 +108,7 @@ class UserNode(DjangoObjectType):
     dmCount = graphene.Int()
 
     can_review_award_application = graphene.Boolean()
+    can_send_global_notification = graphene.Boolean()
 
     def resolve_rowid(self, info):
         return self.id
@@ -129,6 +130,9 @@ class UserNode(DjangoObjectType):
 
     def resolve_can_review_award_application(self, info):
         return self.has_perm("sui_hei.can_review_award_application")
+
+    def resolve_can_send_global_notification(self, info):
+        return self.has_perm("sui_hei.can_send_global_notification")
 
     def resolve_dmCount(self, info):
         return self.dm_count

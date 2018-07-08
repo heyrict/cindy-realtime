@@ -19,6 +19,7 @@ export const TABS = {
   TAB_CHAT: 'TAB_CHAT',
   TAB_CHANNEL: 'TAB_CHANNEL',
   TAB_DIRECTCHAT: 'TAB_DIRECTCHAT',
+  TAB_BROADCAST: 'TAB_BROADCAST',
 };
 
 export const OPEN_MEMO = 'app/Chat/OPEN_MEMO';
@@ -53,3 +54,5 @@ export const REMOVE_FAVCHAN = 'app/Chat/REMOVE_FAVCHAN';
 export const PublicChannels = ['lobby', 'sp', 'yokoku'];
 
 export const SET_DM_RECEIVER = 'app/Chat/SET_DM_RECEIVER';
+
+export const SEND_BROADCAST = 'app/Chat/SEND_BROADCAST';

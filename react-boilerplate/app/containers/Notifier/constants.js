@@ -4,6 +4,7 @@
  *
  */
 
+import { text2md } from 'common';
 import {
   WS_CONNECTED,
   WS_DISCONNECTED,
@@ -67,9 +68,21 @@ const notifierMsg = (context) => ({
   ...context.payload,
 });
 
+const broadcastMsg = (context) => ({
+  ...defaultMessageStyle,
+  ...context.payload,
+  message: null,
+  children: (
+    <span
+      dangerouslySetInnerHTML={{ __html: text2md(context.payload.message) }}
+    />
+  ),
+});
+
 export const DIRECTCHAT_NOTIFY = 'containers/Notifier/DIRECTCHAT_NOTIFY';
 
 export const NOTIFIER_MESSAGE = 'containers/Notifier/NOTIFIER_MESSAGE';
+export const BROADCAST_MESSAGE = 'containers/Notifier/BROADCAST_MESSAGE';
 
 export const NOTE_NEEDED = {
   WS_CONNECTED,
@@ -78,6 +91,7 @@ export const NOTE_NEEDED = {
   DIRECTCHAT_NOTIFY,
   GOTID_MINICHAT,
   NOTIFIER_MESSAGE,
+  BROADCAST_MESSAGE,
 };
 
 export const NOTE_MSG = {
@@ -87,4 +101,5 @@ export const NOTE_MSG = {
   directMessageReceivedMsg,
   chatroomNotExistsMsg,
   notifierMsg,
+  broadcastMsg,
 };

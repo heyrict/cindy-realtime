@@ -20,6 +20,7 @@ import {
   ADD_FAVCHAN,
   REMOVE_FAVCHAN,
   SET_DM_RECEIVER,
+  SEND_BROADCAST,
 } from './constants';
 
 export function toggleChat(open) {
@@ -124,5 +125,12 @@ export function setDmReceiver({ nickname, id }) {
   return {
     type: SET_DM_RECEIVER,
     payload: { nickname, id },
+  };
+}
+
+export function sendBroadcast(payload) {
+  return {
+    type: SEND_BROADCAST,
+    payload,
   };
 }

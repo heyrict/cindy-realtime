@@ -18,6 +18,10 @@ export default defineMessages({
     id: 'app.containers.Chat.direct',
     defaultMessage: 'Direct Messages',
   },
+  broadcast: {
+    id: 'app.containers.Chat.broadcast',
+    defaultMessage: 'Broadcast',
+  },
   defaultChannel: {
     id: 'app.containers.Chat.defaultChannel',
     defaultMessage: 'Default Channel',
@@ -81,5 +85,9 @@ export default defineMessages({
   log: {
     id: 'app.containers.Chat.log',
     defaultMessage: 'Log',
+  },
+  content: {
+    id: 'app.containers.Chat.content',
+    defaultMessage: 'Content',
   },
 });

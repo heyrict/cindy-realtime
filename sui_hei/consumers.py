@@ -53,8 +53,10 @@ rediscon.set("onlineUsers", pickle.dumps(set()))
 
 # {{{1 Constants
 SET_CURRENT_USER = "app/UserNavbar/SET_CURRENT_USER"
+SEND_BROADCAST = "app/Chat/SEND_BROADCAST"
 
 UPDATE_ONLINE_VIEWER_COUNT = "ws/UPDATE_ONLINE_VIEWER_COUNT"
+BROADCAST_MESSAGE = "containers/Notifier/BROADCAST_MESSAGE"
 
 # }}}
 
@@ -101,8 +103,18 @@ class MainConsumer(AsyncJsonWebsocketConsumer):
         await self.send_json(event["content"])
 
     async def receive_json(self, content):
+        print(content)
         if content.get("type") == SET_CURRENT_USER:
             await self.user_change(content)
+        if content.get("type") == SEND_BROADCAST:
+            text = {
+                "type": BROADCAST_MESSAGE,
+                "payload": content.get("payload"),
+            }
+            await self.channel_layer.group_send("viewer", {
+                "type": "viewer.message",
+                "content": text,
+            })
 
     async def user_change(self, content):
         onlineUsers = rediscon.get("onlineUsers")
