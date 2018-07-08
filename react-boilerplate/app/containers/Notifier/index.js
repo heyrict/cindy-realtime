@@ -25,14 +25,16 @@ import { NOTE_NEEDED, NOTE_MSG } from './constants';
 class Notifier extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {
-      WS_CONNECT,
+      WS_CONNECTED,
+      WS_DISCONNECTED,
       PUZZLE_ADDED,
       DIRECTCHAT_NOTIFY,
       GOTID_MINICHAT,
       NOTIFIER_MESSAGE,
     } = NOTE_NEEDED;
     const {
-      wsConnectMsg,
+      wsConnectedMsg,
+      wsDisconnectedMsg,
       puzzleAddedMsg,
       directMessageReceivedMsg,
       chatroomNotExistsMsg,
@@ -40,8 +42,11 @@ class Notifier extends React.Component {
     } = NOTE_MSG;
 
     switch (nextProps.notification.type) {
-      case WS_CONNECT:
-        this.notif.addNotification(wsConnectMsg());
+      case WS_CONNECTED:
+        this.notif.addNotification(wsConnectedMsg());
+        break;
+      case WS_DISCONNECTED:
+        this.notif.addNotification(wsDisconnectedMsg());
         break;
       case PUZZLE_ADDED:
         this.notif.addNotification(puzzleAddedMsg(nextProps.notification.data));
@@ -101,10 +106,17 @@ const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps
+);
 
 const withReducer = injectReducer({ key: 'notifier', reducer });
 
 const withSaga = injectSaga({ key: 'notifier', saga });
 
-export default compose(withSaga, withReducer, withConnect)(Notifier);
+export default compose(
+  withSaga,
+  withReducer,
+  withConnect
+)(Notifier);

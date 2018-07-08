@@ -1,9 +1,13 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  wsConnect: {
-    id: 'app.containers.Notifier.wsConnect',
+  wsConnected: {
+    id: 'app.containers.Notifier.wsConnected',
     defaultMessage: 'Connected to server!',
+  },
+  wsDisconnected: {
+    id: 'app.containers.Notifier.wsDisconnected',
+    defaultMessage: 'Disconnected from server. Retrying...',
   },
   puzzleAdded: {
     id: 'app.containers.Notifier.puzzleAdded',

@@ -9,7 +9,8 @@ import { fromJS } from 'immutable';
 import { NOTE_NEEDED } from './constants';
 
 const {
-  WS_CONNECT,
+  WS_CONNECTED,
+  WS_DISCONNECTED,
   PUZZLE_ADDED,
   DIRECTCHAT_NOTIFY,
   GOTID_MINICHAT,
@@ -22,7 +23,8 @@ const initialState = fromJS({
 
 function notifierReducer(state = initialState, action) {
   switch (action.type) {
-    case WS_CONNECT:
+    case WS_CONNECTED:
+    case WS_DISCONNECTED:
     case PUZZLE_ADDED:
     case DIRECTCHAT_NOTIFY:
       return state.set('notification', action);

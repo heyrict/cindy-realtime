@@ -12,19 +12,14 @@ import { WebSocketBridge } from 'django-channels';
 import { eventChannel, delay } from 'redux-saga';
 
 import { WS_CONNECT, WS_DISCONNECT, INTERNAL_ACTIONS } from './constants';
+import { wsConnected, wsDisconnected } from './actions';
 
 function* handleInternalAction(socket, action) {
   if (action.delay) yield delay(action.delay);
 
   for (let i = 1; i <= 10; i += 1) {
-    try {
-      const { stream = 'viewer', ...payload } = action;
-      socket.send(action);
-      return;
-    } catch (e) {
-      console.log(`Socket not connected. Retry...${i}`);
-      if (socket.socket.readyState === 0) yield call(delay, 1000);
-    }
+    const { stream = 'viewer', ...payload } = action;
+    socket.send(action);
   }
 }
 
@@ -41,6 +36,12 @@ function* externalListener(channel) {
 
 function websocketWatch(socket) {
   return eventChannel((emitter) => {
+    socket.socket.addEventListener('open', () => {
+      emitter(wsConnected());
+    });
+    socket.socket.addEventListener('close', () => {
+      emitter(wsDisconnected());
+    });
     socket.listen((action) => {
       const { stream, payload } = action;
       if (stream) emitter(payload);

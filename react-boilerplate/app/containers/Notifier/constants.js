@@ -4,7 +4,10 @@
  *
  */
 
-import { WS_CONNECT } from 'containers/WebSocketInterface/constants';
+import {
+  WS_CONNECTED,
+  WS_DISCONNECTED,
+} from 'containers/WebSocketInterface/constants';
 import { PUZZLE_ADDED } from 'containers/PuzzleActiveList/constants';
 import { GOTID_MINICHAT } from 'containers/Chat/constants';
 
@@ -17,9 +20,14 @@ const defaultMessageStyle = {
   level: 'info',
 };
 
-const wsConnectMsg = () => ({
+const wsConnectedMsg = () => ({
   ...defaultMessageStyle,
-  children: <FormattedMessage {...messages.wsConnect} />,
+  children: <FormattedMessage {...messages.wsConnected} />,
+});
+
+const wsDisconnectedMsg = () => ({
+  ...defaultMessageStyle,
+  children: <FormattedMessage {...messages.wsDisconnected} />,
 });
 
 const chatroomNotExistsMsg = (context) => ({
@@ -64,7 +72,8 @@ export const DIRECTCHAT_NOTIFY = 'containers/Notifier/DIRECTCHAT_NOTIFY';
 export const NOTIFIER_MESSAGE = 'containers/Notifier/NOTIFIER_MESSAGE';
 
 export const NOTE_NEEDED = {
-  WS_CONNECT,
+  WS_CONNECTED,
+  WS_DISCONNECTED,
   PUZZLE_ADDED,
   DIRECTCHAT_NOTIFY,
   GOTID_MINICHAT,
@@ -72,7 +81,8 @@ export const NOTE_NEEDED = {
 };
 
 export const NOTE_MSG = {
-  wsConnectMsg,
+  wsConnectedMsg,
+  wsDisconnectedMsg,
   puzzleAddedMsg,
   directMessageReceivedMsg,
   chatroomNotExistsMsg,
