@@ -41,6 +41,7 @@ import PuzzleShowSubscription from 'graphql/PuzzleShowSubscription';
 import PuzzleShowUnionSubscription from 'graphql/PuzzleShowUnionSubscription';
 
 import { genreInfo, yamiInfo } from 'components/TitleLabel/constants';
+import star from 'images/star.svg';
 import { dialogueSlicer } from './constants';
 import Frame from './Frame';
 import messages from './messages';
@@ -52,6 +53,7 @@ import BookmarkBox from './BookmarkBox';
 const FilterButton = styled.button`
   border-bottom: ${({ enabled }) => (enabled ? '3px solid #2075c7' : '0')};
   color: ${({ accent }) => (accent ? '#cb4b16' : 'inherit')};
+  font-weight: ${({ accent }) => (accent ? '800' : 'inherit')};
 `;
 
 const FilterFrame = styled.div`
@@ -192,6 +194,7 @@ export class PuzzleShowPage extends React.Component {
                       })
                 }
               >
+                {participant.trueansw && <Img src={star} alt={star} />}
                 {participant.user.nickname}
                 <sup>
                   {participant.uacount > 0
