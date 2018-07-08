@@ -18,8 +18,14 @@ function* handleInternalAction(socket, action) {
   if (action.delay) yield delay(action.delay);
 
   for (let i = 1; i <= 10; i += 1) {
-    const { stream = 'viewer', ...payload } = action;
-    socket.send(action);
+    try {
+      const { stream = 'viewer', ...payload } = action;
+      socket.send(action);
+      return;
+    } catch (e) {
+      console.log(`Socket not connected. Retry...${i}`);
+      if (socket.socket.readyState === 0) yield call(delay, 1000);
+    }
   }
 }
 
