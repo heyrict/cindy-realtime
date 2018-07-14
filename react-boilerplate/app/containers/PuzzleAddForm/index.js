@@ -19,7 +19,9 @@ import { MIN_CONTENT_SAFE_CREDIT } from 'settings';
 import { Input, Select, ButtonOutline as Button } from 'style-store';
 import FieldGroup from 'components/FieldGroup';
 import PreviewEdit from 'components/PreviewEdit';
+import HelpPopper from 'components/HelpPopper';
 import genreMessages from 'components/TitleLabel/messages';
+
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import PuzzleAddFormMutation from 'graphql/PuzzleAddFormMutation';
@@ -100,7 +102,12 @@ export class PuzzleAddForm extends React.Component {
           onChange={this.handleChange}
         />
         <FieldGroup
-          label={<FormattedMessage {...messages.genreLabel} />}
+          label={
+            <span>
+              <FormattedMessage {...messages.genreLabel} />
+              <HelpPopper messageId="puzzle_genre" />
+            </span>
+          }
           CtlElement={
             <Select
               componentClass="select"
@@ -140,7 +147,12 @@ export class PuzzleAddForm extends React.Component {
           }
         />
         <FieldGroup
-          label={<FormattedMessage {...messages.yamiLabel} />}
+          label={
+            <span>
+              <FormattedMessage {...messages.yamiLabel} />
+              <HelpPopper messageId="puzzle_yami" />
+            </span>
+          }
           CtlElement={
             <Select
               componentClass="select"
@@ -174,7 +186,12 @@ export class PuzzleAddForm extends React.Component {
         />
         <FieldGroup
           id="formPuzzleAddContent"
-          label={<FormattedMessage {...messages.contentLabel} />}
+          label={
+            <span>
+              <FormattedMessage {...messages.contentLabel} />
+              <HelpPopper messageId="puzzle_content" />
+            </span>
+          }
           CtlElement={
             <PreviewEdit
               ref={(ref) => (this.contentTextarea = ref)}
@@ -188,7 +205,12 @@ export class PuzzleAddForm extends React.Component {
         />
         <FieldGroup
           id="formPuzzleAddSolution"
-          label={<FormattedMessage {...messages.solutionLabel} />}
+          label={
+            <span>
+              <FormattedMessage {...messages.solutionLabel} />
+              <HelpPopper messageId="puzzle_solution" />
+            </span>
+          }
           CtlElement={
             <PreviewEdit
               ref={(ref) => (this.solutionTextarea = ref)}
