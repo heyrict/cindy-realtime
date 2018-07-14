@@ -118,15 +118,16 @@ function _norm_tabs(string) {
 export function StartCountdown(selector) {
   return window.setInterval(function() {
     Array.forEach(
-      document.getElementsByClassName(selector || '.countdownobj'),
+      document.querySelectorAll(selector || '.countdownobj'),
       (countdownobj) => {
-        var until = moment(countdownobj.getAttribute('until')),
-          now = moment();
+        var until = moment(countdownobj.getAttribute('until'));
+        var now = moment(new Date());
         var diff = until.diff(now, 'milliseconds'),
           diffdays = until.diff(now, 'days');
-        countdownobj.innerHtml =
+        console.log(diff, diffdays);
+        countdownobj.innerHTML =
           diff < 0
-            ? `<font color='tomato'>${gettext('Time Out')}</font>`
+            ? `<font color='tomato'>Time Out</font>`
             : (diffdays ? diffdays + 'd ' : '') +
               moment(diff).format('H[h]:mm[m]:ss[s]');
       }

@@ -90,4 +90,8 @@ export default defineMessages({
     id: 'app.containers.Chat.content',
     defaultMessage: 'Content',
   },
+  autoDismiss: {
+    id: 'app.containers.Chat.autoDismiss',
+    defaultMessage: 'Audo Dismiss (0 to disable)',
+  },
 });

@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 
 import { Flex } from 'rebass';
-import { ButtonOutline, Textarea } from 'style-store';
+import { ButtonOutline, Textarea, Input } from 'style-store';
 import FieldGroup from 'components/FieldGroup';
 
 import { sendBroadcast } from './actions';
@@ -19,7 +19,17 @@ class Broadcast extends React.PureComponent {
       autoDismiss: 10,
     };
 
-    this.handleChange = (e) => this.setState({ message: e.target.value });
+    this.handleChange = (e) => {
+      switch (e.target.id) {
+        case 'broadcast_content':
+          this.setState({ message: e.target.value });
+          break;
+        case 'broadcast_autoDismiss':
+          this.setState({ autoDismiss: e.target.value });
+          break;
+        default:
+      }
+    };
     this.handleSend = () => {
       this.props.sendBroadcast(this.state);
       this.setState({
@@ -36,7 +46,22 @@ class Broadcast extends React.PureComponent {
         <FieldGroup
           label={<FormattedMessage {...messages.content} />}
           CtlElement={
-            <Textarea value={this.state.message} onChange={this.handleChange} />
+            <Textarea
+              id="broadcast_content"
+              value={this.state.message}
+              onChange={this.handleChange}
+            />
+          }
+        />
+        <FieldGroup
+          label={<FormattedMessage {...messages.autoDismiss} />}
+          CtlElement={
+            <Input
+              type="number"
+              id="broadcast_autoDismiss"
+              value={this.state.autoDismiss}
+              onChange={this.handleChange}
+            />
           }
         />
         <ButtonOutline p={1} w={1} onClick={this.handleSend}>
