@@ -138,7 +138,7 @@ class AwardApplicationPanel extends React.Component {
                   </div>
                   <div>
                     <FormattedMessage {...messages.created} />:{' '}
-                    {moment(node.created).format('YYYY-MM-DD HH:mm')}
+                    {moment(node.created).format('lll')}
                   </div>
                   {node.reviewer && (
                     <div style={{ marginTop: '10px' }}>
@@ -151,7 +151,7 @@ class AwardApplicationPanel extends React.Component {
                   {node.reviewed && (
                     <div>
                       <FormattedMessage {...messages.reviewed} />:{' '}
-                      {moment(node.reviewed).format('YYYY-MM-DD HH:mm')}
+                      {moment(node.reviewed).format('lll')}
                     </div>
                   )}
                 </Box>
@@ -249,8 +249,14 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps
+);
 
 const withMutation = graphql(UpdateAwardApplication);
 
-export default compose(withMutation, withConnect)(AwardApplicationPanel);
+export default compose(
+  withMutation,
+  withConnect
+)(AwardApplicationPanel);

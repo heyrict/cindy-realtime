@@ -41,17 +41,7 @@ module.exports = require('./webpack.base.babel')({
       path: join(outputPath, '[name].json'),
     }),
     new BundleTracker({ filename: 'build/webpack-stats.dll.json' }),
-    new webpack.ContextReplacementPlugin(/^\.\/locale$/, (context) => {
-      if (!/\/moment\//.test(context.context)) {
-        return;
-      }
-      // context needs to be modified in place
-      Object.assign(context, {
-        regExp: /^\.\/(ja|en|fr|zh)/,
-        // point to the locale data folder relative to moment's src/lib/locale
-        request: '../../locale',
-      });
-    }),
+    new webpack.ContextReplacementPlugin(/moment\/locale$/, /(en|ja)/),
     //new webpack.IgnorePlugin(/\.\/locale$/),
   ],
   performance: {

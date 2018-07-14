@@ -39,7 +39,7 @@ export class UserPanel extends React.Component {
           </UserCol>
           <Box ml="auto" px={10}>
             <FormattedMessage {...sortMessages.date_joined} />:{' '}
-            {moment(node.dateJoined).format('YYYY-MM-DD HH:mm')}
+            {moment(node.dateJoined).format('lll')}
           </Box>
         </Row>
       </RoundedPanel>

@@ -206,9 +206,7 @@ class Answer extends React.PureComponent {
         <PuzzleFrame>
           <Box width={1}>
             <UserLabel user={this.props.owner} />
-            <Time>
-              {moment(this.props.answeredtime).format('YYYY-MM-DD HH:mm')}
-            </Time>
+            <Time>{moment(this.props.answeredtime).format('lll')}</Time>
           </Box>
           <Splitter />
           <Box width={1} style={{ overflow: 'auto' }}>
@@ -280,8 +278,14 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps
+);
 
 const withMutation = graphql(answerMutation);
 
-export default compose(withConnect, withMutation)(Answer);
+export default compose(
+  withConnect,
+  withMutation
+)(Answer);

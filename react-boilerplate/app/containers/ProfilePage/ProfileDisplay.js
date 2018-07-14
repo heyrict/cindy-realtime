@@ -57,15 +57,11 @@ function ProfileDisplay(props, context) {
       />
       <ProfRow
         heading={_(messages.dateJoined)}
-        content={
-          <div>{moment(props.user.dateJoined).format('YYYY-MM-DD HH:mm')}</div>
-        }
+        content={<div>{moment(props.user.dateJoined).format('lll')}</div>}
       />
       <ProfRow
         heading={_(messages.lastLogin)}
-        content={
-          <div>{moment(props.user.lastLogin).format('YYYY-MM-DD HH:mm')}</div>
-        }
+        content={<div>{moment(props.user.lastLogin).format('lll')}</div>}
       />
       {props.userId === props.currentUserId && (
         <AwardSwitch

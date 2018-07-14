@@ -129,9 +129,7 @@ export class Hint extends React.Component {
               </FormattedMessage>
             )}
           <Flex justifyContent="right">
-            <Time>
-              {moment(this.props.node.created).format('YYYY-MM-DD HH:mm')}
-            </Time>
+            <Time>{moment(this.props.node.created).format('lll')}</Time>
           </Flex>
         </PuzzleFrame>
       </Constrained>
@@ -162,8 +160,14 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps
+);
 
 const withMutate = graphql(hintMutation);
 
-export default compose(withConnect, withMutate)(Hint);
+export default compose(
+  withConnect,
+  withMutate
+)(Hint);

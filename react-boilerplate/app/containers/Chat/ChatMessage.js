@@ -27,9 +27,7 @@ function ChatMessage(props) {
         <PrecedingSpan>{props.precedingStr}</PrecedingSpan>
       )}
       <UserLabel user={props.user} />
-      {props.created && (
-        <Time>{moment(props.created).format('YYYY-MM-DD HH:mm')}</Time>
-      )}
+      {props.created && <Time>{moment(props.created).format('lll')}</Time>}
       <div
         style={{ overflow: 'auto' }}
         dangerouslySetInnerHTML={{ __html: line2md(props.content) }}

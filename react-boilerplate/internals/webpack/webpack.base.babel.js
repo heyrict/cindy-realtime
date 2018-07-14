@@ -14,10 +14,14 @@ process.noDeprecation = true;
 module.exports = (options) => ({
   mode: options.mode,
   entry: options.entry,
-  output: Object.assign({ // Compile into js/build.js
-    path: path.resolve(process.cwd(), 'build'),
-    publicPath: '/static/',
-  }, options.output), // Merge with env dependent settings
+  output: Object.assign(
+    {
+      // Compile into js/build.js
+      path: path.resolve(process.cwd(), 'build'),
+      publicPath: '/static/',
+    },
+    options.output
+  ), // Merge with env dependent settings
   optimization: options.optimization,
   module: {
     rules: [
@@ -125,20 +129,12 @@ module.exports = (options) => ({
     }),
   ]),
   resolve: {
-    modules: [
-      'node_modules',
-      'app',
-    ],
-    extensions: [
-      '.js',
-      '.jsx',
-      '.react.js',
-    ],
-    mainFields: [
-      'browser',
-      'jsnext:main',
-      'main',
-    ],
+    modules: ['node_modules', 'app'],
+    extensions: ['.js', '.jsx', '.react.js'],
+    mainFields: ['browser', 'jsnext:main', 'main'],
+    alias: {
+      moment: 'moment/moment.js',
+    },
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window

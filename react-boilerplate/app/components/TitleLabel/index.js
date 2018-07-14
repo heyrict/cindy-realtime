@@ -61,7 +61,7 @@ function TitleLabel(props) {
           <Box ml="auto" style={{ alignSelf: 'center' }}>
             <PuzzleDate>
               <FormattedMessage {...sortMessages.created} />:{' '}
-              {moment(created).format('YYYY-MM-DD HH:mm')}
+              {moment(created).format('lll')}
             </PuzzleDate>
           </Box>
         </Flex>
@@ -84,7 +84,7 @@ function TitleLabel(props) {
       <Box ml="auto" style={{ alignSelf: 'center' }}>
         <PuzzleDate>
           <FormattedMessage {...sortMessages.created} />:{' '}
-          {moment(created).format('YYYY-MM-DD HH:mm')}
+          {moment(created).format('lll')}
         </PuzzleDate>
       </Box>
     </Flex>

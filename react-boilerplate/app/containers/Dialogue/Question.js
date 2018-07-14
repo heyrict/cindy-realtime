@@ -128,7 +128,7 @@ class Question extends React.PureComponent {
         <Box width={1}>
           <Indexer>{this.props.index}</Indexer>
           <UserLabel user={this.props.user} />
-          <Time>{moment(this.props.created).format('YYYY-MM-DD HH:mm')}</Time>
+          <Time>{moment(this.props.created).format('lll')}</Time>
         </Box>
         <Splitter />
         <Box width={1} style={{ overflow: 'auto' }}>
@@ -185,8 +185,14 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps
+);
 
 const withMutation = graphql(updateQuestionMutation);
 
-export default compose(withConnect, withMutation)(Question);
+export default compose(
+  withConnect,
+  withMutation
+)(Question);
