@@ -43,7 +43,7 @@ class Channels extends React.PureComponent {
           <FormattedMessage {...messages.defaultChannel} />
         </StyledButton>
         <Bar open={this.state.publicShown} onClick={this.togglePublicShown}>
-          public channels
+          <FormattedMessage {...messages.publicChannels} />
         </Bar>
         {this.state.publicShown &&
           PublicChannels.map((c) => (
@@ -58,7 +58,7 @@ class Channels extends React.PureComponent {
             </StyledButton>
           ))}
         <Bar open={this.state.favShown} onClick={this.toggleFavShown}>
-          favorite channels
+          <FormattedMessage {...messages.favoriteChannels} />
         </Bar>
         {this.state.favShown &&
           this.props.favChannels.edges.map((edge) => {

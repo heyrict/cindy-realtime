@@ -94,4 +94,12 @@ export default defineMessages({
     id: 'app.containers.Chat.autoDismiss',
     defaultMessage: 'Audo Dismiss (0 to disable)',
   },
+  favoriteChannels: {
+    id: 'app.containers.Chat.favoriteChannels',
+    defaultMessage: 'favorite channels',
+  },
+  publicChannels: {
+    id: 'app.containers.Chat.publicChannels',
+    defaultMessage: 'public channels',
+  },
 });

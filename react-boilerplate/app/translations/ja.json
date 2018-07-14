@@ -18,7 +18,7 @@
   "app.components.HelpPopper.puzzle_content": "**問題文**: 水平思考パズルの問題提出の部分",
   "app.components.HelpPopper.puzzle_genre": "**ジャンル**: 水平思考パズルのジャンル。\n\n[ウミガメのスープ](https://wiki3.jp/cindy-lat/page/6#2): 物語に隠された謎を「なぜ？」を問う形で出題し、質問者はYes/Noで答えられる質問で真相を解き明かす最も使われているジャンル形式。難易度★\n[20の扉](https://wiki3.jp/cindy-lat/page/6#3): 物語に隠された謎を「なに？」を問う形で出題し、質問者はYes/Noで答えられる質問で出題者が求められる回答を当てることが目的のジャンル形式。難易度★★★\n[亀夫君問題](https://wiki3.jp/cindy-lat/page/6#4): 出題者が物語の登場人物に演じ、参加者が出題者に質問・指示をして物語を進めていく問題形式。難易度★★★★\n[新＆形式](https://wiki3.jp/cindy-lat/page/6#5): 上記３種類に当てはまらない新しいジャンル、もしくはイベントを開催するときに使うジャンル形式",
   "app.components.HelpPopper.puzzle_solution": "**解説文**: 水平思考パズルの問題に対する解説の部分",
-  "app.components.HelpPopper.puzzle_yami": "**闇スープ**: 参加者が他の参加者の質問を閲覧できるかどうかの設定。[くわしく](https://wiki3.jp/cindy-lat/page/6#6)\n\n無し: 参加者が他の参加者の質問を閲覧できる。出題中でも「闇スープ」に切り替えることができる。\n闇スープ: 参加者が他の参加者の質問を閲覧できない。出題中でも「無し」に切り替えることができる。\n闇＆常駐: 出題中に解説の編集ができない。",
+  "app.components.HelpPopper.puzzle_yami": "**闇スープ**: 参加者が他の参加者の質問を閲覧できるかどうかの設定。[くわしく](https://wiki3.jp/cindy-lat/page/6#6)\n\n無し: 参加者が他の参加者の質問を閲覧できる。出題中でも「闇スープ」に切り替えることができる。\n闇スープ: 参加者が他の参加者の質問を閲覧できない。出題中でも「無し」に切り替えることができる。\n闇＆常駐: 正解したユーザーに即時解説を開示する代わりに、出題者が出題中に解説を編集できない。",
   "app.components.MarkdownPreview.hidePreview": "プレビューを閉じる",
   "app.components.MarkdownPreview.showPreview": "プレビューを開く",
   "app.components.MenuNavbar.chat": "チャット",
