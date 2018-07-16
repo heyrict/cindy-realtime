@@ -9,6 +9,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { text2md } from 'common';
+import { Formik } from 'formik';
+import * as yup from 'yup';
 
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -24,183 +26,200 @@ import RegisterFormMutation from 'graphql/RegisterFormMutation';
 
 import { nAlert } from 'containers/Notifier/actions';
 import rulesMessages from 'containers/RulesPage/messages';
+import modalMessages from 'components/withModal/messages';
 import messages from './messages';
 import { registerSucceeded } from './actions';
 
-export class RegisterForm extends React.Component {
-  // {{{ constructor
-  constructor(props) {
-    super(props);
-    this.state = {
-      displayPolicy: true,
+const registerFormSchema = yup.object().shape({
+  username: yup
+    .string()
+    .required()
+    .max(150)
+    .matches(/^[a-zA-Z0-9@\-+._]+$/),
+  nickname: yup
+    .string()
+    .required()
+    .max(64)
+    .trim(),
+  password: yup
+    .string()
+    .required()
+    .min(8)
+    .matches(/[0-9]+/)
+    .matches(/[a-zA-Z]+/)
+    .matches(/^[a-zA-Z0-9@.+\-_]+$/),
+  passwordConfirm: yup
+    .string()
+    .oneOf([yup.ref('password')])
+    .required(),
+});
+
+const innerRegisterForm = ({
+  values,
+  errors,
+  touched,
+  handleBlur,
+  handleChange,
+  handleSubmit,
+  isSubmitting,
+  setFieldValue,
+}) => {
+  if (values.displayPolicy) {
+    return (
+      <Constrained level={5}>
+        <div style={{ maxHeight: '340px', overflow: 'auto' }}>
+          <FormattedMessage {...rulesMessages.rules}>
+            {(msg) => (
+              <div dangerouslySetInnerHTML={{ __html: text2md(msg) }} />
+            )}
+          </FormattedMessage>
+        </div>
+        <ButtonOutline
+          onClick={() => setFieldValue('displayPolicy', false)}
+          style={{ borderRadius: 0, width: '100%' }}
+        >
+          <FormattedMessage {...messages.policyReadPrompt} />
+        </ButtonOutline>
+      </Constrained>
+    );
+  }
+  return (
+    <form onSubmit={handleSubmit}>
+      <FieldGroup
+        id="formRegisterUsername"
+        name="username"
+        label={<FormattedMessage {...messages.usernameLabel} />}
+        Ctl={Input}
+        type="text"
+        value={values.username}
+        valid={touched.username && errors.username ? 'error' : null}
+        help={<FormattedMessage {...messages.usernameHelp} />}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
+      <FieldGroup
+        id="formRegisterNickname"
+        name="nickname"
+        label={<FormattedMessage {...messages.nicknameLabel} />}
+        Ctl={Input}
+        type="text"
+        value={values.nickname}
+        valid={touched.nickname && errors.nickname ? 'error' : null}
+        help={<FormattedMessage {...messages.nicknameHelp} />}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
+      <FieldGroup
+        id="formRegisterPassword"
+        name="password"
+        label={<FormattedMessage {...messages.passwordLabel} />}
+        Ctl={Input}
+        type="password"
+        value={values.password}
+        valid={touched.password && errors.password ? 'error' : null}
+        help={<FormattedMessage {...messages.passwordHelp} />}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
+      <FieldGroup
+        id="formRegisterPasswordConfirm"
+        name="passwordConfirm"
+        label={<FormattedMessage {...messages.passwordConfirmLabel} />}
+        Ctl={Input}
+        type="password"
+        value={values.passwordConfirm}
+        valid={
+          touched.passwordConfirm && errors.passwordConfirm ? 'error' : null
+        }
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
+      <FormattedMessage {...modalMessages.confirm}>
+        {(msg) => (
+          <ButtonOutline
+            is="input"
+            type="submit"
+            w={1}
+            value={msg}
+            disabled={isSubmitting}
+          />
+        )}
+      </FormattedMessage>
+    </form>
+  );
+};
+
+innerRegisterForm.propTypes = {
+  values: PropTypes.shape({
+    username: PropTypes.string.isRequired,
+    nickname: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired,
+    passwordConfirm: PropTypes.string.isRequired,
+    displayPolicy: PropTypes.bool.isRequired,
+  }),
+  errors: PropTypes.shape({
+    username: PropTypes.string,
+    nickname: PropTypes.string,
+    password: PropTypes.string,
+    passwordConfirm: PropTypes.string,
+    displayPolicy: PropTypes.string,
+  }),
+  touched: PropTypes.shape({
+    username: PropTypes.bool,
+    nickname: PropTypes.bool,
+    password: PropTypes.bool,
+    passwordConfirm: PropTypes.bool,
+    displayPolicy: PropTypes.bool,
+  }),
+  handleBlur: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  isSubmitting: PropTypes.bool.isRequired,
+  setFieldValue: PropTypes.func.isRequired,
+};
+
+const RegisterForm = (props) => (
+  <Formik
+    initialValues={{
       username: '',
       nickname: '',
       password: '',
       passwordConfirm: '',
-      username_valid: true,
-      nickname_valid: true,
-      password_valid: true,
-      passwordConfirm_valid: true,
-    };
-
-    this.handlePolicyConfirm = () => this.setState({ displayPolicy: false });
-    this.handleChange = this.handleChange.bind(this);
-    this.confirm = this.confirm.bind(this);
-  }
-  // }}}
-  // {{{ handleChange
-  handleChange(e) {
-    const target = e.target;
-    if (target.id === 'formRegisterUsername') {
-      this.setState({ username: target.value });
-      this.setState((prevState) => ({
-        username_valid:
-          prevState.username.match(/^[a-zA-Z0-9@\-+._]+$/) &&
-          prevState.username.length < 150 &&
-          prevState.username.length > 0,
-      }));
-    } else if (target.id === 'formRegisterNickname') {
-      this.setState({ nickname: target.value });
-      this.setState((prevState) => ({
-        nickname_valid:
-          prevState.nickname.length <= 64 && prevState.nickname.length > 0,
-      }));
-    } else if (target.id === 'formRegisterPassword') {
-      this.setState({ password: target.value });
-      this.setState((prevState) => ({
-        password_valid:
-          prevState.password.length <= 64 &&
-          prevState.password.length >= 8 &&
-          prevState.password.match(/[0-9]+/) &&
-          prevState.password.match(/[a-zA-Z]+/) &&
-          prevState.password.match(/^[a-zA-Z0-9@.+\-_]+$/),
-      }));
-    } else if (target.id === 'formRegisterPasswordConfirm') {
-      this.setState({ passwordConfirm: target.value });
-      this.setState((prevState) => ({
-        passwordConfirm_valid: prevState.passwordConfirm === prevState.password,
-      }));
-    }
-  }
-  // }}}
-  // {{{ confirm
-  confirm() {
-    const { username, nickname, password } = this.state;
-    // Validation
-    if (
-      !this.state.username_valid ||
-      !this.state.nickname_valid ||
-      !this.state.password_valid ||
-      !this.state.passwordConfirm_valid ||
-      !(
-        this.state.nickname &&
-        this.state.username &&
-        this.state.password &&
-        this.state.passwordConfirm
-      )
-    ) {
-      this.setState((prevState) => ({
-        username_valid: prevState.username !== '' && prevState.username_valid,
-        nickname_valid: prevState.nickname !== '' && prevState.nickname_valid,
-        password_valid: prevState.password !== '' && prevState.password_valid,
-        passwordConfirm_valid:
-          prevState.passwordConfirm !== '' && prevState.passwordConfirm_valid,
-      }));
-      this.props.alert('There are some errors in your form!');
-      return;
-    }
-    // Commit
-    this.props
-      .mutate({
-        variables: {
-          input: { username, nickname, password },
-        },
-      })
-      .then(({ data }) => {
-        const user = data.register.user;
-        this.props.updateCurrentUser({
-          ...user,
-          userId: user.rowid,
+      displayPolicy: true,
+    }}
+    validationSchema={registerFormSchema}
+    onSubmit={(values, { setSubmitting }) => {
+      const { username, nickname, password } = values;
+      props
+        .mutate({
+          variables: {
+            input: { username, nickname, password },
+          },
+        })
+        .then(({ data }) => {
+          const user = data.register.user;
+          props.updateCurrentUser({
+            ...user,
+            userId: user.rowid,
+          });
+          props.registerSucceeded(user.rowid);
+          setSubmitting(false);
+        })
+        .catch((error) => {
+          props.alert(error.message);
+          setSubmitting(false);
         });
-        this.props.registerSucceeded(user.rowid);
-      })
-      .catch((error) => {
-        this.props.alert(error.message);
-      });
-  }
-  // }}}
-  // {{{ render
-  render() {
-    if (this.state.displayPolicy) {
-      return (
-        <Constrained level={5}>
-          <div style={{ maxHeight: '340px', overflow: 'auto' }}>
-            <FormattedMessage {...rulesMessages.rules}>
-              {(msg) => (
-                <div dangerouslySetInnerHTML={{ __html: text2md(msg) }} />
-              )}
-            </FormattedMessage>
-          </div>
-          <ButtonOutline
-            onClick={this.handlePolicyConfirm}
-            style={{ borderRadius: 0, width: '100%' }}
-          >
-            <FormattedMessage {...messages.policyReadPrompt} />
-          </ButtonOutline>
-        </Constrained>
-      );
-    }
-    return (
-      <div>
-        <FieldGroup
-          id="formRegisterUsername"
-          label={<FormattedMessage {...messages.usernameLabel} />}
-          Ctl={Input}
-          type="text"
-          value={this.state.username}
-          valid={this.state.username_valid ? null : 'error'}
-          help={<FormattedMessage {...messages.usernameHelp} />}
-          onChange={this.handleChange}
-        />
-        <FieldGroup
-          id="formRegisterNickname"
-          label={<FormattedMessage {...messages.nicknameLabel} />}
-          Ctl={Input}
-          type="text"
-          value={this.state.nickname}
-          valid={this.state.nickname_valid ? null : 'error'}
-          help={<FormattedMessage {...messages.nicknameHelp} />}
-          onChange={this.handleChange}
-        />
-        <FieldGroup
-          id="formRegisterPassword"
-          label={<FormattedMessage {...messages.passwordLabel} />}
-          Ctl={Input}
-          type="password"
-          value={this.state.password}
-          valid={this.state.password_valid ? null : 'error'}
-          help={<FormattedMessage {...messages.passwordHelp} />}
-          onChange={this.handleChange}
-        />
-        <FieldGroup
-          id="formRegisterPasswordConfirm"
-          label={<FormattedMessage {...messages.passwordConfirmLabel} />}
-          Ctl={Input}
-          type="password"
-          value={this.state.passwordConfirm}
-          valid={this.state.passwordConfirm_valid ? null : 'error'}
-          onChange={this.handleChange}
-        />
-      </div>
-    );
-  }
-  // }}}
-}
+    }}
+    render={innerRegisterForm}
+  />
+);
 
 RegisterForm.propTypes = {
+  // eslint-disable-next-line react/no-unused-prop-types
   updateCurrentUser: PropTypes.func.isRequired,
   mutate: PropTypes.func.isRequired,
   alert: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
   registerSucceeded: PropTypes.func.isRequired,
   // onHide: PropTypes.func,
 };
@@ -224,7 +243,6 @@ export default compose(
   withModal({
     header: 'Register',
     footer: {
-      confirm: true,
       close: true,
     },
   })
