@@ -72,7 +72,7 @@ def add_twitter_on_best_of_month_determined(puzzle_list, useraward):
         print(status_message)
         status_messages = status_message.split('\n\n', 1)
 
-        imgpath = render(**status_messages)
+        imgpath = render(*status_messages)
         with open(imgpath, 'rb') as f:
             imgdata = f.read()
         params = {
