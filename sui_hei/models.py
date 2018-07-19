@@ -157,8 +157,8 @@ class Dialogue(models.Model):
         verbose_name = _("Question")
 
     def __str__(self):
-        return "[%s]%s: {%s} puts {%50s}" % (self.puzzle.id, self.puzzle,
-                                             self.user, self.question)
+        return "[%s]%s: {%s} puts {%s}" % (self.puzzle.id, self.puzzle,
+                                           self.user, str(self.question)[:50])
 
 
 class Hint(models.Model):
@@ -171,7 +171,7 @@ class Hint(models.Model):
         verbose_name = _("Hint")
 
     def __str__(self):
-        return "[%s]: %50s" % (self.puzzle, self.content)
+        return "[%s]: %s" % (self.puzzle, str(self.content)[:50])
 
 
 class ChatMessage(models.Model):
@@ -261,3 +261,17 @@ class Star(models.Model):
 
     def __str__(self):
         return "%s -- %.1f --> %s" % (self.user, self.value, self.puzzle)
+
+
+class Schedule(models.Model):
+    user = models.ForeignKey(User, on_delete=CASCADE)
+    content = models.TextField(_("content"))
+    created = models.DateTimeField(_("created"), default=timezone.now)
+    scheduled = models.DateTimeField(_("reviewed"))
+
+    class Meta:
+        verbose_name = _("Schedule")
+
+    def __str__(self):
+        return "[%s TO %s]: (%s) %s" % (self.scheduled, self.created, self.user,
+                                     str(self.content)[:50])

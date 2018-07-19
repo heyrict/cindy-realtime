@@ -26,6 +26,10 @@ export default defineMessages({
     id: 'app.components.MenuNavbar.rules',
     defaultMessage: 'User Policy',
   },
+  dashboard: {
+    id: 'app.components.MenuNavbar.dashboard',
+    defaultMessage: 'DashBoard',
+  },
   wiki: {
     id: 'app.components.MenuNavbar.wiki',
     defaultMessage: 'Wiki',

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import ReactTextareaAutosize from 'react-textarea-autosize';
+import ReactDatePicker from 'react-datepicker';
 import {
   Flex,
   Button as RebassButton,
@@ -30,9 +31,15 @@ export const AutoResizeTextarea = styled(ReactTextareaAutosize)`
   margin: 0;
   padding: 5px;
   width: 100%;
-  &:focus {
-    border: 2px solid #2075c7;
-  }
+`;
+
+export const DatePicker = styled(ReactDatePicker)`
+  border-radius: 10px;
+  border: 1px solid ${({ valid }) => (valid === 'error' ? 'tomato' : '#2075c7')};
+  padding: 5px;
+  width: 100%;
+  color: #073642;
+  font-size: 1.1em;
 `;
 
 export const Navbar = styled(Flex)`
@@ -106,6 +113,7 @@ export const DarkNicknameLink = styled(Link)`
 `;
 
 export const Time = styled.span`
+  display: inline-block;
   font-size: 0.8em;
   color: gray;
   margin: 5px;
@@ -137,6 +145,9 @@ export const Heading = styled.div`
 
 export const Button = RebassButton.extend`
   border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-weight: bold;
   width: ${(props) => formatScalar(props.w, 'auto')};
   cursor: pointer;
@@ -151,6 +162,9 @@ Button.defaultProps = {
 };
 
 export const ButtonOutline = RebassButtonOutline.extend`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-weight: bold;
   width: ${(props) => formatScalar(props.w, 'auto')};
   cursor: pointer;
@@ -180,9 +194,6 @@ export const Select = styled.select`
   width: 100%;
   color: #073642;
   font-size: 1.1em;
-  &:focus {
-    border: 2px solid #2075c7;
-  }
 `;
 
 export const Input = styled.input`
@@ -192,9 +203,6 @@ export const Input = styled.input`
   width: 100%;
   color: #073642;
   font-size: 1.1em;
-  &:focus {
-    border-width: 2px;
-  }
 `;
 
 export const EditButton = ButtonOutline.extend`
@@ -220,9 +228,6 @@ export const Textarea = styled.textarea`
   min-height: 75px;
   color: #073642;
   font-size: 1.1em;
-  &:focus {
-    border: 2px solid #2075c7;
-  }
 `;
 
 export const RoundedPanel = RebassPanel.extend`

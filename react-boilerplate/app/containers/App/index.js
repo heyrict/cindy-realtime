@@ -24,6 +24,7 @@ import WebSocketInterface from 'containers/WebSocketInterface';
 import Notifier from 'containers/Notifier';
 import TopNavbar from 'containers/TopNavbar';
 import HomePage from 'containers/HomePage/Loadable';
+import DashBoardPage from 'containers/DashBoardPage/Loadable';
 import RulesPage from 'containers/RulesPage/Loadable';
 import PuzzlePage from 'containers/PuzzlePage/Loadable';
 import PuzzleAddPage from 'containers/PuzzleAddPage/Loadable';
@@ -82,28 +83,17 @@ class App extends React.Component {
     }
   }
   render() {
-    const tp = (path, locale) => (locale ? `/${locale}${path}` : path);
-    const InnerRoutes = (locale) => (
+    const InnerRoutes = (
       <Switch>
-        <Route exact path={tp('/', locale)} component={HomePage} />
-        <Route exact path={tp('/rules', locale)} component={RulesPage} />
-        <Route exact path={tp('/puzzle', locale)} component={PuzzlePage} />
-        <Route
-          exact
-          path={tp('/puzzle/add', locale)}
-          component={PuzzleAddPage}
-        />
-        <Route
-          path={tp('/puzzle/show/:id', locale)}
-          component={PuzzleShowPage}
-        />
-        <Route exact path={tp('/profile', locale)} component={UserListPage} />
-        <Route
-          exact
-          path={tp('/profile/award', locale)}
-          component={AwardApplicationPage}
-        />
-        <Route path={tp('/profile/show/:id', locale)} component={ProfilePage} />
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/dashboard" component={DashBoardPage} />
+        <Route exact path="/rules" component={RulesPage} />
+        <Route exact path="/puzzle" component={PuzzlePage} />
+        <Route exact path="/puzzle/add" component={PuzzleAddPage} />
+        <Route path="/puzzle/show/:id" component={PuzzleShowPage} />
+        <Route exact path="/profile" component={UserListPage} />
+        <Route exact path="/profile/award" component={AwardApplicationPage} />
+        <Route path="/profile/show/:id" component={ProfilePage} />
       </Switch>
     );
     return (
@@ -126,7 +116,7 @@ class App extends React.Component {
           chatopen={this.props.chat.open}
         >
           <Switch>
-            {InnerRoutes()}
+            {InnerRoutes}
             <Route path="*" component={NotFoundPage} />
           </Switch>
         </BodyBox>

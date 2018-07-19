@@ -90,7 +90,7 @@ injectGlobal`
   // modal stuff
   .modal-shade {
     display: none;
-    z-index: 9998;
+    z-index: 5000;
     opacity: 0;
     background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4) 0, rgba(0,0,0,0.8) 100%);
     position: fixed;

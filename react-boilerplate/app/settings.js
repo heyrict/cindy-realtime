@@ -15,7 +15,7 @@ export const googleAdInfo = {
 export const MIN_CONTENT_SAFE_CREDIT = 1000;
 
 const domainRegex = new RegExp(
-  /^(https?:\/\/)?(www\.)?(cindythink\.com)?\/(ja\/|en\/)?(puzzle|profile|rules)/
+  /^(https?:\/\/)?(www\.)?(cindythink\.com)?\/(ja\/|en\/)?(puzzle|profile|rules|dashboard)/
 );
 export const domainFilter = (url) => {
   const selfDomain = domainRegex.test(url);
@@ -28,3 +28,5 @@ export const domainFilter = (url) => {
     url: url.replace(domainRegex, '/$5'),
   };
 };
+
+export const DEFAULT_TIMEZONE = 9;

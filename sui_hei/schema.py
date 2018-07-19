@@ -3,6 +3,7 @@ from itertools import chain
 
 import django_filters
 import graphene
+from dateutil.parser import parse
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
 from django.db.models import Count, F, Q, Sum
@@ -350,6 +351,16 @@ class FavoriteChatRoomNode(DjangoObjectType):
 
     def resolve_rowid(self, info):
         return self.id
+
+
+# {{{2 ScheduleNode
+class ScheduleNode(DjangoObjectType):
+    class Meta:
+        model = Schedule
+        filter_fields = {
+            "scheduled": ['gt'],
+        }
+        interfaces = (relay.Node, )
 
 
 # {{{1 Connections
@@ -801,6 +812,34 @@ class CreateAwardApplication(graphene.ClientIDMutation):
         return CreateAwardApplication(award_application=awardapp)
 
 
+# {{{2 CreateSchedule
+class CreateSchedule(graphene.ClientIDMutation):
+    schedule = graphene.Field(ScheduleNode)
+
+    class Input:
+        scheduled = graphene.String()
+        content = graphene.String()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        scheduled = parse(input["scheduled"])
+        content = input["content"]
+        now = timezone.now()
+
+        if Schedule.objects.filter(user=user, scheduled__gt=now).count() > 2:
+            raise ValidationError(
+                _("You can set up to 3 schedules at the same time!"))
+
+        schedule = Schedule.objects.create(
+            user=user, content=content, scheduled=scheduled)
+
+        return CreateSchedule(schedule=schedule)
+
+
 # {{{2 UpdateAnswer
 class UpdateAnswer(graphene.ClientIDMutation):
     dialogue = graphene.Field(DialogueNode)
@@ -1217,6 +1256,29 @@ class DeleteFavoriteChatRoom(graphene.ClientIDMutation):
         return DeleteFavoriteChatRoom()
 
 
+# {{{2 DeleteSchedule
+class DeleteSchedule(graphene.ClientIDMutation):
+    class Input:
+        scheduleId = graphene.ID()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        user = info.context.user
+        if (not user.is_authenticated):
+            raise ValidationError(_("Please login!"))
+
+        className, scheduleId = from_global_id(input["scheduleId"])
+        assert className == 'ScheduleNode'
+
+        schedule = Schedule.objects.get(id=scheduleId)
+        if schedule.user != user:
+            raise ValidationError(
+                _("You are not the creator of this schedule"))
+
+        schedule.delete()
+        return DeleteSchedule(award_application=awardapp)
+
+
 # {{{2 Login
 class UserLogin(relay.ClientIDMutation):
     class Input:
@@ -1355,6 +1417,8 @@ class Query(object):
         puzzle=graphene.ID(),
         limit=graphene.Int(),
         offset=graphene.Int())
+    all_schedules = DjangoFilterConnectionField(
+        ScheduleNode, orderBy=graphene.List(of_type=graphene.String))
 
     # {{{2 nodes
     user = relay.Node.Field(UserNode)
@@ -1368,6 +1432,7 @@ class Query(object):
     comment = relay.Node.Field(CommentNode)
     star = relay.Node.Field(StarNode)
     bookmark = relay.Node.Field(BookmarkNode)
+    schedule = relay.Node.Field(ScheduleNode)
 
     # {{{2 unions
     puzzle_show_union = relay.ConnectionField(
@@ -1521,6 +1586,10 @@ class Query(object):
         orderBy = kwargs.get("orderBy", None)
         return resolveOrderBy(AwardApplication.objects, orderBy)
 
+    def resolve_all_schedules(self, info, **kwargs):
+        orderBy = kwargs.get("orderBy", None)
+        return resolveOrderBy(Schedule.objects, orderBy)
+
     # {{{3 resolve union
     def resolve_puzzle_show_union(self, info, **kwargs):
         className, puzzleId = from_global_id(kwargs["id"])
@@ -1542,6 +1611,7 @@ class Mutation(graphene.ObjectType):
     create_chatroom = CreateChatRoom.Field()
     create_favorite_chatroom = CreateFavoriteChatRoom.Field()
     create_award_application = CreateAwardApplication.Field()
+    create_schedule = CreateSchedule.Field()
     update_answer = UpdateAnswer.Field()
     update_question = UpdateQuestion.Field()
     update_puzzle = UpdatePuzzle.Field()
@@ -1556,6 +1626,7 @@ class Mutation(graphene.ObjectType):
     update_award_application = UpdateAwardApplication.Field()
     delete_bookmark = DeleteBookmark.Field()
     delete_favorite_chatroom = DeleteFavoriteChatRoom.Field()
+    delete_schedule = DeleteSchedule.Field()
     login = UserLogin.Field()
     logout = UserLogout.Field()
     register = UserRegister.Field()

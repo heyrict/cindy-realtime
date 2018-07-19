@@ -18,10 +18,6 @@ export default defineMessages({
     id: 'app.containers.ProfilePage.heading',
     defaultMessage: "{nickname}'s Profile",
   },
-  awardApplications: {
-    id: 'app.containers.ProfilePage.awardApplications',
-    defaultMessage: 'Recent Award Applications',
-  },
   nickname: {
     id: 'app.containers.ProfilePage.nickname',
     defaultMessage: 'Nickname',
