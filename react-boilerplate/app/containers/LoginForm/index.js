@@ -91,11 +91,7 @@ innerLoginForm.propTypes = {
 };
 
 const loginFormSchema = yup.object().shape({
-  username: yup
-    .string()
-    .required()
-    .max(150)
-    .matches(/^[a-zA-Z0-9@\-+._]+$/),
+  username: yup.string().required(),
   password: yup.string().required(),
 });
 
