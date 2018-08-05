@@ -8,6 +8,40 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 
+class UserManager(BaseUserManager):
+    def create_user(self,
+                    username,
+                    nickname,
+                    password=None,
+                    is_admin=False,
+                    is_staff=False,
+                    is_active=True):
+        if not username:
+            raise ValueError(_("User must have a username"))
+        if not nickname:
+            raise ValueError(_("User must have a nickname"))
+
+        user = self.model()
+        user.username = username
+        user.set_password(password)
+        user.nickname = nickname
+        user.is_admin = is_admin
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.save()
+        return user
+
+    def create_superuser(self, nickname, username, password=None):
+        user = self.create_user(
+            nickname=nickname,
+            username=username,
+            password=password,
+            is_staff=True,
+            is_admin=True,
+        )
+        return user
+
+
 # Create your models here.
 class Award(models.Model):
     name = models.CharField(max_length=255)
@@ -66,6 +100,7 @@ class User(AbstractUser):
         related_name="last_read_dm")
 
     REQUIRED_FIELDS = ['nickname']
+    objects = UserManager()
 
     class Meta:
         permissions = [("can_send_global_notification", _("Can send global notification")),] # yapf: disable
@@ -273,5 +308,5 @@ class Schedule(models.Model):
         verbose_name = _("Schedule")
 
     def __str__(self):
-        return "[%s TO %s]: (%s) %s" % (self.scheduled, self.created, self.user,
-                                     str(self.content)[:50])
+        return "[%s TO %s]: (%s) %s" % (self.scheduled, self.created,
+                                        self.user, str(self.content)[:50])

@@ -137,7 +137,7 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 const withSaga = injectSaga({ key: 'topNavBar', saga });
@@ -171,11 +171,11 @@ const withData = graphql(
         puzzle,
       };
     },
-  }
+  },
 );
 
 export default compose(
   withSaga,
   withConnect,
-  withData
+  withData,
 )(TopNavbar);

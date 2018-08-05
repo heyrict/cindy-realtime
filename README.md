@@ -95,21 +95,27 @@ Develop
       python3 manage.py makemigrations && python3 manage.py migrate
       python3 manage.py compilemessages
       make schema
+      make initdb
       ```
 
 4. Build develop dependencies for nodejs
 
    ```bash
+   # The process will run until you send SIGINT by pressing <Ctrl-C>
+   # Open another terminal for the rest work
    cd ./react-boilerplate && npm run build:dll && npm run serve
    ```
 
 5. Run server on your localhost.
 
    ```bash
+   # The process will run until you send SIGINT by pressing <Ctrl-C>
+   # Open another terminal for the rest work
    daphne cindy.asgi:application
    ```
 
-6. Open the link appeared in your terminal/cmd with a browser.
+6. Open http://127.0.0.1:8000 appeared in your terminal/cmd with a browser.
+   The page will update instantly when you change your code.
 
 
 Deploy

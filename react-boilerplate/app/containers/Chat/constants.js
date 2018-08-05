@@ -51,7 +51,7 @@ export const MINICHAT_GETID = 'app/Chat/MINICHAT_GETID';
 export const ADD_FAVCHAN = 'app/Chat/ADD_FAVCHAN';
 export const REMOVE_FAVCHAN = 'app/Chat/REMOVE_FAVCHAN';
 
-export const PublicChannels = ['lobby', 'sp', 'yokoku'];
+export const PublicChannels = ['lobby'];
 
 export const SET_DM_RECEIVER = 'app/Chat/SET_DM_RECEIVER';
 

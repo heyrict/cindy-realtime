@@ -43,7 +43,6 @@ import rebassTheme from './rebass-theme.json';
 
 // Import exposed actions
 import { openChat } from './containers/Chat/actions';
-import { pushWithLocale } from './common';
 
 // Observe loading of Open Sans (to remove open sans, remove the <link> tag in
 // the index.html file and this observer)
@@ -76,9 +75,6 @@ if (window.ga) {
 // exposed functions
 window.OpenChat = (channel) => {
   store.dispatch(openChat(channel));
-};
-window.goto = (url) => {
-  store.dispatch(pushWithLocale(url));
 };
 
 const render = (messages) => {

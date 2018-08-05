@@ -2,8 +2,8 @@
  * Combine all reducers in this file and export the combined reducers.
  */
 
-import { combineReducers } from 'redux-immutable';
 import { fromJS } from 'immutable';
+import { combineReducers } from 'redux-immutable';
 import { LOCATION_CHANGE } from 'react-router-redux';
 
 import languageProviderReducer from 'containers/LanguageProvider/reducer';
@@ -35,15 +35,16 @@ const routeInitialState = fromJS({
   location: { pathname: window.location.pathname },
 });
 
-export function location(state = routeInitialState, action) {
+export function routeReducer(state = routeInitialState, action) {
   switch (action.type) {
     case LOCATION_CHANGE:
-      return action.payload;
+      return state.merge({
+        location: action.payload,
+      });
     default:
       return state;
   }
 }
-const routeReducer = combineReducers({ location });
 
 /**
  * Creates the main reducer with the dynamically injected ones

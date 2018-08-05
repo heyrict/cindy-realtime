@@ -20,13 +20,13 @@ module.exports = (options) => ({
       path: path.resolve(process.cwd(), 'build'),
       publicPath: '/static/',
     },
-    options.output
+    options.output,
   ), // Merge with env dependent settings
   optimization: options.optimization,
   module: {
     rules: [
       {
-        test: /\.jsx?$/, // Transform all .js/.jsx files required somewhere with Babel
+        test: /\.js$/, // Transform all .js files required somewhere with Babel
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -87,12 +87,8 @@ module.exports = (options) => ({
               gifsicle: {
                 interlaced: false,
               },
-              optipng: {
-                optimizationLevel: 7,
-              },
               pngquant: {
-                quality: '65-90',
-                speed: 4,
+                enabled: false,
               },
             },
           },
