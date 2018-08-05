@@ -6,7 +6,6 @@ from django.contrib.auth.forms import (PasswordChangeForm, PasswordResetForm,
                                        UserChangeForm, UserCreationForm)
 from django.contrib.auth.models import Group
 from django.utils.translation import ugettext_lazy as _
-from modeltranslation.admin import TranslationAdmin
 
 from .models import *
 
@@ -53,10 +52,6 @@ class SuiheiUserAdmin(UserAdmin):
             'current_award',
         )
     }), )
-
-
-class SuiheiAwardAdmin(TranslationAdmin):
-    pass
 
 
 class SuiheiPuzzleChangeForm(forms.ModelForm):
