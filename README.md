@@ -183,6 +183,33 @@ Also, note that all the configuration files need to be adjusted to you system (e
    Special [requisitories](#requisitories) are also needed for enabling `TWEET_WITH_PICTURE`.
 
 
+FAQs
+======
+1. How to backup & restore cindy database
+
+   > - To backup: `python manage.py dumpdata -o backup.json`
+   >
+   > - To restore on the same server (esp. with same files in sui-hei/migrations):
+   >   `python manage.py loaddata -e contenttypes modified-backup.json`
+   >
+   > - To restore on different server, first you need to make sure your local database has no conflict with the backup file.
+   >   If so, truncate your cindy database first (change `cindy` to database name or user name in your [config file](./cindy/security.py):
+   >
+   >   ```sql
+   >   DROP DATABASE cindy;
+   >   CREATE DATABASE cindy;
+   >   GRANT ALL ON DATABASE cindy to cindy;
+   >   ```
+   >
+   >   Then, load truncate your backup file and load it
+   >
+   >   ```bash
+   >   python ./tools/truncate_contenttypes.py backup.json
+   >   python manage.py loaddata -e contenttypes modified-backup.json
+   >   rm modified-backup.json
+   >   ```
+
+
 Contributers
 ------------
 - [kamisugi(上杉)](http://sui-hei.net/mondai/profile/1)
