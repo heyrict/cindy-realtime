@@ -25,4 +25,9 @@ export default defineMessages({
     id: `${scope}.puzzle_solution`,
     defaultMessage: '**Solution**: The solution to the puzzle',
   },
+  dashboard_schedule: {
+    id: `${scope}.dashboard_schedule`,
+    defaultMessage:
+      'Post up to 3 messages for finding Soup Partners, broadcasting information, announcing events in advance and so on.',
+  },
 });

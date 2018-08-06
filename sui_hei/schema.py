@@ -5,6 +5,7 @@ import django_filters
 import graphene
 from dateutil.parser import parse
 from django.contrib.auth import authenticate, login, logout
+from django.db.models.functions import TruncDate, TruncMonth, TruncYear
 from django.core.exceptions import ValidationError
 from django.db.models import Count, F, Q, Sum
 from django.utils import timezone
@@ -21,6 +22,7 @@ from graphql_relay import from_global_id, to_global_id
 from rx import Observable, Observer
 from six import get_unbound_function
 
+import sui_hei.models
 from .models import *
 from .subscription import Subscription as SubscriptionType
 
@@ -39,8 +41,10 @@ def resolveLimitOffset(qs, limit, offset):
 
 
 # {{{1 resolveFilter
-def resolveFilter(qs, args, filters=[], filter_fields=[]):
+def resolveFilter(qs, args, filters=[], filter_fields=None):
     filters = {f: args[f] for f in filters if f in args}
+    if filter_fields == None:
+        filter_fields = {}
     for filterName, className in filter_fields.items():
         filterValue = args.get(filterName)
         if filterValue is None:
@@ -363,6 +367,19 @@ class ScheduleNode(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
+# {{{1 Custom Nodes
+# {{{2 TruncDate Node
+class TruncDateNode(graphene.ObjectType):
+    timestop = graphene.DateTime()
+    count = graphene.Int()
+
+    def resolve_timestop(self, info):
+        return self.get('timestop')
+
+    def resolve_count(self, info):
+        return self.get('count')
+
+
 # {{{1 Connections
 # {{{2 PuzzleConnection
 class PuzzleConnection(graphene.Connection):
@@ -394,6 +411,13 @@ class StarConnection(graphene.Connection):
 
     class Meta:
         node = StarNode
+
+
+# {{{1 CustomConnections
+# {{{2 TruncDate Connection
+class TruncDateConnection(graphene.Connection):
+    class Meta:
+        node = TruncDateNode
 
 
 # {{{1 Unions
@@ -1364,6 +1388,7 @@ class UserRegister(relay.ClientIDMutation):
 # {{{1 Query
 class Query(object):
     # {{{2 connections
+    # {{{3 cursor connections
     all_users = DjangoFilterConnectionField(
         UserNode, orderBy=graphene.List(of_type=graphene.String))
     all_awards = DjangoFilterConnectionField(
@@ -1372,6 +1397,22 @@ class Query(object):
         AwardApplicationNode, orderBy=graphene.List(of_type=graphene.String))
     all_userawards = DjangoFilterConnectionField(
         UserAwardNode, orderBy=graphene.List(of_type=graphene.String))
+    all_dialogues = DjangoFilterConnectionField(
+        DialogueNode, orderBy=graphene.List(of_type=graphene.String))
+    all_chatmessages = DjangoFilterConnectionField(
+        ChatMessageNode,
+        orderBy=graphene.List(of_type=graphene.String),
+        chatroomName=graphene.String())
+    all_directmessages = DjangoFilterConnectionField(
+        DirectMessageNode, userId=graphene.ID())
+    all_chatrooms = DjangoFilterConnectionField(ChatRoomNode)
+    all_favorite_chatrooms = DjangoFilterConnectionField(FavoriteChatRoomNode)
+    all_comments = DjangoFilterConnectionField(
+        CommentNode, orderBy=graphene.List(of_type=graphene.String))
+    all_schedules = DjangoFilterConnectionField(
+        ScheduleNode, orderBy=graphene.List(of_type=graphene.String))
+
+    # {{{3 limit-offset connections
     all_puzzles = graphene.ConnectionField(
         PuzzleConnection,
         orderBy=graphene.List(of_type=graphene.String),
@@ -1385,24 +1426,12 @@ class Query(object):
         created__month=graphene.Int(),
         limit=graphene.Int(),
         offset=graphene.Int())
-    all_dialogues = DjangoFilterConnectionField(
-        DialogueNode, orderBy=graphene.List(of_type=graphene.String))
-    all_chatmessages = DjangoFilterConnectionField(
-        ChatMessageNode,
-        orderBy=graphene.List(of_type=graphene.String),
-        chatroomName=graphene.String())
     all_chatmessages_lo = graphene.ConnectionField(
         ChatMessageConnection,
         limit=graphene.Int(),
         offset=graphene.Int(),
         orderBy=graphene.List(of_type=graphene.String),
         chatroomName=graphene.String())
-    all_directmessages = DjangoFilterConnectionField(
-        DirectMessageNode, userId=graphene.ID())
-    all_chatrooms = DjangoFilterConnectionField(ChatRoomNode)
-    all_favorite_chatrooms = DjangoFilterConnectionField(FavoriteChatRoomNode)
-    all_comments = DjangoFilterConnectionField(
-        CommentNode, orderBy=graphene.List(of_type=graphene.String))
     all_stars = graphene.ConnectionField(
         StarConnection,
         orderBy=graphene.List(of_type=graphene.String),
@@ -1417,8 +1446,15 @@ class Query(object):
         puzzle=graphene.ID(),
         limit=graphene.Int(),
         offset=graphene.Int())
-    all_schedules = DjangoFilterConnectionField(
-        ScheduleNode, orderBy=graphene.List(of_type=graphene.String))
+
+    # {{{2 custom connections
+    trunc_date_groups = graphene.ConnectionField(
+        TruncDateConnection,
+        className=graphene.String(),
+        user=graphene.ID(),
+        by=graphene.String(),
+        created__gte=graphene.DateTime(),
+        created__lte=graphene.DateTime())
 
     # {{{2 nodes
     user = relay.Node.Field(UserNode)
@@ -1598,6 +1634,33 @@ class Query(object):
         dialogue_list = Dialogue.objects.filter(puzzle__exact=puzzle)
         hint_list = Hint.objects.filter(puzzle__exact=puzzle)
         return sorted(chain(dialogue_list, hint_list), key=lambda x: x.created)
+
+    # {{{3 custom resolves
+    def resolve_trunc_date_groups(self, info, **kwargs):
+        className = kwargs['className']
+        by = kwargs.get('by', 'month')
+        created__gte = kwargs.get('start')
+        created__lte = kwargs.get('end')
+        cls = getattr(sui_hei.models, className)
+
+        assert by in ['date', 'month', 'year']
+        if by == 'date':
+            TruncMethod = TruncDate
+        elif by == 'month':
+            TruncMethod = TruncMonth
+        elif by == 'year':
+            TruncMethod = TruncYear
+
+        qs = cls.objects
+        qs = resolveFilter(
+            qs,
+            kwargs,
+            filters=['created__gte', 'created__lte'],
+            filter_fields={'user': User})
+        qs = qs.annotate(timestop=TruncMethod('created'))\
+                .values('timestop')\
+                .annotate(count=Count('pk'))
+        return qs
 
 
 # {{{1 Mutation

@@ -1,6 +1,7 @@
 build/
 node_modules/
 internals/generators/
+app/translations/
 internals/scripts/
 package-lock.json
 yarn.lock

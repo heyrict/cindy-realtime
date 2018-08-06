@@ -25,9 +25,11 @@ import AwardApplicationList from 'components/AwardApplicationList';
 import ScheduleList from 'components/ScheduleList';
 import Constrained from 'components/Constrained';
 import ScheduleAddItem from 'containers/ScheduleAddForm/ScheduleAddItem';
+import HelpPopper from 'components/HelpPopper';
 
 import messages from './messages';
 import Board from './Board';
+import PuzzleStaticChart from './PuzzleStaticChart';
 
 const now = moment();
 
@@ -50,6 +52,7 @@ function DashBoardPage(props, context) {
               title={
                 <span>
                   <FormattedMessage {...messages.schedule} />
+                  <HelpPopper messageId="dashboard_schedule" />
                   <ScheduleAddItem bg="transparent" style={{ float: 'right' }}>
                     <Img alt="plus" src={plus} />
                   </ScheduleAddItem>
@@ -59,9 +62,7 @@ function DashBoardPage(props, context) {
                 <ScheduleList
                   variables={{
                     orderBy: 'scheduled',
-                    scheduled_Gt: now
-                      .utcOffset(DEFAULT_TIMEZONE)
-                      .format('YYYY-MM-DD HH:mm:ss'),
+                    scheduled_Gt: now.utcOffset(DEFAULT_TIMEZONE).format(),
                   }}
                   fetchPolicy="cache-and-network"
                 />
@@ -97,6 +98,12 @@ function DashBoardPage(props, context) {
               />
             </Box>
           )}
+          <Box w="480px">
+            <Board
+              title={<FormattedMessage {...messages.puzzleCountChart} />}
+              content={<PuzzleStaticChart width={450} />}
+            />
+          </Box>
         </Flex>
       </Constrained>
     </div>
@@ -114,7 +121,7 @@ DashBoardPage.contextTypes = {
 
 const mapStateToProps = createStructuredSelector({
   currentUserId: createSelector(selectUserNavbarDomain, (usernavbar) =>
-    usernavbar.getIn(['user', 'userId'])
+    usernavbar.getIn(['user', 'userId']),
   ),
 });
 
@@ -124,7 +131,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 export default compose(withConnect)(DashBoardPage);

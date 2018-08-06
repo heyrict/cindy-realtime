@@ -24,8 +24,16 @@ export default defineMessages({
     id: `${scope}.schedule`,
     defaultMessage: 'Schedule',
   },
+  puzzleCountChart: {
+    id: `${scope}.puzzleCountChart`,
+    defaultMessage: 'Puzzle Count Chart',
+  },
   awardApplications: {
     id: `${scope}.awardApplications`,
     defaultMessage: 'Recent Award Applications',
+  },
+  chartTotalPuzzleCount: {
+    id: `${scope}.chartTotalPuzzleCount`,
+    defaultMessage: 'Total Puzzle Count',
   },
 });
