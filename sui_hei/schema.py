@@ -54,7 +54,7 @@ def resolveFilter(qs, args, filters=[], filter_fields=None):
                 pk=from_global_id(filterValue)[1])
         except Exception as e:
             print("resolveFilter:", e)
-            continue
+            return qs.none()
 
     if len(filters) > 0:
         qs = qs.filter(**filters)

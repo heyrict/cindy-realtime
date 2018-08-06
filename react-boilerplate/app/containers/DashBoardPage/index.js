@@ -98,10 +98,14 @@ function DashBoardPage(props, context) {
               />
             </Box>
           )}
-          <Box w="480px">
+          <Box w={[1, 1, 1 / 2]} style={{ overflow: 'scroll' }}>
             <Board
               title={<FormattedMessage {...messages.puzzleCountChart} />}
-              content={<PuzzleStaticChart width={450} />}
+              content={
+                <PuzzleStaticChart
+                  currentUserId={currentUserId || t('UserNode', -1)}
+                />
+              }
             />
           </Box>
         </Flex>

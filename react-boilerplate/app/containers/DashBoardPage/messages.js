@@ -32,6 +32,10 @@ export default defineMessages({
     id: `${scope}.awardApplications`,
     defaultMessage: 'Recent Award Applications',
   },
+  chartUserPuzzleCount: {
+    id: `${scope}.chartUserPuzzleCount`,
+    defaultMessage: 'My Puzzle Count',
+  },
   chartTotalPuzzleCount: {
     id: `${scope}.chartTotalPuzzleCount`,
     defaultMessage: 'Total Puzzle Count',

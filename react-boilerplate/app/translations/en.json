@@ -86,6 +86,7 @@
   "app.containers.Chat.sending": "Sending...",
   "app.containers.DashBoardPage.awardApplications": "Recent Award Applications",
   "app.containers.DashBoardPage.chartTotalPuzzleCount": "Total Puzzle Count",
+  "app.containers.DashBoardPage.chartUserPuzzleCount": "My Puzzle Count",
   "app.containers.DashBoardPage.description": "Dashboard for Cindy",
   "app.containers.DashBoardPage.heading": "DashBoard",
   "app.containers.DashBoardPage.puzzleCountChart": "Puzzle Count Chart",
