@@ -11,6 +11,9 @@
     ]
   },
   "colors": {
+    "coffee": "#c6b571",
+    "lightcoffee": "#d7c682",
+    "darksoil": "#4e182d",
     "black": "#777",
     "blue": "#5856b9",
     "cyan": "#2075c7",

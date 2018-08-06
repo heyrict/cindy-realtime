@@ -14,6 +14,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Helmet } from 'react-helmet';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import { Box } from 'rebass';
 import { createStructuredSelector } from 'reselect';
@@ -98,6 +99,12 @@ class App extends React.Component {
     );
     return (
       <div>
+        <Helmet titleTemplate="%s - Cindy" defaultTitle="Cindy">
+          <meta
+            name="description"
+            content="A lateral thinking salon for every one"
+          />
+        </Helmet>
         <Notifier />
         <WebSocketInterface />
         <TopNavbar />
@@ -142,10 +149,10 @@ const mapStateToProps = createStructuredSelector({
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 export default compose(
   withRouter,
-  withConnect
+  withConnect,
 )(App);

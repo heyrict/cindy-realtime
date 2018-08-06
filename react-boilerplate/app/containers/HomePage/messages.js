@@ -5,27 +5,42 @@
  */
 import { defineMessages } from 'react-intl';
 
+const scope = 'app.containers.HomePage';
+
 export default defineMessages({
   title: {
-    id: 'app.containers.HomePage.title',
-    defaultMessage: 'Cindy: A latral thinking salon for every one!',
+    id: `${scope}.title`,
+    defaultMessage: 'Cindy: A lateral thinking salon for every one!',
   },
   description: {
-    id: 'app.containers.HomePage.description',
+    id: `${scope}.description`,
     defaultMessage:
       'Find interesting lateral thinking puzzles here, share with your friends, and even create your own lateral thinking puzzle in minites!',
   },
   header: {
-    id: 'app.containers.HomePage.header',
+    id: `${scope}.header`,
     defaultMessage: 'Welcome to {cindy}!',
   },
   body: {
-    id: 'app.containers.HomePage.body',
+    id: `${scope}.body`,
     defaultMessage:
       'Cindy is an active community for chatting lateral thinking problems.',
   },
   start: {
-    id: 'app.containers.HomePage.start',
+    id: `${scope}.start`,
     defaultMessage: 'Start',
+  },
+  bestPuzzleOfLastMonth: {
+    id: `${scope}.bestPuzzleOfLastMonth`,
+    defaultMessage: 'Most Valuable Puzzles of the Last Month',
+  },
+  recentComments: {
+    id: `${scope}.recentComments`,
+    defaultMessage: 'Recent Comments',
+  },
+  commentHint: {
+    id: `${scope}.commentHint`,
+    defaultMessage:
+      "New comment added on {puzzle_user}'s puzzle {puzzle_title}",
   },
 });

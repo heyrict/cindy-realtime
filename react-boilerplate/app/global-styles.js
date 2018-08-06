@@ -55,6 +55,7 @@ injectGlobal`
   }
   button, a {
     cursor: pointer;
+    padding: 0;
   }
 
   a:focus,

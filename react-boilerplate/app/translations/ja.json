@@ -9,16 +9,22 @@
   "app.components.AwardApplicationList.created": "申請時間",
   "app.components.AwardApplicationList.deny": "拒否する",
   "app.components.AwardApplicationList.reason": "理由",
-  "app.components.AwardApplicationList.reasonHint": "付与/拒否する理由を入力してください",
+  "app.components.AwardApplicationList.reasonHint":
+    "付与/拒否する理由を入力してください",
   "app.components.AwardApplicationList.reviewed": "付与時間",
   "app.components.AwardApplicationList.reviewer": "付与者",
   "app.components.AwardApplicationList.status": "ステータス",
-  "app.components.BookmarkList.deletePrompt": "このブクマを削除します。この操作は撤回することが出来ません。続けますか？",
+  "app.components.BookmarkList.deletePrompt":
+    "このブクマを削除します。この操作は撤回することが出来ません。続けますか？",
   "app.components.BookmarkList.deleted": "削除済み",
-  "app.components.HelpPopper.puzzle_content": "**問題文**: 水平思考パズルの問題提出の部分",
-  "app.components.HelpPopper.puzzle_genre": "**ジャンル**: 水平思考パズルのジャンル。\n\n[ウミガメのスープ](https://wiki3.jp/cindy-lat/page/6#2): 物語に隠された謎を「なぜ？」を問う形で出題し、質問者はYes/Noで答えられる質問で真相を解き明かす最も使われているジャンル形式。難易度★\n[20の扉](https://wiki3.jp/cindy-lat/page/6#3): 物語に隠された謎を「なに？」を問う形で出題し、質問者はYes/Noで答えられる質問で出題者が求められる回答を当てることが目的のジャンル形式。難易度★★★\n[亀夫君問題](https://wiki3.jp/cindy-lat/page/6#4): 出題者が物語の登場人物に演じ、参加者が出題者に質問・指示をして物語を進めていく問題形式。難易度★★★★\n[新＆形式](https://wiki3.jp/cindy-lat/page/6#5): 上記３種類に当てはまらない新しいジャンル、もしくはイベントを開催するときに使うジャンル形式",
-  "app.components.HelpPopper.puzzle_solution": "**解説文**: 水平思考パズルの問題に対する解説の部分",
-  "app.components.HelpPopper.puzzle_yami": "**闇スープ**: 参加者が他の参加者の質問を閲覧できるかどうかの設定。[くわしく](https://wiki3.jp/cindy-lat/page/6#6)\n\n無し: 参加者が他の参加者の質問を閲覧できる。出題中でも「闇スープ」に切り替えることができる。\n闇スープ: 参加者が他の参加者の質問を閲覧できない。出題中でも「無し」に切り替えることができる。\n闇＆常駐: 正解したユーザーに即時解説を開示する代わりに、出題者が出題中に解説を編集できない。",
+  "app.components.HelpPopper.puzzle_content":
+    "**問題文**: 水平思考パズルの問題提出の部分",
+  "app.components.HelpPopper.puzzle_genre":
+    "**ジャンル**: 水平思考パズルのジャンル。\n\n[ウミガメのスープ](https://wiki3.jp/cindy-lat/page/6#2): 物語に隠された謎を「なぜ？」を問う形で出題し、質問者はYes/Noで答えられる質問で真相を解き明かす最も使われているジャンル形式。難易度★\n[20の扉](https://wiki3.jp/cindy-lat/page/6#3): 物語に隠された謎を「なに？」を問う形で出題し、質問者はYes/Noで答えられる質問で出題者が求められる回答を当てることが目的のジャンル形式。難易度★★★\n[亀夫君問題](https://wiki3.jp/cindy-lat/page/6#4): 出題者が物語の登場人物に演じ、参加者が出題者に質問・指示をして物語を進めていく問題形式。難易度★★★★\n[新＆形式](https://wiki3.jp/cindy-lat/page/6#5): 上記３種類に当てはまらない新しいジャンル、もしくはイベントを開催するときに使うジャンル形式",
+  "app.components.HelpPopper.puzzle_solution":
+    "**解説文**: 水平思考パズルの問題に対する解説の部分",
+  "app.components.HelpPopper.puzzle_yami":
+    "**闇スープ**: 参加者が他の参加者の質問を閲覧できるかどうかの設定。[くわしく](https://wiki3.jp/cindy-lat/page/6#6)\n\n無し: 参加者が他の参加者の質問を閲覧できる。出題中でも「闇スープ」に切り替えることができる。\n闇スープ: 参加者が他の参加者の質問を閲覧できない。出題中でも「無し」に切り替えることができる。\n闇＆常駐: 正解したユーザーに即時解説を開示する代わりに、出題者が出題中に解説を編集できない。",
   "app.components.MarkdownPreview.hidePreview": "プレビューを閉じる",
   "app.components.MarkdownPreview.showPreview": "プレビューを開く",
   "app.components.MenuNavbar.chat": "チャット",
@@ -42,7 +48,8 @@
   "app.components.ProfileNavbar.stars": "スター",
   "app.components.RewardingModal.close": "閉じる",
   "app.components.RewardingModal.jump": "解説を見る",
-  "app.components.RewardingModal.spoilerWarning": "注意：このコメントはネタバレ要素を含んでいます。",
+  "app.components.RewardingModal.spoilerWarning":
+    "注意：このコメントはネタバレ要素を含んでいます。",
   "app.components.TitleLabel.classic": "ウミガメのスープ",
   "app.components.TitleLabel.littleAlbat": "亀夫君問題",
   "app.components.TitleLabel.longtermYami": "闇＆常駐",
@@ -53,11 +60,15 @@
   "app.containers.AwardApplicationPage.apply": "申請する",
   "app.containers.AwardApplicationPage.awardDescription": "称号説明",
   "app.containers.AwardApplicationPage.awardRequisition": "獲得条件",
-  "app.containers.AwardApplicationPage.commentPlaceholder": "ここに備考を入力しよう",
-  "app.containers.AwardApplicationPage.description": "たくさん称号をゲットしよう",
-  "app.containers.AwardApplicationPage.formBlankAlert": "空白を全部はめてください",
+  "app.containers.AwardApplicationPage.commentPlaceholder":
+    "ここに備考を入力しよう",
+  "app.containers.AwardApplicationPage.description":
+    "たくさん称号をゲットしよう",
+  "app.containers.AwardApplicationPage.formBlankAlert":
+    "空白を全部はめてください",
   "app.containers.AwardApplicationPage.header": "称号申請所",
-  "app.containers.AwardApplicationPage.selectPlaceholder": "申請したい称号を選ぼう",
+  "app.containers.AwardApplicationPage.selectPlaceholder":
+    "申請したい称号を選ぼう",
   "app.containers.AwardApplicationPage.title": "称号申請所 - Cindy",
   "app.containers.Chat.autoDismiss": "表示時間(s)",
   "app.containers.Chat.back": "< 戻る",
@@ -71,15 +82,18 @@
   "app.containers.Chat.defaultChannel": "自動",
   "app.containers.Chat.description": "説明",
   "app.containers.Chat.direct": "ダイレクト",
-  "app.containers.Chat.directChatInputPlaceholder": "ＤＭを送りたい相手を選んでください",
+  "app.containers.Chat.directChatInputPlaceholder":
+    "ＤＭを送りたい相手を選んでください",
   "app.containers.Chat.favoriteChannels": "お気に入りチャンネル",
   "app.containers.Chat.loadMore": "もっとロードする",
   "app.containers.Chat.log": "ログ",
-  "app.containers.Chat.notifyOfflineDms": "あなたがオフラインしている時、ダイレクトメッセージを受信しました",
+  "app.containers.Chat.notifyOfflineDms":
+    "あなたがオフラインしている時、ダイレクトメッセージを受信しました",
   "app.containers.Chat.onlineUsers": "オンラインユーザー",
   "app.containers.Chat.owner": "所有者",
   "app.containers.Chat.publicChannels": "公開チャンネル",
-  "app.containers.Chat.puzzleChatDescription": "{channelName}用のチャットルーム",
+  "app.containers.Chat.puzzleChatDescription":
+    "{channelName}用のチャットルーム",
   "app.containers.Chat.recent": "最近の会話",
   "app.containers.Chat.send": "送信",
   "app.containers.Chat.sending": "送信中・・・",
@@ -109,19 +123,30 @@
   "app.containers.FilterableList.starSum": "スター総計数",
   "app.containers.FilterableList.title__contains": "タイトル",
   "app.containers.FilterableList.value": "数値",
-  "app.containers.HomePage.body": "Cindy は水平思考パズル「ウミガメのスープ」のリアルタイム出題サイト。\nウミガメのスープは複数ユーザーでプレイする水平思考型推理ゲームです。\nYES/NOで答えることのできる質問をして不可解な謎を一緒に解き明かして行きましょう。",
-  "app.containers.HomePage.description": "水平思考パズルを「ウミガメのスープ」リアルタイムでプレイするなり、友達と楽しく遊ぶなり、自分のパズルも作ってみんなに解かせて遊びましょう！",
+  "app.containers.HomePage.bestPuzzleOfLastMonth": "先月スター数獲得上位問題",
+  "app.containers.HomePage.body":
+    "Cindy は水平思考パズル「ウミガメのスープ」のリアルタイム出題サイト。\nウミガメのスープは複数ユーザーでプレイする水平思考型推理ゲームです。\nYES/NOで答えることのできる質問をして不可解な謎を一緒に解き明かして行きましょう。",
+  "app.containers.HomePage.commentHint":
+    "{puzzle_user}さんの問題「{puzzle_title}」に新しいコメントがあります！",
+  "app.containers.HomePage.description":
+    "リアルタイムでウミガメのスープ問題を遊ぼう！",
   "app.containers.HomePage.header": "{cindy} へようこそ！",
+  "app.containers.HomePage.recentComments": "最新のコメント",
   "app.containers.HomePage.start": "ゲームスタート",
-  "app.containers.HomePage.title": "Cindy：水平思考型推理ゲーム「ウミガメのスープ」をリアルタイムで遊ぼう！",
+  "app.containers.HomePage.title":
+    "みんなで遊ぶ水平思考ゲーム「ウミガメのスープ」",
   "app.containers.LoginForm.password": "パスワード",
   "app.containers.LoginForm.username": "ユーザーネーム",
-  "app.containers.Notifier.chatroomNotExists": "チャンネル「{name}」は存在しません",
-  "app.containers.Notifier.directMessageReceived": "{nickname}さんはあなたにメッセージを送りました。",
+  "app.containers.Notifier.chatroomNotExists":
+    "チャンネル「{name}」は存在しません",
+  "app.containers.Notifier.directMessageReceived":
+    "{nickname}さんはあなたにメッセージを送りました。",
   "app.containers.Notifier.open": "開く",
-  "app.containers.Notifier.puzzleAdded": "{nickname} さんが新しい問題「{title}」を出題しました！",
+  "app.containers.Notifier.puzzleAdded":
+    "{nickname} さんが新しい問題「{title}」を出題しました！",
   "app.containers.Notifier.wsConnected": "サーバーに接続しました",
-  "app.containers.Notifier.wsDisconnected": "サーバーに接続出来ません。再接続します・・・（ラグが出る恐れがありますので、リロードすることをおすすめします）",
+  "app.containers.Notifier.wsDisconnected":
+    "サーバーに接続出来ません。再接続します・・・（ラグが出る恐れがありますので、リロードすることをおすすめします）",
   "app.containers.ProfilePage.awardSelect": "称号選択",
   "app.containers.ProfilePage.commentCount": "コメント数",
   "app.containers.ProfilePage.dateJoined": "登録日時",
@@ -144,24 +169,31 @@
   "app.containers.PuzzleAddForm.submitLabel": "出題",
   "app.containers.PuzzleAddForm.titleLabel": "タイトル",
   "app.containers.PuzzleAddForm.yamiLabel": "闇スープ",
-  "app.containers.PuzzleAddPage.description": "あなただけの水平思考ゲームを作ろう！",
+  "app.containers.PuzzleAddPage.description":
+    "あなただけの水平思考ゲームを作ろう！",
   "app.containers.PuzzleAddPage.header": "出題画面",
   "app.containers.PuzzleAddPage.title": "出題画面 - Cindy",
   "app.containers.PuzzlePage.addPuzzle": "問題を作ろう",
-  "app.containers.PuzzlePage.description": "遊びたいパズルを選ぼう。以前出題された問題を閲覧しよう。数多の水平思考パズルがあなたを待っています！",
+  "app.containers.PuzzlePage.description":
+    "遊びたいパズルを選ぼう。以前出題された問題を閲覧しよう。数多の水平思考パズルがあなたを待っています！",
   "app.containers.PuzzlePage.header": "問題一覧",
-  "app.containers.PuzzlePage.title": "問題一覧：数多の水平思考パズルがあなたを待っています！ - Cindy",
+  "app.containers.PuzzlePage.title":
+    "問題一覧：数多の水平思考パズルがあなたを待っています！ - Cindy",
   "app.containers.PuzzleShowPage.addBookmark": "ブクマを追加する",
   "app.containers.PuzzleShowPage.addComment": "コメントを追加する",
   "app.containers.PuzzleShowPage.addStar": "スターを追加する",
-  "app.containers.PuzzleShowPage.cancelStar": "誤ってスターをつけましたか？ここをクリックして撤回します",
-  "app.containers.PuzzleShowPage.commentNoBlankAlert": "コメントをはめてください",
+  "app.containers.PuzzleShowPage.cancelStar":
+    "誤ってスターをつけましたか？ここをクリックして撤回します",
+  "app.containers.PuzzleShowPage.commentNoBlankAlert":
+    "コメントをはめてください",
   "app.containers.PuzzleShowPage.controlPanel": "コントロールパネル",
   "app.containers.PuzzleShowPage.created": "出題時間",
   "app.containers.PuzzleShowPage.creator": "出題者",
   "app.containers.PuzzleShowPage.description": "問題ロード中です・・・",
-  "app.containers.PuzzleShowPage.disableInput": "遊ぶ前にログインしてくださいね^^",
-  "app.containers.PuzzleShowPage.hiddenFrame": "この問題は非公開に設定されています。あなたはこの問題を見ることが出来ません。",
+  "app.containers.PuzzleShowPage.disableInput":
+    "遊ぶ前にログインしてくださいね^^",
+  "app.containers.PuzzleShowPage.hiddenFrame":
+    "この問題は非公開に設定されています。あなたはこの問題を見ることが出来ません。",
   "app.containers.PuzzleShowPage.hint": "ヒント",
   "app.containers.PuzzleShowPage.input": "ここに質問しよう〜",
   "app.containers.PuzzleShowPage.memo": "メモ帳",
@@ -172,21 +204,28 @@
   "app.containers.PuzzleShowPage.solution": "解説文",
   "app.containers.PuzzleShowPage.solved": "解決時間",
   "app.containers.PuzzleShowPage.spoiler": "ネタバレ",
-  "app.containers.PuzzleShowPage.title": "Cindy でリアルタイムの水平思考パズルを味わいましょう",
+  "app.containers.PuzzleShowPage.title":
+    "Cindy でリアルタイムの水平思考パズルを味わいましょう",
   "app.containers.PuzzleShowPage.toggleHidden": "非公開",
   "app.containers.PuzzleShowPage.toggleYami": "闇スープ",
-  "app.containers.PuzzleShowPage.zeroStarAlert": "１つ以上の星で投票してください",
-  "app.containers.RegisterForm.nicknameHelp": "あなたのニックネームは公開されます。他人に不快をもたらす言葉はお控えめにしましょう。",
+  "app.containers.PuzzleShowPage.zeroStarAlert":
+    "１つ以上の星で投票してください",
+  "app.containers.RegisterForm.nicknameHelp":
+    "あなたのニックネームは公開されます。他人に不快をもたらす言葉はお控えめにしましょう。",
   "app.containers.RegisterForm.nicknameLabel": "ニックネーム",
   "app.containers.RegisterForm.passwordConfirmLabel": "パスワード（確認）",
-  "app.containers.RegisterForm.passwordHelp": "半角英数字８以上。アルファベットと数字がそれぞれ１つ以上必要です。",
+  "app.containers.RegisterForm.passwordHelp":
+    "半角英数字８以上。アルファベットと数字がそれぞれ１つ以上必要です。",
   "app.containers.RegisterForm.passwordLabel": "パスワード",
-  "app.containers.RegisterForm.policyReadPrompt": "私は利用規約を閲覧して、その内容を認めました。",
+  "app.containers.RegisterForm.policyReadPrompt":
+    "私は利用規約を閲覧して、その内容を認めました。",
   "app.containers.RegisterForm.submitLabel": "確認",
-  "app.containers.RegisterForm.usernameHelp": "１５０文字以内の英数字、@/./+/-/_　公開されませんが、ログインに必要です。",
+  "app.containers.RegisterForm.usernameHelp":
+    "１５０文字以内の英数字、@/./+/-/_　公開されませんが、ログインに必要です。",
   "app.containers.RegisterForm.usernameLabel": "ユーザーネーム",
   "app.containers.RulesPage.description": "Cindyの利用規約",
-  "app.containers.RulesPage.rules": "# Cindy利用規約\n本規約は、利用者による当サイトの利用全てに適用されます。\n利用者が当サイトを利用するには、本規約を遵守して頂くものとします。\nまた本規約の内容は、必要に応じて、事前の予告なしに変更されることがありますので、サービスのご利用に際しては、このRulesのページで利用規約の最新の内容をご確認下さい。\n\n## 著作権について\n当サイトに掲載されている作品に関する著作権その他の権利は、サイト管理者及び各問題の出題者に帰属しますので、私的使用など法律によって認められる範囲を超えて、無断で使用することはできません。\nまた公的な場（掲示板、動画サイト、SNSなど）で当サイトの作品を転載する場合には後述する「他所でCindyの問題を扱う（転載など）際について」の各条項を満たさなければなりません。\n\n著作権について以下に詳細を示します。\n+ 各問題についての著作権は出題者に帰属します。\n+ 問題以外の当webサイトに掲載されている文章、画像の著作権は管理人に帰属します。\n+ 当サイトに投稿された問題(本人を除く)、文章、掲載されている画像(バナーを除く)等を無断転載する事は禁止します。\n+ 質問文についての著作権は、投稿した本人及び出題者に帰属します。\n+ プログラムに関して現在サイトはMITライセンスを使っていて、MITライセンスの範囲内に転載、自由に編集、または商業的利用は皆可です。\n\n## 投稿された作品の「強制修正」「問題削除」について\n投稿された問題の「強制修正」「問題削除」対象となるのは、以下の通りです。\n他者の権利やプライバシーを侵害する物。\n性的興奮を助長させる表現のある物。\n有害なプログラム・スクリプト等を含む物。\n宣伝だけが目的の物。\nその他、管理人が不適当と判断した物。\n\n他者の権利を侵害する物については、以下の項目が対象になります。\n二次創作物。\n他所ですでにある他人の作った問題の転載。\n他人の著作物である文章(引用を除く)の転載。\n他人の著作物である画像(挿絵)の転載。\n\n## 免責事項\n1. 管理者の当サイト管理に際しては、その正確性および完全性などに関して、いかなる保証もするものではありません。\n2. 管理者は、予告なしに、当サイトの運営を停止または中止し、また当サイトに掲載されている情報の全部または一部を変更する場合があります。\n3. 利用者が当サイトを利用したこと、または何らかの原因によりこれをご利用できなかったことにより生じる一切の損害および第三者によるデータの書き込み、不正なアクセス、発言に関して生じる一切の損害について、管理者は、何ら責任や費用の負担を負うものではありません。\n\n## リンクについて\n当サイトへのリンクは原則自由ですが、リンクされているウェブサイトの内容（公序良俗違反など）やリンクの方法によっては、リンクをお断りする場合があります。\nまた、画像ファイルへのリンク、 およびフレームを使用したhtmlページ内で表示する形でのリンクはご遠慮ください。\n\nその他 不明点がございましたら[こちら](https://wiki3.jp/cindy-lat/page/5)の掲示板にてお問い合わせください。\n\n## 他所でCindyの問題を扱う（転載など）際について\n### 非営利目的の場合\n他の掲示板や動画投稿サイトなどで、Cindyに投稿された問題を出題する場合は出典元の記載が必須となります。\nまた、以下に示す「営利目的の場合の使用条件１、３項」を満たしていることが望ましいです。\n\n### 営利目的の場合\n使用条件\n1. 必ず事前に詳細を[こちら](https://wiki3.jp/cindy-lat/page/5)の掲示板に投稿し、著作権を有する出題者からの返信をお待ち下さい。 リリースまで詳細を公に明かしたくない等の事情がある場合はその旨お書き添えの上、管理者からの返信をお待ち下さい。\n2. 使用の際はわかりやすい場所に出典元を明記すること。\n3. 問題文及び解説文改変の際には改変後の問題文（解説文）を出題者に確認してもらい了承を得ることが必須となります。\n4. 謝礼等のやり取りについては直接出題者と交渉を行っていただきます。その際に生じたトラブルに関し当サイトは一切責任を負わないものとします。\n5. １〜４の各使用条件は問題文・解説・挿絵に適用されるものとします。\n\n上記に違反し無断転載を行った際は著作権を有する者が違反者に対し損害賠償請求をすることができるものとします。\n準拠法は日本、統括裁判所を規定する場合は、著作権を有する者の所在地の統括裁判所にするのを基本として下さい。\n\n当サイトでは問題作成者の作品を保護保存する立場から、著作権に関して以下の定義を支持するものとします。\n当サイト内における著作権侵害とは、作品（問題文、解説文、挿絵）を無断でコピーまたは改変し、新たにサーバにアップロードしたり料金発生の有無に関わらず不特定多数が閲覧可能な状態にするというものです。\nこれは、著作権法としては「複製権」「公衆送信権」「送信可能化権」の３つの権利を侵害する行為です。\nまた、無断で作品を改変された場合は、「翻案権」と「同一性保持権」を侵害する行為といえます。\n尚、複数のCindyユーザーにおける審査においてほぼデッドコピーであると断定できるのであれば、著作権侵害とは別に民法一般規定の不法行為責任が成立する可能性があります。\n\nただし、当サイト管理者がこれらの権利を、著作権を有するユーザーの代理人として主張することは基本的にないものとします。\n\n## 禁止事項\n1. 当サイトは、利用者が以下の行為を行うことを禁じます。\n    + サイトまたは第三者に損害を与える行為、または損害を与える恐れのある行為\n    + サイトまたは第三者の財産、名誉、プライバシー等を侵害する行為、または侵害する恐れのある行為（他人のメールアドレスを公開するなど）\n    + 公序良俗に反する行為、またはその恐れのある行為\n    + コンピュータウィルス等有害なプログラムを使用または提供する行為\n    + その他、法令に違反する行為、またはその恐れがある行為\n    + その他当サイト管理者が不適切と判断する行為\n2. 上記に違反した場合、当サイト管理者は利用者に対し損害賠償請求をすることができることに利用者は同意します。\n",
+  "app.containers.RulesPage.rules":
+    "# Cindy利用規約\n本規約は、利用者による当サイトの利用全てに適用されます。\n利用者が当サイトを利用するには、本規約を遵守して頂くものとします。\nまた本規約の内容は、必要に応じて、事前の予告なしに変更されることがありますので、サービスのご利用に際しては、このRulesのページで利用規約の最新の内容をご確認下さい。\n\n## 著作権について\n当サイトに掲載されている作品に関する著作権その他の権利は、サイト管理者及び各問題の出題者に帰属しますので、私的使用など法律によって認められる範囲を超えて、無断で使用することはできません。\nまた公的な場（掲示板、動画サイト、SNSなど）で当サイトの作品を転載する場合には後述する「他所でCindyの問題を扱う（転載など）際について」の各条項を満たさなければなりません。\n\n著作権について以下に詳細を示します。\n+ 各問題についての著作権は出題者に帰属します。\n+ 問題以外の当webサイトに掲載されている文章、画像の著作権は管理人に帰属します。\n+ 当サイトに投稿された問題(本人を除く)、文章、掲載されている画像(バナーを除く)等を無断転載する事は禁止します。\n+ 質問文についての著作権は、投稿した本人及び出題者に帰属します。\n+ プログラムに関して現在サイトはMITライセンスを使っていて、MITライセンスの範囲内に転載、自由に編集、または商業的利用は皆可です。\n\n## 投稿された作品の「強制修正」「問題削除」について\n投稿された問題の「強制修正」「問題削除」対象となるのは、以下の通りです。\n他者の権利やプライバシーを侵害する物。\n性的興奮を助長させる表現のある物。\n有害なプログラム・スクリプト等を含む物。\n宣伝だけが目的の物。\nその他、管理人が不適当と判断した物。\n\n他者の権利を侵害する物については、以下の項目が対象になります。\n二次創作物。\n他所ですでにある他人の作った問題の転載。\n他人の著作物である文章(引用を除く)の転載。\n他人の著作物である画像(挿絵)の転載。\n\n## 免責事項\n1. 管理者の当サイト管理に際しては、その正確性および完全性などに関して、いかなる保証もするものではありません。\n2. 管理者は、予告なしに、当サイトの運営を停止または中止し、また当サイトに掲載されている情報の全部または一部を変更する場合があります。\n3. 利用者が当サイトを利用したこと、または何らかの原因によりこれをご利用できなかったことにより生じる一切の損害および第三者によるデータの書き込み、不正なアクセス、発言に関して生じる一切の損害について、管理者は、何ら責任や費用の負担を負うものではありません。\n\n## リンクについて\n当サイトへのリンクは原則自由ですが、リンクされているウェブサイトの内容（公序良俗違反など）やリンクの方法によっては、リンクをお断りする場合があります。\nまた、画像ファイルへのリンク、 およびフレームを使用したhtmlページ内で表示する形でのリンクはご遠慮ください。\n\nその他 不明点がございましたら[こちら](https://wiki3.jp/cindy-lat/page/5)の掲示板にてお問い合わせください。\n\n## 他所でCindyの問題を扱う（転載など）際について\n### 非営利目的の場合\n他の掲示板や動画投稿サイトなどで、Cindyに投稿された問題を出題する場合は出典元の記載が必須となります。\nまた、以下に示す「営利目的の場合の使用条件１、３項」を満たしていることが望ましいです。\n\n### 営利目的の場合\n使用条件\n1. 必ず事前に詳細を[こちら](https://wiki3.jp/cindy-lat/page/5)の掲示板に投稿し、著作権を有する出題者からの返信をお待ち下さい。 リリースまで詳細を公に明かしたくない等の事情がある場合はその旨お書き添えの上、管理者からの返信をお待ち下さい。\n2. 使用の際はわかりやすい場所に出典元を明記すること。\n3. 問題文及び解説文改変の際には改変後の問題文（解説文）を出題者に確認してもらい了承を得ることが必須となります。\n4. 謝礼等のやり取りについては直接出題者と交渉を行っていただきます。その際に生じたトラブルに関し当サイトは一切責任を負わないものとします。\n5. １〜４の各使用条件は問題文・解説・挿絵に適用されるものとします。\n\n上記に違反し無断転載を行った際は著作権を有する者が違反者に対し損害賠償請求をすることができるものとします。\n準拠法は日本、統括裁判所を規定する場合は、著作権を有する者の所在地の統括裁判所にするのを基本として下さい。\n\n当サイトでは問題作成者の作品を保護保存する立場から、著作権に関して以下の定義を支持するものとします。\n当サイト内における著作権侵害とは、作品（問題文、解説文、挿絵）を無断でコピーまたは改変し、新たにサーバにアップロードしたり料金発生の有無に関わらず不特定多数が閲覧可能な状態にするというものです。\nこれは、著作権法としては「複製権」「公衆送信権」「送信可能化権」の３つの権利を侵害する行為です。\nまた、無断で作品を改変された場合は、「翻案権」と「同一性保持権」を侵害する行為といえます。\n尚、複数のCindyユーザーにおける審査においてほぼデッドコピーであると断定できるのであれば、著作権侵害とは別に民法一般規定の不法行為責任が成立する可能性があります。\n\nただし、当サイト管理者がこれらの権利を、著作権を有するユーザーの代理人として主張することは基本的にないものとします。\n\n## 禁止事項\n1. 当サイトは、利用者が以下の行為を行うことを禁じます。\n    + サイトまたは第三者に損害を与える行為、または損害を与える恐れのある行為\n    + サイトまたは第三者の財産、名誉、プライバシー等を侵害する行為、または侵害する恐れのある行為（他人のメールアドレスを公開するなど）\n    + 公序良俗に反する行為、またはその恐れのある行為\n    + コンピュータウィルス等有害なプログラムを使用または提供する行為\n    + その他、法令に違反する行為、またはその恐れがある行為\n    + その他当サイト管理者が不適切と判断する行為\n2. 上記に違反した場合、当サイト管理者は利用者に対し損害賠償請求をすることができることに利用者は同意します。\n",
   "app.containers.RulesPage.title": "利用規約 - Cindy",
   "app.containers.ScheduleAddForm.content": "内容",
   "app.containers.ScheduleAddForm.scheduled": "表示時間（まで）",
@@ -203,7 +242,8 @@
   "app.containers.Settings.sendAnswer": "回答",
   "app.containers.Settings.sendChat": "チャット",
   "app.containers.Settings.sendQuestion": "質問",
-  "app.containers.UserListPage.description": "Cindyの水平思考コミュニティへ入ろう！",
+  "app.containers.UserListPage.description":
+    "Cindyの水平思考コミュニティへ入ろう！",
   "app.containers.UserListPage.header": "ユーザー一覧",
   "app.containers.UserListPage.title": "ユーザー一覧 - Cindy",
   "app.containers.UserNavbar.awardApplication": "称号申請所",

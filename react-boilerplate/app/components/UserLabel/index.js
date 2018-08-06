@@ -18,6 +18,7 @@ import chat from 'images/chat.svg';
 import home from 'images/home.svg';
 
 const Linked = styled.button`
+  padding: 3px;
   color: #006388;
   &:hover {
     color: black;
@@ -25,13 +26,17 @@ const Linked = styled.button`
 `;
 
 function UserLabel(props) {
-  const { user, break: needBreak } = props;
+  const { user, break: needBreak, color } = props;
   const popoverDetail = (
     <div>
-      <button onClick={() => props.goto(`/profile/show/${f(user.id)[1]}`)}>
+      <button
+        style={{ padding: '3px' }}
+        onClick={() => props.goto(`/profile/show/${f(user.id)[1]}`)}
+      >
         <ImgXs alt="home" src={home} />
       </button>
       <button
+        style={{ padding: '3px' }}
         onClick={() =>
           props.openDirectChat({
             id: user.id,
@@ -52,12 +57,12 @@ function UserLabel(props) {
         interactive="true"
         theme="cindy"
       >
-        <Linked>{user.nickname}</Linked>
+        <Linked style={{ color }}>{user.nickname}</Linked>
       </Tooltip>
       {needBreak && <br />}
       <UserAwardPopover
         userAward={user.currentAward}
-        style={{ color: '#23527c', fontSize: '0.92em' }}
+        style={{ color, fontSize: '0.92em' }}
       />
     </span>
   );
@@ -73,6 +78,11 @@ UserLabel.propTypes = {
   openDirectChat: PropTypes.func.isRequired,
   goto: PropTypes.func.isRequired,
   placement: PropTypes.string,
+  color: PropTypes.string,
+};
+
+UserLabel.defaultProps = {
+  color: '#23527c',
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -80,6 +90,9 @@ const mapDispatchToProps = (dispatch) => ({
   goto: (uri) => dispatch(pushWithLocale(uri)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 export default withConnect(UserLabel);

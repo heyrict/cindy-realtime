@@ -17,6 +17,7 @@ import messages from './messages';
 
 import MainFrame from './MainFrame';
 import PuzzleDescribeList from './PuzzleDescribeList';
+import RecentCommentList from './RecentCommentList';
 
 const PurpleBg = styled.div`
   background: linear-gradient(#5f293e, #330617);
@@ -28,9 +29,9 @@ function HomePage(props, context) {
   const dateOfReflesh = 15;
   let year;
   let month;
-  year = now.getYear() + 1900;  // Current Year
-  month = now.getMonth() + 1;  // Current Month (1-12)
-  const date = now.getDate();  // Current Date (1-31)
+  year = now.getYear() + 1900; // Current Year
+  month = now.getMonth() + 1; // Current Month (1-12)
+  const date = now.getDate(); // Current Date (1-31)
 
   if (date <= dateOfReflesh) {
     month -= 2;
@@ -49,6 +50,10 @@ function HomePage(props, context) {
         <meta name="description" content={_(messages.description)} />
       </Helmet>
       <MainFrame />
+      <RecentCommentList
+        variables={{ orderBy: ['-id'], spoiler: false }}
+        itemsPerPage={5}
+      />
       <PuzzleDescribeList
         variables={{ year, month, orderBy: ['-starCount'] }}
         itemsPerPage={5}

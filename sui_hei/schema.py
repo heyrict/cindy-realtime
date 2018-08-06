@@ -305,7 +305,7 @@ class FavoriteChatRoomNode(DjangoObjectType):
 class CommentNode(DjangoObjectType):
     class Meta:
         model = Comment
-        filter_fields = ["user", "puzzle"]
+        filter_fields = ["user", "puzzle", "spoiler"]
         interfaces = (relay.Node, )
 
     rowid = graphene.Int()

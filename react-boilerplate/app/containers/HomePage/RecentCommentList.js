@@ -1,6 +1,6 @@
 /**
  *
- * PuzzleDescribeList
+ * CommentDescribeList
  *
  */
 
@@ -19,9 +19,9 @@ import UserLabel from 'graphql/UserLabel';
 
 import { Box } from 'rebass';
 import Constrained from 'components/Constrained';
-import RewardingModalComponent from 'components/RewardingModal/RewardingModalComponent';
 import LoadingDots from 'components/LoadingDots';
 
+import RecentCommentPanel from './RecentCommentPanel';
 import messages from './messages';
 
 const LightBg = styled.div`
@@ -31,13 +31,13 @@ const LightBg = styled.div`
   border-radius: 10px;
 `;
 
-export function PuzzleDescribeList(props) {
-  if (props.loading || !props.allPuzzles) {
+export function RecentCommentList(props) {
+  if (props.loading || !props.allComments) {
     return <LoadingDots py={50} size={8} />;
   }
   return (
     <Constrained level={5} pt={3}>
-      {props.allPuzzles.edges.length > 0 && (
+      {props.allComments.edges.length > 0 && (
         <Box
           bg="lightcoffee"
           color="darksoil"
@@ -51,72 +51,55 @@ export function PuzzleDescribeList(props) {
             border: '8px solid #a4934f',
           }}
         >
-          <FormattedMessage {...messages.bestPuzzleOfLastMonth} />
+          <FormattedMessage {...messages.recentComments} />
         </Box>
       )}
-      {props.allPuzzles.edges.map((edge) => (
-        <LightBg key={edge.node.id}>
-          <RewardingModalComponent {...edge.node} />
-        </LightBg>
-      ))}
+      <LightBg>
+        {props.allComments.edges.map((edge) => (
+          <RecentCommentPanel node={edge.node} key={edge.node.id} />
+        ))}
+      </LightBg>
     </Constrained>
   );
 }
 
-PuzzleDescribeList.propTypes = {
+RecentCommentList.propTypes = {
   loading: PropTypes.bool.isRequired,
-  allPuzzles: PropTypes.shape({
+  allComments: PropTypes.shape({
     edges: PropTypes.array.isRequired,
   }),
   // eslint-disable-next-line react/no-unused-prop-types
   itemsPerPage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-PuzzleDescribeList.defaultProps = {
+RecentCommentList.defaultProps = {
   page: 1,
   itemsPerPage: 10,
   changePage: () => {},
 };
 
-const withPuzzleList = graphql(
+const withCommentList = graphql(
   gql`
-    query PuzzleDescribeListQuery(
+    query RecentCommentListQuery(
       $orderBy: [String]
-      $offset: Int
-      $limit: Int
-      $year: Int
-      $month: Int
+      $first: Int
+      $spoiler: Boolean
     ) {
-      allPuzzles(
-        orderBy: $orderBy
-        offset: $offset
-        limit: $limit
-        created_Year: $year
-        created_Month: $month
-      ) {
+      allComments(orderBy: $orderBy, first: $first, spoiler: $spoiler) {
         edges {
           node {
             id
-            title
-            genre
-            yami
             user {
               ...UserLabel_user
             }
-            content
-            contentSafe
-            commentSet {
-              edges {
-                node {
-                  id
-                  spoiler
-                  content
-                  user {
-                    ...UserLabel_user
-                  }
-                }
+            puzzle {
+              id
+              title
+              user {
+                ...UserLabel_user
               }
             }
+            content
           }
         }
       }
@@ -126,19 +109,19 @@ const withPuzzleList = graphql(
   {
     options: ({ variables, fetchPolicy, itemsPerPage }) => ({
       variables: {
-        limit: itemsPerPage,
+        first: itemsPerPage,
         ...variables,
       },
       fetchPolicy,
     }),
     props({ data }) {
-      const { loading, allPuzzles } = data;
+      const { loading, allComments } = data;
       return {
         loading,
-        allPuzzles,
+        allComments,
       };
     },
   },
 );
 
-export default compose(withPuzzleList)(PuzzleDescribeList);
+export default compose(withCommentList)(RecentCommentList);

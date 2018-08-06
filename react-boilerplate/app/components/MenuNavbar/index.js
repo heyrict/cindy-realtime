@@ -68,18 +68,6 @@ function MenuNavbar(props) {
       <RouterLink to={withLocale('/dashboard')}>
         <NavLink is="span">
           <FormattedMessage {...messages.dashboard} />
-          <sup>
-            <span
-              style={{
-                borderRadius: '10px',
-                background: '#bd3612',
-                color: 'blanchedalmond',
-                padding: '0 2px',
-              }}
-            >
-              new
-            </span>
-          </sup>
         </NavLink>
       </RouterLink>
       <NavLink is="span">
