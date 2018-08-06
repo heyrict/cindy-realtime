@@ -153,7 +153,7 @@ const mapStateToProps = createStructuredSelector({
   usernavbar: makeSelectUserNavbar(),
   display: createSelector(
     selectLocation,
-    (location) => getQueryStr(location.search).display
+    (location) => getQueryStr(location.get('search')).display,
   ),
 });
 
@@ -162,14 +162,25 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (msg) => dispatch(nAlert(msg)),
 });
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 const withSaga = injectSaga({ key: 'profilepage', saga });
 
 const withUser = graphql(ProfileShowQuery, {
-  options: ({ match: { params: { id } } }) => ({
+  options: ({
+    match: {
+      params: { id },
+    },
+  }) => ({
     variables: { id: t('UserNode', id) },
   }),
 });
 
-export default compose(withUser, withSaga, withConnect)(ProfilePage);
+export default compose(
+  withUser,
+  withSaga,
+  withConnect,
+)(ProfilePage);

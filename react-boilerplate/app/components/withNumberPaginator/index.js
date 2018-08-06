@@ -88,7 +88,7 @@ export function withNumberPaginator({ useQuery = true }) {
     const mapStateToProps = createStructuredSelector({
       page: createSelector(
         selectLocation,
-        (location) => getQueryStr(location.search).page
+        (location) => getQueryStr(location.get('search')).page,
       ),
     });
 
@@ -96,7 +96,10 @@ export function withNumberPaginator({ useQuery = true }) {
       goto: (link) => dispatch(push(link)),
     });
 
-    const withConnect = connect(mapStateToProps, mapDispatchToProps);
+    const withConnect = connect(
+      mapStateToProps,
+      mapDispatchToProps,
+    );
 
     return compose(withConnect)(withNumberPaginatorWrapper);
   };
