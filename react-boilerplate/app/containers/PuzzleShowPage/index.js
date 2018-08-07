@@ -54,6 +54,8 @@ const FilterButton = styled.button`
   border-bottom: ${({ enabled }) => (enabled ? '3px solid #2075c7' : '0')};
   color: ${({ accent }) => (accent ? '#cb4b16' : 'inherit')};
   font-weight: ${({ accent }) => (accent ? '800' : 'inherit')};
+  padding: 0 4px;
+  margin: 0 2px;
 `;
 
 const FilterFrame = styled.div`
@@ -188,7 +190,7 @@ export class PuzzleShowPage extends React.Component {
                     : this.setState({
                         userFilter: Array.filter(
                           Object.keys(participants),
-                          (v) => v !== participant.user.id
+                          (v) => v !== participant.user.id,
                         ),
                         currentPage: 0,
                       })
@@ -241,9 +243,9 @@ export class PuzzleShowPage extends React.Component {
     const DialoguePaginationBar = D.edges.length > 0 && (
       <Constrained>
         <Flex flexWrap="wrap" mb={2} justifyContent="center">
-          <button onClick={this.scrollToTop}>
+          <FilterButton onClick={this.scrollToTop}>
             <Img src={top} alt="Top" />
-          </button>
+          </FilterButton>
           {dSlices.map((dSlice, i) => (
             <FilterButton
               enabled={this.state.currentPage === i}
@@ -253,9 +255,9 @@ export class PuzzleShowPage extends React.Component {
               {i === 0 ? 1 : dSlices[i - 1] + 1} - {dSlice}
             </FilterButton>
           ))}
-          <button onClick={this.scrollToBottom}>
+          <FilterButton onClick={this.scrollToBottom}>
             <Img src={bottom} alt="Bottom" />
-          </button>
+          </FilterButton>
         </Flex>
       </Constrained>
     );
@@ -409,7 +411,7 @@ PuzzleShowPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   user: createSelector(selectUserNavbarDomain, (substate) =>
-    substate.get('user').toJS()
+    substate.get('user').toJS(),
   ),
   settings: makeSelectSettings(),
 });
@@ -420,7 +422,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 const withData = graphql(PuzzleShowQuery, {
@@ -520,5 +522,5 @@ const withData = graphql(PuzzleShowQuery, {
 
 export default compose(
   withConnect,
-  withData
+  withData,
 )(PuzzleShowPage);
