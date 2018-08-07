@@ -17,7 +17,6 @@ import messages from './messages';
 
 import MainFrame from './MainFrame';
 import PuzzleDescribeList from './PuzzleDescribeList';
-import RecentCommentList from './RecentCommentList';
 
 const PurpleBg = styled.div`
   background: linear-gradient(#5f293e, #330617);
@@ -50,10 +49,6 @@ function HomePage(props, context) {
         <meta name="description" content={_(messages.description)} />
       </Helmet>
       <MainFrame />
-      <RecentCommentList
-        variables={{ orderBy: ['-id'], spoiler: false }}
-        itemsPerPage={5}
-      />
       <PuzzleDescribeList
         variables={{ year, month, orderBy: ['-starCount'] }}
         itemsPerPage={5}

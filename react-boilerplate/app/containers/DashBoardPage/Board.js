@@ -14,7 +14,7 @@ const BoardHeader = styled.div`
 
 function Board(props) {
   return (
-    <RoundedPanel style={{ minHeight: '150px', margin: '8px 5px' }}>
+    <RoundedPanel style={{ minHeight: '150px', height: '100%' }}>
       <BoardHeader>{props.title}</BoardHeader>
       {props.content}
     </RoundedPanel>

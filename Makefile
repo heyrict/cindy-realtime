@@ -18,6 +18,7 @@ push:
 	# Run webpack locally, then push built assets to remote server.
 	# Make sure CINDY_SERVER, CINDY_USERNAME, CINDY_PASSWORD, CINDY_ROOTPATH, CINDY_PYTHONPATH
 	# exists in your environment variable.
+	make schema
 	cd ./react-boilerplate && npm run build
 	$(PYTHON_EXECUTABLE) manage.py collectstatic --no-input -c
 	echo 'cd $(CINDY_ROOTPATH) && git pull'\
@@ -30,6 +31,7 @@ push_with_migrate:
 	# Run webpack locally, then push built assets to remote server.
 	# Make sure CINDY_SERVER, CINDY_USERNAME, CINDY_PASSWORD, CINDY_ROOTPATH, CINDY_PYTHONPATH
 	# exists in your environment variable.
+	make schema
 	cd ./react-boilerplate && npm run build
 	$(PYTHON_EXECUTABLE) manage.py collectstatic --no-input -c
 	echo 'cd $(CINDY_ROOTPATH) && git pull && $(CINDY_PYTHONPATH) manage.py makemigrations && $(CINDY_PYTHONPATH) manage.py migrate'\

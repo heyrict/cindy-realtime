@@ -30,6 +30,7 @@ import HelpPopper from 'components/HelpPopper';
 import messages from './messages';
 import Board from './Board';
 import PuzzleStaticChart from './PuzzleStaticChart';
+import RecentCommentList from './RecentCommentList';
 
 const now = moment();
 
@@ -47,7 +48,7 @@ function DashBoardPage(props, context) {
           <FormattedMessage {...messages.heading} />
         </Heading>
         <Flex w={1} flexWrap="wrap">
-          <Box w={[1, 1, 1 / 2]}>
+          <Box w={[1, 1, 1 / 2]} p={1}>
             <Board
               title={
                 <span>
@@ -70,7 +71,7 @@ function DashBoardPage(props, context) {
             />
           </Box>
           {props.currentUserId && (
-            <Box w={[1, 1, 1 / 2]}>
+            <Box w={[1, 1, 1 / 2]} p={1}>
               <Board
                 title={
                   <span>
@@ -98,12 +99,23 @@ function DashBoardPage(props, context) {
               />
             </Box>
           )}
-          <Box w={[1, 1, 1 / 2]} style={{ overflow: 'scroll' }}>
+          <Box w={[1, 1, 1 / 2]} p={1}>
             <Board
               title={<FormattedMessage {...messages.puzzleCountChart} />}
               content={
                 <PuzzleStaticChart
                   currentUserId={currentUserId || t('UserNode', -1)}
+                />
+              }
+            />
+          </Box>
+          <Box w={[1, 1, 1, 1 / 2]} p={1}>
+            <Board
+              title={<FormattedMessage {...messages.recentComments} />}
+              content={
+                <RecentCommentList
+                  variables={{ orderBy: ['-id'] }}
+                  itemsPerPage={10}
                 />
               }
             />

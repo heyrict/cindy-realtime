@@ -24,42 +24,16 @@ import LoadingDots from 'components/LoadingDots';
 import RecentCommentPanel from './RecentCommentPanel';
 import messages from './messages';
 
-const LightBg = styled.div`
-  background: burlywood;
-  padding: 10px;
-  margin-bottom: 50px;
-  border-radius: 10px;
-`;
-
 export function RecentCommentList(props) {
   if (props.loading || !props.allComments) {
     return <LoadingDots py={50} size={8} />;
   }
   return (
-    <Constrained level={5} pt={3}>
-      {props.allComments.edges.length > 0 && (
-        <Box
-          bg="lightcoffee"
-          color="darksoil"
-          mx={[0, -2, -3]}
-          my={2}
-          p={2}
-          style={{
-            fontSize: '1.8em',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            border: '8px solid #a4934f',
-          }}
-        >
-          <FormattedMessage {...messages.recentComments} />
-        </Box>
-      )}
-      <LightBg>
-        {props.allComments.edges.map((edge) => (
-          <RecentCommentPanel node={edge.node} key={edge.node.id} />
-        ))}
-      </LightBg>
-    </Constrained>
+    <div>
+      {props.allComments.edges.map((edge) => (
+        <RecentCommentPanel node={edge.node} key={edge.node.id} />
+      ))}
+    </div>
   );
 }
 
@@ -80,12 +54,8 @@ RecentCommentList.defaultProps = {
 
 const withCommentList = graphql(
   gql`
-    query RecentCommentListQuery(
-      $orderBy: [String]
-      $first: Int
-      $spoiler: Boolean
-    ) {
-      allComments(orderBy: $orderBy, first: $first, spoiler: $spoiler) {
+    query RecentCommentListQuery($orderBy: [String], $first: Int) {
+      allComments(orderBy: $orderBy, first: $first) {
         edges {
           node {
             id
@@ -100,6 +70,7 @@ const withCommentList = graphql(
               }
             }
             content
+            spoiler
           }
         }
       }

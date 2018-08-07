@@ -31,7 +31,7 @@ function PuzzleStaticChart(props, context) {
   });
 
   if (!props.truncDateGroupsCindy) {
-    return <LoadingDots />;
+    return <LoadingDots py={50} size={8} />;
   }
   let data = props.truncDateGroupsCindy.edges;
   if (props.truncDateGroupsUser) {

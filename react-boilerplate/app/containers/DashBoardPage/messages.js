@@ -40,4 +40,17 @@ export default defineMessages({
     id: `${scope}.chartTotalPuzzleCount`,
     defaultMessage: 'Total Puzzle Count',
   },
+  recentComments: {
+    id: `${scope}.recentComments`,
+    defaultMessage: 'Recent Comments',
+  },
+  commentHint: {
+    id: `${scope}.commentHint`,
+    defaultMessage:
+      "New comment added on {puzzle_user}'s puzzle {puzzle_title}",
+  },
+  commentSpoiler: {
+    id: `${scope}.commentSpoiler`,
+    defaultMessage: '(Spoiler)',
+  },
 });

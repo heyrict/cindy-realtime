@@ -7,9 +7,11 @@ import { FormattedMessage } from 'react-intl';
 import posed from 'react-pose';
 
 import { Flex, Box } from 'rebass';
-import { ImgSm as Img, RouterLink } from 'style-store';
-import chevronLeft from 'images/chevron-yellowgreen-left.svg';
-import chevronRight from 'images/chevron-yellowgreen-right.svg';
+import { ImgXs as Img, RouterLink } from 'style-store';
+import chevronYLeft from 'images/chevron-yellowgreen-left.svg';
+import chevronYRight from 'images/chevron-yellowgreen-right.svg';
+import chevronOLeft from 'images/chevron-orange-left.svg';
+import chevronORight from 'images/chevron-orange-right.svg';
 import UserLabel from 'components/UserLabel';
 import TitleLabel from 'components/TitleLabel';
 
@@ -26,7 +28,7 @@ const CommentContent = posed.div({
       }),
   },
   off: {
-    left: 'calc(100% - 6.8em)',
+    left: 'calc(100% - 25px)',
     transition: (props) =>
       tween({
         ...props,
@@ -46,17 +48,43 @@ class RecentCommentPanel extends React.PureComponent {
   }
   render() {
     const { node } = this.props;
+
+    let currentArrow;
+    if (this.state.on) {
+      if (node.spoiler) {
+        currentArrow = <Img alt="detail" src={chevronORight} />;
+      } else {
+        currentArrow = <Img alt="detail" src={chevronYRight} />;
+      }
+    } else {
+      if (node.spoiler) {
+        currentArrow = <Img alt="detail" src={chevronOLeft} />;
+      } else {
+        currentArrow = <Img alt="detail" src={chevronYLeft} />;
+      }
+    }
+
     return (
       <Box
-        m={2}
         bg="blanchedalmond"
-        style={{ overflow: 'hidden', position: 'relative' }}
+        style={{
+          overflow: 'hidden',
+          position: 'relative',
+          border: '2px solid burlywood',
+        }}
       >
         <Box
-          w="calc(100% - 6.8em)"
+          w="calc(100% - 25px)"
           p={2}
           color="darksoil"
-          style={{ position: 'absolute', zIndex: 20 }}
+          style={{
+            position: 'absolute',
+            zIndex: 20,
+            top: 0,
+            width: '100%',
+            height: '100%',
+            overflowY: 'auto',
+          }}
         >
           <FormattedMessage
             {...messages.commentHint}
@@ -73,12 +101,17 @@ class RecentCommentPanel extends React.PureComponent {
               ),
             }}
           />
+          {node.spoiler && (
+            <Box is="span" color="red">
+              <FormattedMessage {...messages.commentSpoiler} />
+            </Box>
+          )}
         </Box>
         <CommentContent
           pose={this.state.on ? 'on' : 'off'}
           style={{
-            position: 'relative',
             display: 'flex',
+            position: 'relative',
             zIndex: 30,
           }}
         >
@@ -86,17 +119,17 @@ class RecentCommentPanel extends React.PureComponent {
             style={{
               display: 'inline-block',
               float: 'right',
-              marginLeft: '20px',
             }}
             onClick={() => this.setState(({ on }) => ({ on: !on }))}
           >
-            {this.state.on ? (
-              <Img alt="detail" src={chevronRight} />
-            ) : (
-              <Img alt="detail" src={chevronLeft} />
-            )}
+            {currentArrow}
           </button>
-          <Box w={1} bg="yellowgreen" p={2} color="blanchedalmond">
+          <Box
+            w={1}
+            bg={node.spoiler ? 'orange' : 'yellowgreen'}
+            p={2}
+            color="blanchedalmond"
+          >
             {node.content}
             <div style={{ float: 'right' }}>
               ——<UserLabel user={node.user} color="blanchedalmond" />

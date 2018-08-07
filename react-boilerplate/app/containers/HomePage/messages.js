@@ -34,13 +34,4 @@ export default defineMessages({
     id: `${scope}.bestPuzzleOfLastMonth`,
     defaultMessage: 'Most Valuable Puzzles of the Last Month',
   },
-  recentComments: {
-    id: `${scope}.recentComments`,
-    defaultMessage: 'Recent Comments',
-  },
-  commentHint: {
-    id: `${scope}.commentHint`,
-    defaultMessage:
-      "New comment added on {puzzle_user}'s puzzle {puzzle_title}",
-  },
 });
