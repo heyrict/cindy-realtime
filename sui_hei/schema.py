@@ -1,3 +1,4 @@
+import os
 from collections import Counter
 from itertools import chain
 
@@ -5,9 +6,9 @@ import django_filters
 import graphene
 from dateutil.parser import parse
 from django.contrib.auth import authenticate, login, logout
-from django.db.models.functions import TruncDate, TruncMonth, TruncYear
 from django.core.exceptions import ValidationError
 from django.db.models import Count, F, Q, Sum
+from django.db.models.functions import TruncDate, TruncMonth, TruncYear
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django_filters import FilterSet
@@ -23,6 +24,7 @@ from rx import Observable, Observer
 from six import get_unbound_function
 
 import sui_hei.models
+
 from .models import *
 from .subscription import Subscription as SubscriptionType
 
@@ -383,6 +385,22 @@ class TruncDateNode(graphene.ObjectType):
 
     def resolve_count(self, info):
         return self.get('count')
+
+
+# {{{2 Wiki Node
+class WikiNode(graphene.ObjectType):
+    content = graphene.String()
+
+    class Meta:
+        interfaces = (relay.Node, )
+
+    def get_node(cls, info):
+        sui_hei_dir = os.path.split(os.path.abspath(__file__))[0]
+        wikiPath = os.path.join(sui_hei_dir, "wiki", info) + ".md"
+        if os.path.exists(wikiPath):
+            with open(wikiPath) as f:
+                wikiCont = f.read()
+            return WikiNode(content=wikiCont)
 
 
 # {{{1 Connections
@@ -1474,6 +1492,8 @@ class Query(object):
     star = relay.Node.Field(StarNode)
     bookmark = relay.Node.Field(BookmarkNode)
     schedule = relay.Node.Field(ScheduleNode)
+
+    wiki = relay.Node.Field(WikiNode)
 
     # {{{2 unions
     puzzle_show_union = relay.ConnectionField(

@@ -2,6 +2,8 @@ Cindy-Realtime
 ==============
 <img align="right" height="192" width="192" src="https://github.com/heyrict/cindy-realtime/blob/master/react-boilerplate/app/images/icon-512x512.png" />
 
+日本語バーションは[こちら](README_ja.md)
+
 This is a project started in homage to [latethin](http://sui-hei.net) created by [kamisugi(上杉)](http://sui-hei.net/mondai/profile/1).
 
 Cindy is a website specially designed for playing lateral thinking games, with python django as the backend, and nodejs as the frontend.
@@ -14,7 +16,7 @@ which comes from the popular original character of [Cindy](http://sui-hei.net/ap
 
 Differences between Cindy
 -------------------------
-Cindy-Realtime inherit its database from [Cindy][1], but its frontend is completely different from [Cindy][1].
+Cindy-Realtime inherit its database from [Cindy](https://github.com/heyrict/cindy), but its frontend is completely different from [Cindy](https://github.com/heyrict/cindy).
 
 Cindy-Realtime has more features:
 
