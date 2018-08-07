@@ -47,7 +47,7 @@ function _norm_link(string) {
 function _norm_countdown(string) {
   return string.replace(
     /\/countdown\(([^)]+)\)\//g,
-    "<span class='btn disabled countdownobj' until='$1'>CountDownObject</span>"
+    "<span class='btn disabled countdownobj' until='$1'>CountDownObject</span>",
   );
 }
 
@@ -111,7 +111,7 @@ function _norm_tabs(string) {
 
   return string.replace(
     /<!--tabs ?([^>]*?)-->([\s\S]*?)<!--endtabs-->/g,
-    _build_tabs
+    _build_tabs,
   );
 }
 
@@ -130,7 +130,7 @@ export function StartCountdown(selector) {
             ? `<font color='tomato'>Time Out</font>`
             : (diffdays ? diffdays + 'd ' : '') +
               moment(diff).format('H[h]:mm[m]:ss[s]');
-      }
+      },
     );
   }, 1000);
 }
@@ -173,7 +173,7 @@ export function line2md(string) {
             : attribs,
         }),
       },
-    }
+    },
   );
 }
 
@@ -384,7 +384,7 @@ export function getQueryStr(qs) {
 export function setQueryStr(qObj) {
   const query = [];
   Object.entries(qObj).forEach(
-    (arg) => arg[0] && arg[1] && query.push(arg.join('='))
+    (arg) => arg[0] && arg[1] && query.push(arg.join('=')),
   );
   return '?' + encodeURI(query.join('&'));
 }
@@ -417,8 +417,8 @@ export const from_global_id = (id) => {
   }
 };
 
-export const withLocale = (link) => {
-  let locale = window.location.pathname.split('/')[1];
+export const withLocale = (link, localeLocation = 1) => {
+  let locale = window.location.pathname.split('/')[localeLocation];
   if (locale !== 'ja' && locale !== 'en') {
     // No i18n pattern
     return link;

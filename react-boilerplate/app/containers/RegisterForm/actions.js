@@ -13,4 +13,4 @@ export const registerSucceeded = () => ({
 });
 */
 
-export const registerSucceeded = (id) => push(`/profile/show/${id}`);
+export const registerSucceeded = (id) => push('/wiki/ja/welcome');

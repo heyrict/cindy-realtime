@@ -70,15 +70,11 @@ function MenuNavbar(props) {
           <FormattedMessage {...messages.dashboard} />
         </NavLink>
       </RouterLink>
-      <NavLink is="span">
-        <a
-          target="_blank"
-          href="//wiki3.jp/cindy-lat"
-          style={{ color: '#002731' }}
-        >
+      <RouterLink to={withLocale('/wiki/ja/welcome')}>
+        <NavLink is="span">
           <FormattedMessage {...messages.wiki} />
-        </a>
-      </NavLink>
+        </NavLink>
+      </RouterLink>
       <SponsersMenuItem>
         <FormattedMessage {...messages.sponsers} />
       </SponsersMenuItem>
@@ -137,5 +133,5 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(MenuNavbar);

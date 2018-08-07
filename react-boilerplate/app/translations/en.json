@@ -224,6 +224,7 @@
   "app.containers.UserNavbar.register": "Register",
   "app.containers.UserNavbar.settings": "Settings",
   "app.containers.UserNavbar.userlist": "User List",
+  "app.containers.WikiPage.title": "Wiki",
   "app.containers.withModel.close": "Close",
   "app.containers.withModel.confirm": "Confirm"
 }

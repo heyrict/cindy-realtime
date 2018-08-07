@@ -224,6 +224,7 @@
   "app.containers.UserNavbar.register": "登録",
   "app.containers.UserNavbar.settings": "設定",
   "app.containers.UserNavbar.userlist": "ユーザー一覧",
+  "app.containers.WikiPage.title": "Wiki",
   "app.containers.withModel.close": "閉じる",
   "app.containers.withModel.confirm": "確認"
 }

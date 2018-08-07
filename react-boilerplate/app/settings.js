@@ -15,7 +15,7 @@ export const googleAdInfo = {
 export const MIN_CONTENT_SAFE_CREDIT = 1000;
 
 const domainRegex = new RegExp(
-  /^(https?:\/\/)?(www\.)?(cindythink\.com)?\/(ja\/|en\/)?(puzzle|profile|rules|dashboard)/
+  /^(https?:\/\/)?(www\.)?(cindythink\.com)?\/(ja\/|en\/)?(puzzle|profile|rules|dashboard|wiki)/
 );
 export const domainFilter = (url) => {
   const selfDomain = domainRegex.test(url);

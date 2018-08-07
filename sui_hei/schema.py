@@ -389,6 +389,7 @@ class TruncDateNode(graphene.ObjectType):
 
 # {{{2 Wiki Node
 class WikiNode(graphene.ObjectType):
+    id = graphene.ID(required=True)
     content = graphene.String()
 
     class Meta:
@@ -400,7 +401,8 @@ class WikiNode(graphene.ObjectType):
         if os.path.exists(wikiPath):
             with open(wikiPath) as f:
                 wikiCont = f.read()
-            return WikiNode(content=wikiCont)
+            return WikiNode(
+                id=to_global_id("WikiNode", info), content=wikiCont)
 
 
 # {{{1 Connections

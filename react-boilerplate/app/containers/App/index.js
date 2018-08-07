@@ -21,20 +21,23 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import WebSocketInterface from 'containers/WebSocketInterface';
+import Chat from 'containers/Chat';
 import Notifier from 'containers/Notifier';
 import TopNavbar from 'containers/TopNavbar';
-import HomePage from 'containers/HomePage/Loadable';
-import DashBoardPage from 'containers/DashBoardPage/Loadable';
-import RulesPage from 'containers/RulesPage/Loadable';
-import PuzzlePage from 'containers/PuzzlePage/Loadable';
-import PuzzleAddPage from 'containers/PuzzleAddPage/Loadable';
-import PuzzleShowPage from 'containers/PuzzleShowPage/Loadable';
-import ProfilePage from 'containers/ProfilePage/Loadable';
-import UserListPage from 'containers/UserListPage/Loadable';
+import WebSocketInterface from 'containers/WebSocketInterface';
+
 import AwardApplicationPage from 'containers/AwardApplicationPage/Loadable';
+import DashBoardPage from 'containers/DashBoardPage/Loadable';
+import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
-import Chat from 'containers/Chat';
+import ProfilePage from 'containers/ProfilePage/Loadable';
+import PuzzleAddPage from 'containers/PuzzleAddPage/Loadable';
+import PuzzlePage from 'containers/PuzzlePage/Loadable';
+import PuzzleShowPage from 'containers/PuzzleShowPage/Loadable';
+import RulesPage from 'containers/RulesPage/Loadable';
+import UserListPage from 'containers/UserListPage/Loadable';
+import WikiPage from 'containers/WikiPage/Loadable';
+
 import makeSelectChat from 'containers/Chat/selectors';
 import { StartCountdown, changeTabularTab, pushWithLocale } from 'common';
 import { domainFilter } from 'settings';
@@ -95,6 +98,7 @@ class App extends React.Component {
         <Route exact path="/profile" component={UserListPage} />
         <Route exact path="/profile/award" component={AwardApplicationPage} />
         <Route path="/profile/show/:id" component={ProfilePage} />
+        <Route path="/wiki/:id([\s\S]+)" component={WikiPage} />
       </Switch>
     );
     return (
