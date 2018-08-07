@@ -309,7 +309,12 @@ class FavoriteChatRoomNode(DjangoObjectType):
 class CommentNode(DjangoObjectType):
     class Meta:
         model = Comment
-        filter_fields = ["user", "puzzle", "spoiler"]
+        filter_fields = {
+            "user": ["exact"],
+            "puzzle": ["exact"],
+            "puzzle__status": ["exact", "gt"],
+            "spoiler": ["exact"],
+        }
         interfaces = (relay.Node, )
 
     rowid = graphene.Int()

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { RoundedPanel } from 'style-store';
+import { Panel } from 'rebass';
 
 const BoardHeader = styled.div`
   background-color: #a02d92;
@@ -12,12 +12,17 @@ const BoardHeader = styled.div`
   width: 100%;
 `;
 
+const BoardPanel = styled(Panel)`
+  min-height: 200px;
+  height: 100%;
+`;
+
 function Board(props) {
   return (
-    <RoundedPanel style={{ minHeight: '150px', height: '100%' }}>
+    <BoardPanel>
       <BoardHeader>{props.title}</BoardHeader>
       {props.content}
-    </RoundedPanel>
+    </BoardPanel>
   );
 }
 

@@ -60,26 +60,34 @@ export class PuzzlePanel extends React.Component {
             <Divider my={2} />
             <ProcessLabel qCount={node.quesCount} uaCount={node.uaquesCount} />
             <StatusLabel status={node.status} />
-            {node.starSet &&
-              node.starSet.edges.length > 0 && (
-                <StarLabel starSet={node.starSet} puzzleId={node.id} />
-              )}
-            {node.commentCount !== undefined &&
-              node.commentCount !== null && (
-                <StyledButton onClick={() => this.toggleRewardingPanel(true)}>
-                  <CommentLabel commentCount={node.commentCount} />
-                </StyledButton>
-              )}
-            {node.bookmarkCount !== undefined &&
-              node.bookmarkCount !== null && (
-                <BookmarkLabel bookmarkCount={node.bookmarkCount} />
-              )}
+            {node.status > 0 && (
+              <span>
+                {node.starSet &&
+                  node.starSet.edges.length > 0 && (
+                    <StarLabel starSet={node.starSet} puzzleId={node.id} />
+                  )}
+                {node.commentCount !== undefined &&
+                  node.commentCount !== null && (
+                    <StyledButton
+                      onClick={() => this.toggleRewardingPanel(true)}
+                    >
+                      <CommentLabel commentCount={node.commentCount} />
+                    </StyledButton>
+                  )}
+                {node.bookmarkCount !== undefined &&
+                  node.bookmarkCount !== null && (
+                    <BookmarkLabel bookmarkCount={node.bookmarkCount} />
+                  )}
+              </span>
+            )}
           </Box>
-          <RewardingModal
-            id={node.id}
-            show={this.state.rewardingShown}
-            onHide={() => this.toggleRewardingPanel(false)}
-          />
+          {node.status > 0 && (
+            <RewardingModal
+              id={node.id}
+              show={this.state.rewardingShown}
+              onHide={() => this.toggleRewardingPanel(false)}
+            />
+          )}
         </Row>
       </RoundedPanel>
     );

@@ -54,8 +54,16 @@ RecentCommentList.defaultProps = {
 
 const withCommentList = graphql(
   gql`
-    query RecentCommentListQuery($orderBy: [String], $first: Int) {
-      allComments(orderBy: $orderBy, first: $first) {
+    query RecentCommentListQuery(
+      $orderBy: [String]
+      $first: Int
+      $puzzle_Status_Gt: Float
+    ) {
+      allComments(
+        orderBy: $orderBy
+        first: $first
+        puzzle_Status_Gt: $puzzle_Status_Gt
+      ) {
         edges {
           node {
             id

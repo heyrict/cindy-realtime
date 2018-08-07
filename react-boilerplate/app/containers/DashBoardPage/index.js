@@ -114,7 +114,7 @@ function DashBoardPage(props, context) {
               title={<FormattedMessage {...messages.recentComments} />}
               content={
                 <RecentCommentList
-                  variables={{ orderBy: ['-id'] }}
+                  variables={{ orderBy: ['-id'], puzzle_Status_Gt: 0 }}
                   itemsPerPage={10}
                 />
               }

@@ -85,7 +85,7 @@
   "app.containers.Chat.send": "送信",
   "app.containers.Chat.sending": "送信中・・・",
   "app.containers.DashBoardPage.awardApplications": "最近の称号申請履歴",
-  "app.containers.DashBoardPage.chartTotalPuzzleCount": "総計出題数",
+  "app.containers.DashBoardPage.chartTotalPuzzleCount": "Cindy出題数",
   "app.containers.DashBoardPage.chartUserPuzzleCount": "自分の出題数",
   "app.containers.DashBoardPage.commentHint": "{puzzle_user}さんの問題「{puzzle_title}」に新しいコメントがあります！",
   "app.containers.DashBoardPage.commentSpoiler": "（ネタバレあり）",
