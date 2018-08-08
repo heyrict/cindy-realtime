@@ -11,6 +11,7 @@
 
 import MarkdownIt from 'markdown-it';
 import mdEmoji from 'markdown-it-emoji/light';
+import mdEmojiLight from 'markdown-it-emoji/lib/data/light.json';
 import sanitizeHtml from 'sanitize-html';
 import moment, * as moments from 'moment';
 import { push } from 'react-router-redux';
@@ -25,7 +26,7 @@ const md = MarkdownIt({
 })
   .enable(['table', 'strikethrough'])
   .use(mdEmoji, {
-    defs: stampDefs,
+    defs: Object.assign({}, mdEmojiLight, stampDefs),
   });
 
 function hash(string) {
@@ -152,7 +153,7 @@ export function line2md(string) {
   })
     .enable(['table', 'strikethrough'])
     .use(mdEmoji, {
-      defs: stampDefs,
+      defs: Object.assign({}, mdEmojiLight, stampDefs),
     });
   string = PreNorm(string);
 
