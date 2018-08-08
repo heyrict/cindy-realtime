@@ -1,4 +1,4 @@
-<a style="background-color:#728905;color:blanchedalmond;padding:3px 6px;border-radius:20px;" href="/wiki/ja/genre">«ジャンル説明に戻る</a>
+<a style="background-color:#728905;color:blanchedalmond;padding:3px 6px;border-radius:20px;" href="javascript:window.history.back();">«戻る</a>
 
 # 新＆形式問題とは？
 上記３形式のいずれにも該当しない方式は全て新＆形式となります。

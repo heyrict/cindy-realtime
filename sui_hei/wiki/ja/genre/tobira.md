@@ -1,4 +1,4 @@
-<a style="background-color:#728905;color:blanchedalmond;padding:3px 6px;border-radius:20px;" href="/wiki/ja/genre">«ジャンル説明に戻る</a>
+<a style="background-color:#728905;color:blanchedalmond;padding:3px 6px;border-radius:20px;" href="javascript:window.history.back();">«戻る</a>
 
 # 20の扉とは？
 出題者の考えた「物」が何か、ウミガメのスープ同様、YESNOで答えられる質問をして特定する問題形式です。

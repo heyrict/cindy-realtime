@@ -1,4 +1,4 @@
-<a style="background-color:#728905;color:blanchedalmond;padding:3px 6px;border-radius:20px;" href="/wiki/ja/genre">«ジャンル説明に戻る</a>
+<a style="background-color:#728905;color:blanchedalmond;padding:3px 6px;border-radius:20px;" href="javascript:window.history.back();">«戻る</a>
 
 # ウミガメのスープとは？
 ウミガメのスープの正式な名称は「Lateral Thinking Puzzles」。略称はLTP。ポール・スローンの一連の著作からとられており、「水平思考パズル」と訳されます。

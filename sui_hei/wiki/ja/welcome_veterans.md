@@ -1,0 +1,3 @@
+<a style="background-color:#728905;color:blanchedalmond;padding:3px 6px;border-radius:20px;" href="javascript:window.history.back();">«戻る</a>
+
+Editing...

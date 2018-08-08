@@ -1,4 +1,4 @@
-<a style="background-color:#728905;color:blanchedalmond;padding:3px 6px;border-radius:20px;" href="/wiki/ja/genre">«ジャンル説明に戻る</a>
+<a style="background-color:#728905;color:blanchedalmond;padding:3px 6px;border-radius:20px;" href="javascript:window.history.back();">«戻る</a>
 
 # **闇スープ・闇＆常駐について**
 「闇スープ」または「闇＆常駐」とは、自分以外の参加者の質問及び回答がゲーム終了まで見ることの出来ないものを言います。

@@ -1,4 +1,4 @@
-<a style="background-color:#728905;color:blanchedalmond;padding:3px 6px;border-radius:20px;" href="/wiki/ja/genre">«ジャンル説明に戻る</a>
+<a style="background-color:#728905;color:blanchedalmond;padding:3px 6px;border-radius:20px;" href="javascript:window.history.back();">«戻る</a>
 
 # 亀夫君問題とは？
 出題者が物語の中の登場人物になり、参加者の質問or指示で物語を進めていく問題形式です。

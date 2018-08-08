@@ -1,3 +1,5 @@
+<a style="background-color:#728905;color:blanchedalmond;padding:3px 6px;border-radius:20px;" href="javascript:window.history.back();">«戻る</a>
+
 # はじめての方へ
 
 Cindyの問題にはウミガメのスープを主に四つのジャンルが存在します：
