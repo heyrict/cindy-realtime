@@ -6,6 +6,13 @@ import stampSanka from './images/sanka.jpg';
 const m = (alt, src) =>
   `<img class="cindy-stamp-middle" alt="${alt}" src="${src}" />`;
 
+export const stamps = {
+  'stamp-a': stampA,
+  'stamp-q': stampQ,
+  'stamp-gj': stampGJ,
+  'stamp-sanka': stampSanka,
+};
+
 const stampDefs = {
   'stamp-a': m('stamp-a', stampA),
   'stamp-q': m('stamp-q', stampQ),

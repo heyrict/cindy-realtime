@@ -44,6 +44,7 @@
   "app.components.RewardingModal.close": "閉じる",
   "app.components.RewardingModal.jump": "解説を見る",
   "app.components.RewardingModal.spoilerWarning": "注意：このコメントはネタバレ要素を含んでいます。",
+  "app.components.StampTooltip.stamp": "スタンプ",
   "app.components.TitleLabel.classic": "ウミガメのスープ",
   "app.components.TitleLabel.littleAlbat": "亀夫君問題",
   "app.components.TitleLabel.longtermYami": "闇＆常駐",

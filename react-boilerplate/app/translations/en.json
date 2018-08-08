@@ -44,6 +44,7 @@
   "app.components.RewardingModal.close": "Close",
   "app.components.RewardingModal.jump": "View the solution",
   "app.components.RewardingModal.spoilerWarning": "This comment is a spoiler, click here if you want to view it.",
+  "app.components.StampTooltip.stamp": "Stamp",
   "app.components.TitleLabel.classic": "Classic",
   "app.components.TitleLabel.littleAlbat": "Little Albat",
   "app.components.TitleLabel.longtermYami": "Long-term Yami",

@@ -5,7 +5,9 @@ import { Flex } from 'rebass';
 import { ButtonOutline, AutoResizeTextarea } from 'style-store';
 
 import { OPTIONS_SEND } from 'containers/Settings/constants';
+import StampTooltip from 'components/StampTooltip';
 
+import stampMessages from 'components/StampTooltip/messages';
 import messages from './messages';
 
 class ChatInput extends React.Component {
@@ -41,10 +43,22 @@ class ChatInput extends React.Component {
     }
   }
 
+  handleInsert(s) {
+    const startPos = this.field.selectionStart || 0;
+    const endPos = this.field.selectionEnd || 0;
+    this.setState((prevState) => ({
+      content:
+        prevState.content.slice(0, startPos) +
+        s +
+        prevState.content.slice(endPos),
+    }));
+  }
+
   render() {
     return (
       <Flex mx={1} w={1}>
         <AutoResizeTextarea
+          inputRef={(ref) => (this.field = ref)}
           style={{ borderRadius: '10px 0 0 10px', minHeight: '36px' }}
           value={this.state.content}
           onChange={this.handleChange}
@@ -55,6 +69,21 @@ class ChatInput extends React.Component {
           minRows={1}
           maxRows={5}
         />
+        <StampTooltip onClick={(name) => this.handleInsert(` :${name}: `)}>
+          <ButtonOutline
+            p={1}
+            disabled={this.props.disabled || this.props.loading}
+            borderRadius={0}
+            style={{
+              wordBreak: 'keep-all',
+              alignItems: 'center',
+              height: '100%',
+              display: 'flex',
+            }}
+          >
+            <FormattedMessage {...stampMessages.stamp} />
+          </ButtonOutline>
+        </StampTooltip>
         <ButtonOutline
           onClick={() => this.props.onSubmit(this.state.content)}
           p={1}
