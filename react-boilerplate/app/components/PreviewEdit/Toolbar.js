@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Flex, Box } from 'rebass';
 import { Tooltip } from 'react-tippy';
-import { ImgXs, Button } from 'style-store';
+import { Button } from 'style-store';
 
 const ToolbarBtn = Button.extend`
   padding: 5px 10px;
@@ -16,14 +16,10 @@ export const Toolbar = ({ options }) => (
       <Box key={obj.name}>
         {obj.tooltipEnabled ? (
           <Tooltip {...obj.tooltipOptions}>
-            <ToolbarBtn>
-              {obj.icon ? <ImgXs alt={obj.name} src={obj.icon} /> : obj.name}
-            </ToolbarBtn>
+            <ToolbarBtn>{obj.icon || obj.name}</ToolbarBtn>
           </Tooltip>
         ) : (
-          <ToolbarBtn onClick={obj.callback}>
-            {obj.icon ? <ImgXs alt={obj.name} src={obj.icon} /> : obj.name}
-          </ToolbarBtn>
+          <ToolbarBtn onClick={obj.callback}>{obj.icon || obj.name}</ToolbarBtn>
         )}
       </Box>
     ))}
@@ -38,7 +34,7 @@ Toolbar.propTypes = {
       tooltipEnabled: PropTypes.bool,
       tooltipOptions: PropTypes.object,
       icon: PropTypes.any,
-    })
+    }),
   ),
 };
 

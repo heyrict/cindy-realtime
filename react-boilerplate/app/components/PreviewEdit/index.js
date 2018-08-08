@@ -72,22 +72,39 @@ class PreviewEdit extends React.Component {
           options={[
             {
               name: 'H1',
+              icon: (
+                <b>
+                  H<sub>1</sub>
+                </b>
+              ),
               callback: () => this.handleSetHeader(1),
             },
             {
               name: 'H2',
+              icon: (
+                <b>
+                  H<sub>2</sub>
+                </b>
+              ),
               callback: () => this.handleSetHeader(2),
             },
             {
               name: 'H3',
+              icon: (
+                <b>
+                  H<sub>3</sub>
+                </b>
+              ),
               callback: () => this.handleSetHeader(3),
             },
             {
               name: 'Bold',
+              icon: <b>B</b>,
               callback: () => this.handleWrapSelection('**'),
             },
             {
               name: 'Italic',
+              icon: <i>I</i>,
               callback: () => this.handleWrapSelection('*'),
             },
             {
@@ -98,8 +115,8 @@ class PreviewEdit extends React.Component {
                   <ColorTooltip
                     handleSubmit={({ color, size }) =>
                       this.handleWrapSelection(
-                        `<span style="color:${color};font-size:${size}px">`,
-                        '</span>'
+                        `<span style="color:${color};font-size:${size}px">\n\n`,
+                        '\n\n</span>',
                       )
                     }
                   />

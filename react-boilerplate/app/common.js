@@ -10,11 +10,12 @@
 /*eslint-disable*/
 
 import MarkdownIt from 'markdown-it';
-import mdEmoji from 'markdown-it-emoji';
+import mdEmoji from 'markdown-it-emoji/light';
 import sanitizeHtml from 'sanitize-html';
 import moment, * as moments from 'moment';
 import { push } from 'react-router-redux';
 import { DEFAULT_LOCALE } from 'containers/App/constants';
+import stampDefs from 'stamps';
 
 const md = MarkdownIt({
   html: true,
@@ -23,7 +24,9 @@ const md = MarkdownIt({
   typographer: true,
 })
   .enable(['table', 'strikethrough'])
-  .use(mdEmoji);
+  .use(mdEmoji, {
+    defs: stampDefs,
+  });
 
 function hash(string) {
   var chr;
@@ -148,7 +151,9 @@ export function line2md(string) {
     typographer: true,
   })
     .enable(['table', 'strikethrough'])
-    .use(mdEmoji);
+    .use(mdEmoji, {
+      defs: stampDefs,
+    });
   string = PreNorm(string);
 
   return sanitizeHtml(
@@ -194,7 +199,13 @@ export function text2md(string, safe = true) {
               }
             : attribs,
         }),
-        img: sanitizeHtml.simpleTransform('img', { class: 'widthfull' }),
+        img: (tagName, attribs) => ({
+          tagName,
+          attribs: {
+            ...attribs,
+            class: attribs.class || 'widthfull',
+          },
+        }),
       },
     });
   } else {
@@ -294,6 +305,7 @@ export function text2md(string, safe = true) {
           'border-right': [/^\d+(px|em|\%)?$/],
           'border-top': [/^\d+(px|em|\%)?$/],
           'border-bottom': [/^\d+(px|em|\%)?$/],
+          float: [/(left|right)/],
         },
       },
       allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'chat'],
@@ -309,7 +321,13 @@ export function text2md(string, safe = true) {
               }
             : attribs,
         }),
-        img: sanitizeHtml.simpleTransform('img', { class: 'widthfull' }),
+        img: (tagName, attribs) => ({
+          tagName,
+          attribs: {
+            ...attribs,
+            class: attribs.class || 'widthfull',
+          },
+        }),
       },
     });
   }

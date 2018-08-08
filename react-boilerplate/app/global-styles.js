@@ -87,6 +87,20 @@ injectGlobal`
   .widthfull {
     width: 100%;
   }
+  .clear-fix {
+    clear: both;
+  }
+
+  // cindy stamp stuff
+  .cindy-stamp-middle {
+    height: 4em;
+  }
+
+  .cindy-frame-icon {
+    display: inline-block;
+    float: left;
+    margin: 0 5px;
+  }
 
   // modal stuff
   .modal-shade {
