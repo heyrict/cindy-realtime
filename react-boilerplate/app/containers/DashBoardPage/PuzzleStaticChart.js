@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { compose } from 'redux';
 import { graphql } from 'react-apollo';
 import { intlShape } from 'react-intl';
@@ -19,6 +20,12 @@ import {
 import LoadingDots from 'components/LoadingDots';
 
 import messages from './messages';
+
+const TooltipContent = styled.div`
+  background: rgb(255, 255, 255, 0.75);
+  padding: 8px;
+  border-radius: 5px;
+`;
 
 function PuzzleStaticChart(props, context) {
   const _ = context.intl.formatMessage;
@@ -74,7 +81,27 @@ function PuzzleStaticChart(props, context) {
             type="monotone"
           />
         )}
-        <Tooltip />
+        <Tooltip
+          content={({ active, payload, label }) =>
+            active && (
+              <TooltipContent>
+                <div>
+                  {moment.unix(now.unix() + label).format('YYYY-MM-DD')}
+                </div>
+                {payload.map((item) => (
+                  <div
+                    key={item.dataKey}
+                    style={{
+                      color: item.color,
+                    }}
+                  >
+                    {item.name}: {item.value}
+                  </div>
+                ))}
+              </TooltipContent>
+            )
+          }
+        />
         <XAxis
           dataKey="node.timestop"
           type="number"
