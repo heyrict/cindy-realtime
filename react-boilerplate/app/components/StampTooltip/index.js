@@ -6,29 +6,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Flex, Box } from 'rebass';
 import { Tooltip } from 'react-tippy';
-// import styled from 'styled-components';
 
-import { ImgMd } from 'style-store';
-import { stamps } from 'stamps';
+import StampTooltipContent from './StampTooltipContent';
 
 const StampTooltip = (props) => (
   <Tooltip
-    html={
-      <Flex style={{ maxHeight: '8em' }}>
-        {Object.entries(stamps).map(([name, src]) => (
-          <Box
-            is="button"
-            w={0.25}
-            key={name}
-            onClick={() => props.onClick(name, src)}
-          >
-            <ImgMd alt={name} src={src} />
-          </Box>
-        ))}
-      </Flex>
-    }
+    html={<StampTooltipContent onClick={props.onClick} />}
     interactive
     position="top"
     theme="cindy"

@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { AutoResizeTextarea } from 'style-store';
 import MarkdownPreview from 'components/MarkdownPreview';
+import StampTooltipContent from 'components/StampTooltip/StampTooltipContent';
 import Toolbar from './Toolbar';
 import ColorTooltip from './ColorTooltip';
 import TabsTooltip from './TabsTooltip';
@@ -134,6 +135,21 @@ class PreviewEdit extends React.Component {
                 html: (
                   <TabsTooltip
                     handleSubmit={(content) => this.handleInsert(content)}
+                  />
+                ),
+                position: 'top',
+                theme: 'cindy',
+                trigger: 'click',
+                interactive: true,
+              },
+            },
+            {
+              name: 'Stamps',
+              tooltipEnabled: true,
+              tooltipOptions: {
+                html: (
+                  <StampTooltipContent
+                    onClick={(content) => this.handleInsert(` :${content}: `)}
                   />
                 ),
                 position: 'top',
