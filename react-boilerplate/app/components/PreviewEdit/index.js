@@ -149,6 +149,7 @@ class PreviewEdit extends React.Component {
               tooltipOptions: {
                 html: (
                   <StampTooltipContent
+                    puzzleStamps
                     onClick={(content) => this.handleInsert(` :${content}: `)}
                   />
                 ),

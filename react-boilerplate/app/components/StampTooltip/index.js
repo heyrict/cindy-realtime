@@ -12,7 +12,13 @@ import StampTooltipContent from './StampTooltipContent';
 
 const StampTooltip = (props) => (
   <Tooltip
-    html={<StampTooltipContent onClick={props.onClick} />}
+    html={
+      <StampTooltipContent
+        onClick={props.onClick}
+        chatStamps={props.chatStamps}
+        puzzleStamps={props.puzzleStamps}
+      />
+    }
     interactive
     position="top"
     theme="cindy"
@@ -25,6 +31,8 @@ const StampTooltip = (props) => (
 StampTooltip.propTypes = {
   onClick: PropTypes.func.isRequired,
   children: PropTypes.any,
+  chatStamps: PropTypes.bool,
+  puzzleStamps: PropTypes.bool,
 };
 
 StampTooltip.defaultProps = {

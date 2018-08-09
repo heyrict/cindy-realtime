@@ -69,7 +69,7 @@ class ChatInput extends React.Component {
           minRows={1}
           maxRows={5}
         />
-        <StampTooltip onClick={(name) => this.handleInsert(` :${name}: `)}>
+        <StampTooltip chatStamps onClick={(name) => this.handleInsert(` :${name}: `)}>
           <ButtonOutline
             p={1}
             disabled={this.props.disabled || this.props.loading}
