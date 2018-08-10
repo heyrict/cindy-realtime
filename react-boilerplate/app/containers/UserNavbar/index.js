@@ -82,6 +82,11 @@ function UserNavbar(props) {
           <FormattedMessage {...messages.userlist} />
         </NavLink>
       </RouterLink>
+      <RouterLink to={withLocale('/profile/award')} tabIndex="0">
+        <NavLink is="span">
+          <FormattedMessage {...messages.awardApplication} />
+        </NavLink>
+      </RouterLink>
       <LoginMenuItem>
         <FormattedMessage {...messages.login} />
       </LoginMenuItem>
