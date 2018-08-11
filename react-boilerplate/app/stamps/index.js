@@ -11,7 +11,7 @@ import stampYodare from './images/yodare.png';
 import stampNanto from './images/nanto.png';
 
 const m = (alt, src) =>
-  `<img class="cindy-stamp-middle" alt="${alt}" src="${src}" />`;
+  `<img class="cindy-stamp-middle" alt=" :${alt}: " src="${src}" />`;
 
 export const chatStamps = {
   'stamp-gj': stampGJ,
