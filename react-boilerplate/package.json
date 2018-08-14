@@ -60,11 +60,6 @@
       "git add --force"
     ]
   },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "es5",
-    "arrowParens": "always"
-  },
   "pre-commit": "lint:staged",
   "babel": {
     "plugins": [

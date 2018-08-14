@@ -280,7 +280,9 @@ export function text2md(string, safe = true) {
             /^[a-z]+$/i,
             /^\#(0x)?[0-9a-f]+$/i,
             /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
+            /^url([^)]+)$/,
           ],
+          'background-image': [/^url([^)]+)$/],
           'background-color': [
             /^[a-z]+$/i,
             /^\#(0x)?[0-9a-f]+$/i,

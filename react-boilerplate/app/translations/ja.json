@@ -138,7 +138,7 @@
   "app.containers.ProfilePage.goodQuesCount": "良質数",
   "app.containers.ProfilePage.heading": "{nickname}さんのプロフィール",
   "app.containers.ProfilePage.hideBookmark": "ブクマを非公開にする",
-  "app.containers.ProfilePage.lastLogin": "最後ログイン時間",
+  "app.containers.ProfilePage.lastLogin": "最終ログイン時間",
   "app.containers.ProfilePage.nickname": "ニックネーム",
   "app.containers.ProfilePage.nullAward": "無し",
   "app.containers.ProfilePage.profile": "プロフィール",
