@@ -149,7 +149,7 @@ class UserNode(DjangoObjectType):
 
     def resolve_rstarCount(self, info):
         return self.puzzle_set.annotate(Count('star__value'))\
-                .aggregate(rstarCount=Count('star__value__count'))\
+                .aggregate(rstarCount=Sum('star__value__count'))\
                 .get('rstarCount', 0)
 
     def resolve_rstarSum(self, info):
