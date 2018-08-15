@@ -10,6 +10,7 @@ import AwardSwitch from './AwardSwitch';
 import ProfRow from './ProfRow';
 import ProfileRow from './ProfileRow';
 import BookmarkHideRow from './BookmarkHideRow';
+import StarStaticsChart from './StarStaticsChart';
 
 import messages from './messages';
 
@@ -54,12 +55,24 @@ function ProfileDisplay(props, context) {
         content={props.user.commentCount}
       />
       <ProfRow
+        heading={_(messages.starReceivedCount)}
+        content={props.user.rstarCount}
+      />
+      <ProfRow
+        heading={_(messages.starReceivedSum)}
+        content={props.user.rstarSum}
+      />
+      <ProfRow
         heading={_(messages.dateJoined)}
         content={<div>{moment(props.user.dateJoined).format('lll')}</div>}
       />
       <ProfRow
         heading={_(messages.lastLogin)}
         content={<div>{moment(props.user.lastLogin).format('lll')}</div>}
+      />
+      <ProfRow
+        heading={_(messages.starStatics)}
+        content={<StarStaticsChart userId={props.userId} />}
       />
       {props.userId === props.currentUserId && (
         <AwardSwitch

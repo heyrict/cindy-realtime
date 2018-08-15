@@ -14,8 +14,12 @@ const StyledFlex = styled(Flex)`
 function ProfRow(props) {
   return (
     <StyledFlex w={1}>
-      <Box w={[1 / 4, 1 / 6]}>{props.heading}</Box>
-      <Box w={[3 / 4, 5 / 6]}>{props.content}</Box>
+      <Box w={[1 / 3, 1 / 4]} px={1}>
+        {props.heading}
+      </Box>
+      <Box w={[2 / 3, 3 / 4]} px={1}>
+        {props.content}
+      </Box>
     </StyledFlex>
   );
 }

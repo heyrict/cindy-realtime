@@ -113,6 +113,10 @@ class UserNode(DjangoObjectType):
     trueQuesCount = graphene.Int()
     commentCount = graphene.Int()
     dmCount = graphene.Int()
+    starCount = graphene.Int()
+    starSum = graphene.Int()
+    rstarCount = graphene.Int()
+    rstarSum = graphene.Int()
 
     can_review_award_application = graphene.Boolean()
     can_send_global_notification = graphene.Boolean()
@@ -134,6 +138,24 @@ class UserNode(DjangoObjectType):
 
     def resolve_commentCount(self, info):
         return self.comment_set.count()
+
+    def resolve_starCount(self, info):
+        return self.star_set.aggregate(Count('star__value'))\
+                .get('star__count__count', 0)
+
+    def resolve_starSum(self, info):
+        return self.star_set.aggregate(Sum('star__count'))\
+                .get('star__count__sum', 0)
+
+    def resolve_rstarCount(self, info):
+        return self.puzzle_set.annotate(Count('star__value'))\
+                .aggregate(rstarCount=Count('star__value__count'))\
+                .get('rstarCount', 0)
+
+    def resolve_rstarSum(self, info):
+        return self.puzzle_set.annotate(Sum('star__value'))\
+                .aggregate(rstarSum=Sum('star__value__sum'))\
+                .get('rstarSum', 0)
 
     def resolve_can_review_award_application(self, info):
         return self.has_perm("sui_hei.can_review_award_application")
@@ -387,6 +409,18 @@ class TruncDateNode(graphene.ObjectType):
         return self.get('count')
 
 
+# {{{2 TruncValue Node
+class TruncValueNode(graphene.ObjectType):
+    value = graphene.Int()
+    count = graphene.Int()
+
+    def resolve_value(self, info):
+        return self.get('value')
+
+    def resolve_count(self, info):
+        return self.get('count')
+
+
 # {{{2 Wiki Node
 class WikiNode(graphene.ObjectType):
     id = graphene.ID(required=True)
@@ -443,6 +477,12 @@ class StarConnection(graphene.Connection):
 class TruncDateConnection(graphene.Connection):
     class Meta:
         node = TruncDateNode
+
+
+# {{{2 TruncValue Connection
+class TruncValueConnection(graphene.Connection):
+    class Meta:
+        node = TruncValueNode
 
 
 # {{{1 Unions
@@ -1480,6 +1520,11 @@ class Query(object):
         by=graphene.String(),
         created__gte=graphene.DateTime(),
         created__lte=graphene.DateTime())
+    trunc_value_groups = graphene.ConnectionField(
+        TruncValueConnection,
+        className=graphene.String(),
+        value=graphene.String(),
+        user=graphene.ID())
 
     # {{{2 nodes
     user = relay.Node.Field(UserNode)
@@ -1687,6 +1732,16 @@ class Query(object):
         qs = qs.annotate(timestop=TruncMethod('created'))\
                 .values('timestop')\
                 .annotate(count=Count('pk'))
+        return qs
+
+    def resolve_trunc_value_groups(self, info, **kwargs):
+        className = kwargs['className']
+        value = kwargs.get('value', 'value')
+        cls = getattr(sui_hei.models, className)
+
+        qs = cls.objects
+        qs = resolveFilter(qs, kwargs, filter_fields={'user': User})
+        qs = qs.values(value).annotate(count=Count(value))
         return qs
 
 

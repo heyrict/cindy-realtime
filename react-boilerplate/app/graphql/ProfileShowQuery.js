@@ -10,6 +10,8 @@ export const ProfileShowQuery = gql`
       goodQuesCount
       trueQuesCount
       commentCount
+      rstarCount
+      rstarSum
       currentAward {
         id
       }

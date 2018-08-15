@@ -4,6 +4,8 @@
  *
  */
 
+/* eslint-disable indent */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -65,7 +67,7 @@ function ProfilePage(props, context) {
     user.hideBookmark && t('UserNode', props.usernavbar.user.userId) !== userId;
 
   return (
-    <Constrained level={3}>
+    <Constrained level={3} mb={2}>
       <Helmet>
         <title>{`${_(messages.heading, {
           nickname: user.nickname,

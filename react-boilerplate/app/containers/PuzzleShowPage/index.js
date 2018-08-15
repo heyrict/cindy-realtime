@@ -278,7 +278,7 @@ export class PuzzleShowPage extends React.Component {
             this.titleref = titleref;
           }}
         />
-        <Constrained>
+        <Constrained mb={2}>
           <Title>{`[${genre}${yami}] ${P.title}`}</Title>
         </Constrained>
         {(P.status <= 2 || P.user.id === U) && (

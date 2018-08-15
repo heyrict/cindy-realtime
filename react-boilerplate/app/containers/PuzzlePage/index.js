@@ -27,7 +27,7 @@ import messages from './messages';
 function PuzzlePage(props, context) {
   const _ = context.intl.formatMessage;
   return (
-    <Constrained level={4}>
+    <Constrained level={4} mb={2}>
       <Helmet>
         <title>{_(messages.title)}</title>
         <meta name="description" content={_(messages.description)} />
@@ -69,8 +69,14 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 const withSaga = injectSaga({ key: 'puzzlePage', saga });
 
-export default compose(withSaga, withConnect)(PuzzlePage);
+export default compose(
+  withSaga,
+  withConnect,
+)(PuzzlePage);

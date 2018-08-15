@@ -46,6 +46,26 @@ export default defineMessages({
     id: 'app.containers.ProfilePage.lastLogin',
     defaultMessage: 'Last Login',
   },
+  starStatics: {
+    id: 'app.containers.ProfilePage.starStatics',
+    defaultMessage: 'Stars',
+  },
+  starStaticsCount: {
+    id: 'app.containers.ProfilePage.starStaticsCount',
+    defaultMessage: 'Star Count',
+  },
+  noStars: {
+    id: 'app.containers.ProfilePage.noStars',
+    defaultMessage: 'No Stars',
+  },
+  starReceivedCount: {
+    id: 'app.containers.ProfilePage.starReceivedCount',
+    defaultMessage: 'Star Received Count',
+  },
+  starReceivedSum: {
+    id: 'app.containers.ProfilePage.starReceivedSum',
+    defaultMessage: 'Star Received Sum',
+  },
   dateJoined: {
     id: 'app.containers.ProfilePage.dateJoined',
     defaultMessage: 'Joined Date',
