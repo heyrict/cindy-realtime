@@ -14,6 +14,9 @@ import stampSounan from './images/sounan.png';
 import stampItadaku from './images/itadaku.png';
 import stampChira from './images/chira.png';
 import stampDeath from './images/death.png';
+import stampGotisou from './images/gotisousama.png';
+import stampMannenn from './images/mannennhuta.png';
+import stampArigatou from './images/arigatou.png';
 
 const m = (alt, src) =>
   `<img class="cindy-stamp-middle" alt=" :${alt}: " src="${src}" />`;
@@ -29,6 +32,9 @@ export const chatStamps = {
   'stamp-itadaku': stampItadaku,
   'stamp-chira': stampChira,
   'stamp-death': stampDeath,
+  'stamp-gotisou': stampGotisou,
+  'stamp-mannenn': stampMannenn,
+  'stamp-arigatou': stampArigatou,
 };
 
 export const puzzleStamps = {
@@ -55,6 +61,9 @@ const stampDefs = {
   'stamp-itadaku': m('stamp-itadaku', stampItadaku),
   'stamp-chira': m('stamp-chira', stampChira),
   'stamp-death': m('stamp-death', stampDeath),
+  'stamp-gotisou': m('stamp-gotisou', stampGotisou),
+  'stamp-mannenn': m('stamp-mannenn', stampMannenn),
+  'stamp-arigatou': m('stamp-arigatou', stampArigatou),
 };
 
 export default stampDefs;

@@ -33,7 +33,7 @@ function Frame(props) {
     <Constrained mt={2} mb={2}>
       <PuzzleFrame>
         <ContentBox
-          pl={10}
+          px={2}
           dangerouslySetInnerHTML={{ __html: text2md(props.text, props.safe) }}
         />
         <br />
