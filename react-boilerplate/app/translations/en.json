@@ -145,6 +145,7 @@
   "app.containers.ProfilePage.profile": "Profile",
   "app.containers.ProfilePage.puzzleCount": "Puzzle Count",
   "app.containers.ProfilePage.quesCount": "Question Count",
+  "app.containers.ProfilePage.rcommentCount": "Comment Received Count",
   "app.containers.ProfilePage.save": "Save",
   "app.containers.ProfilePage.starReceivedCount": "Star Received Count",
   "app.containers.ProfilePage.starReceivedSum": "Star Received Sum",

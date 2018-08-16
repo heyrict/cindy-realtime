@@ -55,6 +55,10 @@ function ProfileDisplay(props, context) {
         content={props.user.commentCount}
       />
       <ProfRow
+        heading={_(messages.rcommentCount)}
+        content={props.user.rcommentCount}
+      />
+      <ProfRow
         heading={_(messages.starReceivedCount)}
         content={props.user.rstarCount}
       />

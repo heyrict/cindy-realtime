@@ -112,6 +112,7 @@ class UserNode(DjangoObjectType):
     goodQuesCount = graphene.Int()
     trueQuesCount = graphene.Int()
     commentCount = graphene.Int()
+    rcommentCount = graphene.Int()
     dmCount = graphene.Int()
     starCount = graphene.Int()
     starSum = graphene.Int()
@@ -138,6 +139,11 @@ class UserNode(DjangoObjectType):
 
     def resolve_commentCount(self, info):
         return self.comment_set.count()
+
+    def resolve_rcommentCount(self, info):
+        return self.puzzle_set.annotate(Count('comment__id'))\
+                .aggregate(rcommentCount=Sum('comment__id__count'))\
+                .get('rcommentCount', 0)
 
     def resolve_starCount(self, info):
         return self.star_set.aggregate(Count('star__value'))\

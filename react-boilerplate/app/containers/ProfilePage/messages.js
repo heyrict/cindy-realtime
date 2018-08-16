@@ -38,6 +38,10 @@ export default defineMessages({
     id: 'app.containers.ProfilePage.trueQuesCount',
     defaultMessage: 'True Answer Count',
   },
+  rcommentCount: {
+    id: 'app.containers.ProfilePage.rcommentCount',
+    defaultMessage: 'Comment Received Count',
+  },
   commentCount: {
     id: 'app.containers.ProfilePage.commentCount',
     defaultMessage: 'Comment Count',

@@ -145,6 +145,7 @@
   "app.containers.ProfilePage.profile": "プロフィール",
   "app.containers.ProfilePage.puzzleCount": "出題数",
   "app.containers.ProfilePage.quesCount": "質問数",
+  "app.containers.ProfilePage.rcommentCount": "コメント獲得数",
   "app.containers.ProfilePage.save": "セーブ",
   "app.containers.ProfilePage.starReceivedCount": "スター獲得数（投票人数）",
   "app.containers.ProfilePage.starReceivedSum": "スター獲得数（総計）",
