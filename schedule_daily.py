@@ -32,11 +32,11 @@ def clean_recent_minichat(chatroomName="lobby", recent=None):
         return
 
     try:
-        earliest = cr_messages[count - recent].id
+        earliest = cr_messages[count - recent - 1].id
     except IndexError:
         return
 
-    to_delete = cr_messages.filter(id__lt=earliest)
+    to_delete = cr_messages.filter(id__lte=earliest)
     logger.debug("[ChatRoom:%s]: Deleting %s objects" % (chatroomName,
                                                          to_delete.count()))
     to_delete.delete()

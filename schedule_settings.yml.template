@@ -1,4 +1,3 @@
 chatroom_messages_preserve_count:
-  lobby: 300
-  test: 10
-direct_message_preserve_days: 90
+  test: 0
+direct_message_preserve_days: 180
