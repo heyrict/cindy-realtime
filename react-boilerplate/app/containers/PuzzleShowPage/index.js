@@ -103,10 +103,10 @@ export class PuzzleShowPage extends React.Component {
     this.changePage = (p) => this.setState({ currentPage: p });
     this.toggleUserFilter = this.toggleUserFilter.bind(this);
     this.scrollToBottom = () => {
-      this.adref.scrollIntoView({ behavior: 'smooth' });
+      this.adref.scrollIntoView({ behavior: 'smooth', block: 'end' });
     };
     this.scrollToTop = () => {
-      this.titleref.scrollIntoView({ behavior: 'smooth' });
+      this.titleref.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
   }
   componentDidMount() {
@@ -263,10 +263,10 @@ export class PuzzleShowPage extends React.Component {
     );
 
     return (
-      <div>
+      <div style={{ marginBottom: '10px' }}>
         <Helmet>
           <title>
-            {P ? `[${genre}${yami}] ${P.title} - Cindy` : _(messages.title)}
+            {P ? `[${genre}${yami}] ${P.title}` : _(messages.title)}
           </title>
           <meta
             name="description"
@@ -278,7 +278,7 @@ export class PuzzleShowPage extends React.Component {
             this.titleref = titleref;
           }}
         />
-        <Constrained mb={2}>
+        <Constrained>
           <Title>{`[${genre}${yami}] ${P.title}`}</Title>
         </Constrained>
         {(P.status <= 2 || P.user.id === U) && (
@@ -368,13 +368,16 @@ export class PuzzleShowPage extends React.Component {
           )}
         {U === P.user.id && <PuzzleModifyBox puzzle={P} puzzleId={puzzleId} />}
         <Constrained>
-          <GoogleAd {...googleAdInfo.textAd} />
+          <GoogleAd {...googleAdInfo.inarticleAd} />
         </Constrained>
         <div
           ref={(adref) => {
             this.adref = adref;
           }}
         />
+        <Constrained>
+          <GoogleAd {...googleAdInfo.relativeAd} />
+        </Constrained>
       </div>
     );
   }

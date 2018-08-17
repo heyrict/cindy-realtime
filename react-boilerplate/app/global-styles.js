@@ -84,6 +84,34 @@ injectGlobal`
     margin: 10px;
   }
 
+  pre {
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    font-size: 13px;
+    line-height: 19px;
+    overflow: auto;
+    padding: 6px 10px;
+    border-radius: 3px;
+  }
+  code {
+    margin: 0 2px;
+    padding: 0 5px;
+    white-space: nowrap;
+    border: 1px solid #eaeaea;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    font-size: 12px;
+    color: #52676f;
+  }
+  pre > code {
+    margin: 0;
+    padding: 0;
+    white-space: pre;
+    border: 0;
+    background: transparent;
+  }
+
   .widthfull {
     width: 100%;
   }

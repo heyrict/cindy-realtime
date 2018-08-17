@@ -1,4 +1,5 @@
 export const googleAdClientToken = 'ca-pub-7445097696449097';
+export const googleAnalyticsTrackingID = 'UA-117095987-1';
 
 export const googleAdInfo = {
   textAd: {
@@ -10,12 +11,25 @@ export const googleAdInfo = {
     format: 'fluid',
     layoutKey: '-gw-3+1f-3d+2z',
   },
+  inarticleAd: {
+    slot: '9365889137',
+    format: 'fluid',
+    layout: 'in-article',
+    wrapperDivStyle: {
+      overflow: 'hidden',
+      textAlign: 'center',
+    },
+  },
+  relativeAd: {
+    slot: '7721634979',
+    format: 'autorelaxed',
+  },
 };
 
 export const MIN_CONTENT_SAFE_CREDIT = 1000;
 
 const domainRegex = new RegExp(
-  /^(https?:\/\/)?(www\.)?(cindythink\.com)?\/(ja\/|en\/)?(puzzle|profile|rules|dashboard|wiki)/
+  /^(https?:\/\/)?(www\.)?(cindythink\.com)?\/(ja\/|en\/)?(puzzle|profile|rules|dashboard|wiki)/,
 );
 export const domainFilter = (url) => {
   const selfDomain = domainRegex.test(url);

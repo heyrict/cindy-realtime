@@ -44,6 +44,9 @@ import rebassTheme from './rebass-theme.json';
 // Import exposed actions
 import { openChat } from './containers/Chat/actions';
 
+// Import settings
+import { googleAnalyticsTrackingID } from 'settings';
+
 // Observe loading of Open Sans (to remove open sans, remove the <link> tag in
 // the index.html file and this observer)
 const openSansObserver = new FontFaceObserver('Open Sans', {});
@@ -65,10 +68,13 @@ const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
 
 // Google Analytics stuff
-if (window.ga) {
+if (typeof window.gtag === 'function') {
   history.listen((location) => {
-    window.ga('set', 'page', location.pathname + location.search);
-    window.ga('send', 'pageview', location.pathname + location.search);
+    window.gtag('config', googleAnalyticsTrackingID, {
+      page_location: location.href,
+      page_path: location.pathname,
+      page_title: document.title,
+    });
   });
 }
 
@@ -90,7 +96,7 @@ const render = (messages) => {
         </LanguageProvider>
       </Provider>
     </RebassProvider>,
-    MOUNT_NODE
+    MOUNT_NODE,
   );
 };
 
@@ -113,7 +119,7 @@ if (!window.Intl) {
       Promise.all([
         import('intl/locale-data/jsonp/en.js'),
         import('intl/locale-data/jsonp/ja.js'),
-      ])
+      ]),
     )
     .then(() => render(translationMessages))
     .catch((err) => {

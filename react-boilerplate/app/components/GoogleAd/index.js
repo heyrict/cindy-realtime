@@ -21,6 +21,7 @@ export class GoogleAd extends React.PureComponent {
   render() {
     const optionalAttr = {
       'data-ad-layout-key': this.props.layoutKey,
+      'data-ad-layout': this.props.layout,
     };
     return (
       <div style={this.props.wrapperDivStyle}>
@@ -42,6 +43,7 @@ GoogleAd.propTypes = {
   slot: PropTypes.string.isRequired,
   format: PropTypes.string.isRequired,
   wrapperDivStyle: PropTypes.object,
+  layout: PropTypes.string,
   layoutKey: PropTypes.string,
 };
 

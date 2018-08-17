@@ -56,15 +56,15 @@ function ProfileDisplay(props, context) {
       />
       <ProfRow
         heading={_(messages.rcommentCount)}
-        content={props.user.rcommentCount}
+        content={props.user.rcommentCount || 0}
       />
       <ProfRow
         heading={_(messages.starReceivedCount)}
-        content={props.user.rstarCount}
+        content={props.user.rstarCount || 0}
       />
       <ProfRow
         heading={_(messages.starReceivedSum)}
-        content={props.user.rstarSum}
+        content={props.user.rstarSum || 0}
       />
       <ProfRow
         heading={_(messages.dateJoined)}
