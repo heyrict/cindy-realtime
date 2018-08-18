@@ -25,6 +25,7 @@ const PuzzleShow = gql`
       yami
       genre
       status
+      anonymous
       user {
         ...UserLabel_user
       }

@@ -10,6 +10,7 @@ const PuzzlePanel = gql`
     title
     status
     created
+    anonymous
     quesCount
     uaquesCount
     starSet {

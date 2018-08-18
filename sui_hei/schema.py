@@ -635,6 +635,7 @@ class CreatePuzzle(relay.ClientIDMutation):
         puzzleYami = graphene.Int(required=True)
         puzzleContent = graphene.String(required=True)
         puzzleSolution = graphene.String(required=True)
+        puzzleAnonymous = graphene.Boolean(required=True)
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -647,6 +648,7 @@ class CreatePuzzle(relay.ClientIDMutation):
         yami = input["puzzleYami"]
         content = input["puzzleContent"]
         solution = input["puzzleSolution"]
+        anonymous = input["puzzleAnonymous"]
 
         if not title:
             raise ValidationError(_("Title cannot be empty!"))
@@ -666,6 +668,7 @@ class CreatePuzzle(relay.ClientIDMutation):
             content_safe=user.credit > MIN_CONTENT_SAFE_CREDIT,
             solution=solution,
             created=created,
+            anonymous=anonymous,
             modified=created)
 
         # Delete messages in puzzle-[id] channel

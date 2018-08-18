@@ -30,4 +30,8 @@ export default defineMessages({
     id: 'app.containers.PuzzleAddForm.submitLabel',
     defaultMessage: 'Submit',
   },
+  anonymousLabel: {
+    id: 'app.containers.PuzzleAddForm.anonymousLabel',
+    defaultMessage: 'Anonymous',
+  },
 });

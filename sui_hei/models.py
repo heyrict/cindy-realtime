@@ -148,6 +148,7 @@ class Puzzle(models.Model):
     modified = models.DateTimeField(_('modified'))
     status = models.IntegerField(_('status'), default=0)
     memo = models.TextField(_('memo'), blank=True)
+    anonymous = models.BooleanField(_('anonymous'), default=False)
 
     class Meta:
         verbose_name = _("Puzzle")

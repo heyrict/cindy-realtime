@@ -14,6 +14,7 @@ export const PuzzleActiveList = gql`
           title
           status
           created
+          anonymous
           quesCount
           uaquesCount
           user {

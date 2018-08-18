@@ -9,13 +9,17 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { pushWithLocale, from_global_id as f } from 'common';
-import { ImgXs } from 'style-store';
+import { ImgXs, ImgMd } from 'style-store';
 import { Tooltip } from 'react-tippy';
+import { FormattedMessage } from 'react-intl';
 
 import { openDirectChat } from 'containers/Chat/actions';
 import UserAwardPopover from 'components/UserAwardPopover';
 import chat from 'images/chat.svg';
 import home from 'images/home.svg';
+import anonymousIcon from 'images/anonymous.png';
+
+import messages from './messages';
 
 const Linked = styled.button`
   padding: 3px;
@@ -25,8 +29,22 @@ const Linked = styled.button`
   }
 `;
 
+const IconMd = ImgMd.extend`
+  border: 1px solid #333;
+  border-radius: 9999px;
+`;
+
 function UserLabel(props) {
-  const { user, break: needBreak, color } = props;
+  const { user, anonymous, break: needBreak, color } = props;
+  if (anonymous) {
+    return (
+      <span>
+        <IconMd alt="anonymous" src={anonymousIcon} />
+        <br />
+        <FormattedMessage {...messages.anonymous} />
+      </span>
+    );
+  }
   const popoverDetail = (
     <div>
       <button
@@ -74,6 +92,7 @@ UserLabel.propTypes = {
     nickname: PropTypes.string.isRequired,
     currentAward: PropTypes.object,
   }),
+  anonymous: PropTypes.bool,
   break: PropTypes.bool,
   openDirectChat: PropTypes.func.isRequired,
   goto: PropTypes.func.isRequired,
@@ -83,6 +102,7 @@ UserLabel.propTypes = {
 
 UserLabel.defaultProps = {
   color: '#23527c',
+  // anonymous: false,
 };
 
 const mapDispatchToProps = (dispatch) => ({

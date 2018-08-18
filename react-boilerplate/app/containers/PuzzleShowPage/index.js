@@ -284,6 +284,7 @@ export class PuzzleShowPage extends React.Component {
         {(P.status <= 2 || P.user.id === U) && (
           <Frame
             user={P.user}
+            anonymous={P.anonymous && P.status === 0}
             text={P.content}
             created={P.created}
             safe={P.contentSafe}

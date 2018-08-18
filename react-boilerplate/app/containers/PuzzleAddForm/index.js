@@ -38,6 +38,7 @@ export class PuzzleAddForm extends React.Component {
       puzzleTitle: '',
       puzzleGenre: 0,
       puzzleYami: 0,
+      puzzleAnonymous: false,
       loading: false,
     };
 
@@ -47,20 +48,28 @@ export class PuzzleAddForm extends React.Component {
   // }}}
   // {{{ handleChange
   handleChange(e) {
-    const target = e.target;
+    const { target } = e;
     if (target.id === 'formPuzzleAddTitle') {
       this.setState({ puzzleTitle: target.value });
     } else if (target.id === 'formPuzzleAddGenre') {
       this.setState({ puzzleGenre: target.value });
     } else if (target.id === 'formPuzzleAddYami') {
       this.setState({ puzzleYami: target.value });
+    } else if (target.id === 'formPuzzleAddAnonymous') {
+      this.setState({ puzzleAnonymous: target.value });
     }
   }
   // }}}
   // {{{ handleSubmit
   handleSubmit(e) {
     e.preventDefault();
-    const { loading, puzzleTitle, puzzleGenre, puzzleYami } = this.state;
+    const {
+      loading,
+      puzzleTitle,
+      puzzleGenre,
+      puzzleYami,
+      puzzleAnonymous,
+    } = this.state;
     const puzzleContent =
       this.contentTextarea && this.contentTextarea.getContent();
     const puzzleSolution =
@@ -76,6 +85,7 @@ export class PuzzleAddForm extends React.Component {
             puzzleYami,
             puzzleContent,
             puzzleSolution,
+            puzzleAnonymous,
           },
         },
       })
@@ -185,6 +195,14 @@ export class PuzzleAddForm extends React.Component {
           }
         />
         <FieldGroup
+          id="formPuzzleAddAnonymous"
+          label={<FormattedMessage {...messages.anonymousLabel} />}
+          Ctl={Input}
+          type="checkbox"
+          value={this.state.puzzleAnonymous}
+          onChange={this.handleChange}
+        />
+        <FieldGroup
           id="formPuzzleAddContent"
           label={
             <span>
@@ -250,7 +268,7 @@ PuzzleAddForm.propTypes = {
 const mapStateToProps = createStructuredSelector({
   currentUserId: createSelector(
     makeSelectUserNavbar(),
-    (usernav) => usernav.user && usernav.user.userId
+    (usernav) => usernav.user && usernav.user.userId,
   ),
 });
 
@@ -261,7 +279,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 const withMutation = graphql(PuzzleAddFormMutation);
@@ -286,11 +304,11 @@ const withCurrentUser = graphql(
       const { user: currentUser } = data;
       return { currentUser };
     },
-  }
+  },
 );
 
 export default compose(
   withConnect,
   withCurrentUser,
-  withMutation
+  withMutation,
 )(PuzzleAddForm);

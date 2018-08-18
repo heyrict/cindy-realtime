@@ -5,11 +5,13 @@ import { text2md } from 'common';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import { Box } from 'rebass';
-import { PuzzleFrame } from 'style-store';
+import { ImgSm, PuzzleFrame } from 'style-store';
 
 import Constrained from 'components/Constrained';
 import UserLabel from 'components/UserLabel';
+import anonymousIcon from 'images/anonymous.png';
 
+import userLabelMessages from 'components/UserLabel/messages';
 import messages from './messages';
 
 const Label = styled.span`
@@ -28,6 +30,12 @@ const ContentBox = styled(Box)`
   font-family: 'Dejavu Sans';
 `;
 
+const IconSm = ImgSm.extend`
+  border: 1px solid #333;
+  border-radius: 9999px;
+  margin: 5px;
+`;
+
 function Frame(props) {
   return (
     <Constrained mt={2} mb={2}>
@@ -37,7 +45,18 @@ function Frame(props) {
           dangerouslySetInnerHTML={{ __html: text2md(props.text, props.safe) }}
         />
         <br />
-        {props.user ? (
+        {props.anonymous && (
+          <FormattedMessage {...messages.creator}>
+            {(c) => (
+              <RightBox>
+                <Label>{c}:</Label>
+                <IconSm alt="anonymous" src={anonymousIcon} />
+                <FormattedMessage {...userLabelMessages.anonymous} />
+              </RightBox>
+            )}
+          </FormattedMessage>
+        )}
+        {props.user && !props.anonymous ? (
           <FormattedMessage {...messages.creator}>
             {(c) => (
               <RightBox>
@@ -76,6 +95,7 @@ function Frame(props) {
 
 Frame.propTypes = {
   text: PropTypes.string.isRequired,
+  anonymous: PropTypes.bool,
   user: PropTypes.object,
   created: PropTypes.string,
   solved: PropTypes.string,

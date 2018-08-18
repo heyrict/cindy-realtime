@@ -3,6 +3,7 @@
  * PuzzlePanel
  *
  */
+/* eslint-disable indent */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -45,7 +46,11 @@ export class PuzzlePanel extends React.Component {
       <RoundedPanel my={10}>
         <Row mx={10} py={10}>
           <UserCol w={[1 / 4, 1 / 6]} px={10}>
-            <UserLabel user={node.user} break />
+            <UserLabel
+              user={node.user}
+              anonymous={node.anonymous && node.status === 0}
+              break
+            />
             {this.props.additional}
           </UserCol>
           <Box w={[3 / 4, 5 / 6]} px={10}>
@@ -97,7 +102,7 @@ export class PuzzlePanel extends React.Component {
 PuzzlePanel.propTypes = {
   node: PropTypes.object.isRequired,
   additional: PropTypes.any,
-  locale: PropTypes.string.isRequired,
+  locale: PropTypes.string,
 };
 
 PuzzlePanel.defaultProps = {

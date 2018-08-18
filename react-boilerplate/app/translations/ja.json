@@ -153,6 +153,7 @@
   "app.containers.ProfilePage.starStaticsCount": "スター投票数",
   "app.containers.ProfilePage.title": "ユーザープロフィール",
   "app.containers.ProfilePage.trueQuesCount": "正解数",
+  "app.containers.PuzzleAddForm.anonymousLabel": "匿名",
   "app.containers.PuzzleAddForm.contentLabel": "問題文",
   "app.containers.PuzzleAddForm.genreLabel": "ジャンル",
   "app.containers.PuzzleAddForm.solutionLabel": "解説文",
@@ -233,5 +234,6 @@
   "app.containers.UserNavbar.userlist": "ユーザー一覧",
   "app.containers.WikiPage.title": "Wiki",
   "app.containers.withModel.close": "閉じる",
-  "app.containers.withModel.confirm": "確認"
+  "app.containers.withModel.confirm": "確認",
+  "components.UserLabel.anonymous": "謎の料理人"
 }

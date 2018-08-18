@@ -153,6 +153,7 @@
   "app.containers.ProfilePage.starStaticsCount": "Star Count",
   "app.containers.ProfilePage.title": "User Profile",
   "app.containers.ProfilePage.trueQuesCount": "True Answer Count",
+  "app.containers.PuzzleAddForm.anonymousLabel": "Anonymous",
   "app.containers.PuzzleAddForm.contentLabel": "Content",
   "app.containers.PuzzleAddForm.genreLabel": "Genre",
   "app.containers.PuzzleAddForm.solutionLabel": "Solution",
@@ -233,5 +234,6 @@
   "app.containers.UserNavbar.userlist": "User List",
   "app.containers.WikiPage.title": "Wiki",
   "app.containers.withModel.close": "Close",
-  "app.containers.withModel.confirm": "Confirm"
+  "app.containers.withModel.confirm": "Confirm",
+  "components.UserLabel.anonymous": "Anonymous"
 }
