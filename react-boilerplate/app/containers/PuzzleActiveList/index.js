@@ -142,6 +142,7 @@ const withPuzzleActiveList = graphql(PuzzleActiveListQuery, {
                 id: newNode.id,
                 title: newNode.title,
                 nickname: newNode.user.nickname,
+                anonymous: newNode.anonymous,
               },
             });
 

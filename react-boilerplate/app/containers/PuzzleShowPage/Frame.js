@@ -5,13 +5,11 @@ import { text2md } from 'common';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import { Box } from 'rebass';
-import { ImgSm, PuzzleFrame } from 'style-store';
+import { PuzzleFrame } from 'style-store';
 
 import Constrained from 'components/Constrained';
 import UserLabel from 'components/UserLabel';
-import anonymousIcon from 'images/anonymous.png';
 
-import userLabelMessages from 'components/UserLabel/messages';
 import messages from './messages';
 
 const Label = styled.span`
@@ -30,12 +28,6 @@ const ContentBox = styled(Box)`
   font-family: 'Dejavu Sans';
 `;
 
-const IconSm = ImgSm.extend`
-  border: 1px solid #333;
-  border-radius: 9999px;
-  margin: 5px;
-`;
-
 function Frame(props) {
   return (
     <Constrained mt={2} mb={2}>
@@ -45,27 +37,20 @@ function Frame(props) {
           dangerouslySetInnerHTML={{ __html: text2md(props.text, props.safe) }}
         />
         <br />
-        {props.anonymous && (
+        {props.user && (
           <FormattedMessage {...messages.creator}>
             {(c) => (
               <RightBox>
                 <Label>{c}:</Label>
-                <IconSm alt="anonymous" src={anonymousIcon} />
-                <FormattedMessage {...userLabelMessages.anonymous} />
+                <UserLabel
+                  user={props.user}
+                  anonymous={props.anonymous}
+                  iconSize="sm"
+                />
               </RightBox>
             )}
           </FormattedMessage>
         )}
-        {props.user && !props.anonymous ? (
-          <FormattedMessage {...messages.creator}>
-            {(c) => (
-              <RightBox>
-                <Label>{c}:</Label>
-                <UserLabel user={props.user} />
-              </RightBox>
-            )}
-          </FormattedMessage>
-        ) : null}
         {props.created ? (
           <FormattedMessage {...messages.created}>
             {(c) => (

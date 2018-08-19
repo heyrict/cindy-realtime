@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { pushWithLocale, from_global_id as f } from 'common';
-import { ImgXs, ImgMd } from 'style-store';
+import { ImgXs, ImgSm, ImgMd } from 'style-store';
 import { Tooltip } from 'react-tippy';
 import { FormattedMessage } from 'react-intl';
 
@@ -32,15 +32,41 @@ const Linked = styled.button`
 const IconMd = ImgMd.extend`
   border: 1px solid #333;
   border-radius: 9999px;
+  margin: 0 5px;
 `;
 
+const IconSm = ImgSm.extend`
+  border: 1px solid #333;
+  border-radius: 9999px;
+  margin: 0 3px;
+`;
+
+const IconXs = ImgXs.extend`
+  border: 1px solid #333;
+  border-radius: 9999px;
+  margin: 0 2px;
+`;
+
+const getIcon = (iconSize) => {
+  switch (iconSize) {
+    case 'xs':
+      return IconXs;
+    case 'sm':
+      return IconSm;
+    case 'md':
+    default:
+      return IconMd;
+  }
+};
+
 function UserLabel(props) {
-  const { user, anonymous, break: needBreak, color } = props;
+  const { user, anonymous, break: needBreak, color, iconSize } = props;
+  const Icon = getIcon(iconSize);
   if (anonymous) {
     return (
       <span>
-        <IconMd alt="anonymous" src={anonymousIcon} />
-        <br />
+        <Icon alt="anonymous" src={anonymousIcon} />
+        {needBreak && <br />}
         <FormattedMessage {...messages.anonymous} />
       </span>
     );
@@ -98,6 +124,7 @@ UserLabel.propTypes = {
   goto: PropTypes.func.isRequired,
   placement: PropTypes.string,
   color: PropTypes.string,
+  iconSize: PropTypes.oneOf(['xs', 'sm', 'md']),
 };
 
 UserLabel.defaultProps = {

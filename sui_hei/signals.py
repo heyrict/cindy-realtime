@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from twitter import OAuth, Twitter
 
 ENABLE_TWITTERBOT = settings.ENABLE_TWITTERBOT
@@ -26,11 +27,11 @@ def add_twitter_on_puzzle_created(sender, instance, created, **kwargs):
 
             params = {
                 'status': TWEET_MESSAGE % {
-                    'user_nickname': instance.user.nickname,
+                    'user_nickname': _('Anonymous User') if instance.anonymous else instance.user.nickname,
                     'title': instance.title,
                     'id': instance.id
                 },
-            }
+            } # yapf: disable
 
             if TWEET_WITH_PICTURE:
                 from imaging.puzzle_rendering import render, textify

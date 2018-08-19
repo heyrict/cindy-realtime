@@ -43,7 +43,12 @@ const chatroomNotExistsMsg = (context) => ({
 
 const puzzleAddedMsg = (context) => ({
   ...defaultMessageStyle,
-  children: (
+  children: context.anonymous ? (
+    <FormattedMessage
+      {...messages.puzzleAddedAnonymous}
+      values={{ ...context }}
+    />
+  ) : (
     <FormattedMessage {...messages.puzzleAdded} values={{ ...context }} />
   ),
 });

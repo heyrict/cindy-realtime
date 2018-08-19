@@ -209,6 +209,7 @@ class Answer extends React.PureComponent {
           <Box width={1}>
             <UserLabel
               user={this.props.owner}
+              iconSize="sm"
               anonymous={this.props.anonymous}
             />
             <Time>{moment(this.props.answeredtime).format('lll')}</Time>

@@ -13,6 +13,10 @@ export default defineMessages({
     id: 'app.containers.Notifier.puzzleAdded',
     defaultMessage: 'A New Puzzle {title} is Added by {nickname}!',
   },
+  puzzleAddedAnonymous: {
+    id: 'app.containers.Notifier.puzzleAddedAnonymous',
+    defaultMessage: 'A New Puzzle {title} is Added by an anonymous user!',
+  },
   directMessageReceived: {
     id: 'app.containers.Notifier.directMessageReceived',
     defaultMessage: '{nickname} sends a direct message to you!',

@@ -8,12 +8,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Row, Divider } from 'rebass';
-import { RoundedPanel } from 'style-store';
+import { ImgXs, RoundedPanel } from 'style-store';
 import styled from 'styled-components';
 
 import TitleLabel from 'components/TitleLabel';
 import UserLabel from 'components/UserLabel';
 import RewardingModal from 'components/RewardingModal/Loadable';
+import anonymousIcon from 'images/anonymous.png';
 
 import StarLabel from './StarLabel';
 import CommentLabel from './CommentLabel';
@@ -30,6 +31,15 @@ const UserCol = styled(Box)`
 const StyledButton = styled.button`
   padding: 0;
   margin-right: 6px;
+`;
+
+const AnonymousIcon = ImgXs.extend`
+  border: 1px solid #888;
+  border-radius: 9999px;
+  margin-bottom: 3px;
+  margin-right: 6px;
+  padding: 0 2px;
+  display: inline-block;
 `;
 
 export class PuzzlePanel extends React.Component {
@@ -63,6 +73,9 @@ export class PuzzlePanel extends React.Component {
               created={node.created}
             />
             <Divider my={2} />
+            {node.anonymous && (
+              <AnonymousIcon alt="anonymous" src={anonymousIcon} />
+            )}
             <ProcessLabel qCount={node.quesCount} uaCount={node.uaquesCount} />
             <StatusLabel status={node.status} />
             {node.status > 0 && (

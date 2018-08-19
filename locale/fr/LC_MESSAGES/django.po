@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-02 21:31+0900\n"
+"POT-Creation-Date: 2018-08-19 13:37+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,380 +18,439 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: cindy/settings.py:144
+#: cindy/settings.py:146
 msgid "Japanese"
 msgstr "Japonais"
 
-#: cindy/settings.py:145
-msgid "English"
-msgstr "Anglais"
-
-#: cindy/settings.py:146
-msgid "French"
+#: sui_hei/apps.py:10
+msgid "Lateral Thinking"
 msgstr ""
 
-#: sui_hei/models.py:18
+#: sui_hei/models.py:20
+msgid "User must have a username"
+msgstr ""
+
+#: sui_hei/models.py:22
+msgid "User must have a nickname"
+msgstr ""
+
+#: sui_hei/models.py:53
 msgid "Award"
 msgstr "Titre"
 
-#: sui_hei/models.py:27 sui_hei/models.py:102
+#: sui_hei/models.py:63 sui_hei/models.py:149
 msgid "status"
 msgstr ""
 
-#: sui_hei/models.py:28
+#: sui_hei/models.py:64
 #, fuzzy
 #| msgid "Comments"
 msgid "comment"
 msgstr "Commentaires"
 
-#: sui_hei/models.py:30 sui_hei/models.py:76 sui_hei/models.py:100
-#: sui_hei/models.py:141 sui_hei/models.py:157 sui_hei/models.py:172
-#: sui_hei/models.py:189
+#: sui_hei/models.py:67
+msgid "reason"
+msgstr ""
+
+#: sui_hei/models.py:68 sui_hei/models.py:121 sui_hei/models.py:147
+#: sui_hei/models.py:189 sui_hei/models.py:204 sui_hei/models.py:219
+#: sui_hei/models.py:236 sui_hei/models.py:250 sui_hei/models.py:305
 msgid "created"
 msgstr "Heure créé"
 
-#: sui_hei/models.py:31
+#: sui_hei/models.py:69 sui_hei/models.py:306
 #, fuzzy
 #| msgid "Preview"
 msgid "reviewed"
 msgstr "Aperçu"
 
-#: sui_hei/models.py:34
+#: sui_hei/models.py:72
 msgid "Award Application"
 msgstr ""
 
-#: sui_hei/models.py:36
+#: sui_hei/models.py:73
 msgid "Can review award application"
 msgstr ""
 
-#: sui_hei/models.py:43
+#: sui_hei/models.py:80
 msgid "Waiting"
 msgstr ""
 
-#: sui_hei/models.py:44
+#: sui_hei/models.py:81
 msgid "Accepted"
 msgstr ""
 
-#: sui_hei/models.py:45
+#: sui_hei/models.py:82
 msgid "Denied"
 msgstr ""
 
-#: sui_hei/models.py:51
+#: sui_hei/models.py:87
 msgid "nick_name"
 msgstr "Surnom"
 
-#: sui_hei/models.py:52
+#: sui_hei/models.py:88
 msgid "profile"
 msgstr "Profile"
 
-#: sui_hei/models.py:58
+#: sui_hei/models.py:94
 #, fuzzy
 #| msgid "edit"
 msgid "credit"
 msgstr "Editer"
 
-#: sui_hei/models.py:59
+#: sui_hei/models.py:95
 msgid "hide bookmark"
 msgstr ""
 
-#: sui_hei/models.py:79
+#: sui_hei/models.py:106
+msgid "Can send global notification"
+msgstr ""
+
+#: sui_hei/models.py:124
 #, fuzzy
 #| msgid "Award"
 msgid "User-Award"
 msgstr "Titre"
 
-#: sui_hei/models.py:95
+#: sui_hei/models.py:140
 msgid "title"
 msgstr "Titre"
 
-#: sui_hei/models.py:96
+#: sui_hei/models.py:141
 msgid "yami"
 msgstr "Yami"
 
-#: sui_hei/models.py:97
+#: sui_hei/models.py:142
 msgid "genre"
 msgstr "Genre"
 
-#: sui_hei/models.py:98 sui_hei/models.py:155 sui_hei/models.py:170
-#: sui_hei/models.py:207
+#: sui_hei/models.py:143 sui_hei/models.py:203 sui_hei/models.py:217
+#: sui_hei/models.py:235 sui_hei/models.py:268 sui_hei/models.py:304
 msgid "content"
 msgstr "Contenu"
 
-#: sui_hei/models.py:99
+#: sui_hei/models.py:144
 #, fuzzy
 #| msgid "Question"
 msgid "solution"
 msgstr "Qustion"
 
-#: sui_hei/models.py:101
+#: sui_hei/models.py:146
+msgid "allow safe rendering"
+msgstr ""
+
+#: sui_hei/models.py:148
 msgid "modified"
 msgstr "Heure modifié"
 
-#: sui_hei/models.py:103
+#: sui_hei/models.py:150
 msgid "memo"
 msgstr ""
 
-#: sui_hei/models.py:104
-msgid "score"
-msgstr "Score"
+#: sui_hei/models.py:151
+msgid "anonymous"
+msgstr ""
 
-#: sui_hei/models.py:107
+#: sui_hei/models.py:154
 msgid "Puzzle"
 msgstr ""
 
-#: sui_hei/models.py:114
+#: sui_hei/models.py:161
 msgid "Albatross"
 msgstr "Enigme de situaton"
 
-#: sui_hei/models.py:115
+#: sui_hei/models.py:162
 msgid "20th-Door"
 msgstr "20 questions"
 
-#: sui_hei/models.py:116
+#: sui_hei/models.py:163
 msgid "Little Albat"
 msgstr "Petit énigme de situation"
 
-#: sui_hei/models.py:117
+#: sui_hei/models.py:164
 msgid "Others & Formal"
 msgstr "Autres formes d'énigmes"
 
-#: sui_hei/models.py:121
+#: sui_hei/models.py:168
 msgid "Unsolved"
 msgstr ""
 
-#: sui_hei/models.py:122
+#: sui_hei/models.py:169
 msgid "Solved"
 msgstr ""
 
-#: sui_hei/models.py:123
+#: sui_hei/models.py:170
 msgid "Dazed"
 msgstr ""
 
-#: sui_hei/models.py:124
+#: sui_hei/models.py:171
 msgid "Hidden"
 msgstr ""
 
-#: sui_hei/models.py:125
+#: sui_hei/models.py:172
 msgid "Forced Hidden"
 msgstr ""
 
-#: sui_hei/models.py:133
+#: sui_hei/models.py:175
+msgid "Normal"
+msgstr ""
+
+#: sui_hei/models.py:175
+msgid "Yami"
+msgstr "Yami"
+
+#: sui_hei/models.py:175
+msgid "Long-term Yami"
+msgstr ""
+
+#: sui_hei/models.py:182
 #, fuzzy
 #| msgid "Question"
 msgid "question"
 msgstr "Qustion"
 
-#: sui_hei/models.py:135
+#: sui_hei/models.py:184
 msgid "question edit times"
 msgstr ""
 
-#: sui_hei/models.py:136
+#: sui_hei/models.py:185
 #, fuzzy
 #| msgid "answeredtime"
 msgid "answer"
 msgstr "Heure répondu"
 
-#: sui_hei/models.py:138
+#: sui_hei/models.py:186
 #, fuzzy
 #| msgid "answeredtime"
 msgid "answer edit times"
 msgstr "Heure répondu"
 
-#: sui_hei/models.py:139
+#: sui_hei/models.py:187
 msgid "good_ques"
 msgstr "Bonne question"
 
-#: sui_hei/models.py:140
+#: sui_hei/models.py:188
 msgid "true_ques"
 msgstr "Bonne réponse"
 
-#: sui_hei/models.py:142
+#: sui_hei/models.py:190
 msgid "answeredtime"
 msgstr "Heure répondu"
 
-#: sui_hei/models.py:145
+#: sui_hei/models.py:193
 msgid "Question"
 msgstr "Qustion"
 
-#: sui_hei/models.py:160
+#: sui_hei/models.py:207
 msgid "Hint"
 msgstr ""
 
-#: sui_hei/models.py:173
+#: sui_hei/models.py:220
 #, fuzzy
 #| msgid "Created time"
 msgid "edit times"
 msgstr "Heure crée"
 
-#: sui_hei/models.py:176
+#: sui_hei/models.py:223
 msgid "ChatMessage"
 msgstr ""
 
-#: sui_hei/models.py:187
+#: sui_hei/models.py:239
+msgid "DirectMessage"
+msgstr ""
+
+#: sui_hei/models.py:248
 msgid "channel"
 msgstr "Chaîne"
 
-#: sui_hei/models.py:188
+#: sui_hei/models.py:249
 #, fuzzy
 #| msgid "Question"
 msgid "description"
 msgstr "Qustion"
 
-#: sui_hei/models.py:192
+#: sui_hei/models.py:253
 msgid "ChatRoom"
 msgstr ""
 
-#: sui_hei/models.py:208
+#: sui_hei/models.py:269
 msgid "spoiler"
 msgstr ""
 
-#: sui_hei/models.py:211
+#: sui_hei/models.py:272
 #, fuzzy
 #| msgid "Comments"
 msgid "Comment"
 msgstr "Commentaires"
 
-#: sui_hei/models.py:220 sui_hei/models.py:232
+#: sui_hei/models.py:281 sui_hei/models.py:293
 msgid "Value"
 msgstr ""
 
-#: sui_hei/models.py:223
+#: sui_hei/models.py:284
 msgid "Bookmark"
 msgstr ""
 
-#: sui_hei/models.py:235
+#: sui_hei/models.py:296
 msgid "Star"
 msgstr "Etoile"
 
-#: sui_hei/schema.py:472 sui_hei/schema.py:524 sui_hei/schema.py:553
-#: sui_hei/schema.py:585 sui_hei/schema.py:612 sui_hei/schema.py:637
-#: sui_hei/schema.py:662 sui_hei/schema.py:685 sui_hei/schema.py:724
-#: sui_hei/schema.py:761 sui_hei/schema.py:793 sui_hei/schema.py:836
-#: sui_hei/schema.py:862 sui_hei/schema.py:889 sui_hei/schema.py:917
-#: sui_hei/schema.py:945 sui_hei/schema.py:973 sui_hei/schema.py:1001
-#: sui_hei/schema.py:1065 sui_hei/schema.py:1088
+#: sui_hei/models.py:309
+msgid "Schedule"
+msgstr ""
+
+#: sui_hei/schema.py:644 sui_hei/schema.py:698 sui_hei/schema.py:727
+#: sui_hei/schema.py:759 sui_hei/schema.py:786 sui_hei/schema.py:815
+#: sui_hei/schema.py:840 sui_hei/schema.py:865 sui_hei/schema.py:888
+#: sui_hei/schema.py:925 sui_hei/schema.py:955 sui_hei/schema.py:992
+#: sui_hei/schema.py:1024 sui_hei/schema.py:1067 sui_hei/schema.py:1093
+#: sui_hei/schema.py:1120 sui_hei/schema.py:1148 sui_hei/schema.py:1176
+#: sui_hei/schema.py:1204 sui_hei/schema.py:1229 sui_hei/schema.py:1258
+#: sui_hei/schema.py:1325 sui_hei/schema.py:1348 sui_hei/schema.py:1366
 #, fuzzy
 #| msgid "Last login"
 msgid "Please login!"
 msgstr "Dernier connecte"
 
-#: sui_hei/schema.py:481
+#: sui_hei/schema.py:654
 msgid "Title cannot be empty!"
 msgstr ""
 
-#: sui_hei/schema.py:483
+#: sui_hei/schema.py:656
 msgid "Content cannot be empty!"
 msgstr ""
 
-#: sui_hei/schema.py:485 sui_hei/schema.py:802
+#: sui_hei/schema.py:658 sui_hei/schema.py:1033
 msgid "Solution cannot be empty!"
 msgstr ""
 
-#: sui_hei/schema.py:530 sui_hei/schema.py:732 sui_hei/schema.py:767
+#: sui_hei/schema.py:704 sui_hei/schema.py:963 sui_hei/schema.py:998
 msgid "Question content cannot be empty!"
 msgstr ""
 
-#: sui_hei/schema.py:559 sui_hei/schema.py:951
+#: sui_hei/schema.py:733 sui_hei/schema.py:1182
 msgid "Hint content cannot be empty!"
 msgstr ""
 
-#: sui_hei/schema.py:565
+#: sui_hei/schema.py:739
 msgid "You are not the creator of this puzzle"
 msgstr ""
 
-#: sui_hei/schema.py:592
+#: sui_hei/schema.py:766
 msgid "ChatMessage cannot be empty!"
 msgstr ""
 
-#: sui_hei/schema.py:643
+#: sui_hei/schema.py:793
+msgid "DirectMessage cannot be empty!"
+msgstr ""
+
+#: sui_hei/schema.py:846
 #, python-format
 msgid "Channel %s exists already!"
 msgstr ""
 
-#: sui_hei/schema.py:695
+#: sui_hei/schema.py:898
 msgid "You can apply up to 2 awards at the same time!"
 msgstr ""
 
-#: sui_hei/schema.py:698
+#: sui_hei/schema.py:901
 msgid "You already have this award!"
 msgstr ""
 
-#: sui_hei/schema.py:702
+#: sui_hei/schema.py:905
 msgid "You already have applied this award!"
 msgstr ""
 
-#: sui_hei/schema.py:897 sui_hei/schema.py:1072
+#: sui_hei/schema.py:933
+msgid "You can set up to 3 schedules at the same time!"
+msgstr ""
+
+#: sui_hei/schema.py:1128 sui_hei/schema.py:1332
 msgid "You are not the creator of this bookmark"
 msgstr ""
 
-#: sui_hei/schema.py:925
+#: sui_hei/schema.py:1156
 msgid "You are not the creator of this chatroom"
 msgstr ""
 
-#: sui_hei/schema.py:956
+#: sui_hei/schema.py:1187
 msgid "You are not the creator of this hint"
 msgstr ""
 
-#: sui_hei/schema.py:982
+#: sui_hei/schema.py:1213
 msgid "You are not the owner of this award"
 msgstr ""
 
-#: sui_hei/schema.py:1030
+#: sui_hei/schema.py:1288
 msgid "You are not authenticated to do this!"
 msgstr ""
 
-#: sui_hei/schema.py:1042
+#: sui_hei/schema.py:1301
 msgid "Only staff members can review self-applied award applications"
 msgstr ""
 
-#: sui_hei/schema.py:1113
+#: sui_hei/schema.py:1374
+msgid "You are not the creator of this schedule"
+msgstr ""
+
+#: sui_hei/schema.py:1396
 msgid "Login incorrect!"
 msgstr ""
 
-#: sui_hei/schema.py:1148
+#: sui_hei/schema.py:1431
 msgid ""
 "Characters other than letters,digits and @/./+/-/_ are not allowed in "
 "username"
 msgstr ""
 
-#: sui_hei/schema.py:1152
+#: sui_hei/schema.py:1435
 msgid "Your username is too short (less than 4 characters)"
 msgstr ""
 
-#: sui_hei/schema.py:1155
+#: sui_hei/schema.py:1438
 msgid "Your username is too long (more than 150 characters)"
 msgstr ""
 
-#: sui_hei/schema.py:1157
+#: sui_hei/schema.py:1440
 msgid "Username cannot be blank!"
 msgstr ""
 
-#: sui_hei/schema.py:1160
+#: sui_hei/schema.py:1443
 msgid "Your nickname is too long (more than 64 characters)"
 msgstr ""
 
-#: sui_hei/schema.py:1164
+#: sui_hei/schema.py:1447
 msgid "Password should have both letters and digits"
 msgstr ""
 
-#: sui_hei/schema.py:1167
+#: sui_hei/schema.py:1450
 msgid "Your password is too short (less than 8 characters)"
 msgstr ""
 
-#: sui_hei/schema.py:1170
+#: sui_hei/schema.py:1453
 msgid "Your password is too long (more than 32 characters)"
 msgstr ""
 
-#: sui_hei/templates/index.html:12
+#: sui_hei/signals.py:30
+msgid "Anonymous User"
+msgstr ""
+
+#: sui_hei/templates/base_index.html:12
 #, fuzzy
 #| msgid "Welcome to Cindy, a real-time website for lateral thinking games!"
 msgid "Cindy -- the best place for lateral thinking"
 msgstr ""
 "Bienvenue chez [Cindy], un site qu'on peut jouer des énigmes à situation!"
 
-#: sui_hei/templates/index.html:13
+#: sui_hei/templates/base_index.html:13
 msgid "Play situation puzzles realtime!"
 msgstr ""
+
+#~ msgid "English"
+#~ msgstr "Anglais"
+
+#~ msgid "score"
+#~ msgstr "Score"
 
 #~ msgid "Chinese"
 #~ msgstr "Chinois"
@@ -550,9 +609,6 @@ msgstr ""
 
 #~ msgid "Genre"
 #~ msgstr "Genre"
-
-#~ msgid "Yami"
-#~ msgstr "Yami"
 
 #~ msgid "uncheck as yami"
 #~ msgstr "Ne pas admettre comme yami"
