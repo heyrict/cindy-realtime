@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -80,7 +82,7 @@ class Answer extends React.PureComponent {
   }
 
   handleKeyPress(e) {
-    const content = this.state.content;
+    const { content } = this.state;
     switch (this.props.sendPolicy) {
       case OPTIONS_SEND.NONE:
         break;
@@ -205,7 +207,10 @@ class Answer extends React.PureComponent {
       return (
         <PuzzleFrame>
           <Box width={1}>
-            <UserLabel user={this.props.owner} />
+            <UserLabel
+              user={this.props.owner}
+              anonymous={this.props.anonymous}
+            />
             <Time>{moment(this.props.answeredtime).format('lll')}</Time>
           </Box>
           <Splitter />
@@ -258,6 +263,7 @@ Answer.propTypes = {
   id: PropTypes.string.isRequired,
   good: PropTypes.bool.isRequired,
   true: PropTypes.bool.isRequired,
+  anonymous: PropTypes.bool,
   answer: PropTypes.string,
   answeredtime: PropTypes.string,
   answerEditTimes: PropTypes.number.isRequired,
@@ -270,7 +276,7 @@ Answer.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   user: createSelector(selectUserNavbarDomain, (substate) =>
-    substate.get('user').toJS()
+    substate.get('user').toJS(),
   ),
 });
 
@@ -280,12 +286,12 @@ const mapDispatchToProps = (dispatch) => ({
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 const withMutation = graphql(answerMutation);
 
 export default compose(
   withConnect,
-  withMutation
+  withMutation,
 )(Answer);

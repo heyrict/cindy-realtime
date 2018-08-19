@@ -319,6 +319,7 @@ export class PuzzleShowPage extends React.Component {
                     <AnimatedPanel key={edge.node.id}>
                       <Dialogue
                         index={edge.index}
+                        anonymous={P.anonymous && P.status === 0}
                         status={P.status}
                         node={edge.node}
                         settings={this.props.settings}

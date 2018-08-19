@@ -25,6 +25,7 @@ const Dialogue = (props) => (
       <Box width={1 / 2} ml={1}>
         <Answer
           id={props.node.id}
+          anonymous={props.anonymous}
           answeredtime={props.node.answeredtime}
           answer={props.node.answer}
           answerEditTimes={props.node.answerEditTimes}
@@ -54,6 +55,7 @@ Dialogue.propTypes = {
     answerEditTimes: PropTypes.number.isRequired,
     questionEditTimes: PropTypes.number.isRequired,
   }),
+  anonymous: PropTypes.bool,
   settings: PropTypes.shape({
     modifyQuestion: PropTypes.string.isRequired,
     sendAnswer: PropTypes.string.isRequired,
