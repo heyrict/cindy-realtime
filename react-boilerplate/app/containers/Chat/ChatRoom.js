@@ -244,11 +244,36 @@ class ChatRoom extends React.Component {
         >
           <FormattedMessage {...messages.log} />
         </ShowlogBtn>
-        <ChatLogModal
-          show={this.state.chatLogModalShown}
-          onHide={() => this.toggleChatLogModalShow(false)}
-          variables={{ chatroomName }}
-        />
+        {puzzleId ? (
+          <Query query={currentPuzzleQuery} variables={{ puzzleId }}>
+            {({ loading, error, data }) => {
+              if (loading) return null;
+              if (error) {
+                return JSON.stringify(error);
+              }
+              const currentPuzzle = data.puzzle;
+              const anonymous =
+                currentPuzzle.anonymous && currentPuzzle.status === 0;
+              const anonymousUserId = anonymous
+                ? currentPuzzle.user.id
+                : undefined;
+              return (
+                <ChatLogModal
+                  show={this.state.chatLogModalShown}
+                  anonymousUserId={anonymousUserId}
+                  onHide={() => this.toggleChatLogModalShow(false)}
+                  variables={{ chatroomName }}
+                />
+              );
+            }}
+          </Query>
+        ) : (
+          <ChatLogModal
+            show={this.state.chatLogModalShown}
+            onHide={() => this.toggleChatLogModalShow(false)}
+            variables={{ chatroomName }}
+          />
+        )}
         {this.state.show && (
           <DescriptionPanel
             show={this.state.show}

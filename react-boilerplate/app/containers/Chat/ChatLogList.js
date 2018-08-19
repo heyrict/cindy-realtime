@@ -37,7 +37,11 @@ const ChatLogList = (props) => (
     )}
     {props.allChatmessagesLo &&
       props.allChatmessagesLo.edges.map((edge) => (
-        <ChatMessage key={edge.node.id} {...edge.node} />
+        <ChatMessage
+          key={edge.node.id}
+          {...edge.node}
+          anonymous={props.anonymousUserId === edge.node.user.id}
+        />
       ))}
   </div>
 );
@@ -48,6 +52,7 @@ ChatLogList.propTypes = {
     edges: PropTypes.array.isRequired,
     totalCount: PropTypes.number.isRequired,
   }),
+  anonymousUserId: PropTypes.string,
   // eslint-disable-next-line react/no-unused-prop-types
   page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   itemsPerPage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -81,5 +86,5 @@ export default compose(
     },
   }),
   withNumberPaginator({ useQuery: false }),
-  withChatLogList
+  withChatLogList,
 )(ChatLogList);
