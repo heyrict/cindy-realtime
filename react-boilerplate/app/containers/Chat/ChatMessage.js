@@ -26,7 +26,7 @@ function ChatMessage(props) {
       {props.precedingStr && (
         <PrecedingSpan>{props.precedingStr}</PrecedingSpan>
       )}
-      <UserLabel user={props.user} />
+      <UserLabel user={props.user} anonymous={props.anonymous} iconSize="sm" />
       {props.created && <Time>{moment(props.created).format('lll')}</Time>}
       <div
         style={{ overflow: 'auto' }}
@@ -42,6 +42,7 @@ ChatMessage.propTypes = {
     nickname: PropTypes.string.isRequired,
     currentAward: PropTypes.object,
   }),
+  anonymous: PropTypes.bool,
   precedingStr: PropTypes.string,
   created: PropTypes.string,
   content: PropTypes.string.isRequired,

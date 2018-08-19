@@ -7,13 +7,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { from_global_id as f } from 'common';
+import { from_global_id as f, to_global_id as t } from 'common';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
 import { Button, ButtonOutline } from 'style-store';
 import { nAlert } from 'containers/Notifier/actions';
 
-import { graphql } from 'react-apollo';
+import { graphql, Query } from 'react-apollo';
+import gql from 'graphql-tag';
 import ChatQuery from 'graphql/ChatQuery';
 import CreateChatmessageMutation from 'graphql/CreateChatmessageMutation';
 import ChatMessageSubscription from 'graphql/ChatMessageSubscription';
@@ -48,6 +49,19 @@ const ShowlogBtn = ButtonOutline.extend`
   height: ${(props) => props.height}px;
   border-radius: 0;
   padding: 0;
+`;
+
+const currentPuzzleQuery = gql`
+  query ChatRoomPuzzleQuery($puzzleId: ID!) {
+    puzzle(id: $puzzleId) {
+      id
+      anonymous
+      status
+      user {
+        id
+      }
+    }
+  }
 `;
 
 class ChatRoom extends React.Component {
@@ -132,7 +146,14 @@ class ChatRoom extends React.Component {
             chatroomName,
           },
         },
-        update(proxy, { data: { createChatmessage: { chatmessage } } }) {
+        update(
+          proxy,
+          {
+            data: {
+              createChatmessage: { chatmessage },
+            },
+          },
+        ) {
           const data = proxy.readQuery({
             query: ChatQuery,
             variables: { chatroomName },
@@ -201,6 +222,8 @@ class ChatRoom extends React.Component {
     if (this.props.hidden) return null;
     const chatroomName =
       this.props.channel || defaultChannel(this.props.pathname);
+    const puzzleIdMatch = chatroomName.match(/^puzzle-(\d+)$/);
+    const puzzleId = puzzleIdMatch && t('PuzzleNode', puzzleIdMatch[1] || -1);
 
     return (
       <Flex flexWrap="wrap" justifyContent="center">
@@ -249,21 +272,58 @@ class ChatRoom extends React.Component {
               </ButtonOutline>
             )
           )}
-          {this.props.allChatmessages
-            ? this.props.allChatmessages.edges.map((edge, i) => {
-                if (i + 1 === this.props.allChatmessages.edges.length) {
-                  return (
-                    <div
-                      ref={(lastcm) => (this.lastcmref = lastcm)}
-                      key={edge.node.id}
-                    >
-                      <ChatMessage {...edge.node} />
-                    </div>
-                  );
+          {puzzleId ? (
+            <Query query={currentPuzzleQuery} variables={{ puzzleId }}>
+              {({ loading, error, data }) => {
+                if (loading) return null;
+                if (error) {
+                  console.log(error);
+                  return null;
                 }
-                return <ChatMessage key={edge.node.id} {...edge.node} />;
-              })
-            : null}
+                const currentPuzzle = data.puzzle;
+                return this.props.allChatmessages
+                  ? this.props.allChatmessages.edges.map((edge, i) => {
+                      const anonymous =
+                        currentPuzzle.anonymous &&
+                        currentPuzzle.status === 0 &&
+                        edge.node.user.id === currentPuzzle.user.id;
+                      if (i + 1 === this.props.allChatmessages.edges.length) {
+                        return (
+                          <div
+                            ref={(lastcm) => (this.lastcmref = lastcm)}
+                            key={edge.node.id}
+                          >
+                            <ChatMessage {...edge.node} anonymous={anonymous} />
+                          </div>
+                        );
+                      }
+                      return (
+                        <ChatMessage
+                          key={edge.node.id}
+                          {...edge.node}
+                          anonymous={anonymous}
+                        />
+                      );
+                    })
+                  : null;
+              }}
+            </Query>
+          ) : (
+            this.props.allChatmessages &&
+            this.props.allChatmessages.edges.map((edge, i) => {
+              if (i + 1 === this.props.allChatmessages.edges.length) {
+                return (
+                  <div
+                    ref={(lastcm) => (this.lastcmref = lastcm)}
+                    key={edge.node.id}
+                  >
+                    <ChatMessage {...edge.node} />
+                  </div>
+                );
+              }
+              return <ChatMessage key={edge.node.id} {...edge.node} />;
+            })
+          )}
           <div ref={(btm) => (this.btmref = btm)} />
         </MessageWrapper>
         <ChatInput
@@ -306,7 +366,10 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 const withMutation = graphql(CreateChatmessageMutation);
 
@@ -336,7 +399,7 @@ const withChat = graphql(ChatQuery, {
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             const newEdges = fetchMoreResult.allChatmessages.edges;
-            const pageInfo = fetchMoreResult.allChatmessages.pageInfo;
+            const { pageInfo } = fetchMoreResult.allChatmessages;
 
             return newEdges.length
               ? {
@@ -403,4 +466,8 @@ const withChat = graphql(ChatQuery, {
   },
 });
 
-export default compose(withChat, withMutation, withConnect)(ChatRoom);
+export default compose(
+  withChat,
+  withMutation,
+  withConnect,
+)(ChatRoom);
