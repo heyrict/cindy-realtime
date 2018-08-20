@@ -377,9 +377,6 @@ export class PuzzleShowPage extends React.Component {
             this.adref = adref;
           }}
         />
-        <Constrained>
-          <GoogleAd {...googleAdInfo.relativeAd} />
-        </Constrained>
       </div>
     );
   }

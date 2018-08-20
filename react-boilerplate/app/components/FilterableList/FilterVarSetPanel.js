@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { RoundedPanel, Button, ButtonOutline } from 'style-store';
+import { FormattedMessage } from 'react-intl';
 import { Flex, Box } from 'rebass';
 
 import FilterButton from './FilterButton';
 import SearchPanel from './SearchPanel';
+import messages from './messages';
 
 const ToggleBtn = (props) => {
   const { on, ...others } = props;
@@ -77,13 +79,13 @@ class FilterVarSetPanel extends React.Component {
               on={this.state.display === this.MODE.SORT}
               onClick={() => this.handleToggleButtonClick(this.MODE.SORT)}
             >
-              Sort
+              <FormattedMessage {...messages.sort} />
             </ToggleBtn>
             <ToggleBtn
               on={this.state.display === this.MODE.SEARCH}
               onClick={() => this.handleToggleButtonClick(this.MODE.SEARCH)}
             >
-              Search
+              <FormattedMessage {...messages.search} />
             </ToggleBtn>
           </Flex>
         )}
