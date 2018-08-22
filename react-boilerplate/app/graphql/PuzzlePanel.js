@@ -13,16 +13,8 @@ const PuzzlePanel = gql`
     anonymous
     quesCount
     uaquesCount
-    starSet {
-      edges {
-        node {
-          user {
-            nickname
-          }
-          value
-        }
-      }
-    }
+    starCount
+    starSum
     commentCount
     bookmarkCount
     user {

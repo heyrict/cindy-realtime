@@ -26,14 +26,17 @@ function PuzzleList(props) {
           <PuzzlePanel node={edge.node} key={edge.node.id} />
         ))}
       {props.loading && <LoadingDots py={props.allPuzzles ? 5 : 50} size={8} />}
-      {!props.loading && (
-        <PaginatorBar
-          queryKey={props.queryKey}
-          numPages={Math.ceil(props.allPuzzles.totalCount / props.itemsPerPage)}
-          currentPage={props.page}
-          changePage={props.changePage}
-        />
-      )}
+      {!props.loading &&
+        props.allPuzzles && (
+          <PaginatorBar
+            queryKey={props.queryKey}
+            numPages={Math.ceil(
+              props.allPuzzles.totalCount / props.itemsPerPage,
+            )}
+            currentPage={props.page}
+            changePage={props.changePage}
+          />
+        )}
     </div>
   );
 }
@@ -76,4 +79,7 @@ const withPuzzleList = graphql(PuzzleListQuery, {
   },
 });
 
-export default compose(withNumberPaginator({}), withPuzzleList)(PuzzleList);
+export default compose(
+  withNumberPaginator({}),
+  withPuzzleList,
+)(PuzzleList);

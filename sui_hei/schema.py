@@ -234,7 +234,7 @@ class PuzzleNode(DjangoObjectType):
         try:
             return self.StarSum
         except:
-            return self.star_set.aggregate(Sum("value"))
+            return self.star_set.aggregate(Sum("value")).get("value__sum", 0)
 
     def resolve_commentCount(self, info):
         try:

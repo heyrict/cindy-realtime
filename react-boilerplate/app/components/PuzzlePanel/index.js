@@ -80,10 +80,12 @@ export class PuzzlePanel extends React.Component {
             <StatusLabel status={node.status} />
             {node.status > 0 && (
               <span>
-                {node.starSet &&
-                  node.starSet.edges.length > 0 && (
-                    <StarLabel starSet={node.starSet} puzzleId={node.id} />
-                  )}
+                {node.starCount > 0 && (
+                  <StarLabel
+                    starCount={node.starCount}
+                    starSum={node.starSum}
+                  />
+                )}
                 {node.commentCount !== undefined &&
                   node.commentCount !== null && (
                     <StyledButton
