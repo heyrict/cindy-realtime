@@ -34,4 +34,9 @@ export default defineMessages({
     id: 'app.containers.PuzzleAddForm.anonymousLabel',
     defaultMessage: 'Anonymous',
   },
+  previewEditUsage: {
+    id: 'app.containers.PuzzleAddForm.previewEditUsage',
+    defaultMessage:
+      '**Usage:**\n\n- Bold: `**bold**` -> **bold**\n- Multiple Newline: `<br />` -> ↩\n- Change Font: `<font color="red" size="3">font</font>` -> <font color="red" size="3">font</font>',
+  },
 });

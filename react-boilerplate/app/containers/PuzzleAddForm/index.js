@@ -11,7 +11,7 @@ import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
 import { createStructuredSelector, createSelector } from 'reselect';
 import { push } from 'react-router-redux';
-import { withLocale, to_global_id as t } from 'common';
+import { withLocale, to_global_id as t, text2md } from 'common';
 import { nAlert } from 'containers/Notifier/actions';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
 import { MIN_CONTENT_SAFE_CREDIT } from 'settings';
@@ -238,6 +238,15 @@ export class PuzzleAddForm extends React.Component {
                   : true
               }
             />
+          }
+        />
+        <FieldGroup
+          CtlElement={
+            <FormattedMessage {...messages.previewEditUsage}>
+              {(msg) => (
+                <span dangerouslySetInnerHTML={{ __html: text2md(msg) }} />
+              )}
+            </FormattedMessage>
           }
         />
         {!this.state.loading && (

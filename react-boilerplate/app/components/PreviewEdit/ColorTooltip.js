@@ -17,7 +17,7 @@ class ColorTooltip extends React.PureComponent {
   constructor(props) {
     super(props);
     this.defaultState = {
-      color: '#5856b9',
+      color: 'chocolate',
       size: '14',
     };
     this.state = this.defaultState;

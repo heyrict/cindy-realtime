@@ -23,7 +23,7 @@ function FieldGroup({ label, help, Ctl, CtlElement, ...props }) {
 }
 
 FieldGroup.propTypes = {
-  label: PropTypes.node.isRequired,
+  label: PropTypes.node,
   help: PropTypes.node,
   Ctl: PropTypes.any,
   CtlElement: PropTypes.any,
