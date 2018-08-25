@@ -72,61 +72,49 @@ class PreviewEdit extends React.Component {
         <Toolbar
           options={[
             {
-              name: 'H1',
-              icon: (
-                <b>
-                  H<sub>1</sub>
-                </b>
-              ),
-              callback: () => this.handleSetHeader(1),
-            },
-            {
-              name: 'H2',
-              icon: (
-                <b>
-                  H<sub>2</sub>
-                </b>
-              ),
-              callback: () => this.handleSetHeader(2),
-            },
-            {
-              name: 'H3',
-              icon: (
-                <b>
-                  H<sub>3</sub>
-                </b>
-              ),
-              callback: () => this.handleSetHeader(3),
-            },
-            {
-              name: 'Bold',
-              icon: <b>B</b>,
-              callback: () => this.handleWrapSelection('**'),
-            },
-            {
-              name: 'Italic',
-              icon: <i>I</i>,
-              callback: () => this.handleWrapSelection('*'),
-            },
-            {
-              name: 'Font',
-              tooltipEnabled: true,
-              tooltipOptions: {
-                html: (
-                  <ColorTooltip
-                    handleSubmit={({ color, size }) =>
-                      this.handleWrapSelection(
-                        `<span style="color:${color};font-size:${size}px">\n\n`,
-                        '\n\n</span>',
-                      )
-                    }
-                  />
+              name: 'Red',
+              icon: <span style={{ color: '#dc322f' }}>●</span>,
+              callback: () =>
+                this.handleWrapSelection(
+                  `<span style="color:#dc322f">`,
+                  '</span>',
                 ),
-                position: 'top',
-                theme: 'cindy',
-                trigger: 'click',
-                interactive: true,
-              },
+            },
+            {
+              name: 'Green',
+              icon: <span style={{ color: '#859900' }}>●</span>,
+              callback: () =>
+                this.handleWrapSelection(
+                  `<span style="color:#859900">`,
+                  '</span>',
+                ),
+            },
+            {
+              name: 'Blue',
+              icon: <span style={{ color: '#268bd2' }}>●</span>,
+              callback: () =>
+                this.handleWrapSelection(
+                  `<span style="color:#268bd2">`,
+                  '</span>',
+                ),
+            },
+            {
+              name: 'Small',
+              icon: <div><small>A</small></div>,
+              callback: () =>
+                this.handleWrapSelection(
+                  `<small>`,
+                  '</small>',
+                ),
+            },
+            {
+              name: 'Big',
+              icon: <div>A</div>,
+              callback: () =>
+                this.handleWrapSelection(
+                  `<big>`,
+                  '</big>',
+                ),
             },
             {
               name: 'Tabs',
