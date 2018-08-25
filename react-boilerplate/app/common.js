@@ -166,7 +166,15 @@ export function line2md(string) {
     {
       allowedTags: false,
       allowedAttributes: false,
-      allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'chat', 'javascript'],
+      allowedSchemes: [
+        'http',
+        'https',
+        'ftp',
+        'mailto',
+        'chat',
+        'javascript',
+        'data',
+      ],
       textFilter: _norm_countdown,
       transformTags: {
         '*': (tagName, attribs) => ({

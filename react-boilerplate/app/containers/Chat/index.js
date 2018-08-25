@@ -154,7 +154,7 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 const withSaga = injectSaga({ key: 'chat', saga });
@@ -188,7 +188,7 @@ const withMemo = graphql(
         puzzle,
       };
     },
-  }
+  },
 );
 
 const withFavChannels = graphql(FavoriteChatRoomQuery, {
@@ -233,7 +233,7 @@ const withCurrentUser = graphql(
       const { user: currentUser } = data;
       return { currentUser };
     },
-  }
+  },
 );
 
 export default compose(
@@ -241,5 +241,5 @@ export default compose(
   withConnect,
   withCurrentUser,
   withMemo,
-  withFavChannels
+  withFavChannels,
 )(Chat);
