@@ -44,9 +44,14 @@ function UserNavbar(props) {
     return (
       <SubNavbar
         w={1}
-        style={{ display: props.open ? 'block' : 'none' }}
+        style={{ display: props.open ? 'flex' : 'none' }}
         onMouseLeave={props.onMouseLeave}
       >
+        <NavLink is="span" style={{ marginRight: 'auto' }}>
+          {welcomeTitle}
+          {'  '}
+          {onlineViewerNumTitle}
+        </NavLink>
         <RouterLink
           to={withLocale(`/profile/show/${props.usernavbar.user.userId}`)}
           tabIndex="0"
@@ -71,11 +76,6 @@ function UserNavbar(props) {
         <LogoutMenuItem>
           <FormattedMessage {...messages.logout} />
         </LogoutMenuItem>
-        <NavLink is="span">
-          {welcomeTitle}
-          {'  '}
-          {onlineViewerNumTitle}
-        </NavLink>
       </SubNavbar>
     );
   }
