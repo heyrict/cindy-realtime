@@ -9,6 +9,7 @@ import { from_global_id as f } from 'common';
 import { nAlert } from 'containers/Notifier/actions';
 import { createStructuredSelector } from 'reselect';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
+import ButtonSelect from 'components/ButtonSelect';
 
 import { graphql } from 'react-apollo';
 import ProfileShowQuery from 'graphql/ProfileShowQuery';
@@ -23,7 +24,10 @@ class AwardSwitch extends React.PureComponent {
     this.state = {
       selectedAward: props.currentAwardId,
     };
-    this.selectAward = (a) => this.setState({ selectedAward: a });
+    this.handleChange = (option) =>
+      this.setState({
+        selectedAward: option.value,
+      });
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -72,41 +76,25 @@ class AwardSwitch extends React.PureComponent {
         <ProfRow
           heading={<FormattedMessage {...messages.awardSelect} />}
           content={
-            <Flex flexWrap="wrap">
-              <ButtonOutline
-                px={1}
-                py={1}
-                mx="2px"
-                onClick={() => this.selectAward(null)}
-              >
-                <FormattedMessage {...messages.nullAward} />
-              </ButtonOutline>
-              {this.props.userawardSet.edges.map((edge) => (
-                <span key={edge.node.id}>
-                  {edge.node.id === this.state.selectedAward ? (
-                    <Button
-                      px={1}
-                      mx="2px"
-                      py={1}
-                      onClick={() => this.selectAward(null)}
-                    >
-                      {edge.node.award.name}
-                    </Button>
-                  ) : (
-                    <ButtonOutline
-                      p={1}
-                      mx="2px"
-                      onClick={() => this.selectAward(edge.node.id)}
-                    >
-                      {edge.node.award.name}
-                    </ButtonOutline>
-                  )}
-                </span>
-              ))}
+            <div>
+              <ButtonSelect
+                value={this.state.selectedAward}
+                onChange={this.handleChange}
+                options={[
+                  {
+                    value: null,
+                    label: <FormattedMessage {...messages.nullAward} />,
+                  },
+                  ...this.props.userawardSet.edges.map((edge) => ({
+                    value: edge.node.id,
+                    label: edge.node.award.name,
+                  })),
+                ]}
+              />
               <ButtonOutline p={1} onClick={this.handleSubmit} w={1} mt="5px">
                 <FormattedMessage {...messages.save} />
               </ButtonOutline>
-            </Flex>
+            </div>
           }
         />
       );
@@ -134,8 +122,14 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 const withMutation = graphql(UpdateCurrentAwardMutation);
 
-export default compose(withConnect, withMutation)(AwardSwitch);
+export default compose(
+  withConnect,
+  withMutation,
+)(AwardSwitch);

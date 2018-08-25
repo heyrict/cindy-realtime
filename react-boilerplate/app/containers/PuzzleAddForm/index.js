@@ -16,7 +16,8 @@ import { nAlert } from 'containers/Notifier/actions';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
 import { MIN_CONTENT_SAFE_CREDIT } from 'settings';
 
-import { Input, Select, ButtonOutline as Button } from 'style-store';
+import { Input, Select, ButtonOutline, ImgXs } from 'style-store';
+import ButtonSelect from 'components/ButtonSelect';
 import FieldGroup from 'components/FieldGroup';
 import PreviewEdit from 'components/PreviewEdit';
 import HelpPopper from 'components/HelpPopper';
@@ -26,6 +27,9 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import PuzzleAddFormMutation from 'graphql/PuzzleAddFormMutation';
 import UserLabel from 'graphql/UserLabel';
+
+import cross from 'images/cross.svg';
+import tick from 'images/tick.svg';
 
 import messages from './messages';
 
@@ -43,6 +47,8 @@ export class PuzzleAddForm extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleSelectChange = (target, value) =>
+      this.setState({ [target]: value });
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   // }}}
@@ -119,41 +125,32 @@ export class PuzzleAddForm extends React.Component {
             </span>
           }
           CtlElement={
-            <Select
-              componentClass="select"
+            <ButtonSelect
               value={this.state.puzzleGenre}
-              onChange={this.handleChange}
-              id="formPuzzleAddGenre"
-            >
-              <FormattedMessage {...genreMessages.classic}>
-                {(msg) => (
-                  <option value={0} key={0}>
-                    {msg}
-                  </option>
-                )}
-              </FormattedMessage>
-              <FormattedMessage {...genreMessages.twentyQuestions}>
-                {(msg) => (
-                  <option value={1} key={1}>
-                    {msg}
-                  </option>
-                )}
-              </FormattedMessage>
-              <FormattedMessage {...genreMessages.littleAlbat}>
-                {(msg) => (
-                  <option value={2} key={2}>
-                    {msg}
-                  </option>
-                )}
-              </FormattedMessage>
-              <FormattedMessage {...genreMessages.others}>
-                {(msg) => (
-                  <option value={3} key={3}>
-                    {msg}
-                  </option>
-                )}
-              </FormattedMessage>
-            </Select>
+              onChange={(option) =>
+                this.handleSelectChange('puzzleGenre', option.value)
+              }
+              options={[
+                {
+                  value: 0,
+                  label: <FormattedMessage {...genreMessages.classic} />,
+                },
+                {
+                  value: 1,
+                  label: (
+                    <FormattedMessage {...genreMessages.twentyQuestions} />
+                  ),
+                },
+                {
+                  value: 2,
+                  label: <FormattedMessage {...genreMessages.littleAlbat} />,
+                },
+                {
+                  value: 3,
+                  label: <FormattedMessage {...genreMessages.others} />,
+                },
+              ]}
+            />
           }
         />
         <FieldGroup
@@ -164,43 +161,43 @@ export class PuzzleAddForm extends React.Component {
             </span>
           }
           CtlElement={
-            <Select
-              componentClass="select"
+            <ButtonSelect
               value={this.state.puzzleYami}
-              onChange={this.handleChange}
-              id="formPuzzleAddYami"
-            >
-              <FormattedMessage {...genreMessages.none}>
-                {(msg) => (
-                  <option value={0} key={0}>
-                    {msg}
-                  </option>
-                )}
-              </FormattedMessage>
-              <FormattedMessage {...genreMessages.yami}>
-                {(msg) => (
-                  <option value={1} key={1}>
-                    {msg}
-                  </option>
-                )}
-              </FormattedMessage>
-              <FormattedMessage {...genreMessages.longtermYami}>
-                {(msg) => (
-                  <option value={2} key={2}>
-                    {msg}
-                  </option>
-                )}
-              </FormattedMessage>
-            </Select>
+              onChange={(option) =>
+                this.handleSelectChange('puzzleYami', option.value)
+              }
+              options={[
+                {
+                  value: 0,
+                  label: <FormattedMessage {...genreMessages.none} />,
+                },
+                {
+                  value: 1,
+                  label: <FormattedMessage {...genreMessages.yami} />,
+                },
+                {
+                  value: 2,
+                  label: <FormattedMessage {...genreMessages.longtermYami} />,
+                },
+              ]}
+            />
           }
         />
         <FieldGroup
           id="formPuzzleAddAnonymous"
           label={<FormattedMessage {...messages.anonymousLabel} />}
-          Ctl={Input}
-          type="checkbox"
-          value={this.state.puzzleAnonymous}
-          onChange={this.handleChange}
+          CtlElement={
+            <ButtonSelect
+              value={this.state.puzzleAnonymous}
+              onChange={(option) =>
+                this.handleSelectChange('puzzleAnonymous', option.value)
+              }
+              options={[
+                { value: false, label: '×' },
+                { value: true, label: '○' },
+              ]}
+            />
+          }
         />
         <FieldGroup
           id="formPuzzleAddContent"
@@ -244,20 +241,23 @@ export class PuzzleAddForm extends React.Component {
           CtlElement={
             <FormattedMessage {...messages.previewEditUsage}>
               {(msg) => (
-                <span dangerouslySetInnerHTML={{ __html: text2md(msg) }} />
+                <span
+                  style={{ overflowY: 'auto' }}
+                  dangerouslySetInnerHTML={{ __html: text2md(msg) }}
+                />
               )}
             </FormattedMessage>
           }
         />
         {!this.state.loading && (
-          <Button
+          <ButtonOutline
             w={1}
             py={1}
             onClick={this.handleSubmit}
             disabled={!this.props.currentUser}
           >
             {<FormattedMessage {...messages.submitLabel} />}
-          </Button>
+          </ButtonOutline>
         )}
       </div>
     );
