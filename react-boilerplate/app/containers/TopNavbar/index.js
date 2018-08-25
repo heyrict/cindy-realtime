@@ -68,7 +68,11 @@ function TopNavbar(props) {
     <div>
       <Navbar w={1}>
         <Box w={1 / 3} m="auto">
-          <NavbarBtn onClick={() => toggle('menu')} color="gray3">
+          <NavbarBtn
+            onClick={() => toggle('menu')}
+            onMouseEnter={() => props.toggleSubNav('menu')}
+            color="gray3"
+          >
             <ImgSm src={menuImg} alt="menu" />
             <NavbarBtnMsg>
               <FormattedMessage {...messages.menu} />
@@ -98,7 +102,11 @@ function TopNavbar(props) {
             </Box>
           )}
         <Box w={1 / 3} m="auto">
-          <NavbarBtn onClick={() => toggle('user')} color="gray3">
+          <NavbarBtn
+            onClick={() => toggle('user')}
+            onMouseEnter={() => props.toggleSubNav('user')}
+            color="gray3"
+          >
             <ImgSm src={loginImg} alt="profile" />
             <NavbarBtnMsg>
               <FormattedMessage {...messages.profile} />
@@ -106,8 +114,14 @@ function TopNavbar(props) {
           </NavbarBtn>
         </Box>
       </Navbar>
-      <MenuNavbar open={props.topnavbar.subnav === 'menu'} />
-      <UserNavbar open={props.topnavbar.subnav === 'user'} />
+      <MenuNavbar
+        open={props.topnavbar.subnav === 'menu'}
+        onMouseLeave={() => props.toggleSubNav(null)}
+      />
+      <UserNavbar
+        open={props.topnavbar.subnav === 'user'}
+        onMouseLeave={() => props.toggleSubNav(null)}
+      />
     </div>
   );
 }

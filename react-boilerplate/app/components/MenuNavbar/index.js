@@ -49,7 +49,11 @@ GroupButton.propTypes = {
 
 function MenuNavbar(props) {
   return (
-    <SubNavbar w={1} style={{ display: props.open ? 'block' : 'none' }}>
+    <SubNavbar
+      w={1}
+      style={{ display: props.open ? 'block' : 'none' }}
+      onMouseLeave={props.onMouseLeave}
+    >
       <RouterLink to={withLocale('/')} tabIndex="0">
         <NavLink is="span">
           <FormattedMessage {...messages.hp} />
@@ -119,6 +123,7 @@ MenuNavbar.propTypes = {
   dispatch: PropTypes.func,
   open: PropTypes.bool,
   locale: PropTypes.string,
+  onMouseLeave: PropTypes.func,
 };
 
 const mapStateToProps = createSelector(makeSelectLocale(), (locale) => ({

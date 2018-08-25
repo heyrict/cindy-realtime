@@ -42,7 +42,11 @@ function UserNavbar(props) {
   );
   if (props.usernavbar.user.userId) {
     return (
-      <SubNavbar w={1} style={{ display: props.open ? 'block' : 'none' }}>
+      <SubNavbar
+        w={1}
+        style={{ display: props.open ? 'block' : 'none' }}
+        onMouseLeave={props.onMouseLeave}
+      >
         <RouterLink
           to={withLocale(`/profile/show/${props.usernavbar.user.userId}`)}
           tabIndex="0"
@@ -101,6 +105,7 @@ function UserNavbar(props) {
 UserNavbar.propTypes = {
   usernavbar: PropTypes.object,
   open: PropTypes.bool.isRequired,
+  onMouseLeave: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -113,5 +118,5 @@ const withReducer = injectReducer({ key: 'userNavbar', reducer });
 
 export default compose(
   withReducer,
-  withConnect
+  withConnect,
 )(UserNavbar);
