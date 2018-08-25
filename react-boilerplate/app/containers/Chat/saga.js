@@ -1,5 +1,5 @@
 import { put, select, takeLatest, takeEvery } from 'redux-saga/effects';
-import { toggleChat, changeChannel } from './actions';
+import { toggleChat, changeChannel, changeTab } from './actions';
 import {
   TOGGLE_MINICHAT,
   OPEN_MINICHAT,
@@ -29,6 +29,7 @@ function* handleToggleChat(action) {
   } else if (chatOpen !== 'chat' && action.open !== null) {
     yield put({ type: OPEN_MINICHAT });
   }
+  yield put(changeTab('TAB_CHAT'));
 }
 
 function* handleToggleMemo(action) {
