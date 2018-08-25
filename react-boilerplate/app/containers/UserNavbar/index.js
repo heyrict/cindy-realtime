@@ -44,14 +44,9 @@ function UserNavbar(props) {
     return (
       <SubNavbar
         w={1}
-        style={{ display: props.open ? 'flex' : 'none' }}
-        onMouseLeave={props.onMouseLeave}
+        style={{ display: 'flex', flexWrap: 'wrap' }}
+        onPointerLeave={props.onPointerLeave}
       >
-        <NavLink is="span" style={{ marginRight: 'auto' }}>
-          {welcomeTitle}
-          {'  '}
-          {onlineViewerNumTitle}
-        </NavLink>
         <RouterLink
           to={withLocale(`/profile/show/${props.usernavbar.user.userId}`)}
           tabIndex="0"
@@ -76,11 +71,16 @@ function UserNavbar(props) {
         <LogoutMenuItem>
           <FormattedMessage {...messages.logout} />
         </LogoutMenuItem>
+        <NavLink is="span" style={{ marginRight: 'auto' }}>
+          {welcomeTitle}
+          {'  '}
+          {onlineViewerNumTitle}
+        </NavLink>
       </SubNavbar>
     );
   }
   return (
-    <SubNavbar w={1} style={{ display: props.open ? 'block' : 'none' }}>
+    <SubNavbar w={1} style={{ display: 'block' }}>
       <RouterLink to={withLocale('/profile')} tabIndex="0">
         <NavLink is="span">
           <FormattedMessage {...messages.userlist} />
@@ -104,8 +104,7 @@ function UserNavbar(props) {
 
 UserNavbar.propTypes = {
   usernavbar: PropTypes.object,
-  open: PropTypes.bool.isRequired,
-  onMouseLeave: PropTypes.func,
+  onPointerLeave: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({

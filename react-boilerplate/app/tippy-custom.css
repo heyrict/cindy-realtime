@@ -1,3 +1,4 @@
+/* cindy-theme */
 /* top */
 .tippy-popper[x-placement^='top'] .tippy-tooltip.cindy-theme [x-circle] {
   background-color: #c6b571;
@@ -101,5 +102,87 @@
   background-color: #c6b571;
 }
 .tippy-popper .tippy-tooltip.cindy-theme[data-animatefill] {
+  background-color: transparent;
+}
+
+/* nav-theme */
+/* top */
+.tippy-popper[x-placement^='top'] .tippy-tooltip.nav-theme [x-circle] {
+  background-color: #c6b571;
+}
+.tippy-popper[x-placement^='top'] .tippy-tooltip.nav-theme [x-arrow] {
+  border: none;
+}
+.tippy-popper[x-placement^='top']
+  .tippy-tooltip.nav-theme
+  [x-arrow].arrow-small {
+  border: none;
+}
+.tippy-popper[x-placement^='top'] .tippy-tooltip.nav-theme [x-arrow].arrow-big {
+  border: none;
+}
+
+/* bottom */
+.tippy-popper[x-placement^='bottom'] .tippy-tooltip.nav-theme [x-circle] {
+  background-color: transparent;
+}
+.tippy-popper[x-placement^='bottom'] .tippy-tooltip.nav-theme [x-arrow] {
+  border: none;
+}
+.tippy-popper[x-placement^='bottom']
+  .tippy-tooltip.nav-theme
+  [x-arrow].arrow-small {
+  border: none;
+}
+.tippy-popper[x-placement^='bottom']
+  .tippy-tooltip.nav-theme
+  [x-arrow].arrow-big {
+  border: none;
+}
+
+/* left */
+.tippy-popper[x-placement^='left'] .tippy-tooltip.nav-theme [x-circle] {
+  background-color: transparent;
+}
+.tippy-popper[x-placement^='left'] .tippy-tooltip.nav-theme [x-arrow] {
+  border: none;
+}
+.tippy-popper[x-placement^='left']
+  .tippy-tooltip.nav-theme
+  [x-arrow].arrow-small {
+  border: none;
+}
+.tippy-popper[x-placement^='left']
+  .tippy-tooltip.nav-theme
+  [x-arrow].arrow-big {
+  border: none;
+}
+
+/* right */
+.tippy-popper[x-placement^='right'] .tippy-tooltip.nav-theme [x-circle] {
+  background-color: transparent;
+}
+.tippy-popper[x-placement^='right'] .tippy-tooltip.nav-theme [x-arrow] {
+  border: none;
+}
+.tippy-popper[x-placement^='right']
+  .tippy-tooltip.nav-theme
+  [x-arrow].arrow-small {
+  border: none;
+}
+.tippy-popper[x-placement^='right']
+  .tippy-tooltip.nav-theme
+  [x-arrow].arrow-big {
+  border: none;
+}
+
+.tippy-popper .tippy-tooltip.nav-theme {
+  box-shadow: 0 4px 20px 4px rgba(0, 20, 60, 0.1),
+    0 4px 80px -8px rgba(0, 20, 60, 0.2);
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}
+.tippy-popper .tippy-tooltip.nav-theme[data-animatefill] {
   background-color: transparent;
 }

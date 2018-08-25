@@ -4,6 +4,8 @@
  *
  */
 
+/* eslint-disable indent */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -15,6 +17,7 @@ import gql from 'graphql-tag';
 
 import { Box, ButtonTransparent } from 'rebass';
 import { Navbar, ImgSm } from 'style-store';
+import { Tooltip } from 'react-tippy';
 import MenuNavbar from 'components/MenuNavbar';
 import UserNavbar from 'containers/UserNavbar';
 import styled from 'styled-components';
@@ -22,6 +25,7 @@ import chatImg from 'images/chat.svg';
 import memoImg from 'images/memo.svg';
 import loginImg from 'images/login.svg';
 import menuImg from 'images/menu.svg';
+import 'tippy-custom.css';
 
 import { toggleChat, toggleMemo } from 'containers/Chat/actions';
 // import { selectPuzzleShowPageDomain } from 'containers/PuzzleShowPage/selectors';
@@ -68,16 +72,23 @@ function TopNavbar(props) {
     <div>
       <Navbar w={1}>
         <Box w={1 / 3} m="auto">
-          <NavbarBtn
-            onClick={() => toggle('menu')}
-            onMouseEnter={() => props.toggleSubNav('menu')}
-            color="gray3"
+          <Tooltip
+            interactive
+            useContext
+            theme="nav"
+            position="bottom"
+            open={props.topnavbar.subnav === 'menu'}
+            onShow={() => props.toggleSubNav('menu')}
+            onRequestClose={() => props.toggleSubNav(null)}
+            html={<MenuNavbar />}
           >
-            <ImgSm src={menuImg} alt="menu" />
-            <NavbarBtnMsg>
-              <FormattedMessage {...messages.menu} />
-            </NavbarBtnMsg>
-          </NavbarBtn>
+            <NavbarBtn color="gray3">
+              <ImgSm src={menuImg} alt="menu" />
+              <NavbarBtnMsg>
+                <FormattedMessage {...messages.menu} />
+              </NavbarBtnMsg>
+            </NavbarBtn>
+          </Tooltip>
         </Box>
         <Box w={1 / 3} m="auto">
           <NavbarBtn onClick={() => props.dispatch(toggleChat())} color="gray3">
@@ -102,26 +113,25 @@ function TopNavbar(props) {
             </Box>
           )}
         <Box w={1 / 3} m="auto">
-          <NavbarBtn
-            onClick={() => toggle('user')}
-            onMouseEnter={() => props.toggleSubNav('user')}
-            color="gray3"
+          <Tooltip
+            interactive
+            useContext
+            theme="nav"
+            position="bottom"
+            open={props.topnavbar.subnav === 'user'}
+            onShow={() => props.toggleSubNav('user')}
+            onRequestClose={() => props.toggleSubNav(null)}
+            html={<UserNavbar />}
           >
-            <ImgSm src={loginImg} alt="profile" />
-            <NavbarBtnMsg>
-              <FormattedMessage {...messages.profile} />
-            </NavbarBtnMsg>
-          </NavbarBtn>
+            <NavbarBtn color="gray3">
+              <ImgSm src={loginImg} alt="profile" />
+              <NavbarBtnMsg>
+                <FormattedMessage {...messages.profile} />
+              </NavbarBtnMsg>
+            </NavbarBtn>
+          </Tooltip>
         </Box>
       </Navbar>
-      <MenuNavbar
-        open={props.topnavbar.subnav === 'menu'}
-        onMouseLeave={() => props.toggleSubNav(null)}
-      />
-      <UserNavbar
-        open={props.topnavbar.subnav === 'user'}
-        onMouseLeave={() => props.toggleSubNav(null)}
-      />
     </div>
   );
 }

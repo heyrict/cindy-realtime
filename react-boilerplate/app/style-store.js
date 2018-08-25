@@ -55,7 +55,6 @@ export const SubNavbar = styled(Flex)`
   background-color: #d7c682;
   padding: 0 8px;
   z-index: 1029;
-  position: fixed;
 `;
 
 export const RouterLink = styled(Link)`

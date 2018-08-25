@@ -51,8 +51,8 @@ function MenuNavbar(props) {
   return (
     <SubNavbar
       w={1}
-      style={{ display: props.open ? 'block' : 'none' }}
-      onMouseLeave={props.onMouseLeave}
+      style={{ display: 'block' }}
+      onPointerLeave={props.onPointerLeave}
     >
       <RouterLink to={withLocale('/')} tabIndex="0">
         <NavLink is="span">
@@ -121,9 +121,8 @@ function MenuNavbar(props) {
 
 MenuNavbar.propTypes = {
   dispatch: PropTypes.func,
-  open: PropTypes.bool,
   locale: PropTypes.string,
-  onMouseLeave: PropTypes.func,
+  onPointerLeave: PropTypes.func,
 };
 
 const mapStateToProps = createSelector(makeSelectLocale(), (locale) => ({
