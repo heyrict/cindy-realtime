@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-19 13:37+0900\n"
+"POT-Creation-Date: 2018-08-26 11:40+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: cindy/settings.py:146
+#: cindy/settings.py:153
 msgid "Japanese"
 msgstr "Japonais"
 
@@ -54,11 +54,11 @@ msgstr ""
 
 #: sui_hei/models.py:68 sui_hei/models.py:121 sui_hei/models.py:147
 #: sui_hei/models.py:189 sui_hei/models.py:204 sui_hei/models.py:219
-#: sui_hei/models.py:236 sui_hei/models.py:250 sui_hei/models.py:305
+#: sui_hei/models.py:236 sui_hei/models.py:251 sui_hei/models.py:306
 msgid "created"
 msgstr "Heure créé"
 
-#: sui_hei/models.py:69 sui_hei/models.py:306
+#: sui_hei/models.py:69 sui_hei/models.py:307
 #, fuzzy
 #| msgid "Preview"
 msgid "reviewed"
@@ -125,7 +125,7 @@ msgid "genre"
 msgstr "Genre"
 
 #: sui_hei/models.py:143 sui_hei/models.py:203 sui_hei/models.py:217
-#: sui_hei/models.py:235 sui_hei/models.py:268 sui_hei/models.py:304
+#: sui_hei/models.py:235 sui_hei/models.py:269 sui_hei/models.py:305
 msgid "content"
 msgstr "Contenu"
 
@@ -269,33 +269,37 @@ msgstr "Chaîne"
 msgid "description"
 msgstr "Qustion"
 
-#: sui_hei/models.py:253
+#: sui_hei/models.py:250
+msgid "private"
+msgstr ""
+
+#: sui_hei/models.py:254
 msgid "ChatRoom"
 msgstr ""
 
-#: sui_hei/models.py:269
+#: sui_hei/models.py:270
 msgid "spoiler"
 msgstr ""
 
-#: sui_hei/models.py:272
+#: sui_hei/models.py:273
 #, fuzzy
 #| msgid "Comments"
 msgid "Comment"
 msgstr "Commentaires"
 
-#: sui_hei/models.py:281 sui_hei/models.py:293
+#: sui_hei/models.py:282 sui_hei/models.py:294
 msgid "Value"
 msgstr ""
 
-#: sui_hei/models.py:284
+#: sui_hei/models.py:285
 msgid "Bookmark"
 msgstr ""
 
-#: sui_hei/models.py:296
+#: sui_hei/models.py:297
 msgid "Star"
 msgstr "Etoile"
 
-#: sui_hei/models.py:309
+#: sui_hei/models.py:310
 msgid "Schedule"
 msgstr ""
 
@@ -304,9 +308,9 @@ msgstr ""
 #: sui_hei/schema.py:840 sui_hei/schema.py:865 sui_hei/schema.py:888
 #: sui_hei/schema.py:925 sui_hei/schema.py:955 sui_hei/schema.py:992
 #: sui_hei/schema.py:1024 sui_hei/schema.py:1067 sui_hei/schema.py:1093
-#: sui_hei/schema.py:1120 sui_hei/schema.py:1148 sui_hei/schema.py:1176
-#: sui_hei/schema.py:1204 sui_hei/schema.py:1229 sui_hei/schema.py:1258
-#: sui_hei/schema.py:1325 sui_hei/schema.py:1348 sui_hei/schema.py:1366
+#: sui_hei/schema.py:1120 sui_hei/schema.py:1149 sui_hei/schema.py:1181
+#: sui_hei/schema.py:1209 sui_hei/schema.py:1234 sui_hei/schema.py:1263
+#: sui_hei/schema.py:1330 sui_hei/schema.py:1353 sui_hei/schema.py:1371
 #, fuzzy
 #| msgid "Last login"
 msgid "Please login!"
@@ -328,7 +332,7 @@ msgstr ""
 msgid "Question content cannot be empty!"
 msgstr ""
 
-#: sui_hei/schema.py:733 sui_hei/schema.py:1182
+#: sui_hei/schema.py:733 sui_hei/schema.py:1187
 msgid "Hint content cannot be empty!"
 msgstr ""
 
@@ -365,69 +369,69 @@ msgstr ""
 msgid "You can set up to 3 schedules at the same time!"
 msgstr ""
 
-#: sui_hei/schema.py:1128 sui_hei/schema.py:1332
+#: sui_hei/schema.py:1128 sui_hei/schema.py:1337
 msgid "You are not the creator of this bookmark"
 msgstr ""
 
-#: sui_hei/schema.py:1156
+#: sui_hei/schema.py:1158
 msgid "You are not the creator of this chatroom"
 msgstr ""
 
-#: sui_hei/schema.py:1187
+#: sui_hei/schema.py:1192
 msgid "You are not the creator of this hint"
 msgstr ""
 
-#: sui_hei/schema.py:1213
+#: sui_hei/schema.py:1218
 msgid "You are not the owner of this award"
 msgstr ""
 
-#: sui_hei/schema.py:1288
+#: sui_hei/schema.py:1293
 msgid "You are not authenticated to do this!"
 msgstr ""
 
-#: sui_hei/schema.py:1301
+#: sui_hei/schema.py:1306
 msgid "Only staff members can review self-applied award applications"
 msgstr ""
 
-#: sui_hei/schema.py:1374
+#: sui_hei/schema.py:1379
 msgid "You are not the creator of this schedule"
 msgstr ""
 
-#: sui_hei/schema.py:1396
+#: sui_hei/schema.py:1401
 msgid "Login incorrect!"
 msgstr ""
 
-#: sui_hei/schema.py:1431
+#: sui_hei/schema.py:1436
 msgid ""
 "Characters other than letters,digits and @/./+/-/_ are not allowed in "
 "username"
 msgstr ""
 
-#: sui_hei/schema.py:1435
+#: sui_hei/schema.py:1440
 msgid "Your username is too short (less than 4 characters)"
 msgstr ""
 
-#: sui_hei/schema.py:1438
+#: sui_hei/schema.py:1443
 msgid "Your username is too long (more than 150 characters)"
 msgstr ""
 
-#: sui_hei/schema.py:1440
+#: sui_hei/schema.py:1445
 msgid "Username cannot be blank!"
 msgstr ""
 
-#: sui_hei/schema.py:1443
+#: sui_hei/schema.py:1448
 msgid "Your nickname is too long (more than 64 characters)"
 msgstr ""
 
-#: sui_hei/schema.py:1447
+#: sui_hei/schema.py:1452
 msgid "Password should have both letters and digits"
 msgstr ""
 
-#: sui_hei/schema.py:1450
+#: sui_hei/schema.py:1455
 msgid "Your password is too short (less than 8 characters)"
 msgstr ""
 
-#: sui_hei/schema.py:1453
+#: sui_hei/schema.py:1458
 msgid "Your password is too long (more than 32 characters)"
 msgstr ""
 
@@ -444,6 +448,22 @@ msgstr ""
 
 #: sui_hei/templates/base_index.html:13
 msgid "Play situation puzzles realtime!"
+msgstr ""
+
+#: sui_hei/templates/base_index.html:51
+msgid "Cindy is Loading..."
+msgstr ""
+
+#: sui_hei/templates/base_index.html:52
+msgid "If cindy does not load, check your browser version."
+msgstr ""
+
+#: sui_hei/templates/base_index.html:53
+msgid "IE and some old browsers are not currently supported in Cindy."
+msgstr ""
+
+#: sui_hei/templates/base_index.html:54
+msgid "Latest version of Chrome, Firefox and Safari are always under support."
 msgstr ""
 
 #~ msgid "English"

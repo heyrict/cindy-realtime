@@ -30,6 +30,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/icon-180x180.png">
 
     <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="{% static 'css/loading-indicator.css' %}" />
 
     {% block extraHead %}
     {% endblock extraHead %}
@@ -39,7 +40,21 @@
     <noscript>If you're seeing this message, that means <strong>JavaScript has been disabled on your browser</strong>, please <strong>enable JS</strong> to make this app work.</noscript>
 
     <!-- The app hooks into this div -->
-    <div id="app"></div>
+    <div id="app">
+    <div class="ipl-progress-indicator" id="ipl-progress-indicator">
+      <div class="ipl-progress-indicator-head">
+        <div class="first-indicator"></div>
+        <div class="second-indicator"></div>
+      </div>
+      <div class="insp-logo-frame">
+        <img alt="cindylogo" src="{% static 'pictures/cindylogo.svg' %}" />
+        <div class="insp-logo-frame-msg" style="font-size:1.2em;font-weight:bold;">{% trans 'Cindy is Loading...' %}</div>
+        <div class="insp-logo-frame-msg">{% trans 'If cindy does not load, check your browser version.' %}</div>
+        <div class="insp-logo-frame-msg">{% trans 'IE and some old browsers are not currently supported in Cindy.' %}</div>
+        <div class="insp-logo-frame-msg">{% trans 'Latest version of Chrome, Firefox and Safari are always under support.' %}</div>
+      </div>
+</div>
+    </div>
 
     <!-- A lot of magic happens in this file. HtmlWebpackPlugin automatically includes all assets (e.g. bundle.js, main.css) with the correct HTML tags, which is why they are missing in this HTML file. Don't add any assets here! (Check out webpackconfig.js if you want to know more) -->
     {% block bundle %}
