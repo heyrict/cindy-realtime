@@ -128,9 +128,16 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    os.path.join(BASE_DIR, "react-boilerplate/build"),
     os.path.join(BASE_DIR, "sui_hei/static"),
 ]
+if os.environ.get('DJANGO_BUILD_ENV') == 'PRODPUSH':
+    STATICFILES_DIRS += [
+        os.path.join(BASE_DIR, "react-boilerplate/pushbundle"),
+    ]
+else:
+    STATICFILES_DIRS += [
+        os.path.join(BASE_DIR, "react-boilerplate/build"),
+    ]
 STATIC_ROOT = os.path.join(BASE_DIR, "collected_static")
 
 # Don't append `_id` to foreign keys
