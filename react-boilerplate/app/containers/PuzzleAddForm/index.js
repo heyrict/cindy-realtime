@@ -237,18 +237,14 @@ export class PuzzleAddForm extends React.Component {
             />
           }
         />
-        <FieldGroup
-          CtlElement={
-            <FormattedMessage {...messages.previewEditUsage}>
-              {(msg) => (
-                <span
-                  style={{ overflowY: 'auto' }}
-                  dangerouslySetInnerHTML={{ __html: text2md(msg) }}
-                />
-              )}
-            </FormattedMessage>
-          }
-        />
+        <FormattedMessage {...messages.previewEditUsage}>
+          {(msg) => (
+            <div
+              style={{ overflowX: 'auto', marginLeft: '5em' }}
+              dangerouslySetInnerHTML={{ __html: text2md(msg) }}
+            />
+          )}
+        </FormattedMessage>
         {!this.state.loading && (
           <ButtonOutline
             w={1}

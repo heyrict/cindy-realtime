@@ -1,6 +1,7 @@
 import React from 'react';
 import posed from 'react-pose';
 import PropTypes from 'prop-types';
+import Portal from 'components/Portal';
 
 const shaderProps = {
   show: {
@@ -44,32 +45,34 @@ class Modal extends React.PureComponent {
   }
   render() {
     return (
-      <div style={{ display: 'inline-block' }}>
-        <Shader
-          className="modal-shade"
-          pose={this.props.show ? 'show' : 'hide'}
-          style={{ display: this.state.display ? 'flex' : 'none' }}
-          onPoseComplete={this.handlePoseComplete}
-        />
-        <div
-          className="modal-container"
-          style={{
-            display: this.state.display ? 'flex' : 'none',
-            overflowY: 'auto',
-            padding: '80px 0',
-          }}
-        >
-          <Container
-            className="modal"
+      <Portal>
+        <div style={{ display: 'inline-block' }}>
+          <Shader
+            className="modal-shade"
             pose={this.props.show ? 'show' : 'hide'}
+            style={{ display: this.state.display ? 'flex' : 'none' }}
+            onPoseComplete={this.handlePoseComplete}
+          />
+          <div
+            className="modal-container"
             style={{
+              display: this.state.display ? 'flex' : 'none',
               overflowY: 'auto',
+              padding: '80px 0',
             }}
           >
-            {this.props.children}
-          </Container>
+            <Container
+              className="modal"
+              pose={this.props.show ? 'show' : 'hide'}
+              style={{
+                overflowY: 'auto',
+              }}
+            >
+              {this.props.children}
+            </Container>
+          </div>
         </div>
-      </div>
+      </Portal>
     );
   }
 }
