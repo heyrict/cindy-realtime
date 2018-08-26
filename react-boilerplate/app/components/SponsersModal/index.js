@@ -45,7 +45,7 @@ function Sponsers() {
         <tr>
           <td width="245">
             <a
-              href="http://heyrict.pythonanywhere.com/"
+              href="https://www.cindythink.com/"
               target="_blank"
               title="はやてさん設置の後継サイト(ここ)"
             >
@@ -87,11 +87,12 @@ function Sponsers() {
         <tr>
           <td width="245">
             <a
-              href="https://discordapp.com/invite/6bETyMQ"
+              href="http://chat.kanichat.com/chat?roomid=Cindychat"
               target="_blank"
-              title="ボイスチャットも可能なチャットツール"
+              title="Cindy公式チャット(現在も稼働中)"
+              style={{ fontWeight: 'bold' }}
             >
-              DISCORD
+              Cindy公式
             </a>
           </td>
           <td width="245">
@@ -105,6 +106,17 @@ function Sponsers() {
           </td>
           <td width="245">
             <a
+              href="http://chat.kanichat.com/chat?roomid=latethin"
+              target="_blank"
+              title="出題用チャット(テスト等に)"
+            >
+              出題用
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td width="245">
+            <a
               href="http://chat.kanichat.com/chat?roomid=NewComer"
               target="_blank"
               title="新人向け旧公式チャット"
@@ -112,8 +124,6 @@ function Sponsers() {
               ぱ～ら～
             </a>
           </td>
-        </tr>
-        <tr>
           <td width="245">
             <a
               href="http://chat.kanichat.com/chat?roomid=SandaiBanashi"
@@ -132,13 +142,15 @@ function Sponsers() {
               TRPG
             </a>
           </td>
+        </tr>
+        <tr>
           <td width="245">
             <a
-              href="http://chat.kanichat.com/chat?roomid=latethin"
+              href="https://discordapp.com/invite/6bETyMQ"
               target="_blank"
-              title="出題用チャット(テスト等に)"
+              title="ボイスチャットも可能なチャットツール"
             >
-              出題用
+              DISCORD
             </a>
           </td>
         </tr>
