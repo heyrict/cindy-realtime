@@ -60,14 +60,6 @@ const NavbarBtnMsg = styled.span`
 `;
 
 function TopNavbar(props) {
-  function toggle(navName, set = false) {
-    if (set === false) {
-      props.toggleSubNav(props.topnavbar.subnav === navName ? null : navName);
-      return;
-    }
-    props.toggleSubNav(navName);
-  }
-
   return (
     <div>
       <Navbar w={1}>
@@ -80,7 +72,9 @@ function TopNavbar(props) {
             open={props.topnavbar.subnav === 'menu'}
             onShow={() => props.toggleSubNav('menu')}
             onRequestClose={() => props.toggleSubNav(null)}
-            html={<MenuNavbar />}
+            html={
+              <MenuNavbar onPointerLeave={() => props.toggleSubNav(null)} />
+            }
           >
             <NavbarBtn color="gray3">
               <ImgSm src={menuImg} alt="menu" />
@@ -121,7 +115,9 @@ function TopNavbar(props) {
             open={props.topnavbar.subnav === 'user'}
             onShow={() => props.toggleSubNav('user')}
             onRequestClose={() => props.toggleSubNav(null)}
-            html={<UserNavbar />}
+            html={
+              <UserNavbar onPointerLeave={() => props.toggleSubNav(null)} />
+            }
           >
             <NavbarBtn color="gray3">
               <ImgSm src={loginImg} alt="profile" />
