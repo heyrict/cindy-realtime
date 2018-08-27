@@ -41,8 +41,8 @@ export function withNumberPaginator({ useQuery = true }) {
       }
 
       withNumberPaginatorWrapper.propTypes = {
-        defaultPage: PropTypes.number.isRequired,
-        itemsPerPage: PropTypes.number.isRequired,
+        defaultPage: PropTypes.number,
+        itemsPerPage: PropTypes.number,
       };
 
       withNumberPaginatorWrapper.defaultProps = {
@@ -74,8 +74,8 @@ export function withNumberPaginator({ useQuery = true }) {
     };
 
     withNumberPaginatorWrapper.propTypes = {
-      defaultPage: PropTypes.number.isRequired,
-      itemsPerPage: PropTypes.number.isRequired,
+      defaultPage: PropTypes.number,
+      itemsPerPage: PropTypes.number,
       goto: PropTypes.func.isRequired,
       page: PropTypes.string,
     };

@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { from_global_id as f, to_global_id as t } from 'common';
+import { createSelector, createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
 import { Button, ButtonOutline } from 'style-store';
@@ -20,6 +21,7 @@ import CreateChatmessageMutation from 'graphql/CreateChatmessageMutation';
 import ChatMessageSubscription from 'graphql/ChatMessageSubscription';
 
 import LoadingDots from 'components/LoadingDots';
+import { selectSettingsDomain } from 'containers/Settings/selectors';
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import DescriptionPanel from './DescriptionPanel';
@@ -42,12 +44,18 @@ const DescriptionBtn = Button.extend`
   height: ${(props) => props.height}px;
   border-radius: 0;
   padding: 0;
+  font-size: 0.95em;
+  background: rgb(160, 82, 45) /* sienna */;
+  &:hover {
+    background: rgb(140, 62, 25);
+  }
 `;
 
 const ShowlogBtn = ButtonOutline.extend`
   overflow-y: auto;
   height: ${(props) => props.height}px;
   border-radius: 0;
+  font-size: 0.95em;
   padding: 0;
 `;
 
@@ -71,9 +79,21 @@ class ChatRoom extends React.Component {
     this.state = {
       loading: false,
       taHeight: 36,
-      show: false,
       chatLogModalShown: false,
     };
+
+    switch (props.displayChatroomDescription) {
+      case 'True':
+        this.state.show = true;
+        break;
+      case 'False':
+        this.state.show = false;
+        break;
+      default:
+        this.state.show =
+          (window.innerHeight || document.documentElement.clientHeight) > 500;
+    }
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.toggleChatLogModalShow = (show) =>
       this.setState({ chatLogModalShown: show });
@@ -230,7 +250,6 @@ class ChatRoom extends React.Component {
         <DescriptionBtn
           height={20}
           w={2 / 3}
-          bg="sienna"
           onClick={() => this.handleToggleShow(chatroomName)}
         >
           {chatroomName}
@@ -383,16 +402,23 @@ ChatRoom.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   pathname: PropTypes.string.isRequired,
   alert: PropTypes.func.isRequired,
+  displayChatroomDescription: PropTypes.string.isRequired,
   tune: PropTypes.func.isRequired,
   hidden: PropTypes.bool,
 };
+
+const mapStateToProps = createStructuredSelector({
+  displayChatroomDescription: createSelector(selectSettingsDomain, (settings) =>
+    settings.get('displayChatroomDescription'),
+  ),
+});
 
 const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
 const withConnect = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 );
 

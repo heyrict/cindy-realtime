@@ -478,6 +478,14 @@ class StarConnection(graphene.Connection):
         node = StarNode
 
 
+# {{{2 ChatRoomConnection
+class ChatRoomConnection(graphene.Connection):
+    total_count = graphene.Int()
+
+    class Meta:
+        node = ChatRoomNode
+
+
 # {{{1 CustomConnections
 # {{{2 TruncDate Connection
 class TruncDateConnection(graphene.Connection):
@@ -1138,8 +1146,9 @@ class UpdateChatRoom(graphene.ClientIDMutation):
     chatroom = graphene.Field(ChatRoomNode)
 
     class Input:
-        chatroomId = graphene.Int()
+        chatroomId = graphene.Int(required=True)
         description = graphene.String()
+        private = graphene.Boolean()
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -1147,15 +1156,19 @@ class UpdateChatRoom(graphene.ClientIDMutation):
         if (not user.is_authenticated):
             raise ValidationError(_("Please login!"))
 
-        description = input["description"]
+        description = input.get("description")
+        private = input.get("private")
         chatroomId = input["chatroomId"]
         chatroom = ChatRoom.objects.get(id=chatroomId)
 
-        if (chatroom.user.id != user.id):
+        if chatroom.user.id != user.id:
             raise ValidationError(
                 _("You are not the creator of this chatroom"))
 
-        chatroom.description = description
+        if description is not None:
+            chatroom.description = description
+        if private is not None:
+            chatroom.private = private
         chatroom.save()
 
         return UpdateChatRoom(chatroom=chatroom)
@@ -1520,6 +1533,13 @@ class Query(object):
         puzzle=graphene.ID(),
         limit=graphene.Int(),
         offset=graphene.Int())
+    all_chatrooms_lo = graphene.ConnectionField(
+        ChatRoomConnection,
+        orderBy=graphene.List(of_type=graphene.String),
+        user=graphene.ID(),
+        private=graphene.Boolean(),
+        limit=graphene.Int(),
+        offset=graphene.Int())
 
     # {{{2 custom connections
     trunc_date_groups = graphene.ConnectionField(
@@ -1639,6 +1659,28 @@ class Query(object):
             return qs.filter(chatroom=chatroom)
         return qs
 
+    def resolve_all_chatrooms_lo(self, info, **kwargs):
+        orderBy = kwargs.get("orderBy", None)
+        limit = kwargs.get("limit", None)
+        offset = kwargs.get("offset", None)
+        qs = resolveOrderBy(ChatRoom.objects, orderBy)
+        qs = resolveFilter(
+            qs,
+            kwargs,
+            filters=['private'],
+            filter_fields={
+                "user": User,
+                "puzzle": Puzzle
+            })
+        total_count = qs.count()
+        qs = resolveLimitOffset(qs, limit, offset)
+        qs = list(qs)
+        return ChatRoomConnection(
+            total_count=total_count,
+            edges=[
+                ChatRoomConnection.Edge(node=qs[i], ) for i in range(len(qs))
+            ])
+
     def resolve_all_directmessages(self, info, **kwargs):
         userId = kwargs.get("userId", None)
         if userId:
@@ -1660,12 +1702,8 @@ class Query(object):
         qs = Star.objects.all()
         qs = resolveOrderBy(qs, orderBy)
         qs = resolveFilter(
-            qs,
-            kwargs,
-            filters=[],
-            filter_fields={
+            qs, kwargs, filters=[], filter_fields={
                 "user": User,
-                "puzzle": Puzzle
             })
         total_count = qs.count()
         qs = resolveLimitOffset(qs, limit, offset)
@@ -1720,8 +1758,6 @@ class Query(object):
     def resolve_trunc_date_groups(self, info, **kwargs):
         className = kwargs['className']
         by = kwargs.get('by', 'month')
-        created__gte = kwargs.get('start')
-        created__lte = kwargs.get('end')
         cls = getattr(sui_hei.models, className)
 
         assert by in ['date', 'month', 'year']

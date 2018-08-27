@@ -6,6 +6,7 @@ const ChatRoom = gql`
     id
     name
     description
+    private
     created
     user {
       ...UserLabel_user

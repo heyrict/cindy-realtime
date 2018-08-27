@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { FormattedMessage } from 'react-intl';
 import ProfRow from 'containers/ProfilePage/ProfRow';
-import BtnSwitch from './BtnSwitch';
+import ButtonSelect from 'components/ButtonSelect';
 import { OPTIONS_SEND } from './constants';
 import messages from './messages';
 
@@ -15,10 +15,10 @@ const SendPolicySwitch = (props) => {
         name in messages ? <FormattedMessage {...messages[name]} /> : name
       }
       content={
-        <BtnSwitch
-          selected={curVal}
+        <ButtonSelect
+          value={curVal}
           options={Object.entries(OPTIONS_SEND).map((entry) => ({
-            id: entry[1],
+            value: entry[1],
             label:
               entry[0] in messages ? (
                 <FormattedMessage {...messages[entry[0]]} />

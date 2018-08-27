@@ -179,10 +179,10 @@
 .tippy-popper .tippy-tooltip.nav-theme {
   box-shadow: 0 4px 20px 4px rgba(0, 20, 60, 0.1),
     0 4px 80px -8px rgba(0, 20, 60, 0.2);
-  background-color: transparent;
+  background-color: #d7c682;
   color: inherit;
-  padding: 0;
+  padding: 1em 0;
 }
 .tippy-popper .tippy-tooltip.nav-theme[data-animatefill] {
-  background-color: transparent;
+  background-color: #d7c682;
 }

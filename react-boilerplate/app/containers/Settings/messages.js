@@ -38,6 +38,10 @@ export default defineMessages({
     id: 'app.containers.Settings.save',
     defaultMessage: 'Save',
   },
+  auto: {
+    id: 'app.containers.Settings.auto',
+    defaultMessage: 'Auto',
+  },
   msgSendPolicy: {
     id: 'app.containers.Settings.msgSendPolicy',
     defaultMessage: 'Message Send Policy',
@@ -49,6 +53,10 @@ export default defineMessages({
   enableGenreIcon: {
     id: 'app.containers.Settings.enableGenreIcon',
     defaultMessage: 'Enable Genre Icon',
+  },
+  displayChatroomDescription: {
+    id: 'app.containers.Settings.displayChatroomDescription',
+    defaultMessage: 'Display ChatRoom Description',
   },
   others: {
     id: 'app.containers.Settings.others',

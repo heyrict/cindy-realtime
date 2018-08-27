@@ -23,7 +23,7 @@ import {
 const initialState = fromJS({
   // Sidebar State Stuff
   open:
-    (window.innerWidth || document.documentElement.clientHeight) < 576
+    (window.innerWidth || document.documentElement.clientWidth) < 576
       ? null
       : 'chat',
   activeTab: 'TAB_CHAT',
@@ -58,11 +58,11 @@ function chatReducer(state = initialState, action) {
       return state.setIn(['dmReceiver'], action.chat);
     case ADD_FAVCHAN:
       return state.updateIn(['favChannels'], (prev) =>
-        prev.concat([action.chatroomName])
+        prev.concat([action.chatroomName]),
       );
     case REMOVE_FAVCHAN:
       return state.updateIn(['favChannels'], (prev) =>
-        prev.map((cn) => (cn === action.chatroomName ? null : cn))
+        prev.map((cn) => (cn === action.chatroomName ? null : cn)),
       );
     case SET_CURRENT_USER:
       if (!action.currentUser.favoritechatroomSet) {
@@ -71,8 +71,8 @@ function chatReducer(state = initialState, action) {
       return state.setIn(
         ['favChannels'],
         action.currentUser.favoritechatroomSet.edges.map(
-          (e) => e.node.chatroom.name
-        )
+          (e) => e.node.chatroom.name,
+        ),
       );
     case SET_DM_RECEIVER:
       return state.setIn(['dmReceiver'], action.payload);

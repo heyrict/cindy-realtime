@@ -11,6 +11,6 @@
   </rdf:RDF>
  </metadata>
  <g id="layer1" transform="translate(-321.8 -389.26)">
-  <path id="path4136" d="m342.32 390.76 5.8778 11.91 13.143 1.9098-9.5106 9.2705 2.2451 13.09-11.756-6.1803-11.756 6.1803 2.2451-13.09-9.5106-9.2705 13.143-1.9098z" fill="#ffdc00" fill-opacity=".97647" opacity=".99" stroke="#ffc101" stroke-linejoin="round" stroke-opacity=".98102" stroke-width="3"/>
+  <path id="path4136" d="m342.32 390.76 5.8778 11.91 13.143 1.9098-9.5106 9.2705 2.2451 13.09-11.756-6.1803-11.756 6.1803 2.2451-13.09-9.5106-9.2705 13.143-1.9098z" fill="none" opacity=".99" stroke="#ffc101" stroke-linejoin="round" stroke-opacity=".98102" stroke-width="3"/>
  </g>
 </svg>

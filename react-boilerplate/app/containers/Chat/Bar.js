@@ -14,13 +14,13 @@ function Bar(props) {
   const { open, children, ...others } = props;
   return (
     <StyledBar
-      {...others}
       color="brown"
       border="2px solid brown"
       borderRadius={0}
       my={1}
       w={1}
       p={1}
+      {...others}
     >
       <Flex w={1} mx={1}>
         <Box>{children}</Box>

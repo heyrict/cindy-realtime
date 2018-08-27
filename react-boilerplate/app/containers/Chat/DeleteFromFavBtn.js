@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { nAlert } from 'containers/Notifier/actions';
+import { ImgXs } from 'style-store';
+import star from 'images/star.svg';
 
 import { graphql } from 'react-apollo';
 import deleteFavoriteChatRoomMutation from 'graphql/DeleteFavoriteChatRoomMutation';
@@ -31,7 +33,7 @@ function DeleteFromFavBtn(props) {
           variables: { userId },
         });
         const index = data.allFavoriteChatrooms.edges.findIndex(
-          (edge) => edge.node.chatroom.name === chatroomName
+          (edge) => edge.node.chatroom.name === chatroomName,
         );
         if (index > -1) {
           data.allFavoriteChatrooms.edges.splice(index, 1);
@@ -53,7 +55,7 @@ function DeleteFromFavBtn(props) {
 
   return (
     <FavBtn onClick={handleSubmit}>
-      ★
+      <ImgXs alt="star" src={star} />
     </FavBtn>
   );
 }
@@ -71,8 +73,14 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 const withMutation = graphql(deleteFavoriteChatRoomMutation);
 
-export default compose(withMutation, withConnect)(DeleteFromFavBtn);
+export default compose(
+  withMutation,
+  withConnect,
+)(DeleteFromFavBtn);

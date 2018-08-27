@@ -21,5 +21,7 @@ export const defaultSettings = {
   modifyQuestion: 'NONE',
   // Genre Icon Options
   enableGenreIcon: true,
+  displayChatroomDescription: 'Auto',
+  // Other Options
   canFilterMultipleUser: false,
 };

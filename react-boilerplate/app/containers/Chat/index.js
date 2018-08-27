@@ -4,6 +4,8 @@
  *
  */
 
+/* eslint-disable indent */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -24,6 +26,7 @@ import { makeSelectLocation } from 'containers/App/selectors';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
 import makeSelectSettings from 'containers/Settings/selectors';
 import ChatRoom from './ChatRoom';
+import PublicChatRooms from './PublicChatRooms';
 import Channels from './Channels';
 import DirectChat from './DirectChat';
 import Broadcast from './Broadcast';
@@ -34,7 +37,13 @@ import messages from './messages';
 import { changeChannel, changeTab } from './actions';
 import { defaultChannel, TABS } from './constants';
 
-const { TAB_CHAT, TAB_CHANNEL, TAB_DIRECTCHAT, TAB_BROADCAST } = TABS;
+const {
+  TAB_CHAT,
+  TAB_CHANNEL,
+  TAB_DIRECTCHAT,
+  TAB_BROADCAST,
+  TAB_CHATROOMLIST,
+} = TABS;
 
 const StyledToolbar = styled(Toolbar)`
   background-color: sienna;
@@ -115,6 +124,9 @@ export function Chat(props) {
       )}
       {props.chat.activeTab === TAB_BROADCAST && (
         <Broadcast height={props.height - 50} />
+      )}
+      {props.chat.activeTab === TAB_CHATROOMLIST && (
+        <PublicChatRooms tune={tune} />
       )}
     </div>
   );

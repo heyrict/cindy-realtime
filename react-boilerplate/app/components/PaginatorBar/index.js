@@ -4,6 +4,8 @@
  *
  */
 
+/* eslint-disable jsx-a11y/anchor-is-valid */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -87,7 +89,7 @@ class PaginatorBar extends React.Component {
       let nextPage;
       if (p === undefined) {
         nextPage = parseInt(this.state.value, 10);
-        if (isNaN(nextPage)) {
+        if (Number.isNaN(nextPage)) {
           this.setState({ value: this.props.currentPage });
           return;
         }
@@ -188,7 +190,7 @@ const withConnect = connect(mapStateToProps);
 PaginatorBar.propTypes = {
   changePage: PropTypes.func.isRequired,
   currentPage: PropTypes.number.isRequired,
-  numPages: PropTypes.number.isRequired,
+  numPages: PropTypes.number,
   location: PropTypes.shape({
     search: PropTypes.string.isRequired,
   }),

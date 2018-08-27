@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { nAlert } from 'containers/Notifier/actions';
+import { ImgXs } from 'style-store';
+import starBlank from 'images/star-blank.svg';
+
 import { graphql } from 'react-apollo';
 import createFavoriteChatRoomMutation from 'graphql/CreateFavoriteChatRoomMutation';
 import FavoriteChatRoomQuery from 'graphql/FavoriteChatRoomQuery';
@@ -25,7 +28,14 @@ function AddToFavBtn(props) {
             chatroomName,
           },
         },
-        update(proxy, { data: { createFavoriteChatroom: { favchatroom } } }) {
+        update(
+          proxy,
+          {
+            data: {
+              createFavoriteChatroom: { favchatroom },
+            },
+          },
+        ) {
           const data = proxy.readQuery({
             query: FavoriteChatRoomQuery,
             variables: { userId },
@@ -52,7 +62,11 @@ function AddToFavBtn(props) {
       });
   };
 
-  return <FavBtn onClick={handleSubmit}>☆</FavBtn>;
+  return (
+    <FavBtn onClick={handleSubmit}>
+      <ImgXs alt="star-blk" src={starBlank} />
+    </FavBtn>
+  );
 }
 
 AddToFavBtn.propTypes = {
@@ -68,8 +82,14 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 const withMutation = graphql(createFavoriteChatRoomMutation);
 
-export default compose(withMutation, withConnect)(AddToFavBtn);
+export default compose(
+  withMutation,
+  withConnect,
+)(AddToFavBtn);

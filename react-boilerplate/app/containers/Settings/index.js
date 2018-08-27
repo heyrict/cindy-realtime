@@ -16,6 +16,7 @@ import { Switch, Button } from 'style-store';
 import withModal from 'components/withModal';
 import Bar from 'containers/Chat/Bar';
 import ProfRow from 'containers/ProfilePage/ProfRow';
+import ButtonSelect from 'components/ButtonSelect';
 
 import SendPolicySwitch from './SendPolicySwitch';
 import makeSelectSettings from './selectors';
@@ -49,22 +50,24 @@ function Settings(props) {
       <SendPolicySwitch
         name="sendChat"
         curVal={settings.sendChat}
-        onChange={({ id }) => dispatch(changeSetting('sendChat', id))}
+        onChange={({ value }) => dispatch(changeSetting('sendChat', value))}
       />
       <SendPolicySwitch
         name="sendQuestion"
         curVal={settings.sendQuestion}
-        onChange={({ id }) => dispatch(changeSetting('sendQuestion', id))}
+        onChange={({ value }) => dispatch(changeSetting('sendQuestion', value))}
       />
       <SendPolicySwitch
         name="sendAnswer"
         curVal={settings.sendAnswer}
-        onChange={({ id }) => dispatch(changeSetting('sendAnswer', id))}
+        onChange={({ value }) => dispatch(changeSetting('sendAnswer', value))}
       />
       <SendPolicySwitch
         name="modifyQuestion"
         curVal={settings.modifyQuestion}
-        onChange={({ id }) => dispatch(changeSetting('modifyQuestion', id))}
+        onChange={({ value }) =>
+          dispatch(changeSetting('modifyQuestion', value))
+        }
       />
       <Bar open>
         <FormattedMessage {...messages.display} />
@@ -76,7 +79,7 @@ function Settings(props) {
             checked={settings.enableGenreIcon}
             onClick={() =>
               dispatch(
-                changeSetting('enableGenreIcon', !settings.enableGenreIcon)
+                changeSetting('enableGenreIcon', !settings.enableGenreIcon),
               )
             }
           />
@@ -94,9 +97,25 @@ function Settings(props) {
               dispatch(
                 changeSetting(
                   'canFilterMultipleUser',
-                  !settings.canFilterMultipleUser
-                )
+                  !settings.canFilterMultipleUser,
+                ),
               )
+            }
+          />
+        }
+      />
+      <ProfRow
+        heading={<FormattedMessage {...messages.displayChatroomDescription} />}
+        content={
+          <ButtonSelect
+            value={settings.displayChatroomDescription}
+            options={[
+              { value: 'Auto', label: <FormattedMessage {...messages.auto} /> },
+              { value: 'True', label: '○' },
+              { value: 'False', label: '×' },
+            ]}
+            onChange={({ value }) =>
+              dispatch(changeSetting('displayChatroomDescription', value))
             }
           />
         }
@@ -132,12 +151,12 @@ const mapDispatchToProps = (dispatch) => ({
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 export default compose(
   withConnect,
   withModal({
     header: 'Settings',
-  })
+  }),
 )(Settings);

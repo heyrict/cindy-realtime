@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
 export function ButtonSelect(props) {
-  const { onChange } = props;
+  const { onChange, buttonProps } = props;
   return (
     <Flex flexWrap="wrap">
       {props.options.map(
@@ -21,6 +21,7 @@ export function ButtonSelect(props) {
               key={option.value}
               p={1}
               mx={1}
+              {...buttonProps}
               onClick={() => onChange(option)}
             >
               {option.label || option.value}
@@ -30,6 +31,7 @@ export function ButtonSelect(props) {
               key={option.value}
               p={1}
               mx={1}
+              {...buttonProps}
               onClick={() => onChange(option)}
             >
               {option.label || option.value}
@@ -49,6 +51,11 @@ ButtonSelect.propTypes = {
       label: PropTypes.any,
     }),
   ),
+  buttonProps: PropTypes.object,
+};
+
+ButtonSelect.defaultProps = {
+  buttonProps: {},
 };
 
 export default ButtonSelect;

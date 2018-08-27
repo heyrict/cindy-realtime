@@ -7,11 +7,14 @@ import { Flex, Box } from 'rebass';
 import { line2md, from_global_id as f } from 'common';
 import { FormattedMessage } from 'react-intl';
 import { graphql } from 'react-apollo';
+
 import UserLabel from 'components/UserLabel';
+import ButtonSelect from 'components/ButtonSelect';
 import dialogueMessages from 'containers/Dialogue/messages';
 import { nAlert } from 'containers/Notifier/actions';
 import tick from 'images/tick.svg';
 import cross from 'images/cross.svg';
+
 import UpdateChatroomMutation from 'graphql/UpdateChatroomMutation';
 import ChatRoomQuery from 'graphql/ChatRoomQuery';
 
@@ -41,11 +44,13 @@ class DescriptionPanel extends React.Component {
     super(props);
     this.state = {
       editMode: false,
-      description: props.channel ? props.channel.description : '',
+      description: props.channel ? props.channel.description : 'Now Loading...',
     };
     this.handleChange = (e) => this.setState({ description: e.target.value });
-    this.toggleEditMode = () =>
-      this.setState((s) => ({ editMode: !s.editMode }));
+    this.toggleEditMode = (mode) =>
+      this.setState((s) => ({
+        editMode: mode === undefined ? !s.editMode : mode,
+      }));
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   componentWillReceiveProps(nextProps) {
@@ -57,16 +62,15 @@ class DescriptionPanel extends React.Component {
       });
     }
   }
-  handleSubmit() {
+  handleSubmit(input) {
     const id = parseInt(f(this.props.channel.id)[1], 10);
     const { name } = this.props;
-    const newDescription = this.state.description;
     this.props
       .mutate({
         variables: {
           input: {
-            description: newDescription,
             chatroomId: id,
+            ...input,
           },
         },
         update(proxy) {
@@ -74,7 +78,12 @@ class DescriptionPanel extends React.Component {
             query: ChatRoomQuery,
             variables: { chatroomName: name },
           });
-          data.allChatrooms.edges[0].node.description = newDescription;
+          if (input.description !== undefined) {
+            data.allChatrooms.edges[0].node.description = input.description;
+          }
+          if (input.private !== undefined) {
+            data.allChatrooms.edges[0].node.private = input.private;
+          }
           proxy.writeQuery({
             query: ChatRoomQuery,
             variables: { chatroomName: name },
@@ -87,12 +96,11 @@ class DescriptionPanel extends React.Component {
           updateChannel(this.props.name, {
             ...this.props.channel,
             description: this.state.description,
-          })
+          }),
         );
-        this.toggleEditMode();
+        this.toggleEditMode(false);
       })
       .catch((error) => {
-        this.setState({ loading: false });
         this.props.alert(error.message);
       });
   }
@@ -155,21 +163,48 @@ class DescriptionPanel extends React.Component {
               />
             </Box>
             <Box w={[1 / 3, 1 / 6, 1 / 8]} mr={1}>
-              <StyledButton onClick={this.toggleEditMode}>
+              <StyledButton onClick={() => this.toggleEditMode(false)}>
                 <ImgXs src={cross} />
               </StyledButton>
-              <StyledButton onClick={this.handleSubmit}>
+              <StyledButton
+                onClick={() =>
+                  this.handleSubmit({ description: this.state.description })
+                }
+              >
                 <ImgXs src={tick} />
               </StyledButton>
             </Box>
           </Flex>
         ) : (
           <div>
-            <Flex style={{ fontSize: '0.9em' }}>
+            <Flex style={{ fontSize: '0.9em' }} alignItems="center">
               <Box mr="auto">
                 <FormattedMessage {...messages.owner} />:{' '}
                 <UserLabel user={this.props.channel.user} />
               </Box>
+              {this.props.currentUserId === this.props.channel.user.id && (
+                <Box mx="auto">
+                  <ButtonSelect
+                    value={this.props.channel.private}
+                    onChange={({ value }) =>
+                      this.handleSubmit({ private: value })
+                    }
+                    buttonProps={{
+                      py: 0,
+                    }}
+                    options={[
+                      {
+                        value: true,
+                        label: <FormattedMessage {...messages.private} />,
+                      },
+                      {
+                        value: false,
+                        label: <FormattedMessage {...messages.public} />,
+                      },
+                    ]}
+                  />
+                </Box>
+              )}
               {this.props.currentUserId && (
                 <Box ml="auto">
                   {inFavorite ? (
@@ -196,7 +231,9 @@ class DescriptionPanel extends React.Component {
             {this.props.currentUserId === this.props.channel.user.id && (
               <FormattedMessage {...dialogueMessages.edit}>
                 {(msg) => (
-                  <EditButton onClick={this.toggleEditMode}>{msg}</EditButton>
+                  <EditButton onClick={() => this.toggleEditMode(true)}>
+                    {msg}
+                  </EditButton>
                 )}
               </FormattedMessage>
             )}
@@ -224,7 +261,10 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 const withMutation = graphql(UpdateChatroomMutation);
 
@@ -241,4 +281,8 @@ const withData = graphql(ChatRoomQuery, {
   },
 });
 
-export default compose(withData, withConnect, withMutation)(DescriptionPanel);
+export default compose(
+  withData,
+  withConnect,
+  withMutation,
+)(DescriptionPanel);

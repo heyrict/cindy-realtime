@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
 import { ButtonOutline, Input } from 'style-store';
+
+import { changeTab } from './actions';
 import { PublicChannels } from './constants';
 import messages from './messages';
 import ChatRoomCreateModal from './ChatRoomCreateModal';
@@ -43,7 +47,7 @@ class Channels extends React.PureComponent {
           <FormattedMessage {...messages.defaultChannel} />
         </StyledButton>
         <Bar open={this.state.publicShown} onClick={this.togglePublicShown}>
-          <FormattedMessage {...messages.publicChannels} />
+          <FormattedMessage {...messages.officialChannels} />
         </Bar>
         {this.state.publicShown &&
           PublicChannels.map((c) => (
@@ -57,6 +61,13 @@ class Channels extends React.PureComponent {
               {c}
             </StyledButton>
           ))}
+        <Bar
+          onClick={() => {
+            this.props.changeTab('TAB_CHATROOMLIST');
+          }}
+        >
+          <FormattedMessage {...messages.publicChannels} />
+        </Bar>
         <Bar open={this.state.favShown} onClick={this.toggleFavShown}>
           <FormattedMessage {...messages.favoriteChannels} />
         </Bar>
@@ -119,6 +130,16 @@ Channels.propTypes = {
   tune: PropTypes.func.isRequired,
   favChannels: PropTypes.object,
   height: PropTypes.number.isRequired,
+  changeTab: PropTypes.func.isRequired,
 };
 
-export default Channels;
+const mapDispatchToProps = (dispatch) => ({
+  changeTab: (tab) => dispatch(changeTab(tab)),
+});
+
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
+
+export default compose(withConnect)(Channels);

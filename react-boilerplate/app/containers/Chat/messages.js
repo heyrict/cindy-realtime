@@ -98,8 +98,20 @@ export default defineMessages({
     id: 'app.containers.Chat.favoriteChannels',
     defaultMessage: 'favorite channels',
   },
+  officialChannels: {
+    id: 'app.containers.Chat.officialChannels',
+    defaultMessage: 'official channels',
+  },
   publicChannels: {
     id: 'app.containers.Chat.publicChannels',
     defaultMessage: 'public channels',
+  },
+  private: {
+    id: 'app.containers.Chat.private',
+    defaultMessage: 'Private',
+  },
+  public: {
+    id: 'app.containers.Chat.public',
+    defaultMessage: 'Public',
   },
 });

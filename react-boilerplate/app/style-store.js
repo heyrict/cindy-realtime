@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import ReactTextareaAutosize from 'react-textarea-autosize';
@@ -63,18 +65,21 @@ export const RouterLink = styled(Link)`
 
 export const ImgSm = styled.img`
   max-height: 2.1em;
+  min-height: 0.8em;
   padding: 0;
   margin: 0;
 `;
 
 export const ImgXs = styled.img`
   max-height: 1.4em;
+  min-height: 0.5em;
   padding: 0;
   margin: 0;
 `;
 
 export const ImgMd = styled.img`
   max-height: 4em;
+  min-height: 1em;
   padding: 0;
   margin: 0;
 `;
