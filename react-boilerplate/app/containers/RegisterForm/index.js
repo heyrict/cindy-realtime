@@ -86,18 +86,6 @@ const innerRegisterForm = ({
   return (
     <form onSubmit={handleSubmit}>
       <FieldGroup
-        id="formRegisterUsername"
-        name="username"
-        label={<FormattedMessage {...messages.usernameLabel} />}
-        Ctl={Input}
-        type="text"
-        value={values.username}
-        valid={touched.username && errors.username ? 'error' : null}
-        help={<FormattedMessage {...messages.usernameHelp} />}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
-      <FieldGroup
         id="formRegisterNickname"
         name="nickname"
         label={<FormattedMessage {...messages.nicknameLabel} />}
@@ -106,6 +94,18 @@ const innerRegisterForm = ({
         value={values.nickname}
         valid={touched.nickname && errors.nickname ? 'error' : null}
         help={<FormattedMessage {...messages.nicknameHelp} />}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
+      <FieldGroup
+        id="formRegisterUsername"
+        name="username"
+        label={<FormattedMessage {...messages.usernameLabel} />}
+        Ctl={Input}
+        type="text"
+        value={values.username}
+        valid={touched.username && errors.username ? 'error' : null}
+        help={<FormattedMessage {...messages.usernameHelp} />}
         onChange={handleChange}
         onBlur={handleBlur}
       />

@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Flex, Box, ButtonTransparent } from 'rebass';
+import { line2md } from 'common';
 import { ButtonOutline } from 'style-store';
 // import styled from 'styled-components';
 
@@ -63,7 +64,9 @@ class ChatRoomPanel extends React.PureComponent {
                 </OpenButton>
               )}
             </Flex>
-            <Box>{node.description}</Box>
+            <div
+              dangerouslySetInnerHTML={{ __html: line2md(node.description) }}
+            />
           </Content>
         )}
       </div>
