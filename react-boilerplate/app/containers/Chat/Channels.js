@@ -62,6 +62,7 @@ class Channels extends React.PureComponent {
             </StyledButton>
           ))}
         <Bar
+          open
           onClick={() => {
             this.props.changeTab('TAB_CHATROOMLIST');
           }}

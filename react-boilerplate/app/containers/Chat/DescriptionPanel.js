@@ -17,6 +17,7 @@ import cross from 'images/cross.svg';
 
 import UpdateChatroomMutation from 'graphql/UpdateChatroomMutation';
 import ChatRoomQuery from 'graphql/ChatRoomQuery';
+import ChatRoomFragment from 'graphql/ChatRoom';
 
 import Wrapper from './Wrapper';
 import AddToFavBtn from './AddToFavBtn';
@@ -63,7 +64,7 @@ class DescriptionPanel extends React.Component {
     }
   }
   handleSubmit(input) {
-    const id = parseInt(f(this.props.channel.id)[1], 10);
+    const { id } = this.props.channel;
     const { name } = this.props;
     this.props
       .mutate({
@@ -74,6 +75,7 @@ class DescriptionPanel extends React.Component {
           },
         },
         update(proxy) {
+          /*
           const data = proxy.readQuery({
             query: ChatRoomQuery,
             variables: { chatroomName: name },
@@ -87,6 +89,24 @@ class DescriptionPanel extends React.Component {
           proxy.writeQuery({
             query: ChatRoomQuery,
             variables: { chatroomName: name },
+            data,
+          });
+          */
+          const data = proxy.readFragment({
+            id,
+            fragment: ChatRoomFragment,
+            fragmentName: 'ChatRoom',
+          });
+          if (input.description !== undefined) {
+            data.description = input.description;
+          }
+          if (input.private !== undefined) {
+            data.private = input.private;
+          }
+          proxy.writeFragment({
+            id,
+            fragment: ChatRoomFragment,
+            fragmentName: 'ChatRoom',
             data,
           });
         },

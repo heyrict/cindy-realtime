@@ -1146,7 +1146,7 @@ class UpdateChatRoom(graphene.ClientIDMutation):
     chatroom = graphene.Field(ChatRoomNode)
 
     class Input:
-        chatroomId = graphene.Int(required=True)
+        chatroomId = graphene.ID(required=True)
         description = graphene.String()
         private = graphene.Boolean()
 
@@ -1158,7 +1158,7 @@ class UpdateChatRoom(graphene.ClientIDMutation):
 
         description = input.get("description")
         private = input.get("private")
-        chatroomId = input["chatroomId"]
+        className, chatroomId = from_global_id(input["chatroomId"])
         chatroom = ChatRoom.objects.get(id=chatroomId)
 
         if chatroom.user.id != user.id:
