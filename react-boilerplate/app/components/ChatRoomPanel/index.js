@@ -44,7 +44,7 @@ class ChatRoomPanel extends React.PureComponent {
   render() {
     const { node } = this.props;
     return (
-      <div>
+      <div style={{ marginBottom: '5px' }}>
         <Border w={1} open={this.state.open} onClick={this.toggleOpen}>
           {node.name}
         </Border>

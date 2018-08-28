@@ -14,7 +14,7 @@ import messages from './messages';
 
 const PublicChatRooms = (props) => (
   <div>
-    <Flex bg="burlywood">
+    <Flex bg="burlywood" style={{ height: '35px', overflow: 'hidden' }}>
       <Button
         p={2}
         bg="burlywood"
@@ -27,17 +27,20 @@ const PublicChatRooms = (props) => (
         <FormattedMessage {...messages.publicChannels} />
       </Box>
     </Flex>
-    <ChatRoomList
-      variables={{ private: false }}
-      order="-created"
-      fetchPolicy="cache-first"
-      tune={props.tune}
-      itemsPerPage={10}
-    />
+    <div style={{ overflowY: 'auto', height: props.height - 35 }}>
+      <ChatRoomList
+        variables={{ private: false }}
+        order="-created"
+        fetchPolicy="cache-first"
+        tune={props.tune}
+        itemsPerPage={10}
+      />
+    </div>
   </div>
 );
 
 PublicChatRooms.propTypes = {
+  height: PropTypes.number.isRequired,
   tune: PropTypes.func.isRequired,
   changeTab: PropTypes.func.isRequired,
 };

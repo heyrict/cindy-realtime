@@ -126,7 +126,7 @@ export function Chat(props) {
         <Broadcast height={props.height - 50} />
       )}
       {props.chat.activeTab === TAB_CHATROOMLIST && (
-        <PublicChatRooms tune={tune} />
+        <PublicChatRooms height={props.height - 50} tune={tune} />
       )}
     </div>
   );

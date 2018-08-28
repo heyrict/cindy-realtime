@@ -20,7 +20,8 @@ export function ButtonSelect(props) {
             <Button
               key={option.value}
               p={1}
-              mx={1}
+              mr={1}
+              mb={1}
               {...buttonProps}
               onClick={() => onChange(option)}
             >
@@ -30,7 +31,8 @@ export function ButtonSelect(props) {
             <ButtonOutline
               key={option.value}
               p={1}
-              mx={1}
+              mr={1}
+              mb={1}
               {...buttonProps}
               onClick={() => onChange(option)}
             >
