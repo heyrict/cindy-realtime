@@ -7,8 +7,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { FormattedMessage } from 'react-intl';
 
-import { status_code_dict as STATUS_CODE } from 'common';
+import messages from './messages';
 
 const StatusBase = styled.span`
   text-align: center;
@@ -46,10 +47,13 @@ const styledStatus = (statusCode) => {
 };
 
 function StatusLabel(props) {
-  const status = props.status;
-  const translatedStatus = STATUS_CODE[status];
+  const { status } = props;
   const StyledStatus = styledStatus(status);
-  return <StyledStatus>{translatedStatus}</StyledStatus>;
+  return (
+    <StyledStatus>
+      <FormattedMessage {...messages[`status_${status}`]} />
+    </StyledStatus>
+  );
 }
 
 StatusLabel.propTypes = {

@@ -80,7 +80,11 @@ function UserNavbar(props) {
     );
   }
   return (
-    <SubNavbar w={1} style={{ display: 'block' }}>
+    <SubNavbar
+      w={1}
+      style={{ display: 'flex', flexWrap: 'wrap' }}
+      onPointerLeave={props.onPointerLeave}
+    >
       <RouterLink to={withLocale('/profile')} tabIndex="0">
         <NavLink is="span">
           <FormattedMessage {...messages.userlist} />
