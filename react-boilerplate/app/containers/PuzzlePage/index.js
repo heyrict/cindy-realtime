@@ -17,9 +17,9 @@ import Constrained from 'components/Constrained';
 import FilterableList from 'components/FilterableList';
 import PuzzleList from 'components/PuzzleList';
 import GoogleAd from 'components/GoogleAd';
+import PuzzleNavbar from 'components/PuzzleNavbar';
 import PuzzleActiveList from 'containers/PuzzleActiveList';
 import { googleAdInfo } from 'settings';
-import AddPuzzleBtn from './AddPuzzleBtn';
 
 import saga from './saga';
 import messages from './messages';
@@ -27,7 +27,7 @@ import messages from './messages';
 function PuzzlePage(props, context) {
   const _ = context.intl.formatMessage;
   return (
-    <Constrained level={4} mb={2}>
+    <Constrained level={5} mb={2}>
       <Helmet>
         <title>{_(messages.title)}</title>
         <meta name="description" content={_(messages.description)} />
@@ -35,8 +35,8 @@ function PuzzlePage(props, context) {
       <Heading>
         <FormattedMessage {...messages.header} />
         <span style={{ padding: '0 10px' }} />
-        <AddPuzzleBtn />
       </Heading>
+      <PuzzleNavbar />
       <PuzzleActiveList />
       <GoogleAd {...googleAdInfo.infieldAd} />
       <FilterableList

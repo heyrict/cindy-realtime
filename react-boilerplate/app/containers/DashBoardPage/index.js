@@ -26,6 +26,7 @@ import ScheduleList from 'components/ScheduleList';
 import Constrained from 'components/Constrained';
 import ScheduleAddItem from 'containers/ScheduleAddForm/ScheduleAddItem';
 import HelpPopper from 'components/HelpPopper';
+import PuzzleNavbar from 'components/PuzzleNavbar';
 
 import messages from './messages';
 import Board from './Board';
@@ -47,6 +48,7 @@ function DashBoardPage(props, context) {
         <Heading>
           <FormattedMessage {...messages.heading} />
         </Heading>
+        <PuzzleNavbar />
         <Flex w={1} flexWrap="wrap">
           <Box w={[1, 1, 1 / 2]} p={1}>
             <Board

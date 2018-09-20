@@ -8,7 +8,7 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
   title: {
     id: 'app.containers.PuzzlePage.title',
-    defaultMessage: 'Puzzles - Cindy',
+    defaultMessage: 'Puzzles',
   },
   description: {
     id: 'app.containers.PuzzlePage.description',
@@ -19,8 +19,8 @@ export default defineMessages({
     id: 'app.containers.PuzzlePage.header',
     defaultMessage: 'Puzzle List',
   },
-  addPuzzle: {
-    id: 'app.containers.PuzzlePage.addPuzzle',
-    defaultMessage: 'Add a new puzzle',
+  newPuzzle: {
+    id: 'app.containers.PuzzlePage.newPuzzle',
+    defaultMessage: 'New puzzle',
   },
 });
