@@ -202,6 +202,7 @@ export const Select = styled.select`
 
 export const Input = styled.input`
   border-radius: 10px;
+  min-width: 200px;
   border: 1px solid ${({ valid }) => (valid === 'error' ? 'tomato' : '#2075c7')};
   padding: 5px;
   width: 100%;

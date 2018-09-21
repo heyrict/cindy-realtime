@@ -1,5 +1,15 @@
 {
+  "breakpoints": ["36em", "48em", "64em", "80em"],
   "fonts": {
+    "0": [
+      "Noto Sans CJK JP",
+      "Dejavu Sans",
+      "Inconsolata",
+      "Consolas",
+      "Helvetica",
+      "Arial",
+      "sans-serif"
+    ],
     "sans": [
       "Noto Sans CJK JP",
       "Dejavu Sans",

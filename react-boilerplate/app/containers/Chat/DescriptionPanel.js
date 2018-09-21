@@ -127,14 +127,11 @@ class DescriptionPanel extends React.Component {
   render() {
     if (!this.props.name) return null;
     if (!this.props.channel) {
-      if (this.props.name.match(/^puzzle-\d+$/)) {
-        return <DescriptionWrapper height={30} />;
-      }
-      return <DescriptionWrapper height={100} />;
+      return <DescriptionWrapper height={this.props.height} />;
     }
     if (this.props.name.match(/^puzzle-\d+$/)) {
       return (
-        <DescriptionWrapper height={30}>
+        <DescriptionWrapper height={this.props.height}>
           <Flex style={{ fontSize: '0.9em' }}>
             <Box mr="auto">
               <FormattedMessage
@@ -172,7 +169,7 @@ class DescriptionPanel extends React.Component {
     }
 
     return (
-      <DescriptionWrapper height={100}>
+      <DescriptionWrapper height={this.props.height}>
         {this.state.editMode === true ? (
           <Flex alignItems="center" mx={0} mt={1}>
             <Box w={[2 / 3, 5 / 6, 7 / 8]} mx={1}>
@@ -269,6 +266,7 @@ DescriptionPanel.propTypes = {
   alert: PropTypes.func.isRequired,
   mutate: PropTypes.func.isRequired,
   name: PropTypes.string,
+  height: PropTypes.number.isRequired,
   channel: PropTypes.object,
   currentUserId: PropTypes.string,
   favChannels: PropTypes.shape({

@@ -1,19 +1,17 @@
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { easing, tween } from 'popmotion';
 import { from_global_id as f, withLocale } from 'common';
 import { FormattedMessage } from 'react-intl';
 import posed from 'react-pose';
 
-import { Flex, Box } from 'rebass';
+import { Box } from 'rebass';
 import { ImgXs as Img, RouterLink } from 'style-store';
 import chevronYLeft from 'images/chevron-yellowgreen-left.svg';
 import chevronYRight from 'images/chevron-yellowgreen-right.svg';
 import chevronOLeft from 'images/chevron-orange-left.svg';
 import chevronORight from 'images/chevron-orange-right.svg';
 import UserLabel from 'components/UserLabel';
-import TitleLabel from 'components/TitleLabel';
 
 import messages from './messages';
 
@@ -50,18 +48,14 @@ class RecentCommentPanel extends React.PureComponent {
     const { node } = this.props;
 
     let currentArrow;
-    if (this.state.on) {
-      if (node.spoiler) {
-        currentArrow = <Img alt="detail" src={chevronORight} />;
-      } else {
-        currentArrow = <Img alt="detail" src={chevronYRight} />;
-      }
+    if (this.state.on && node.spoiler) {
+      currentArrow = <Img alt="detail" src={chevronORight} />;
+    } else if (this.state.on && !node.spoiler) {
+      currentArrow = <Img alt="detail" src={chevronYRight} />;
+    } else if (!this.state.on && node.spoiler) {
+      currentArrow = <Img alt="detail" src={chevronOLeft} />;
     } else {
-      if (node.spoiler) {
-        currentArrow = <Img alt="detail" src={chevronOLeft} />;
-      } else {
-        currentArrow = <Img alt="detail" src={chevronYLeft} />;
-      }
+      currentArrow = <Img alt="detail" src={chevronYLeft} />;
     }
 
     return (
@@ -113,6 +107,7 @@ class RecentCommentPanel extends React.PureComponent {
             display: 'flex',
             position: 'relative',
             zIndex: 30,
+            minHeight: '60px',
           }}
         >
           <button
@@ -140,5 +135,9 @@ class RecentCommentPanel extends React.PureComponent {
     );
   }
 }
+
+RecentCommentPanel.propTypes = {
+  node: PropTypes.object.isRequired,
+};
 
 export default RecentCommentPanel;

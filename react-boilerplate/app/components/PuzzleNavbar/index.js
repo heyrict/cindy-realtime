@@ -32,7 +32,7 @@ const ButtonLink = styled(Link)`
 
 function PuzzleNavbar() {
   return (
-    <Flex alignItems="center" justifyContent="center" w={1} mb={4}>
+    <Flex alignItems="center" justifyContent="center" w={1} mb={3}>
       <ToolButton mx="3px" w={1}>
         <ButtonLink to={withLocale('/puzzle')}>
           <FormattedMessage {...puzzlepageMessages.header} />

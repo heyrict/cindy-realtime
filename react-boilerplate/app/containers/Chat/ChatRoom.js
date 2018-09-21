@@ -73,6 +73,7 @@ const currentPuzzleQuery = gql`
 `;
 
 class ChatRoom extends React.Component {
+  // {{{ constructor()
   constructor(props) {
     super(props);
 
@@ -80,6 +81,7 @@ class ChatRoom extends React.Component {
       loading: false,
       taHeight: 36,
       chatLogModalShown: false,
+      show: true,
     };
 
     switch (props.displayChatroomDescription) {
@@ -105,11 +107,15 @@ class ChatRoom extends React.Component {
         : this.setState((p) => ({ show: !p.show }));
     this.scrollToBottom = this.scrollToBottom.bind(this);
   }
+  // }}}
 
+  // {{{ componentDidMount()
   componentDidMount() {
     this.props.subscribeChatUpdates();
   }
+  // }}}
 
+  // {{{ componentDidUpdate()
   componentDidUpdate(prevProps) {
     // If chatroom not exist, jump to lobby
     if (
@@ -134,7 +140,9 @@ class ChatRoom extends React.Component {
       this.scrollToBottom();
     }
   }
+  // }}}
 
+  // {{{ scrollToBottom()
   scrollToBottom() {
     if (!this.lastcmref || !this.btmref) {
       return;
@@ -146,7 +154,9 @@ class ChatRoom extends React.Component {
       this.btmref.scrollIntoView({ behavior: 'smooth' });
     }
   }
+  // }}}
 
+  // {{{ handleSubmit()
   handleSubmit(content) {
     if (this.state.loading) return;
     if (!content.trim()) {
@@ -237,25 +247,36 @@ class ChatRoom extends React.Component {
         this.setState({ loading: false });
       });
   }
+  // }}}
 
+  // {{{ render()
   render() {
+    let dpHeight;
+
     if (this.props.hidden) return null;
     const chatroomName =
       this.props.channel || defaultChannel(this.props.pathname);
     const puzzleIdMatch = chatroomName.match(/^puzzle-(\d+)$/);
     const puzzleId = puzzleIdMatch && t('PuzzleNode', puzzleIdMatch[1] || -1);
 
+    // calculate chat height
+    dpHeight = chatroomName.match(/^puzzle-\d+$/) ? 30 : 100;
+    dpHeight = this.state.show ? dpHeight : 0;
+    const dbHeight = 20;
+    const { taHeight } = this.state;
+    const bodyHeight = this.props.height - dpHeight - dbHeight - taHeight - 20;
+
     return (
       <Flex flexWrap="wrap" justifyContent="center">
         <DescriptionBtn
-          height={20}
+          height={dbHeight}
           w={2 / 3}
           onClick={() => this.handleToggleShow(chatroomName)}
         >
           {chatroomName}
         </DescriptionBtn>
         <ShowlogBtn
-          height={20}
+          height={dbHeight}
           w={1 / 3}
           color="sienna"
           border="0"
@@ -297,16 +318,13 @@ class ChatRoom extends React.Component {
           <DescriptionPanel
             show={this.state.show}
             toggleShow={this.handleToggleShow}
+            height={dpHeight}
             name={chatroomName}
             currentUserId={this.props.currentUser && this.props.currentUser.id}
             favChannels={this.props.favChannels}
           />
         )}
-        <MessageWrapper
-          height={
-            this.props.height - this.state.taHeight - this.state.show * 100 - 36
-          }
-        >
+        <MessageWrapper height={bodyHeight}>
           {this.props.loading ? (
             <LoadingDots />
           ) : (
@@ -381,6 +399,7 @@ class ChatRoom extends React.Component {
       </Flex>
     );
   }
+  // }}}
 }
 
 ChatRoom.propTypes = {

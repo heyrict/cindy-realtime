@@ -44,7 +44,7 @@ import { domainFilter } from 'settings';
 
 const BodyBox = styled(Box)`
   ${({ chatopen }) =>
-    chatopen && '@media (max-width: 31.99em) { display: none; }'};
+    chatopen && '@media (max-width: 35.99em) { display: none; }'};
 `;
 
 class App extends React.Component {
@@ -113,7 +113,7 @@ class App extends React.Component {
         <WebSocketInterface />
         <TopNavbar />
         <Box
-          w={this.props.chat.open ? [1, 0.38, 0.3] : 0}
+          w={this.props.chat.open ? [1, '250px', 0.3] : 0}
           height={this.state.height}
           hidden={!this.props.chat.open}
           style={{ position: 'fixed' }}
@@ -121,8 +121,8 @@ class App extends React.Component {
           <Chat height={this.state.height - 50} />
         </Box>
         <BodyBox
-          w={this.props.chat.open ? [0, 0.62, 0.7] : 1}
-          ml={this.props.chat.open ? ['100%', '38%', '30%'] : 0}
+          w={this.props.chat.open ? [0, 'calc(100% - 250px)', 0.7] : 1}
+          ml={this.props.chat.open ? ['100%', '250px', '30%'] : 0}
           height={this.state.height}
           chatopen={this.props.chat.open}
         >
