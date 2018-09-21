@@ -4,9 +4,7 @@
  *
  */
 
-import {
-  SET_CURRENT_USER,
-} from './constants';
+import { SET_CURRENT_USER } from './constants';
 
 export function setCurrentUser(user) {
   return {

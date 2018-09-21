@@ -75,4 +75,7 @@ const withStarList = graphql(StarListQuery, {
   },
 });
 
-export default compose(withNumberPaginator({}), withStarList)(StarList);
+export default compose(
+  withNumberPaginator({}),
+  withStarList,
+)(StarList);

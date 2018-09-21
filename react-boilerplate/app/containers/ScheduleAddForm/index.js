@@ -122,7 +122,7 @@ export const ScheduleAddForm = (props) => (
               data: {
                 createSchedule: { schedule },
               },
-            }
+            },
           ) => {
             let update = false;
             const data = proxy.readQuery({ query: ScheduleListQuery });
@@ -142,7 +142,7 @@ export const ScheduleAddForm = (props) => (
             }
             data.allSchedules.edges.sort(
               (edge1, edge2) =>
-                moment(edge1.node.scheduled) - moment(edge2.node.scheduled)
+                moment(edge1.node.scheduled) - moment(edge2.node.scheduled),
             );
             console.log(data);
             proxy.writeQuery({ query: ScheduleListQuery, data });
@@ -174,7 +174,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const withConnect = connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 const withScheduleAdd = graphql(ScheduleAddFormMutation);
@@ -187,5 +187,5 @@ export default compose(
     footer: {
       close: true,
     },
-  })
+  }),
 )(ScheduleAddForm);

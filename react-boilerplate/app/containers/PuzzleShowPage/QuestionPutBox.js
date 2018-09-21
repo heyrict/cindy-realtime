@@ -93,7 +93,14 @@ class QuestionPutBox extends React.PureComponent {
             puzzleId,
           },
         },
-        update(proxy, { data: { createQuestion: { dialogue } } }) {
+        update(
+          proxy,
+          {
+            data: {
+              createQuestion: { dialogue },
+            },
+          },
+        ) {
           let update = false;
           const id = t('PuzzleNode', puzzleId);
           const data = proxy.readQuery({
@@ -121,7 +128,7 @@ class QuestionPutBox extends React.PureComponent {
                 return responseData;
               }
               return edge;
-            }
+            },
           );
           if (!update) {
             data.puzzleShowUnion.edges.push(responseData);
@@ -198,7 +205,10 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 const withMutation = graphql(putQuestionMutation);
 
@@ -222,9 +232,11 @@ const withCurrentUser = graphql(
       const { user: currentUser } = data;
       return { currentUser };
     },
-  }
+  },
 );
 
-export default compose(withCurrentUser, withMutation, withConnect)(
-  QuestionPutBox
-);
+export default compose(
+  withCurrentUser,
+  withMutation,
+  withConnect,
+)(QuestionPutBox);

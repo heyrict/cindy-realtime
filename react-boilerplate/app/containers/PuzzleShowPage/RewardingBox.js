@@ -154,7 +154,10 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 const withStarUpdateMutation = graphql(UpdateStarMutation, {
   name: 'mutateStarUpdate',
@@ -167,5 +170,5 @@ const withCommentUpdateMutation = graphql(UpdateCommentMutation, {
 export default compose(
   withStarUpdateMutation,
   withCommentUpdateMutation,
-  withConnect
+  withConnect,
 )(RewardingBox);

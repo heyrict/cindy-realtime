@@ -128,8 +128,14 @@ const mapStateToProps = createStructuredSelector({
   currentUser: makeSelectUserNavbar(),
 });
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 const withMutation = graphql(UpdateUserMutation);
 
-export default compose(withConnect, withMutation)(ProfileRow);
+export default compose(
+  withConnect,
+  withMutation,
+)(ProfileRow);

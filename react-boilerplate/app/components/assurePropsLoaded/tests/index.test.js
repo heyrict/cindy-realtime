@@ -32,7 +32,7 @@ describe('withAssurePropsLoaded', () => {
   });
   it('Expect to mount nested props', () => {
     const Element = assurePropsLoaded({ requiredProps: [['parent', 'child']] })(
-      TestElement
+      TestElement,
     );
     const rendered = mount(<Element parent={{ child: 'TestText' }} />);
     expect(rendered.contains(TestElement)).toBe(true);

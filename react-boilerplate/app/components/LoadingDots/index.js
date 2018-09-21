@@ -28,7 +28,7 @@ class LoadingDots extends React.PureComponent {
     this.timer = window.setInterval(
       () =>
         this.setState((prevState) => ({ active: (prevState.active + 1) % 3 })),
-      1000
+      1000,
     );
   }
 

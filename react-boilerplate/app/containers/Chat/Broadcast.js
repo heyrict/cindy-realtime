@@ -85,7 +85,7 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 export default compose(withConnect)(Broadcast);

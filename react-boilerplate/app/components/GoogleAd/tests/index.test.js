@@ -24,11 +24,11 @@ describe('<GoogleAd />', () => {
 
     it('renders GoogleAd if clientToken is defined', () => {
       const Element = RegisterGoogleAd({ clientToken: fakeToken })(
-        FakeGoogleAd
+        FakeGoogleAd,
       );
       const rendered = shallow(<Element />);
       expect(rendered.contains(<FakeGoogleAd client={fakeToken} />)).toEqual(
-        true
+        true,
       );
     });
   });
@@ -37,7 +37,7 @@ describe('<GoogleAd />', () => {
       window.adsbygoogle = [];
       expect(window.adsbygoogle.length).toBe(0);
       const rendered = shallow(
-        <GoogleAd client={fakeToken} slot={fakeSlot} format={fakeFormat} />
+        <GoogleAd client={fakeToken} slot={fakeSlot} format={fakeFormat} />,
       );
       expect(window.adsbygoogle.length).toBe(1);
       expect(rendered).toMatchSnapshot();
@@ -50,7 +50,7 @@ describe('<GoogleAd />', () => {
           format={fakeFormat}
           wrapperDivStyle={{ width: '100%' }}
           layoutKey="-gw-3+1f-3d+2z"
-        />
+        />,
       );
       expect(rendered).toMatchSnapshot();
     });

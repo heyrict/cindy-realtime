@@ -373,7 +373,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const withConnect = connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 const withPuzzleUpdateMutation = graphql(puzzleUpdateMutation, {
@@ -387,5 +387,5 @@ const withHintCreateMutation = graphql(createHintMutation, {
 export default compose(
   withPuzzleUpdateMutation,
   withHintCreateMutation,
-  withConnect
+  withConnect,
 )(PuzzleModifyBox);

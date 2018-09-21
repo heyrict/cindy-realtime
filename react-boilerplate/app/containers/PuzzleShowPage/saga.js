@@ -35,7 +35,7 @@ function* fetchPuzzleBody(action) {
     {
       id: g('PuzzleNode', action.data.puzzleId),
       userId: currentUserId ? g('UserNode', currentUserId) : null,
-    }
+    },
   );
   yield put({ type: INIT_PUZZLE_SHOW, ...data });
 }
@@ -47,7 +47,7 @@ function* fetchDialogue(action) {
     const data = yield call(
       gqlQuery,
       { text: dialogueQuery },
-      { id: action.data.id }
+      { id: action.data.id },
     );
     switch (action.type) {
       case DIALOGUE_ADDED:
@@ -65,7 +65,7 @@ function* fetchHint(action) {
   const data = yield call(
     gqlQuery,
     { text: hintQuery },
-    { id: action.data.id }
+    { id: action.data.id },
   );
   switch (action.type) {
     case HINT_ADDED:
@@ -85,7 +85,7 @@ function* fetchUpdatedPuzzle(action) {
     const data = yield call(
       gqlQuery,
       { text: puzzleUpdateQuery },
-      { id: action.data.id }
+      { id: action.data.id },
     );
     yield put({ type: UPDATE_PUZZLE, ...data });
   }

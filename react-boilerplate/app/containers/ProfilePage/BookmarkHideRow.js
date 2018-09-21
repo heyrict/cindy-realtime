@@ -65,8 +65,14 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 const withMutate = graphql(UpdateUserMutation);
 
-export default compose(withMutate, withConnect)(AwardSwitch);
+export default compose(
+  withMutate,
+  withConnect,
+)(AwardSwitch);

@@ -152,7 +152,7 @@ Hint.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   user: createSelector(selectUserNavbarDomain, (substate) =>
-    substate.get('user').toJS()
+    substate.get('user').toJS(),
   ),
 });
 
@@ -162,12 +162,12 @@ const mapDispatchToProps = (dispatch) => ({
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 const withMutate = graphql(hintMutation);
 
 export default compose(
   withConnect,
-  withMutate
+  withMutate,
 )(Hint);

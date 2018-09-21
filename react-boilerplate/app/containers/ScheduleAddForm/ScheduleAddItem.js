@@ -8,7 +8,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'style-store';
 
-
 import ScheduleAddModal from './index';
 
 export class ScheduleAddItem extends React.PureComponent {

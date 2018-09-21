@@ -83,7 +83,10 @@ const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 const withPuzzleActiveList = graphql(PuzzleActiveListQuery, {
   options: {
@@ -130,7 +133,7 @@ const withPuzzleActiveList = graphql(PuzzleActiveListQuery, {
                   ...prev.allPuzzles,
                   edges: Array.sort(
                     prevEdges,
-                    (e1, e2) => e1.node.status > e2.node.status
+                    (e1, e2) => e1.node.status > e2.node.status,
                   ),
                 },
               };
@@ -189,4 +192,7 @@ const withPuzzleActiveList = graphql(PuzzleActiveListQuery, {
   },
 });
 
-export default compose(withConnect, withPuzzleActiveList)(PuzzleActiveList);
+export default compose(
+  withConnect,
+  withPuzzleActiveList,
+)(PuzzleActiveList);

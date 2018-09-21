@@ -9,14 +9,8 @@ import PuzzleDescribeList from '../PuzzleDescribeList';
 
 describe('<HomePage />', () => {
   it('should render the contents', () => {
-    const renderedComponent = shallow(
-      <HomePage />
-    );
-    expect(renderedComponent.contains(
-      <MainFrame />
-    )).toEqual(true);
-    expect(renderedComponent.contains(
-      <PuzzleDescribeList />
-    )).toEqual(true);
+    const renderedComponent = shallow(<HomePage />);
+    expect(renderedComponent.contains(<MainFrame />)).toEqual(true);
+    expect(renderedComponent.contains(<PuzzleDescribeList />)).toEqual(true);
   });
 });

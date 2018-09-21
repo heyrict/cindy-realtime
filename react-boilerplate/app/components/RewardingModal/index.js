@@ -52,4 +52,7 @@ const withData = graphql(RewardingModalQuery, {
   },
 });
 
-export default compose(withModal({}), withData)(RewardingModal);
+export default compose(
+  withModal({}),
+  withData,
+)(RewardingModal);

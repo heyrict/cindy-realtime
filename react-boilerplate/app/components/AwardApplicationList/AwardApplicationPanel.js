@@ -47,7 +47,7 @@ class AwardApplicationPanel extends React.Component {
         (p) =>
           p.mode === this.MODE.DISPLAY
             ? { mode: this.MODE.REVIEW }
-            : { mode: this.MODE.DISPLAY }
+            : { mode: this.MODE.DISPLAY },
       );
     this.handleReview = this.handleReview.bind(this);
   }
@@ -251,12 +251,12 @@ const mapDispatchToProps = (dispatch) => ({
 
 const withConnect = connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 const withMutation = graphql(UpdateAwardApplication);
 
 export default compose(
   withMutation,
-  withConnect
+  withConnect,
 )(AwardApplicationPanel);

@@ -80,7 +80,7 @@ class SearchPanel extends React.PureComponent {
                   <option value={f} key={f}>
                     {f}
                   </option>
-                )
+                ),
             )}
           </SearchSelect>
         </Box>
@@ -96,7 +96,7 @@ class SearchPanel extends React.PureComponent {
             onClick={() =>
               this.props.handleSearchButtonClick(
                 this.state.filterKey,
-                this.state.filterValue
+                this.state.filterValue,
               )
             }
             style={{ borderRadius: '10px' }}

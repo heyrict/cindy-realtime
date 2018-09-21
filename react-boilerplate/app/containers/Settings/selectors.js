@@ -9,17 +9,12 @@ const selectSettingsDomain = (state) => state.get('settings');
  * Other specific selectors
  */
 
-
 /**
  * Default selector used by Settings
  */
 
-const makeSelectSettings = () => createSelector(
-  selectSettingsDomain,
-  (substate) => substate.toJS()
-);
+const makeSelectSettings = () =>
+  createSelector(selectSettingsDomain, (substate) => substate.toJS());
 
 export default makeSelectSettings;
-export {
-  selectSettingsDomain,
-};
+export { selectSettingsDomain };

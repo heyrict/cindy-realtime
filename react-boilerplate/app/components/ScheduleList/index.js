@@ -35,23 +35,20 @@ ScheduleList.propTypes = {
   }),
 };
 
-const withScheduleList = graphql(
-  ScheduleListQuery,
-  {
-    options: ({ variables, fetchPolicy }) => ({
-      variables: {
-        ...variables,
-      },
-      fetchPolicy,
-    }),
-    props({ data }) {
-      const { loading, allSchedules } = data;
-      return {
-        loading,
-        allSchedules,
-      };
+const withScheduleList = graphql(ScheduleListQuery, {
+  options: ({ variables, fetchPolicy }) => ({
+    variables: {
+      ...variables,
     },
-  }
-);
+    fetchPolicy,
+  }),
+  props({ data }) {
+    const { loading, allSchedules } = data;
+    return {
+      loading,
+      allSchedules,
+    };
+  },
+});
 
 export default compose(withScheduleList)(ScheduleList);

@@ -64,14 +64,14 @@ class Notifier extends React.Component {
                     id: nextProps.notification.payload.sender.id,
                     nickname: nextProps.notification.payload.sender.nickname,
                   },
-                })
+                }),
               ),
-          })
+          }),
         );
         break;
       case GOTID_MINICHAT:
         this.notif.addNotification(
-          chatroomNotExistsMsg(nextProps.notification)
+          chatroomNotExistsMsg(nextProps.notification),
         );
         break;
       case NOTIFIER_MESSAGE:
@@ -104,7 +104,7 @@ const mapStateToProps = createSelector(
   makeSelectNotifier(),
   (notification) => ({
     notification,
-  })
+  }),
 );
 
 const mapDispatchToProps = (dispatch) => ({
@@ -113,7 +113,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 const withReducer = injectReducer({ key: 'notifier', reducer });
@@ -123,5 +123,5 @@ const withSaga = injectSaga({ key: 'notifier', saga });
 export default compose(
   withSaga,
   withReducer,
-  withConnect
+  withConnect,
 )(Notifier);

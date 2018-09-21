@@ -38,19 +38,19 @@ function puzzleShowPageReducer(state = initialState, action) {
         .setIn(['puzzleShowUnion', 'edges'], action.data.puzzleShowUnion.edges)
         .setIn(
           ['allComments', 'edges'],
-          action.data.allComments ? action.data.allComments.edges : []
+          action.data.allComments ? action.data.allComments.edges : [],
         )
         .setIn(
           ['allStars', 'edges'],
-          action.data.allComments ? action.data.allStars.edges : []
+          action.data.allComments ? action.data.allStars.edges : [],
         )
         .setIn(
           ['allBookmarks', 'edges'],
-          action.data.allComments ? action.data.allBookmarks.edges : []
+          action.data.allComments ? action.data.allBookmarks.edges : [],
         );
     case ADD_QUESTION:
       return state.updateIn(['puzzleShowUnion', 'edges'], (e) =>
-        Array.concat(e, [{ node: action.data.dialogue }])
+        Array.concat(e, [{ node: action.data.dialogue }]),
       );
     case UPDATE_ANSWER:
       return state.updateIn(['puzzleShowUnion', 'edges'], (edges) =>
@@ -58,12 +58,12 @@ function puzzleShowPageReducer(state = initialState, action) {
           (edge) =>
             edge.node.id === action.data.dialogue.id
               ? { node: action.data.dialogue }
-              : edge
-        )
+              : edge,
+        ),
       );
     case ADD_HINT:
       return state.updateIn(['puzzleShowUnion', 'edges'], (e) =>
-        Array.concat(e, [{ node: action.data.hint }])
+        Array.concat(e, [{ node: action.data.hint }]),
       );
     case UPDATE_HINT:
       return state.updateIn(['puzzleShowUnion', 'edges'], (edges) =>
@@ -71,8 +71,8 @@ function puzzleShowPageReducer(state = initialState, action) {
           (edge) =>
             edge.node.id === action.data.hint.id
               ? { node: action.data.hint }
-              : edge
-        )
+              : edge,
+        ),
       );
     case UPDATE_PUZZLE:
       return state.updateIn(['puzzle'], (pzl) => ({

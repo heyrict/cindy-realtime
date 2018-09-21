@@ -35,7 +35,13 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 const withSaga = injectSaga({ key: 'webSocketInterface', saga, mode: DAEMON });
 
-export default compose(withSaga, withConnect)(WebSocketInterface);
+export default compose(
+  withSaga,
+  withConnect,
+)(WebSocketInterface);

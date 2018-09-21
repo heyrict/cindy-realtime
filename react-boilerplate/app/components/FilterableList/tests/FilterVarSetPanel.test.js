@@ -8,13 +8,15 @@ import SearchPanel from '../SearchPanel';
 describe('<FilterVarSetPanel />', () => {
   const onOrderChangeSpy = jest.fn();
   const onFilterChangeSpy = jest.fn();
-  const rendered = shallow(<FilterVarSetPanel 
-    filterList={['id']}
-    orderList={['id', 'created']}
-    order={'-id'}
-    onOrderChange={onOrderChangeSpy}
-    onFilterChange={onFilterChangeSpy}
-  />);
+  const rendered = shallow(
+    <FilterVarSetPanel
+      filterList={['id']}
+      orderList={['id', 'created']}
+      order={'-id'}
+      onOrderChange={onOrderChangeSpy}
+      onFilterChange={onFilterChangeSpy}
+    />,
+  );
 
   it('Expect to render sort display properly', () => {
     expect(rendered.find(FilterButton)).toHaveLength(2);
@@ -33,11 +35,26 @@ describe('<FilterVarSetPanel />', () => {
   });
 
   it('Expect to update to props properly', () => {
-    expect(rendered.find(FilterButton).find('[name="id"]').prop('asc')).toBe(true)
+    expect(
+      rendered
+        .find(FilterButton)
+        .find('[name="id"]')
+        .prop('asc'),
+    ).toBe(true);
     rendered.setProps({ order: 'id' });
-    expect(rendered.find(FilterButton).find('[name="id"]').prop('asc')).toBe(false)
+    expect(
+      rendered
+        .find(FilterButton)
+        .find('[name="id"]')
+        .prop('asc'),
+    ).toBe(false);
     rendered.setProps({ order: '-id' });
-    expect(rendered.find(FilterButton).find('[name="id"]').prop('asc')).toBe(true)
+    expect(
+      rendered
+        .find(FilterButton)
+        .find('[name="id"]')
+        .prop('asc'),
+    ).toBe(true);
   });
 
   it('Expect to change display correctly', () => {

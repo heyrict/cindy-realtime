@@ -9,7 +9,7 @@ describe('<Constrained />', () => {
     const wrapper = shallow(
       <Constrained level={level}>
         <div className="test_class" />
-      </Constrained>
+      </Constrained>,
     );
     expect(wrapper.contains(<div className="test_class" />)).toBe(true);
     expect(wrapper).toMatchSnapshot();

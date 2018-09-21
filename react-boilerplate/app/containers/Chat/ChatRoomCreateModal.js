@@ -96,7 +96,10 @@ const mapDispatchToProps = (dispatch) => ({
 const withMutation = graphql(CreateChatRoomMutation);
 
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(
+    null,
+    mapDispatchToProps,
+  ),
   withMutation,
   withModal({
     header: 'New ChatRoom',
@@ -104,5 +107,5 @@ export default compose(
       confirm: true,
       close: true,
     },
-  })
+  }),
 )(ChatRoomCreateForm);

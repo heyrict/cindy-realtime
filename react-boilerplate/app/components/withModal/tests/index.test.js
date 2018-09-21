@@ -33,7 +33,7 @@ describe('<ModalContainer />', () => {
         rendered
           .find('.cindy-modal-header')
           .dive()
-          .text()
+          .text(),
       ).toContain(header);
       rendered
         .find('.cindy-modal-header')

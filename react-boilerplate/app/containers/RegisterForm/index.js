@@ -232,7 +232,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const withConnect = connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 const withMutation = graphql(RegisterFormMutation);
@@ -245,5 +245,5 @@ export default compose(
     footer: {
       close: true,
     },
-  })
+  }),
 )(RegisterForm);

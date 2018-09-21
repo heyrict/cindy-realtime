@@ -4,11 +4,7 @@
  *
  */
 
-import {
-  WS_CONNECT,
-  WS_CONNECTED,
-  WS_DISCONNECTED,
-} from './constants';
+import { WS_CONNECT, WS_CONNECTED, WS_DISCONNECTED } from './constants';
 
 export function wsConnect() {
   return {

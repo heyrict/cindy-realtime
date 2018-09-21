@@ -153,11 +153,14 @@ const mapDispatchToProps = (dispatch) => ({
           label: 'Confirm',
           callback,
         },
-      })
+      }),
     ),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 const withUpdateBookmarkMutation = graphql(UpdateBookmarkMutation, {
   name: 'mutateBookmarkUpdate',
@@ -170,5 +173,5 @@ const withDeleteBookmarkMutation = graphql(DeleteBookmarkMutation, {
 export default compose(
   withUpdateBookmarkMutation,
   withDeleteBookmarkMutation,
-  withConnect
+  withConnect,
 )(BookmarkLabel);

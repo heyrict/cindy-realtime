@@ -36,7 +36,7 @@ export class LogoutMenuItem extends React.PureComponent {
         this.props.alert(
           <Panel key={error.message} color="tomato">
             <PanelHeader>{error.message}</PanelHeader>
-          </Panel>
+          </Panel>,
         );
       });
   }
@@ -64,12 +64,18 @@ const mapDispatchToProps = (dispatch) => ({
       setCurrentUser({
         userId: null,
         nickname: null,
-      })
+      }),
     ),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 const withLogout = graphql(LogoutMenuItemMutation);
 
-export default compose(withLogout, withConnect)(LogoutMenuItem);
+export default compose(
+  withLogout,
+  withConnect,
+)(LogoutMenuItem);

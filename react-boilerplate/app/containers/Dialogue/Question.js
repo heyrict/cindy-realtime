@@ -177,7 +177,7 @@ Question.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: createSelector(selectUserNavbarDomain, (substate) =>
-    substate.get('user').toJS()
+    substate.get('user').toJS(),
   ),
 });
 
@@ -187,12 +187,12 @@ const mapDispatchToProps = (dispatch) => ({
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 const withMutation = graphql(updateQuestionMutation);
 
 export default compose(
   withConnect,
-  withMutation
+  withMutation,
 )(Question);

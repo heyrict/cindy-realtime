@@ -140,7 +140,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const withConnect = connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps,
 );
 
 const withLogin = graphql(LoginFormMutation);
@@ -153,5 +153,5 @@ export default compose(
     footer: {
       close: true,
     },
-  })
+  }),
 )(LoginForm);

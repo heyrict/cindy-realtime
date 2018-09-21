@@ -8,21 +8,16 @@
 /* eslint-disable no-underscore-dangle */
 
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
 
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import UserLabel from 'graphql/UserLabel';
 
-import { Box } from 'rebass';
-import Constrained from 'components/Constrained';
 import LoadingDots from 'components/LoadingDots';
 
 import RecentCommentPanel from './RecentCommentPanel';
-import messages from './messages';
 
 export function RecentCommentList(props) {
   if (props.loading || !props.allComments) {
@@ -47,9 +42,7 @@ RecentCommentList.propTypes = {
 };
 
 RecentCommentList.defaultProps = {
-  page: 1,
   itemsPerPage: 10,
-  changePage: () => {},
 };
 
 const withCommentList = graphql(

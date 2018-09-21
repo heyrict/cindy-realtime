@@ -21,7 +21,7 @@ describe('<FilterableList />', () => {
   it('Expect to render component', () => {
     const gotoSpy = jest.fn();
     const rendered = shallow(
-      <FilterableList component={Component} goto={gotoSpy} />
+      <FilterableList component={Component} goto={gotoSpy} />,
     );
     expect(rendered.find(Component)).toExist();
   });
@@ -29,10 +29,10 @@ describe('<FilterableList />', () => {
   it('Expect to render component with proper Props', () => {
     const gotoSpy = jest.fn();
     const rendered = shallow(
-      <FilterableList component={Component} goto={gotoSpy} {...testProps} />
+      <FilterableList component={Component} goto={gotoSpy} {...testProps} />,
     );
     expect(rendered.find(Component).prop('variables')).toMatchObject(
-      testProps.variables
+      testProps.variables,
     );
     const bar = rendered.find(FilterVarSetPanel);
     expect(bar.prop('orderList')).toMatchObject(testProps.orderList);
@@ -44,7 +44,7 @@ describe('<FilterableList />', () => {
     let query = { order: '-id', filterKey: 'id', filterValue: 'fakeId' };
     const gotoSpy = jest.fn((q) => (query = getQueryStr(q)));
     const rendered = shallow(
-      <FilterableList component={Component} goto={gotoSpy} {...testProps} />
+      <FilterableList component={Component} goto={gotoSpy} {...testProps} />,
     );
     const bar = rendered.find(FilterVarSetPanel);
 

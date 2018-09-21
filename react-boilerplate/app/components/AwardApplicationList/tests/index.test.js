@@ -19,7 +19,7 @@ describe('<AwardApplicationList />', () => {
         }}
         loading
         allowPagination
-      />
+      />,
     );
     expect(rendered.contains(<LoadingDots py={50} size={8} />)).toEqual(true);
     expect(rendered.contains('button')).toEqual(false);
@@ -35,7 +35,7 @@ describe('<AwardApplicationList />', () => {
         loadMore={loadMoreSpy}
         loading={false}
         allowPagination
-      />
+      />,
     );
     rendered.tap((n) => console.log(n.debug()));
     expect(rendered.contains(<LoadingDots py={50} size={8} />)).toEqual(false);

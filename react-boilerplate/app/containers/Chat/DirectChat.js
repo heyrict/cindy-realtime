@@ -69,14 +69,14 @@ class DirectChat extends React.Component {
           f(currentUser.lastReadDm.id)[1])
     ) {
       this.props.notifyOfflineDms(
-        <FormattedMessage {...messages.notifyOfflineDms} />
+        <FormattedMessage {...messages.notifyOfflineDms} />,
       );
     }
 
     this.props.subscribeToDirectmessages();
     this.updateLastReadDmHandle = window.setInterval(
       this.updateLastReadDm,
-      6000
+      6000,
     );
   }
 
@@ -124,7 +124,14 @@ class DirectChat extends React.Component {
             receiver,
           },
         },
-        update(proxy, { data: { createDirectmessage: { directmessage } } }) {
+        update(
+          proxy,
+          {
+            data: {
+              createDirectmessage: { directmessage },
+            },
+          },
+        ) {
           const data = proxy.readQuery({
             query: DirectmessageQuery,
             variables: { userId: currentUser.id },
@@ -189,7 +196,7 @@ class DirectChat extends React.Component {
                     content={edge.node.content}
                     created={edge.node.created}
                   />
-                )
+                ),
             )}
         </MessageWrapper>
         <Flex mx="10px" w={1}>
@@ -255,12 +262,15 @@ const mapDispatchToProps = (dispatch) => ({
           callback: () => dispatch(openDirectChat({ chat: null })),
         },
         message,
-      })
+      }),
     ),
   notify: (payload) => dispatch(directchatReceived(payload)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 const withCreateDmMutation = graphql(CreateDirectmessageMutation, {
   name: 'mutateCreateDm',
@@ -350,5 +360,5 @@ export default compose(
   withUpdateLastReadDmMutation,
   assurePropsLoaded({
     requiredProps: ['allDirectmessages', 'currentUser'],
-  })
+  }),
 )(DirectChat);

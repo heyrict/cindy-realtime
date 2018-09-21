@@ -38,7 +38,7 @@ export const FilterableList = (props) => {
         filterKey,
         filterValue,
         page: 1,
-      })
+      }),
     );
   const setOrder = (nextOrder) => {
     props.goto(updateQueryStr({ order: nextOrder, page: 1 }));
@@ -93,6 +93,9 @@ const mapDispatchToProps = (dispatch) => ({
   goto: (link) => dispatch(push(link)),
 });
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default compose(withConnect)(FilterableList);

@@ -20,7 +20,8 @@ function userNavbarReducer(state = initialState, action) {
     case UPDATE_ONLINE_VIEWER_COUNT:
       return state.set('onlineViewerCount', action.data.onlineViewerCount);
     case SET_CURRENT_USER:
-      return state.setIn(['user', 'userId'], action.currentUser.userId)
+      return state
+        .setIn(['user', 'userId'], action.currentUser.userId)
         .setIn(['user', 'nickname'], action.currentUser.nickname);
     default:
       return state;

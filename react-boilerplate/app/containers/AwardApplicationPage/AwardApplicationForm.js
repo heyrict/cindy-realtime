@@ -53,7 +53,11 @@ class AwardApplicationForm extends React.Component {
         },
         update(
           proxy,
-          { data: { createAwardApplication: { awardApplication } } }
+          {
+            data: {
+              createAwardApplication: { awardApplication },
+            },
+          },
         ) {
           const data = proxy.readQuery({
             query: AwardApplicationList,
@@ -162,7 +166,10 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 const withMutation = graphql(CreateAwardApplication);
 
@@ -181,6 +188,8 @@ const withData = graphql(AwardList, {
   },
 });
 
-export default compose(withData, withMutation, withConnect)(
-  AwardApplicationForm
-);
+export default compose(
+  withData,
+  withMutation,
+  withConnect,
+)(AwardApplicationForm);

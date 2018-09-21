@@ -100,21 +100,17 @@ class PreviewEdit extends React.Component {
             },
             {
               name: 'Small',
-              icon: <div><small>A</small></div>,
-              callback: () =>
-                this.handleWrapSelection(
-                  `<small>`,
-                  '</small>',
-                ),
+              icon: (
+                <div>
+                  <small>A</small>
+                </div>
+              ),
+              callback: () => this.handleWrapSelection(`<small>`, '</small>'),
             },
             {
               name: 'Big',
               icon: <div>A</div>,
-              callback: () =>
-                this.handleWrapSelection(
-                  `<big>`,
-                  '</big>',
-                ),
+              callback: () => this.handleWrapSelection(`<big>`, '</big>'),
             },
             {
               name: 'Tabs',

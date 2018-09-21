@@ -125,9 +125,10 @@ const withCurrentUser = graphql(
       const { user } = data;
       return { currentUser: user };
     },
-  }
+  },
 );
 
-export default compose(withAwardApplicationList, withCurrentUser)(
-  AwardApplicationList
-);
+export default compose(
+  withAwardApplicationList,
+  withCurrentUser,
+)(AwardApplicationList);

@@ -4,9 +4,7 @@
  *
  */
 
-import {
-  UPDATE_ANSWER,
-} from './constants';
+import { UPDATE_ANSWER } from './constants';
 
 export function updateAnswer(data) {
   return {

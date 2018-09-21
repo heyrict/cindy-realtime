@@ -88,8 +88,14 @@ const mapDispatchToProps = (dispatch) => ({
   alert: (message) => dispatch(nAlert(message)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
 
 const withMutation = graphql(CreateBookmarkMutation);
 
-export default compose(withMutation, withConnect)(BookmarkBox);
+export default compose(
+  withMutation,
+  withConnect,
+)(BookmarkBox);

@@ -11,7 +11,7 @@ describe('<FilterButton />', () => {
       name={'id'}
       onMainButtonClick={onMainButtonClickSpy}
       onSortButtonClick={onSortButtonClickSpy}
-    />
+    />,
   );
 
   it('Expect to render MainButton with no asc', () => {

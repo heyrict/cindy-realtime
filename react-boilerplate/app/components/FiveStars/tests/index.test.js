@@ -13,7 +13,7 @@ describe('<FiveStars />', () => {
     it('Resizing', () => {
       const STAR_SIZE = '50px';
       const rendered = render(
-        <FiveStars value={STAR_COUNT} starSize={STAR_SIZE} />
+        <FiveStars value={STAR_COUNT} starSize={STAR_SIZE} />,
       );
       expect(rendered.find('div').prop('style')).toMatchObject({
         'font-size': STAR_SIZE,
@@ -27,7 +27,7 @@ describe('<FiveStars />', () => {
     it('Rendering', () => {
       const onSetSpy = jest.fn();
       const rendered = render(
-        <FiveStars value={STAR_COUNT} onSet={onSetSpy} />
+        <FiveStars value={STAR_COUNT} onSet={onSetSpy} />,
       );
       expect(rendered.find('[checked]').length).toEqual(STAR_COUNT);
     });
