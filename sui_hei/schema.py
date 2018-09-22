@@ -1491,7 +1491,9 @@ class Query(object):
         orderBy=graphene.List(of_type=graphene.String),
         chatroomName=graphene.String())
     all_directmessages = DjangoFilterConnectionField(
-        DirectMessageNode, userId=graphene.ID())
+        DirectMessageNode,
+        userId=graphene.ID(),
+        orderBy=graphene.List(of_type=graphene.String))
     all_chatrooms = DjangoFilterConnectionField(ChatRoomNode)
     all_favorite_chatrooms = DjangoFilterConnectionField(FavoriteChatRoomNode)
     all_comments = DjangoFilterConnectionField(
@@ -1683,12 +1685,13 @@ class Query(object):
 
     def resolve_all_directmessages(self, info, **kwargs):
         userId = kwargs.get("userId", None)
+        orderBy = kwargs.get("orderBy", None)
+        qs = DirectMessage.objects
         if userId:
             className, userId = from_global_id(userId)
             assert className == 'UserNode'
-            qs = DirectMessage.objects.filter(
-                Q(sender_id=userId) | Q(receiver_id=userId))
-            return qs
+            qs = qs.filter(Q(sender_id=userId) | Q(receiver_id=userId))
+        qs = resolveOrderBy(qs, orderBy)
         return qs
 
     def resolve_all_comments(self, info, **kwargs):

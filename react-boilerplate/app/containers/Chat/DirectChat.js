@@ -58,7 +58,7 @@ class DirectChat extends React.Component {
 
   componentWillMount() {
     const adm = this.props.allDirectmessages;
-    const currentUser = this.props.currentUser;
+    const { currentUser } = this.props;
     /*
      * Upon first load, check new messages.
      */
@@ -86,7 +86,7 @@ class DirectChat extends React.Component {
 
   updateLastReadDm() {
     const adm = this.props.allDirectmessages;
-    const currentUser = this.props.currentUser;
+    const { currentUser } = this.props;
     if (
       adm.edges.length > 0 &&
       (!currentUser.lastReadDm ||
@@ -112,7 +112,7 @@ class DirectChat extends React.Component {
       return;
     }
     const receiver = this.props.chat.dmReceiver.id;
-    const currentUser = this.props.currentUser;
+    const { currentUser } = this.props;
     this.setState({ loading: true });
     this.input.setContent('');
 
@@ -210,7 +210,9 @@ class DirectChat extends React.Component {
             <FormattedMessage {...messages.directChatInputPlaceholder}>
               {(msg) => (
                 <ChatInput
-                  ref={(ins) => (this.input = ins)}
+                  ref={(ins) => {
+                    this.input = ins;
+                  }}
                   sendPolicy={this.props.sendPolicy}
                   placeholder={user ? null : msg}
                   disabled={
@@ -280,7 +282,7 @@ const withUpdateLastReadDmMutation = graphql(UpdateLastReadDmMutation, {
 });
 const withDirectMessages = graphql(DirectmessageQuery, {
   options: ({ currentUser }) => ({
-    variables: { userId: currentUser.id, last: 10 },
+    variables: { userId: currentUser.id, last: 10, orderBy: ['created'] },
     fetchPolicy: 'cache-and-network',
   }),
   props({ data, ownProps }) {
@@ -298,10 +300,11 @@ const withDirectMessages = graphql(DirectmessageQuery, {
             userId: currentUser.id,
             last: 10,
             before: allDirectmessages.pageInfo.startCursor,
+            orderBy: ['created'],
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             const newEdges = fetchMoreResult.allDirectmessages.edges;
-            const pageInfo = fetchMoreResult.allDirectmessages.pageInfo;
+            const { pageInfo } = fetchMoreResult.allDirectmessages;
 
             return newEdges.length
               ? {
