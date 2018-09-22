@@ -1,6 +1,7 @@
 import { getMainDefinition } from 'apollo-utilities';
 import { ApolloClient } from 'apollo-client';
 // import { HttpLink } from 'apollo-link-http';
+import { HttpLink } from 'apollo-link-http';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink, split } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
@@ -12,41 +13,68 @@ import {
 import introspectionQueryResultData from '../fragmentTypes.json';
 import { getCookie } from './common';
 
+let httpLink;
+
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.map(({ message, locations, path }) =>
       console.log(
         `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
-          locations
-        )}, Path: ${path}`
-      )
+          locations,
+        )}, Path: ${path}`,
+      ),
     );
   }
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
-const httpLink = new BatchHttpLink({
-  uri: '/graphql',
-  credentials: 'same-origin',
-  headers: {
-    Accept: 'application/json',
-    'X-CSRFToken': getCookie('csrftoken'),
-  },
-  fetchOptions: {
-    method: 'POST',
-  },
-  defaultOptions: {
-    watchQuery: {
-      errorPolicy: 'all',
+if (process.env.NODE_ENV === 'production') {
+  httpLink = new BatchHttpLink({
+    uri: '/graphql',
+    credentials: 'same-origin',
+    headers: {
+      Accept: 'application/json',
+      'X-CSRFToken': getCookie('csrftoken'),
     },
-    query: {
-      errorPolicy: 'all',
+    fetchOptions: {
+      method: 'POST',
     },
-    mutate: {
-      errorPolicy: 'all',
+    defaultOptions: {
+      watchQuery: {
+        errorPolicy: 'all',
+      },
+      query: {
+        errorPolicy: 'all',
+      },
+      mutate: {
+        errorPolicy: 'all',
+      },
     },
-  },
-});
+  });
+} else {
+  httpLink = new HttpLink({
+    uri: '/graphql',
+    credentials: 'same-origin',
+    headers: {
+      Accept: 'application/json',
+      'X-CSRFToken': getCookie('csrftoken'),
+    },
+    fetchOptions: {
+      method: 'POST',
+    },
+    defaultOptions: {
+      watchQuery: {
+        errorPolicy: 'all',
+      },
+      query: {
+        errorPolicy: 'all',
+      },
+      mutate: {
+        errorPolicy: 'all',
+      },
+    },
+  });
+}
 
 const headerLink = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers = {} }) => ({
@@ -81,7 +109,7 @@ export const client = new ApolloClient({
         return kind === 'OperationDefinition' && operation === 'subscription';
       },
       wsLink,
-      httpLink
+      httpLink,
     ),
   ]),
   cache: new InMemoryCache({
