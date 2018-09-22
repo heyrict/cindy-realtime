@@ -1,8 +1,10 @@
 import re
 
 from django.conf import settings
-from django.shortcuts import redirect, render, render_to_response
+from django.shortcuts import HttpResponse, redirect, render, render_to_response
 from django.views.decorators.csrf import ensure_csrf_cookie
+
+from sui_hei.models import *
 
 I18N_PATTERN_REGEX = re.compile(r'^/(en|ja)')
 DEBUG = settings.DEBUG
@@ -21,3 +23,11 @@ def serviceWorker(request, *args, **kwargs):
 
 def remove_i18n_pattern(request, *args, **kwargs):
     return redirect(I18N_PATTERN_REGEX.sub("", request.path))
+
+
+def event(request, eventId, *args, **kwargs):
+    ev = Event.objects.get(pk=eventId)
+    if ev.page_src:
+        return HttpResponse(ev.page_src)
+    else:
+        return redirect('/')

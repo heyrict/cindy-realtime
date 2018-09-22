@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import injectSaga from 'utils/injectSaga';
 
 import { Helmet } from 'react-helmet';
@@ -18,11 +19,14 @@ import FilterableList from 'components/FilterableList';
 import PuzzleList from 'components/PuzzleList';
 import GoogleAd from 'components/GoogleAd';
 import PuzzleNavbar from 'components/PuzzleNavbar';
+import EventList from 'components/EventList';
 import PuzzleActiveList from 'containers/PuzzleActiveList';
-import { googleAdInfo } from 'settings';
+import { googleAdInfo, DEFAULT_TIMEZONE } from 'settings';
 
 import saga from './saga';
 import messages from './messages';
+
+const now = moment();
 
 function PuzzlePage(props, context) {
   const _ = context.intl.formatMessage;
@@ -37,6 +41,13 @@ function PuzzlePage(props, context) {
         <span style={{ padding: '0 10px' }} />
       </Heading>
       <PuzzleNavbar />
+      <EventList
+        variables={{
+          orderBy: ['end_time'],
+          endTime_Gt: now.utcOffset(DEFAULT_TIMEZONE).format(),
+        }}
+        itemsPerPage={10}
+      />
       <PuzzleActiveList />
       <GoogleAd {...googleAdInfo.infieldAd} />
       <FilterableList

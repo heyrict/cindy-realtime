@@ -312,3 +312,34 @@ class Schedule(models.Model):
     def __str__(self):
         return "[%s TO %s]: (%s) %s" % (self.scheduled, self.created,
                                         self.user, str(self.content)[:50])
+
+
+class Event(models.Model):
+    user = models.ForeignKey(User, on_delete=CASCADE)
+    title = models.CharField(_("title"), max_length=255)
+    banner_img_url = models.URLField(
+        _("banner image URL"), default=None, blank=True)
+    status = models.IntegerField(_("status"), default=0)
+    start_time = models.DateTimeField(_("start_time"), default=timezone.now)
+    end_time = models.DateTimeField(_("end_time"), default=timezone.now)
+    related_awards = models.ManyToManyField(
+        Award, _("related_awards"), through="EventAward")
+    page_link = models.URLField(_("page link"), default=None, blank=True)
+    page_src = models.TextField(_("page src"), default=None, blank=True)
+
+    class Meta:
+        verbose_name = _("Event")
+
+    def __str__(self):
+        return self.title
+
+
+class EventAward(models.Model):
+    event = models.ForeignKey(Event, on_delete=CASCADE)
+    award = models.ForeignKey(Award, on_delete=CASCADE)
+
+    class Meta:
+        verbose_name = _("EventAward")
+
+    def __str__(self):
+        return "%s: %s" % (self.event.title, self.award.name)

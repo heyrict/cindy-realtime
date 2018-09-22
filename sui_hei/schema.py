@@ -402,6 +402,17 @@ class ScheduleNode(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
+# {{{2 EventNode
+class EventNode(DjangoObjectType):
+    class Meta:
+        model = Event
+        filter_fields = {
+            "start_time": ['lt', 'gt'],
+            "end_time": ['lt', 'gt'],
+        }
+        interfaces = (relay.Node, )
+
+
 # {{{1 Custom Nodes
 # {{{2 TruncDate Node
 class TruncDateNode(graphene.ObjectType):
@@ -1498,6 +1509,8 @@ class Query(object):
         CommentNode, orderBy=graphene.List(of_type=graphene.String))
     all_schedules = DjangoFilterConnectionField(
         ScheduleNode, orderBy=graphene.List(of_type=graphene.String))
+    all_events = DjangoFilterConnectionField(
+        EventNode, orderBy=graphene.List(of_type=graphene.String))
 
     # {{{3 limit-offset connections
     all_puzzles = graphene.ConnectionField(
@@ -1744,6 +1757,10 @@ class Query(object):
     def resolve_all_schedules(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
         return resolveOrderBy(Schedule.objects, orderBy)
+
+    def resolve_all_events(self, info, **kwargs):
+        orderBy = kwargs.get("orderBy", None)
+        return resolveOrderBy(Event.objects, orderBy)
 
     # {{{3 resolve union
     def resolve_puzzle_show_union(self, info, **kwargs):

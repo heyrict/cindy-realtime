@@ -12,6 +12,7 @@ app_name = "sui_hei"
 
 contentpatterns = [
     re_path("^(en|ja)", views.remove_i18n_pattern),
+    path("event/<int:eventId>", views.event, name="event"),
     re_path("(puzzle|profile|rules|dashboard|wiki)", views.main, name="main"),
     path("", views.main, name="main"),
 ] # yapf: disable
