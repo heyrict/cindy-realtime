@@ -26,7 +26,7 @@
     "prebuild": "npm run build:clean",
     "build": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "build:push": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prodpush.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
-    "build:clean": "rimraf ./build",
+    "build:clean": "rimraf ./build ./pushbundle",
     "build:dll": "node ./internals/scripts/dependencies.js",
     "start": "cross-env NODE_ENV=development node server",
     "start:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",

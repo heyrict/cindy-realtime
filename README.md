@@ -85,7 +85,7 @@ Develop
       CREATE DATABASE cindy;
       CREATE USER cindy WITH PASSWORD 'cindy';
       ALTER ROLE cindy SET client_encoding TO 'utf8';
-      ALTER ROLE cindy SET default_transaction_isolation TO 'react committed';
+      ALTER ROLE cindy SET default_transaction_isolation TO 'read committed';
       ALTER ROLE cindy SET timezone TO 'UTC';
       GRANT ALL PRIVILEGES ON DATABASE cindy TO cindy;
       \q;
