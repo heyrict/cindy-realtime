@@ -1,10 +1,9 @@
 import 'react-select/dist/react-select.css';
 import 'react-tippy/dist/tippy.css';
 import 'tippy-custom.css';
-import { injectGlobal } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
-/* eslint no-unused-expressions: 0 */
-injectGlobal`
+const GlobalStyle = createGlobalStyle`
   html,
   body {
     height: 100%;
@@ -237,3 +236,7 @@ injectGlobal`
     margin-bottom: 10px;
   }
 `;
+
+throw new Error(
+  "An injectGlobal usage was converted to createGlobalStyles via codemod but needs to be hooked up. See https://www.styled-components.com/docs/api#createglobalstyle for instructions."
+);

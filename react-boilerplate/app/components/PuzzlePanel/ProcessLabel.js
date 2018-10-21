@@ -21,16 +21,16 @@ const ProcessBase = styled.span`
 const styledProcess = (uaquesCount) => {
   switch (uaquesCount) {
     case 0: // answered
-      return ProcessBase.extend`
-        background: #85d514;
-        color: #eee8d5;
-      `;
+      return styled(ProcessBase)`
+  background: #85d514;
+  color: #eee8d5;
+`;
     default:
       // unanswered
-      return ProcessBase.extend`
-        background: #b58900;
-        color: #eee8d5;
-      `;
+      return styled(ProcessBase)`
+  background: #b58900;
+  color: #eee8d5;
+`;
   }
 };
 

@@ -27,7 +27,7 @@ import ChatMessage from './ChatMessage';
 import messages from './messages';
 import { directchatReceived, openDirectChat } from './actions';
 
-const MessageWrapper = Wrapper.extend`
+const MessageWrapper = styled(Wrapper)`
   overflow-y: auto;
   height: ${(props) => props.height}px;
   width: 100%;

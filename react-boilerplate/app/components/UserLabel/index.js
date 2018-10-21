@@ -29,19 +29,19 @@ const Linked = styled.button`
   }
 `;
 
-const IconMd = ImgMd.extend`
+const IconMd = styled(ImgMd)`
   border: 1px solid #333;
   border-radius: 9999px;
   margin: 0 5px;
 `;
 
-const IconSm = ImgSm.extend`
+const IconSm = styled(ImgSm)`
   border: 1px solid #333;
   border-radius: 9999px;
   margin: 0 3px;
 `;
 
-const IconXs = ImgXs.extend`
+const IconXs = styled(ImgXs)`
   border: 1px solid #333;
   border-radius: 9999px;
   margin: 0 2px;

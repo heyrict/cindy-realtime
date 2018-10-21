@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from "styled-components";
 import { Flex, Box } from 'rebass';
 import { ButtonOutline } from 'style-store';
 
-const StyledBar = ButtonOutline.extend`
+const StyledBar = styled(ButtonOutline)`
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
     color: brown;

@@ -147,7 +147,7 @@ export const Heading = styled.div`
   padding-top: 0.5em;
 `;
 
-export const Button = RebassButton.extend`
+export const Button = styled(RebassButton)`
   border-radius: 10px;
   display: inline-flex;
   align-items: center;
@@ -165,7 +165,7 @@ Button.defaultProps = {
   color: 'white',
 };
 
-export const ButtonOutline = RebassButtonOutline.extend`
+export const ButtonOutline = styled(RebassButtonOutline)`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -210,7 +210,7 @@ export const Input = styled.input`
   font-size: 1.1em;
 `;
 
-export const EditButton = ButtonOutline.extend`
+export const EditButton = styled(ButtonOutline)`
   padding: 5px 10px;
   margin: 0 5px;
   width: auto;
@@ -235,12 +235,12 @@ export const Textarea = styled.textarea`
   font-size: 1.1em;
 `;
 
-export const RoundedPanel = RebassPanel.extend`
+export const RoundedPanel = styled(RebassPanel)`
   border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.382);
 `;
 
-export const Switch = RebassSwitch.extend`
+export const Switch = styled(RebassSwitch)`
   color: #2075c7;
   margin: 2px 5px;
   background-color: ${(props) => (props.checked ? '#2075C7' : 'transparent')};
@@ -253,7 +253,7 @@ export const Switch = RebassSwitch.extend`
   }
 `;
 
-export const NavLink = RebassNavLink.extend`
+export const NavLink = styled(RebassNavLink)`
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
   }

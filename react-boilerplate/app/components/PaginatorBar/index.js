@@ -23,7 +23,7 @@ import Constrained from 'components/Constrained';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
-const SqBtn = ButtonOutline.extend`
+const SqBtn = styled(ButtonOutline)`
   padding: 5px;
   margin: 5px 0;
   max-width: 40px;

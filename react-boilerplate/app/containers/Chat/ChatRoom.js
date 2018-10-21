@@ -5,6 +5,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from "styled-components";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { from_global_id as f, to_global_id as t } from 'common';
@@ -31,7 +32,7 @@ import messages from './messages';
 
 import { defaultChannel } from './constants';
 
-const MessageWrapper = Wrapper.extend`
+const MessageWrapper = styled(Wrapper)`
   overflow-y: auto;
   height: ${(props) => props.height}px;
   width: 100%;
@@ -39,7 +40,7 @@ const MessageWrapper = Wrapper.extend`
   border-radius: 0 0 10px 10px;
 `;
 
-const DescriptionBtn = Button.extend`
+const DescriptionBtn = styled(Button)`
   overflow-y: auto;
   height: ${(props) => props.height}px;
   border-radius: 0;
@@ -51,7 +52,7 @@ const DescriptionBtn = Button.extend`
   }
 `;
 
-const ShowlogBtn = ButtonOutline.extend`
+const ShowlogBtn = styled(ButtonOutline)`
   overflow-y: auto;
   height: ${(props) => props.height}px;
   border-radius: 0;

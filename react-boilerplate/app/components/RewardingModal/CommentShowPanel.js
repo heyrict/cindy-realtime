@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from "styled-components";
 import { FormattedMessage } from 'react-intl';
 
 import { Flex, Box } from 'rebass';
@@ -9,7 +10,7 @@ import UserLabel from 'components/UserLabel';
 
 import messages from './messages';
 
-const WarningBtn = ButtonOutline.extend`
+const WarningBtn = styled(ButtonOutline)`
   color: tomato;
   width: 100%;
   border: 2px solid tomato;

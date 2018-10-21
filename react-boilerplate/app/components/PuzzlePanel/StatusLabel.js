@@ -22,27 +22,27 @@ const StatusBase = styled.span`
 const styledStatus = (statusCode) => {
   switch (statusCode) {
     case 0: // unsolved
-      return StatusBase.extend`
-        border: 1px solid #cb4b16;
-        color: #cb4b16;
-      `;
+      return styled(StatusBase)`
+  border: 1px solid #cb4b16;
+  color: #cb4b16;
+`;
     case 1: // solved
-      return StatusBase.extend`
-        border: 1px solid #859900;
-        color: #859900;
-      `;
+      return styled(StatusBase)`
+  border: 1px solid #859900;
+  color: #859900;
+`;
     case 2: // dazed
-      return StatusBase.extend`
-        border: 1px solid #259185;
-        color: #259185;
-      `;
+      return styled(StatusBase)`
+  border: 1px solid #259185;
+  color: #259185;
+`;
     case 3: // hidden
     case 4: // forced hidden
     default:
-      return StatusBase.extend`
-        border: 1px solid gray;
-        color: gray;
-      `;
+      return styled(StatusBase)`
+  border: 1px solid gray;
+  color: gray;
+`;
   }
 };
 

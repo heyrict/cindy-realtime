@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from "styled-components";
 import moment from 'moment';
 import { line2md, from_global_id as f } from 'common';
 import { compose } from 'redux';
@@ -33,13 +34,13 @@ import hintMutation from 'graphql/UpdateHintMutation';
 
 import dialogueMessages from 'containers/Dialogue/messages';
 
-const StyledButton = ButtonOutline.extend`
+const StyledButton = styled(ButtonOutline)`
   padding: 5px 15px;
   margin-bottom: 5px;
   width: 100%;
 `;
 
-const PuzzleFrame = Frame.extend`
+const PuzzleFrame = styled(Frame)`
   margin: 5px 0;
 `;
 

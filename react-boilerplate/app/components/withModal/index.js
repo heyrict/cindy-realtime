@@ -14,7 +14,7 @@ import { Button } from 'style-store';
 import messages from './messages';
 import Modal from './Modal';
 
-const StyledButton = Button.extend`
+const StyledButton = styled(Button)`
   padding: 10px;
   border-radius: 5px;
   margin: 0 5px;

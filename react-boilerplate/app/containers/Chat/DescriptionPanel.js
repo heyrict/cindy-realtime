@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
@@ -25,14 +26,14 @@ import DeleteFromFavBtn from './DeleteFromFavBtn';
 import { updateChannel } from './actions';
 import messages from './messages';
 
-const StyledButton = ButtonOutline.extend`
+const StyledButton = styled(ButtonOutline)`
   padding: 5px 15px;
   margin: 0 0 5px 0;
   border-radius: 10px;
   width: 100%;
 `;
 
-const DescriptionWrapper = Wrapper.extend`
+const DescriptionWrapper = styled(Wrapper)`
   overflow-y: auto;
   height: ${(props) => props.height}px;
   width: 100%;

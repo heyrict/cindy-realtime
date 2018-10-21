@@ -34,7 +34,7 @@ const IntroBox = styled(Box)`
   }
 `;
 
-const StartBox = Button.extend`
+const StartBox = styled(Button)`
   font-weight: bold;
   color: #4e182d;
   background: burlywood;

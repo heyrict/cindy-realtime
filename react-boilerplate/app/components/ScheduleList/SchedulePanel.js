@@ -7,7 +7,7 @@ import moment from 'moment';
 
 import UserLabel from 'components/UserLabel';
 
-const ScheduleTime = Time.extend`
+const ScheduleTime = styled(Time)`
   background-color: #2d52a0;
   color: blanchedalmond;
   border-radius: 5px;

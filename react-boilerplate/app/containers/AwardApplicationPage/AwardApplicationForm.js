@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from "styled-components";
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { line2md } from 'common';
@@ -17,7 +18,7 @@ import { nAlert } from 'containers/Notifier/actions';
 
 import messages from './messages';
 
-const StyledBtn = ButtonOutline.extend`
+const StyledBtn = styled(ButtonOutline)`
   padding: 5px;
   min-width: 30px;
 `;

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from "styled-components";
 import moment from 'moment';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -30,12 +31,12 @@ import cross from 'images/cross.svg';
 
 import messages from './messages';
 
-const Textarea = DefaultTextarea.extend`
+const Textarea = styled(DefaultTextarea)`
   min-height: 75px;
   max-height: 200px;
 `;
 
-const StyledButton = ButtonOutline.extend`
+const StyledButton = styled(ButtonOutline)`
   padding: 5px 15px;
   margin-bottom: 5px;
   width: 100%;

@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -12,7 +13,7 @@ import messages from './messages';
 import ChatRoomCreateModal from './ChatRoomCreateModal';
 import Bar from './Bar';
 
-const StyledButton = ButtonOutline.extend`
+const StyledButton = styled(ButtonOutline)`
   border-radius: 5px;
   padding: 10px;
 `;

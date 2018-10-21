@@ -6,7 +6,7 @@ import { ButtonTransparent } from 'rebass';
 
 import messages from './messages';
 
-const StyledButton = ButtonTransparent.extend`
+const StyledButton = styled(ButtonTransparent)`
   border-radius: 10px;
   padding: 10px 5px;
   margin: 0;

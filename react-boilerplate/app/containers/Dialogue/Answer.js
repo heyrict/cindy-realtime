@@ -1,3 +1,4 @@
+import styled from "styled-components";
 /* eslint-disable indent */
 
 import React from 'react';
@@ -36,12 +37,12 @@ import { OPTIONS_SEND } from 'containers/Settings/constants';
 
 import messages from './messages';
 
-const StyledButton = ButtonOutline.extend`
+const StyledButton = styled(ButtonOutline)`
   padding: 5px 15px;
   width: 100%;
 `;
 
-const Img = ImgMd.extend`
+const Img = styled(ImgMd)`
   padding-right: 10px;
 `;
 

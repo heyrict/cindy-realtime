@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from "styled-components";
 import { Flex, Box } from 'rebass';
 import { Button, Input, Select } from 'style-store';
 import { FormattedMessage } from 'react-intl';
 
 import messages from './messages';
 
-const SearchBtn = Button.extend`
+const SearchBtn = styled(Button)`
   border-radius: 10px;
   padding: 5px;
   min-width: 50px;
@@ -15,7 +16,7 @@ const SearchBtn = Button.extend`
   margin-bottom: 5px;
 `;
 
-const SearchSelect = Select.extend`
+const SearchSelect = styled(Select)`
   min-height: 36px;
   margin-top: 5px;
   margin-bottom: 5px;
@@ -28,7 +29,7 @@ const SearchSelect = Select.extend`
   }
 `;
 
-const SearchInput = Input.extend`
+const SearchInput = styled(Input)`
   min-height: 36px;
   margin-top: 5px;
   margin-bottom: 5px;

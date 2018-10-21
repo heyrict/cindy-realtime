@@ -33,7 +33,7 @@ const StyledButton = styled.button`
   margin-right: 6px;
 `;
 
-const AnonymousIcon = ImgXs.extend`
+const AnonymousIcon = styled(ImgXs)`
   border: 1px solid #888;
   border-radius: 9999px;
   margin-bottom: 3px;

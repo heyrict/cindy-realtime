@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from "styled-components";
 import { FormattedMessage } from 'react-intl';
 import { Flex, Box, ButtonTransparent } from 'rebass';
 import { line2md } from 'common';
@@ -16,17 +17,17 @@ import UserLabel from 'components/UserLabel';
 
 import messages from './messages';
 
-const Border = ButtonOutline.extend`
+const Border = styled(ButtonOutline)`
   border-radius: ${({ open }) => (open ? '10px 10px 0 0' : '10px')};
 `;
 
-const Content = Box.extend`
+const Content = styled(Box)`
   border-radius: 0 0 10px 10px;
   border: 2px solid #2075c7;
   border-top: 0;
 `;
 
-const OpenButton = ButtonTransparent.extend`
+const OpenButton = styled(ButtonTransparent)`
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
   }

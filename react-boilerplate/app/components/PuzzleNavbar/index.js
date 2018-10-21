@@ -17,7 +17,7 @@ import { withLocale } from 'common';
 import dashboardMessages from 'containers/DashBoardPage/messages';
 import puzzlepageMessages from 'containers/PuzzlePage/messages';
 
-const ToolButton = Button.extend`
+const ToolButton = styled(Button)`
   padding: 5px;
   background-color: darkgoldenrod;
   &:hover {

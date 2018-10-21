@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from "styled-components";
 import { Flex, Box } from 'rebass';
 import { Tooltip } from 'react-tippy';
 import { Button } from 'style-store';
 
-const ToolbarBtn = Button.extend`
+const ToolbarBtn = styled(Button)`
   padding: 5px 10px;
   margin: 0;
   border-radius: 0;

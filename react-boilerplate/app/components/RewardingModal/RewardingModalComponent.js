@@ -23,12 +23,12 @@ const Title = styled.h2`
   text-align: center;
 `;
 
-const Frame = PuzzleFrame.extend`
+const Frame = styled(PuzzleFrame)`
   margin: 5px 0;
   overflow: auto;
 `;
 
-const JumpButton = ButtonOutline.extend`
+const JumpButton = styled(ButtonOutline)`
   background-color: rgba(255, 255, 255, 0.5);
   &:hover {
     background-color: rgba(255, 255, 255, 0.3);
@@ -36,7 +36,7 @@ const JumpButton = ButtonOutline.extend`
   }
 `;
 
-const CloseButton = ButtonOutline.extend`
+const CloseButton = styled(ButtonOutline)`
   background-color: rgba(255, 255, 255, 0.5);
   color: #aa6644;
   &:hover {
@@ -45,7 +45,7 @@ const CloseButton = ButtonOutline.extend`
   }
 `;
 
-const PuzzleUserLabel = NicknameLink.extend`
+const PuzzleUserLabel = styled(NicknameLink)`
   padding: 5px;
   font-size: 1.1em;
   color: #033393;

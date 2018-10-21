@@ -5,13 +5,14 @@
  */
 
 import React from 'react';
+import styled from "styled-components";
 import PropTypes from 'prop-types';
 import { Flex } from 'rebass';
 import { Button } from 'style-store';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
-const ProfileButton = Button.extend`
+const ProfileButton = styled(Button)`
   padding: 5px;
   background-color: darkgoldenrod;
   &:hover {
