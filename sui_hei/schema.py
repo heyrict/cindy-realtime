@@ -248,6 +248,14 @@ class PuzzleNode(DjangoObjectType):
         except:
             return self.bookmark_set.count()
 
+    # Prevent sending answer to un-privileged users
+    def resolve_solution(self, info):
+        user = info.context.user
+
+        if user == self.user or self.status == 1 or self.status == 2:
+            return self.solution
+        return ""
+
 
 # {{{2 UserAwardNode
 class UserAwardNode(DjangoObjectType):
