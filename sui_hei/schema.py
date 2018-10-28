@@ -254,6 +254,12 @@ class PuzzleNode(DjangoObjectType):
 
         if user == self.user or self.status == 1 or self.status == 2:
             return self.solution
+
+        # Long-term yami
+        if self.status == 0 and\
+                self.yami == 2 and\
+                {'true': True} in self.dialogue_set.filter(user=user).values("true"):
+            return self.solution
         return ""
 
 
