@@ -21,6 +21,12 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
+import 'react-select/dist/react-select.css';
+import 'react-tippy/dist/tippy.css';
+import 'datepicker-custom.css';
+import 'tippy-custom.css';
+import 'base.css';
+
 import Chat from 'containers/Chat';
 import Notifier from 'containers/Notifier';
 import TopNavbar from 'containers/TopNavbar';

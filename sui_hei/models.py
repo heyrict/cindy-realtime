@@ -134,6 +134,11 @@ class Puzzle(models.Model):
       1: tobira
       2: kameo
       3: shin-keshiki
+
+    yami:
+      0: normal
+      1: yami
+      2: long-term yami
     '''
     id = models.AutoField(max_length=11, primary_key=True)
     user = models.ForeignKey(User, on_delete=CASCADE)
@@ -149,6 +154,8 @@ class Puzzle(models.Model):
     status = models.IntegerField(_('status'), default=0)
     memo = models.TextField(_('memo'), blank=True)
     anonymous = models.BooleanField(_('anonymous'), default=False)
+    grotesque = models.BooleanField(_('grotesque'), default=False)
+    dazed_on = models.DateField(_('dazed_on'))
 
     class Meta:
         verbose_name = _("Puzzle")

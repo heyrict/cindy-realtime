@@ -34,6 +34,14 @@ export default defineMessages({
     id: 'app.containers.PuzzleAddForm.anonymousLabel',
     defaultMessage: 'Anonymous',
   },
+  grotesqueLabel: {
+    id: 'app.containers.PuzzleAddForm.grotesqueLabel',
+    defaultMessage: 'Grotesque',
+  },
+  dazedOnLabel: {
+    id: 'app.containers.PuzzleAddForm.dazedOnLabel',
+    defaultMessage: 'Dazed On',
+  },
   previewEditUsage: {
     id: 'app.containers.PuzzleAddForm.previewEditUsage',
     defaultMessage:

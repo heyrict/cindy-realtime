@@ -190,6 +190,15 @@ ButtonOutline.defaultProps = {
   borderRadius: 10,
 };
 
+export const WarningBtn = styled(ButtonOutline)`
+  color: tomato;
+  width: 100%;
+  border: 2px solid tomato;
+  &:hover {
+    background-color: tomato;
+  }
+`;
+
 export const Select = styled.select`
   border-radius: 10px;
   border: 1px solid #2075c7;

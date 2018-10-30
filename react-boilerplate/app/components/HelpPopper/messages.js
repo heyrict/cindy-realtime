@@ -25,6 +25,21 @@ export default defineMessages({
     id: `${scope}.puzzle_solution`,
     defaultMessage: '**Solution**: The solution to the puzzle',
   },
+  puzzle_anonymous: {
+    id: `${scope}.puzzle_anonymous`,
+    defaultMessage:
+      '**Anonymous**: Whether to show your identity *before puzzle is solved*. After the puzzle is solved, your identity will be opened to public.',
+  },
+  puzzle_grotesque: {
+    id: `${scope}.puzzle_grotesque`,
+    defaultMessage:
+      '**Grotesque**: Whether the solution contain grotesque features. Your solution will be automatically masked if this option is selected.',
+  },
+  puzzle_dazedOn: {
+    id: `${scope}.puzzle_dazedOn`,
+    defaultMessage:
+      '**Dazed On**: In case you have some incidents in real-life and cannot put the solution in time, after the selected *dazed_on* time, the puzzle will be automatically marked as `dazed`.\nYou can update the *dazed_on* date after you put the question.',
+  },
   dashboard_schedule: {
     id: `${scope}.dashboard_schedule`,
     defaultMessage:

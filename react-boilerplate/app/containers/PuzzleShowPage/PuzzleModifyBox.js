@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import moment from 'moment';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -17,7 +18,15 @@ import puzzleUpdateMutation from 'graphql/UpdatePuzzleMutation';
 
 import tick from 'images/tick.svg';
 import cross from 'images/cross.svg';
-import { ImgXs, PuzzleFrame, EditButton, Switch, Textarea } from 'style-store';
+import {
+  DatePicker,
+  ImgXs,
+  PuzzleFrame,
+  EditButton,
+  Switch,
+  Textarea,
+} from 'style-store';
+import { getMaxDazedDays } from 'settings';
 import messages from './messages';
 
 const StyledTabItem = styled.button`
@@ -46,6 +55,8 @@ class PuzzleModifyBox extends React.Component {
       solve: props.puzzle.status === 3,
       yami: props.puzzle.yami,
       hidden: props.puzzle.status === 3,
+      grotesque: props.puzzle.grotesque,
+      dazedOn: moment(props.puzzle.dazedOn),
       hint: '',
     };
     this.changeTab = (t) => {
@@ -71,6 +82,12 @@ class PuzzleModifyBox extends React.Component {
     };
     this.handleHiddenChange = () => {
       this.setState((p) => ({ hidden: !p.hidden }));
+    };
+    this.handleGrotesqueChange = () => {
+      this.setState((p) => ({ grotesque: !p.grotesque }));
+    };
+    this.handleDazedOnChange = (v) => {
+      this.setState({ dazedOn: v });
     };
     this.handleSaveSolution = this.handleSaveSolution.bind(this);
     this.handleSaveMemo = this.handleSaveMemo.bind(this);
@@ -117,7 +134,9 @@ class PuzzleModifyBox extends React.Component {
           },
         },
       })
-      .then(() => {})
+      .then(() => {
+        this.props.alert('Save Succeed!');
+      })
       .catch((error) => {
         this.props.alert(error.message);
       });
@@ -153,10 +172,14 @@ class PuzzleModifyBox extends React.Component {
             puzzleId: this.props.puzzleId,
             yami: this.state.yami,
             status,
+            grotesque: this.state.grotesque,
+            dazedOn: this.state.dazedOn.format('YYYY-MM-DD'),
           },
         },
       })
-      .then(() => {})
+      .then(() => {
+        this.props.alert('Save Succeed!');
+      })
       .catch((error) => {
         this.props.alert(error.message);
       });
@@ -233,7 +256,9 @@ class PuzzleModifyBox extends React.Component {
                 <div hidden={!this.state.solutionEditMode}>
                   <PreviewEdit
                     content={this.props.puzzle.solution}
-                    ref={(ref) => (this.solutionTextarea = ref)}
+                    ref={(ref) => {
+                      this.solutionTextarea = ref;
+                    }}
                     safe={this.props.puzzle.contentSafe}
                   />
                   <Flex>
@@ -269,7 +294,9 @@ class PuzzleModifyBox extends React.Component {
               <div hidden={!this.state.memoEditMode}>
                 <PreviewEdit
                   content={this.props.puzzle.memo}
-                  ref={(ref) => (this.memoTextarea = ref)}
+                  ref={(ref) => {
+                    this.memoTextarea = ref;
+                  }}
                 />
                 <Flex>
                   <EditButton
@@ -311,11 +338,37 @@ class PuzzleModifyBox extends React.Component {
           {this.state.activeTab === 3 && (
             <div>
               <Flex flexWrap="wrap" mx={1}>
+                {this.props.puzzle.status === 0 && (
+                  <Flex w={1}>
+                    <Box>
+                      <FormattedMessage {...messages.dazedDate} />
+                    </Box>
+                    <Box w={1}>
+                      <DatePicker
+                        onChange={this.handleDazedOnChange}
+                        selected={this.state.dazedOn}
+                        minDate={moment()}
+                        maxDate={moment().add(
+                          getMaxDazedDays(this.props.puzzle),
+                          'days',
+                        )}
+                        dateFormat="lll"
+                      />
+                    </Box>
+                  </Flex>
+                )}
                 <Box w={[1 / 3, 1 / 5]} hidden={this.props.puzzle.status !== 0}>
                   <FormattedMessage {...messages.putSolution} />
                   <Switch
                     checked={this.state.solve}
                     onClick={this.handleSolveChange}
+                  />
+                </Box>
+                <Box w={[1 / 3, 1 / 5]}>
+                  <FormattedMessage {...messages.grotesque} />
+                  <Switch
+                    checked={this.state.grotesque}
+                    onClick={this.handleGrotesqueChange}
                   />
                 </Box>
                 <Box

@@ -49,6 +49,7 @@ import QuestionPutBox from './QuestionPutBox';
 import PuzzleModifyBox from './PuzzleModifyBox';
 import RewardingBox from './RewardingBox';
 import BookmarkBox from './BookmarkBox';
+import WarningMask from './WarningMask';
 
 const FilterButton = styled.button`
   border-bottom: ${({ enabled }) => (enabled ? '3px solid #2075c7' : '0')};
@@ -350,7 +351,9 @@ export class PuzzleShowPage extends React.Component {
           P.status === 2 ||
           P.user.rowid === U ||
           getTrueAnswInLtYami) && (
-          <Frame text={P.solution} solved={P.modified} safe={P.contentSafe} />
+          <WarningMask defaultShow={P.grotesque}>
+            <Frame text={P.solution} solved={P.modified} safe={P.contentSafe} />
+          </WarningMask>
         )}
         {(P.status === 1 || P.status === 2 || getTrueAnswInLtYami) &&
           U && (

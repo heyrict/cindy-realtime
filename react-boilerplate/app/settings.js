@@ -26,6 +26,18 @@ export const googleAdInfo = {
   },
 };
 
+export const maxDazedDaysByGenre = [
+  7, // Classic
+  14, // Twenty Questions
+  14, // Little Albat
+  28, // Others
+];
+export const maxDazedDaysLongtermYami = 28;
+export const getMaxDazedDays = (puzzle) =>
+  puzzle.yami === 2
+    ? maxDazedDaysLongtermYami
+    : maxDazedDaysByGenre[puzzle.genre];
+
 export const MIN_CONTENT_SAFE_CREDIT = 1000;
 
 const domainRegex = new RegExp(

@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
@@ -14,9 +15,9 @@ import { push } from 'react-router-redux';
 import { withLocale, to_global_id as t, text2md } from 'common';
 import { nAlert } from 'containers/Notifier/actions';
 import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
-import { MIN_CONTENT_SAFE_CREDIT } from 'settings';
+import { MIN_CONTENT_SAFE_CREDIT, getMaxDazedDays } from 'settings';
 
-import { Input, Select, ButtonOutline, ImgXs } from 'style-store';
+import { DatePicker, Input, ButtonOutline } from 'style-store';
 import ButtonSelect from 'components/ButtonSelect';
 import FieldGroup from 'components/FieldGroup';
 import PreviewEdit from 'components/PreviewEdit';
@@ -27,9 +28,6 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import PuzzleAddFormMutation from 'graphql/PuzzleAddFormMutation';
 import UserLabel from 'graphql/UserLabel';
-
-import cross from 'images/cross.svg';
-import tick from 'images/tick.svg';
 
 import messages from './messages';
 
@@ -43,27 +41,39 @@ export class PuzzleAddForm extends React.Component {
       puzzleGenre: 0,
       puzzleYami: 0,
       puzzleAnonymous: false,
+      puzzleGrotesque: false,
+      puzzleDazedOn: moment().add(
+        getMaxDazedDays({ genre: 0, yami: 0 }),
+        'days',
+      ),
       loading: false,
     };
 
-    this.handleChange = this.handleChange.bind(this);
+    this.confinedDazedOn = ({
+      puzzleDazedOn: prevDazedOn,
+      puzzleGenre: genre,
+      puzzleYami: yami,
+    }) => {
+      const maxDazedDays = getMaxDazedDays({
+        genre,
+        yami,
+      });
+
+      if (
+        moment()
+          .add(maxDazedDays, 'days')
+          .diff(prevDazedOn) < 0
+      ) {
+        return moment().add(maxDazedDays, 'days');
+      }
+      return prevDazedOn;
+    };
     this.handleSelectChange = (target, value) =>
-      this.setState({ [target]: value });
+      this.setState((p) => ({
+        puzzleDazedOn: this.confinedDazedOn({ ...p, [target]: value }),
+        [target]: value,
+      }));
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  // }}}
-  // {{{ handleChange
-  handleChange(e) {
-    const { target } = e;
-    if (target.id === 'formPuzzleAddTitle') {
-      this.setState({ puzzleTitle: target.value });
-    } else if (target.id === 'formPuzzleAddGenre') {
-      this.setState({ puzzleGenre: target.value });
-    } else if (target.id === 'formPuzzleAddYami') {
-      this.setState({ puzzleYami: target.value });
-    } else if (target.id === 'formPuzzleAddAnonymous') {
-      this.setState({ puzzleAnonymous: target.value });
-    }
   }
   // }}}
   // {{{ handleSubmit
@@ -75,6 +85,8 @@ export class PuzzleAddForm extends React.Component {
       puzzleGenre,
       puzzleYami,
       puzzleAnonymous,
+      puzzleGrotesque,
+      puzzleDazedOn,
     } = this.state;
     const puzzleContent =
       this.contentTextarea && this.contentTextarea.getContent();
@@ -92,6 +104,8 @@ export class PuzzleAddForm extends React.Component {
             puzzleContent,
             puzzleSolution,
             puzzleAnonymous,
+            puzzleGrotesque,
+            puzzleDazedOn: puzzleDazedOn.format('YYYY-MM-DD'),
           },
         },
       })
@@ -115,7 +129,9 @@ export class PuzzleAddForm extends React.Component {
           Ctl={Input}
           type="text"
           value={this.state.puzzleTitle}
-          onChange={this.handleChange}
+          onChange={(e) =>
+            this.handleSelectChange('puzzleTitle', e.target.value)
+          }
         />
         <FieldGroup
           label={
@@ -185,7 +201,12 @@ export class PuzzleAddForm extends React.Component {
         />
         <FieldGroup
           id="formPuzzleAddAnonymous"
-          label={<FormattedMessage {...messages.anonymousLabel} />}
+          label={
+            <span>
+              <FormattedMessage {...messages.anonymousLabel} />
+              <HelpPopper messageId="puzzle_anonymous" />
+            </span>
+          }
           CtlElement={
             <ButtonSelect
               value={this.state.puzzleAnonymous}
@@ -200,6 +221,53 @@ export class PuzzleAddForm extends React.Component {
           }
         />
         <FieldGroup
+          id="formPuzzleAddGrotesque"
+          label={
+            <span>
+              <FormattedMessage {...messages.grotesqueLabel} />
+              <HelpPopper messageId="puzzle_grotesque" />
+            </span>
+          }
+          CtlElement={
+            <ButtonSelect
+              value={this.state.puzzleGrotesque}
+              onChange={(option) =>
+                this.handleSelectChange('puzzleGrotesque', option.value)
+              }
+              options={[
+                { value: false, label: '×' },
+                { value: true, label: '○' },
+              ]}
+            />
+          }
+        />
+        <FieldGroup
+          id="formPuzzleAddDazedOn"
+          label={
+            <span>
+              <FormattedMessage {...messages.dazedOnLabel} />
+              <HelpPopper messageId="puzzle_dazedOn" />
+            </span>
+          }
+          CtlElement={
+            <DatePicker
+              onChange={(value) =>
+                this.handleSelectChange('puzzleDazedOn', value)
+              }
+              selected={this.state.puzzleDazedOn}
+              minDate={moment()}
+              maxDate={moment().add(
+                getMaxDazedDays({
+                  genre: this.state.puzzleGenre,
+                  yami: this.state.puzzleYami,
+                }),
+                'days',
+              )}
+              dateFormat="ll"
+            />
+          }
+        />
+        <FieldGroup
           id="formPuzzleAddContent"
           label={
             <span>
@@ -209,7 +277,9 @@ export class PuzzleAddForm extends React.Component {
           }
           CtlElement={
             <PreviewEdit
-              ref={(ref) => (this.contentTextarea = ref)}
+              ref={(ref) => {
+                this.contentTextarea = ref;
+              }}
               safe={
                 this.props.currentUser
                   ? this.props.currentUser.credit > MIN_CONTENT_SAFE_CREDIT

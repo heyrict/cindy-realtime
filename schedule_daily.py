@@ -2,12 +2,12 @@
 import os
 import logging
 import yaml
-from datetime import timedelta
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cindy.settings")
 
 import django
 django.setup()
 from django.utils import timezone
+from django.utils.timezone import timedelta
 
 from sui_hei.models import Award, ChatMessage, ChatRoom, Puzzle, User, DirectMessage
 
@@ -28,7 +28,7 @@ def clean_recent_minichat(chatroomName="lobby", recent=None):
         logger.debug("[ChatRoom:%s]: Leaving message count: %s" %
                      (chatroomName, recent))
 
-    if count < recent:
+    if count <= recent:
         return
 
     try:
@@ -52,15 +52,14 @@ def clean_recent_directmessages(recent=90):
     outdated.delete()
 
 
-def mark_puzzle_as_dazed(recent=14):
-    now = timezone.now()
-    recent_days_ago = now - timedelta(days=recent)
-    unsolved = Puzzle.objects.filter(status=0, modified__lt=recent_days_ago)
+def mark_puzzle_as_dazed():
+    now = timezone.datetime.date(timezone.now())
+    unsolved = Puzzle.objects.filter(status=0, dazed_on__lte=now)
     for dazed_puzzle in unsolved:
         logger.debug("[Puzzle]: Mark dazed: %d - %s" % (dazed_puzzle.id,
                                                         dazed_puzzle.title))
         dazed_puzzle.status = 2
-        dazed_puzzle.modified = now
+        dazed_puzzle.modified = timezone.now()
         dazed_puzzle.save()
 
 
@@ -79,3 +78,6 @@ if __name__ == "__main__":
     recent = settings.get('direct_message_preserve_days', None)
     if isinstance(recent, int):
         clean_recent_directmessages(recent)
+
+    # mark dazed puzzles
+    mark_puzzle_as_dazed()

@@ -5,19 +5,10 @@ import { FormattedMessage } from 'react-intl';
 
 import { Flex, Box } from 'rebass';
 import { line2md } from 'common';
-import { ButtonOutline } from 'style-store';
+import { WarningBtn } from 'style-store';
 import UserLabel from 'components/UserLabel';
 
 import messages from './messages';
-
-const WarningBtn = styled(ButtonOutline)`
-  color: tomato;
-  width: 100%;
-  border: 2px solid tomato;
-  &:hover {
-    background-color: tomato;
-  }
-`;
 
 class CommentShowPanel extends React.PureComponent {
   constructor(props) {

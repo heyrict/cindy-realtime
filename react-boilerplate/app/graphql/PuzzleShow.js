@@ -33,6 +33,8 @@ const PuzzleShow = gql`
       contentSafe
       solution
       memo
+      grotesque
+      dazedOn
       created
       modified
     }

@@ -669,6 +669,8 @@ class CreatePuzzle(relay.ClientIDMutation):
         puzzleContent = graphene.String(required=True)
         puzzleSolution = graphene.String(required=True)
         puzzleAnonymous = graphene.Boolean(required=True)
+        puzzleGrotesque = graphene.Boolean(required=True)
+        puzzleDazedOn = graphene.String(required=True)
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -682,6 +684,8 @@ class CreatePuzzle(relay.ClientIDMutation):
         content = input["puzzleContent"]
         solution = input["puzzleSolution"]
         anonymous = input["puzzleAnonymous"]
+        grotesque = input["puzzleGrotesque"]
+        dazedOn = input["puzzleDazedOn"]
 
         if not title:
             raise ValidationError(_("Title cannot be empty!"))
@@ -702,6 +706,8 @@ class CreatePuzzle(relay.ClientIDMutation):
             solution=solution,
             created=created,
             anonymous=anonymous,
+            grotesque=grotesque,
+            dazed_on=dazedOn,
             modified=created)
 
         # Delete messages in puzzle-[id] channel
@@ -1049,6 +1055,8 @@ class UpdatePuzzle(graphene.ClientIDMutation):
         solution = graphene.String()
         memo = graphene.String()
         status = graphene.Int()
+        grotesque = graphene.Boolean()
+        dazedOn = graphene.Date()
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -1061,6 +1069,8 @@ class UpdatePuzzle(graphene.ClientIDMutation):
         solution = input.get('solution')
         memo = input.get('memo')
         status = input.get('status')
+        grotesque = input.get("grotesque")
+        dazedOn = input.get("dazedOn")
 
         if solution == '':
             raise ValidationError(_("Solution cannot be empty!"))
@@ -1080,6 +1090,12 @@ class UpdatePuzzle(graphene.ClientIDMutation):
             if status == 1 and puzzle.status == 0:
                 puzzle.modified = timezone.now()
             puzzle.status = status
+
+        if grotesque is not None:
+            puzzle.grotesque = grotesque
+
+        if dazedOn is not None:
+            puzzle.dazed_on = dazedOn
 
         puzzle.save()
         return UpdatePuzzle(puzzle=puzzle)

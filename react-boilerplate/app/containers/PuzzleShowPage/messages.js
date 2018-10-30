@@ -66,6 +66,14 @@ export default defineMessages({
     id: 'app.containers.PuzzleShowPage.hint',
     defaultMessage: 'Hint',
   },
+  dazedDate: {
+    id: 'app.containers.PuzzleShowPage.dazedDate',
+    defaultMessage: 'Dazed Date',
+  },
+  grotesque: {
+    id: 'app.containers.PuzzleShowPage.grotesque',
+    defaultMessage: 'Grotesque',
+  },
   controlPanel: {
     id: 'app.containers.PuzzleShowPage.controlPanel',
     defaultMessage: 'Control Panel',
@@ -106,5 +114,10 @@ export default defineMessages({
   commentNoBlankAlert: {
     id: 'app.containers.PuzzleShowPage.commentNoBlankAlert',
     defaultMessage: 'Comment cannot be blank!',
+  },
+  grotesqueWarning: {
+    id: 'app.containers.PuzzleShowPage.grotesqueWarning',
+    defaultMessage:
+      'There are some grotesque contents here, click here if you want to view it.',
   },
 });
