@@ -37,6 +37,10 @@ const PuzzleShow = gql`
       dazedOn
       created
       modified
+      starCount
+      starSum
+      commentCount
+      bookmarkCount
     }
     allComments(puzzle: $id, user: $userId) {
       edges {

@@ -23,7 +23,7 @@ export function RewardingModal(props) {
   } else if (loading) {
     return <LoadingDots />;
   }
-  return <RewardingModalComponent {...others} {...puzzle} />;
+  return <RewardingModalComponent puzzle={puzzle} {...others} />;
 }
 
 RewardingModal.propTypes = {

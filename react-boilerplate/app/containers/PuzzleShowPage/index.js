@@ -47,6 +47,7 @@ import Frame from './Frame';
 import messages from './messages';
 import QuestionPutBox from './QuestionPutBox';
 import PuzzleModifyBox from './PuzzleModifyBox';
+import PuzzleResultBar from './PuzzleResultBar';
 import RewardingBox from './RewardingBox';
 import BookmarkBox from './BookmarkBox';
 import WarningMask from './WarningMask';
@@ -305,6 +306,16 @@ export class PuzzleShowPage extends React.Component {
               )}
             </FormattedMessage>
           )}
+        {(P.status === 1 || P.status === 2 || getTrueAnswInLtYami) && (
+          <Constrained level={1}>
+            <PuzzleResultBar
+              puzzleId={P.id}
+              starCount={P.starCount}
+              starSum={P.starSum}
+              commentCount={P.commentCount}
+            />
+          </Constrained>
+        )}
         {(P.status === 1 ||
           P.status === 2 ||
           P.user.id === U ||

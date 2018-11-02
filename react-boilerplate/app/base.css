@@ -9,9 +9,6 @@ body {
   font-family: 'Noto Sans CJK JP', 'Dejavu Sans', Inconsolata, Consolas,
     Helvetica, Arial, sans-serif;
   overscroll-behavior: contain;
-  @media (max-width: 400px) {
-    font-size: 13px;
-  }
 }
 
 body {
@@ -172,15 +169,6 @@ pre > code {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  @media (min-width: 400px) {
-    width: 95%;
-  }
-  @media (min-width: 760px) {
-    width: 88%;
-  }
-  @media (min-width: 1024px) {
-    width: 76%;
-  }
 }
 .modal-container > .modal-actions {
   align-self: flex-end;
@@ -250,4 +238,27 @@ h2,
 h3 {
   margin-top: 20px;
   margin-bottom: 10px;
+}
+
+/* media queries */
+@media (max-width: 400px) {
+  html,
+  body {
+    font-size: 13px;
+  }
+  .modal-container > .modal {
+    width: 95%;
+  }
+}
+
+@media (min-width: 760px) {
+  .modal-container > .modal {
+    width: 88%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .modal-container > .modal {
+    width: 76%;
+  }
 }

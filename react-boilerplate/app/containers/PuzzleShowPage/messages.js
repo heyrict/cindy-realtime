@@ -120,4 +120,12 @@ export default defineMessages({
     defaultMessage:
       'There are some grotesque contents here, click here if you want to view it.',
   },
+  starCount: {
+    id: 'app.containers.PuzzleShowPage.starCount',
+    defaultMessage: 'Star Count',
+  },
+  commentCount: {
+    id: 'app.containers.PuzzleShowPage.commentCount',
+    defaultMessage: 'Comment Count',
+  },
 });
