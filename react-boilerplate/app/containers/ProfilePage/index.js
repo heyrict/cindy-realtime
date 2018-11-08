@@ -32,19 +32,21 @@ import makeSelectUserNavbar from 'containers/UserNavbar/selectors';
 import { selectLocation } from 'containers/App/selectors';
 import { nAlert } from 'containers/Notifier/actions';
 import ProfileDisplay from './ProfileDisplay';
+import CommentDisplay from './CommentDisplay';
 import saga from './saga';
 import messages from './messages';
 import { TAB_NAMES } from './constants';
 
 function ProfilePage(props, context) {
   const _ = context.intl.formatMessage;
-  const userId = t('UserNode', props.match.params.id);
   const { loading, error, user } = props.data;
+  const userId = t('UserNode', props.match.params.id);
+  const currentUserId = t('UserNode', props.usernavbar.user.userId);
 
   if (loading) {
     return (
       <Helmet>
-        <title>{`Cindy - ${_(messages.title)}`}</title>
+        <title>{_(messages.title)}</title>
         <meta
           name="description"
           content={
@@ -64,14 +66,14 @@ function ProfilePage(props, context) {
     props.goto(setQueryStr({ display }));
   };
   const hideBookmark =
-    user.hideBookmark && t('UserNode', props.usernavbar.user.userId) !== userId;
+    user.hideBookmark && currentUserId !== userId;
 
   return (
     <Constrained level={3} mb={2}>
       <Helmet>
-        <title>{`${_(messages.heading, {
+        <title>{_(messages.heading, {
           nickname: user.nickname,
-        })} - Cindy`}</title>
+        })}</title>
         <meta name="description" content={_(messages.description)} />
       </Helmet>
       <Heading>
@@ -85,14 +87,14 @@ function ProfilePage(props, context) {
         onProfileClick={() => changeTab(TAB_NAMES.profile)}
         onPuzzlesClick={() => changeTab(TAB_NAMES.puzzle)}
         onStarsClick={() => changeTab(TAB_NAMES.star)}
+        onCommentsClick={() => changeTab(TAB_NAMES.comment)}
         onBookmarksClick={() => changeTab(TAB_NAMES.bookmark)}
         hideBookmark={hideBookmark}
       />
       {currentTab === TAB_NAMES.profile && (
         <ProfileDisplay
           user={user}
-          userId={userId}
-          currentUserId={t('UserNode', props.usernavbar.user.userId)}
+          currentUserId={currentUserId}
         />
       )}
       {currentTab === TAB_NAMES.puzzle && (
@@ -101,6 +103,11 @@ function ProfilePage(props, context) {
           variables={{ count: 10, user: userId }}
           order="-modified"
           orderList={['modified', 'starCount', 'starSum']}
+        />
+      )}
+      {currentTab === TAB_NAMES.comment && (
+        <CommentDisplay
+          user={user}
         />
       )}
       {currentTab === TAB_NAMES.star && (
@@ -119,7 +126,7 @@ function ProfilePage(props, context) {
             order="-value"
             orderList={['id', 'value']}
             userId={userId}
-            currentUserId={t('UserNode', props.usernavbar.user.userId)}
+            currentUserId={currentUserId}
           />
         )}
     </Constrained>

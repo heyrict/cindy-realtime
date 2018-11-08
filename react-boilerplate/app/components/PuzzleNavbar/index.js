@@ -34,17 +34,17 @@ function PuzzleNavbar() {
   return (
     <Flex alignItems="center" justifyContent="center" w={1} mb={3}>
       <ButtonLink to={withLocale('/puzzle')}>
-        <ToolButton mx="3px" w={1}>
+        <ToolButton w={1}>
           <FormattedMessage {...puzzlepageMessages.header} />
         </ToolButton>
       </ButtonLink>
       <ButtonLink to={withLocale('/puzzle/add')}>
-        <ToolButton mx="3px" w={1}>
+        <ToolButton w={1}>
           <FormattedMessage {...puzzlepageMessages.newPuzzle} />
         </ToolButton>
       </ButtonLink>
       <ButtonLink to={withLocale('/dashboard')}>
-        <ToolButton mx="3px" w={1}>
+        <ToolButton w={1}>
           <FormattedMessage {...dashboardMessages.heading} />
         </ToolButton>
       </ButtonLink>

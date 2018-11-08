@@ -94,4 +94,12 @@ export default defineMessages({
     id: 'app.containers.ProfilePage.save',
     defaultMessage: 'Save',
   },
+  commentsPosted: {
+    id: 'app.containers.ProfilePage.commentsPosted',
+    defaultMessage: 'Comment Posted',
+  },
+  commentsReceived: {
+    id: 'app.containers.ProfilePage.commentsReceived',
+    defaultMessage: 'Comment Received',
+  },
 });

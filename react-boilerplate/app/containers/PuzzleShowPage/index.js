@@ -306,16 +306,6 @@ export class PuzzleShowPage extends React.Component {
               )}
             </FormattedMessage>
           )}
-        {(P.status === 1 || P.status === 2 || getTrueAnswInLtYami) && (
-          <Constrained level={1}>
-            <PuzzleResultBar
-              puzzleId={P.id}
-              starCount={P.starCount}
-              starSum={P.starSum}
-              commentCount={P.commentCount}
-            />
-          </Constrained>
-        )}
         {(P.status === 1 ||
           P.status === 2 ||
           P.user.id === U ||
@@ -365,6 +355,16 @@ export class PuzzleShowPage extends React.Component {
           <WarningMask defaultShow={P.grotesque}>
             <Frame text={P.solution} solved={P.modified} safe={P.contentSafe} />
           </WarningMask>
+        )}
+        {(P.status === 1 || P.status === 2 || getTrueAnswInLtYami) && (
+          <Constrained level={1}>
+            <PuzzleResultBar
+              puzzleId={P.id}
+              starCount={P.starCount}
+              starSum={P.starSum}
+              commentCount={P.commentCount}
+            />
+          </Constrained>
         )}
         {(P.status === 1 || P.status === 2 || getTrueAnswInLtYami) &&
           U && (

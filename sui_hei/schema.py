@@ -358,6 +358,7 @@ class CommentNode(DjangoObjectType):
             "user": ["exact"],
             "puzzle": ["exact"],
             "puzzle__status": ["exact", "gt"],
+            "puzzle__user": ["exact"],
             "spoiler": ["exact"],
         }
         interfaces = (relay.Node, )
@@ -510,6 +511,14 @@ class ChatRoomConnection(graphene.Connection):
 
     class Meta:
         node = ChatRoomNode
+
+
+# {{{2 CommentConnection
+class CommentConnection(graphene.Connection):
+    total_count = graphene.Int()
+
+    class Meta:
+        node = CommentNode
 
 
 # {{{1 CustomConnections
@@ -1586,6 +1595,14 @@ class Query(object):
         private=graphene.Boolean(),
         limit=graphene.Int(),
         offset=graphene.Int())
+    all_comments_lo = graphene.ConnectionField(
+        CommentConnection,
+        orderBy=graphene.List(of_type=graphene.String),
+        puzzle__status__gt=graphene.Float(),
+        puzzle__user=graphene.ID(),
+        user=graphene.ID(),
+        limit=graphene.Int(),
+        offset=graphene.Int())
 
     # {{{2 custom connections
     trunc_date_groups = graphene.ConnectionField(
@@ -1795,6 +1812,28 @@ class Query(object):
     def resolve_all_events(self, info, **kwargs):
         orderBy = kwargs.get("orderBy", None)
         return resolveOrderBy(Event.objects, orderBy)
+
+    def resolve_all_comments_lo(self, info, **kwargs):
+        orderBy = kwargs.get("orderBy", None)
+        limit = kwargs.get("limit", None)
+        offset = kwargs.get("offset", None)
+        qs = resolveOrderBy(Comment.objects, orderBy)
+        qs = resolveFilter(
+            qs,
+            kwargs,
+            filters=['puzzle__status__gt'],
+            filter_fields={
+                "user": User,
+                "puzzle__user": User,
+            })
+        total_count = qs.count()
+        qs = resolveLimitOffset(qs, limit, offset)
+        qs = list(qs)
+        return CommentConnection(
+            total_count=total_count,
+            edges=[
+                CommentConnection.Edge(node=qs[i], ) for i in range(len(qs))
+            ])
 
     # {{{3 resolve union
     def resolve_puzzle_show_union(self, info, **kwargs):

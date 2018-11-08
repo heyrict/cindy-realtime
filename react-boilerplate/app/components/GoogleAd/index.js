@@ -50,6 +50,7 @@ GoogleAd.propTypes = {
 GoogleAd.defaultProps = {
   wrapperDivStyle: {
     overflow: 'hidden',
+    margin: '1em 0',
   },
 };
 

@@ -37,7 +37,7 @@ const CommentContent = posed.div({
   initialPose: 'off',
 });
 
-class RecentCommentPanel extends React.PureComponent {
+class CommentPanel extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -81,7 +81,7 @@ class RecentCommentPanel extends React.PureComponent {
           }}
         >
           <FormattedMessage
-            {...messages.commentHint}
+            {...messages[this.props.hintMessageId || 'commentDescribe']}
             values={{
               user: <UserLabel user={node.user} />,
               puzzle_user: <UserLabel user={node.puzzle.user} />,
@@ -136,8 +136,9 @@ class RecentCommentPanel extends React.PureComponent {
   }
 }
 
-RecentCommentPanel.propTypes = {
+CommentPanel.propTypes = {
   node: PropTypes.object.isRequired,
+  hintMessageId: PropTypes.string,
 };
 
-export default RecentCommentPanel;
+export default CommentPanel;

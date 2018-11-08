@@ -15,6 +15,7 @@ import messages from './messages';
 
 function ProfileDisplay(props, context) {
   const _ = context.intl.formatMessage;
+  const userId = props.user.id;
   return (
     <Flex flexWrap="wrap">
       <ProfRow
@@ -73,20 +74,20 @@ function ProfileDisplay(props, context) {
         heading={_(messages.lastLogin)}
         content={<div>{moment(props.user.lastLogin).format('lll')}</div>}
       />
-      {props.userId === props.currentUserId && (
+      {userId === props.currentUserId && (
         <AwardSwitch
-          userId={props.userId}
+          userId={userId}
           currentAwardId={
             props.user.currentAward ? props.user.currentAward.id : null
           }
           userawardSet={props.user.userawardSet}
         />
       )}
-      {props.userId === props.currentUserId && (
+      {userId === props.currentUserId && (
         <BookmarkHideRow hideBookmark={props.user.hideBookmark} />
       )}
       <ProfileRow
-        userId={props.userId}
+        userId={userId}
         profile={props.user.profile}
         currentUserId={props.currentUserId}
       />
@@ -96,7 +97,6 @@ function ProfileDisplay(props, context) {
 
 ProfileDisplay.propTypes = {
   user: PropTypes.object.isRequired,
-  userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
 };
 

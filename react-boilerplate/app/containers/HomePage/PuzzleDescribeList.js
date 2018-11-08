@@ -56,7 +56,7 @@ export function PuzzleDescribeList(props) {
       )}
       {props.allPuzzles.edges.map((edge) => (
         <LightBg key={edge.node.id}>
-          <RewardingModalComponent {...edge.node} />
+          <RewardingModalComponent puzzle={edge.node} />
         </LightBg>
       ))}
     </Constrained>

@@ -62,6 +62,10 @@ export default defineMessages({
     id: 'app.containers.FilterableList.nickname__contains',
     defaultMessage: 'Nickname',
   },
+  puzzle__created: {
+    id: 'app.containers.FilterableList.puzzle__created',
+    defaultMessage: 'Puzzle Created Time',
+  },
   search: {
     id: 'app.containers.FilterableList.search',
     defaultMessage: 'Search',

@@ -11,4 +11,5 @@ export const TAB_NAMES = {
   puzzle: 'puzzle',
   star: 'star',
   bookmark: 'bookmark',
+  comment: 'comment',
 };

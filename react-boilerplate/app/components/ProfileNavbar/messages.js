@@ -18,6 +18,10 @@ export default defineMessages({
     id: 'app.components.ProfileNavbar.stars',
     defaultMessage: 'Stars',
   },
+  comments: {
+    id: 'app.components.ProfileNavbar.comments',
+    defaultMessage: 'Comments',
+  },
   bookmarks: {
     id: 'app.components.ProfileNavbar.bookmarks',
     defaultMessage: 'Bookmarks',

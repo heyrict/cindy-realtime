@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
-import { Button, ImgSm as Img } from 'style-store';
+import { Button, ImgXs as Img } from 'style-store';
 
 import RewardingModal from 'components/RewardingModal/Loadable';
 
@@ -25,13 +25,13 @@ class PuzzleResultBar extends React.PureComponent {
 
   render() {
     return (
-      <Flex justifyContent="center" alignItems="center" my={1}>
+      <Flex justifyContent="center" alignItems="center" my={2}>
         <FormattedMessage {...messages.starCount}>
           {(msg) => (
             <Button w={1} bg="purple" mx={1}>
               <Img src={star} alt="star" />
               <span>
-                {msg}: {this.props.starCount}({this.props.starSum})
+                {msg}: {this.props.starCount}({this.props.starSum || 0})
               </span>
             </Button>
           )}
@@ -74,6 +74,7 @@ PuzzleResultBar.propTypes = {
 
 PuzzleResultBar.defaultProps = {
   starCount: 0,
+  starSum: 0,
   commentCount: 0,
 };
 
