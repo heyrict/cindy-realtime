@@ -64,14 +64,14 @@ function MainFrame(props) {
         </H1>
       </Flex>
       <Flex mx={1} pt={20} pb={20}>
-        <IntroBox w={[0.5, 0.618, 0.7, 0.8]} m={20} p={10}>
+        <IntroBox w={[0.7, 0.75, 0.8, 0.85]} m={20} p={10}>
           <FormattedMessage {...messages.body}>
             {(msg) => (
               <div dangerouslySetInnerHTML={{ __html: line2md(msg) }} />
             )}
           </FormattedMessage>
         </IntroBox>
-        <Box w={[0.5, 0.382, 0.3, 0.2]}>
+        <Box w={[0.3, 0.25, 0.2, 0.15]}>
           <img style={{ width: '100%' }} src={cindychan} alt="Mrs. Cindy" />
         </Box>
       </Flex>

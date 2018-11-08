@@ -12,6 +12,7 @@ class Portal extends React.Component {
   constructor(props) {
     super(props);
     this.el = document.createElement('div');
+    this.el.style = 'height: 0';
   }
   componentDidMount() {
     document.body.appendChild(this.el);
