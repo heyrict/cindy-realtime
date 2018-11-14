@@ -13,16 +13,16 @@ import {
   NavLink as RebassNavLink,
 } from 'rebass';
 
-const formatScalar = (value, defaultValue = 'auto') => {
+const formatScalar = (value, defaultValue) => {
+  const def = defaultValue || 'auto';
   if (value) {
     if (typeof value === 'string') {
       return value;
     } else if (typeof value === 'number') {
       return `${value * 100}%`;
     }
-    return defaultValue;
   }
-  return defaultValue;
+  return def;
 };
 
 export const AutoResizeTextarea = styled(ReactTextareaAutosize)`
