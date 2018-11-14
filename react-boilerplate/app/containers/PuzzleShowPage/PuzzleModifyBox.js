@@ -21,6 +21,7 @@ import cross from 'images/cross.svg';
 import {
   DatePicker,
   ImgXs,
+  Input,
   PuzzleFrame,
   EditButton,
   Switch,
@@ -56,7 +57,6 @@ class PuzzleModifyBox extends React.Component {
       yami: props.puzzle.yami,
       hidden: props.puzzle.status === 3,
       grotesque: props.puzzle.grotesque,
-      dazedOn: moment(props.puzzle.dazedOn),
       hint: '',
     };
     this.changeTab = (t) => {
@@ -86,13 +86,24 @@ class PuzzleModifyBox extends React.Component {
     this.handleGrotesqueChange = () => {
       this.setState((p) => ({ grotesque: !p.grotesque }));
     };
-    this.handleDazedOnChange = (v) => {
-      this.setState({ dazedOn: v });
-    };
     this.handleSaveSolution = this.handleSaveSolution.bind(this);
     this.handleSaveMemo = this.handleSaveMemo.bind(this);
     this.handleSaveControl = this.handleSaveControl.bind(this);
     this.handleCreateHint = this.handleCreateHint.bind(this);
+    this.updateDazedOnDate = this.updateDazedOnDate.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.props.puzzle.status === 0) {
+      const currentDazedDate = moment(this.props.puzzle.dazedOn);
+      const nextDazedDate = moment().add(
+        getMaxDazedDays(this.props.puzzle),
+        'days',
+      );
+      if (currentDazedDate.format('MM-DD') !== nextDazedDate.format('MM-DD')) {
+        this.updateDazedOnDate(nextDazedDate);
+      }
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -118,6 +129,24 @@ class PuzzleModifyBox extends React.Component {
         memoEditMode: false,
       });
     }
+  }
+
+  updateDazedOnDate(date) {
+    this.props
+      .mutatePuzzleUpdate({
+        variables: {
+          input: {
+            puzzleId: this.props.puzzleId,
+            dazedOn: date.format('YYYY-MM-DD'),
+          },
+        },
+      })
+      .then(() => {
+        this.props.alert('Save Succeed!');
+      })
+      .catch((error) => {
+        this.props.alert(error.message);
+      });
   }
 
   handleSaveSolution() {
@@ -173,7 +202,6 @@ class PuzzleModifyBox extends React.Component {
             yami: this.state.yami,
             status,
             grotesque: this.state.grotesque,
-            dazedOn: this.state.dazedOn.format('YYYY-MM-DD'),
           },
         },
       })
@@ -339,22 +367,16 @@ class PuzzleModifyBox extends React.Component {
             <div>
               <Flex flexWrap="wrap" mx={1}>
                 {this.props.puzzle.status === 0 && (
-                  <Flex w={1}>
+                  <Flex w={1} my={1}>
                     <Box>
                       <FormattedMessage {...messages.dazedDate} />
                     </Box>
-                    <Box w={1}>
-                      <DatePicker
-                        onChange={this.handleDazedOnChange}
-                        selected={this.state.dazedOn}
-                        minDate={moment()}
-                        maxDate={moment().add(
-                          getMaxDazedDays(this.props.puzzle),
-                          'days',
-                        )}
-                        dateFormat="lll"
-                      />
-                    </Box>
+                    <Input
+                      w={1}
+                      p={1}
+                      value={moment(this.props.puzzle.dazedOn).format('ll')}
+                      disabled
+                    />
                   </Flex>
                 )}
                 <Box w={[1 / 3, 1 / 5]} hidden={this.props.puzzle.status !== 0}>

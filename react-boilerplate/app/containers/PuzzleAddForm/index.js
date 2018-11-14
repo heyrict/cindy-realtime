@@ -42,10 +42,6 @@ export class PuzzleAddForm extends React.Component {
       puzzleYami: 0,
       puzzleAnonymous: false,
       puzzleGrotesque: false,
-      puzzleDazedOn: moment().add(
-        getMaxDazedDays({ genre: 0, yami: 0 }),
-        'days',
-      ),
       loading: false,
     };
 
@@ -86,7 +82,6 @@ export class PuzzleAddForm extends React.Component {
       puzzleYami,
       puzzleAnonymous,
       puzzleGrotesque,
-      puzzleDazedOn,
     } = this.state;
     const puzzleContent =
       this.contentTextarea && this.contentTextarea.getContent();
@@ -105,7 +100,15 @@ export class PuzzleAddForm extends React.Component {
             puzzleSolution,
             puzzleAnonymous,
             puzzleGrotesque,
-            puzzleDazedOn: puzzleDazedOn.format('YYYY-MM-DD'),
+            puzzleDazedOn: moment()
+              .add(
+                getMaxDazedDays({
+                  genre: this.state.puzzleGenre,
+                  yami: this.state.puzzleYami,
+                }),
+                'days',
+              )
+              .format('YYYY-MM-DD'),
           },
         },
       })
@@ -250,20 +253,16 @@ export class PuzzleAddForm extends React.Component {
             </span>
           }
           CtlElement={
-            <DatePicker
-              onChange={(value) =>
-                this.handleSelectChange('puzzleDazedOn', value)
-              }
-              selected={this.state.puzzleDazedOn}
-              minDate={moment()}
-              maxDate={moment().add(
+            <Input
+              w={1}
+              value={moment().add(
                 getMaxDazedDays({
                   genre: this.state.puzzleGenre,
                   yami: this.state.puzzleYami,
                 }),
                 'days',
-              )}
-              dateFormat="ll"
+              ).format('ll')}
+              disabled
             />
           }
         />

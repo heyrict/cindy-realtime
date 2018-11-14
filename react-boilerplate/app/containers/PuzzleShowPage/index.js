@@ -150,7 +150,7 @@ export class PuzzleShowPage extends React.Component {
       this.props.alert(this.props.error.message);
       return <NotFoundPage />;
     }
-    if (this.props.loading || !P) {
+    if (!P) {
       return (
         <div style={{ paddingTop: '100px' }}>
           <LoadingDots />
@@ -310,6 +310,9 @@ export class PuzzleShowPage extends React.Component {
           P.status === 2 ||
           P.user.id === U ||
           (P.status === 0 && P.yami === 0)) && <div>{UserFilterBar}</div>}
+        {this.props.loading && (
+          <LoadingDots my={1} />
+        )}
         {(P.status <= 2 || P.user.id === U) && (
           <div>
             {DialoguePaginationBar}
