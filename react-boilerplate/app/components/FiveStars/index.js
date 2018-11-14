@@ -14,25 +14,40 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Flex } from 'rebass';
 import { Star } from 'style-store';
+import { Tooltip } from 'react-tippy';
+import { FormattedMessage } from 'react-intl';
 // import styled from 'styled-components';
+
+import messages from './messages';
 
 class FiveStars extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      value: this.props.value,
+      value: this.props.value || 0,
       hovered: false,
     };
     this.handleMouseEnter = (v) => this.setState({ value: v, hovered: true });
     this.handleMouseLeave = (v) => this.setState({ value: v, hovered: false });
   }
   render() {
-    const { value, onSet, starSize, ...others } = this.props;
+    const {
+      value,
+      onSet,
+      starSize,
+      placement,
+      template,
+      ...others
+    } = this.props;
+    let starComponent;
+
     if (onSet === null) {
       const UncontrolledStar = ({ v }) => (
-        <Star style={{ fontSize: starSize }} checked={value >= v}>
-          ★
-        </Star>
+        <Tooltip position={placement} html={template(v)} useContext>
+          <Star style={{ fontSize: starSize }} checked={value >= v}>
+            ★
+          </Star>
+        </Tooltip>
       );
       return (
         <Flex {...others}>
@@ -46,15 +61,17 @@ class FiveStars extends React.PureComponent {
     }
     const trueVal = this.state.hovered ? this.state.value : this.props.value;
     const ControlledStar = ({ v }) => (
-      <Star
-        style={{ cursor: 'pointer', fontSize: starSize }}
-        checked={trueVal >= v}
-        onMouseEnter={() => this.handleMouseEnter(v)}
-        onMouseLeave={() => this.handleMouseLeave(v)}
-        onClick={() => this.props.onSet(v)}
-      >
-        ★
-      </Star>
+      <Tooltip position={placement} html={template(v)} useContext>
+        <Star
+          style={{ cursor: 'pointer', fontSize: starSize }}
+          checked={trueVal >= v}
+          onMouseEnter={() => this.handleMouseEnter(v)}
+          onMouseLeave={() => this.handleMouseLeave(v)}
+          onClick={() => this.props.onSet(v)}
+        >
+          ★
+        </Star>
+      </Tooltip>
     );
     return (
       <Flex {...others}>
@@ -72,11 +89,19 @@ FiveStars.propTypes = {
   value: PropTypes.number.isRequired,
   onSet: PropTypes.func,
   starSize: PropTypes.string.isRequired,
+  template: PropTypes.func,
+  placement: PropTypes.string,
 };
 
 FiveStars.defaultProps = {
   starSize: '20px',
   onSet: null,
+  placement: 'top',
+  template: (t) => (
+    <span>
+      ★ {t} : <FormattedMessage {...messages[t]} />
+    </span>
+  ),
 };
 
 export default FiveStars;

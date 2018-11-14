@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Flex } from 'rebass';
 import { Button, ImgXs as Img } from 'style-store';
+import { Tooltip } from 'react-tippy';
 
 import RewardingModal from 'components/RewardingModal/Loadable';
+import InnerStarLabel from 'components/PuzzlePanel/InnerStarLabel';
 
 import comment from 'images/comment.svg';
 import star from 'images/star-white.svg';
@@ -27,14 +29,37 @@ class PuzzleResultBar extends React.PureComponent {
     return (
       <Flex justifyContent="center" alignItems="center" my={2}>
         <FormattedMessage {...messages.starCount}>
-          {(msg) => (
-            <Button w={1} bg="purple" mx={1}>
-              <Img src={star} alt="star" />
-              <span>
-                {msg}: {this.props.starCount}({this.props.starSum || 0})
-              </span>
-            </Button>
-          )}
+          {(msg) =>
+            this.props.starCount > 0 ? (
+              <Tooltip
+                position="top"
+                theme="cindy"
+                html={<InnerStarLabel puzzleId={this.props.puzzleId} />}
+                style={{
+                  width: '100%',
+                  borderRadius: '10px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                useContext
+              >
+                <Button w={1} bg="purple" mx={1}>
+                  <Img src={star} alt="star" />
+                  <span>
+                    {msg}: {this.props.starCount}({this.props.starSum || 0})
+                  </span>
+                </Button>
+              </Tooltip>
+            ) : (
+              <Button w={1} bg="purple" mx={1}>
+                <Img src={star} alt="star" />
+                <span>
+                  {msg}: {this.props.starCount}({this.props.starSum || 0})
+                </span>
+              </Button>
+            )
+          }
         </FormattedMessage>
         <FormattedMessage {...messages.commentCount}>
           {(msg) => (

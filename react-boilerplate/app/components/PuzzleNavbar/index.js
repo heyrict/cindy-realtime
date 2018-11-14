@@ -33,17 +33,17 @@ const ButtonLink = styled(Link)`
 function PuzzleNavbar() {
   return (
     <Flex alignItems="center" justifyContent="center" w={1} mb={3}>
-      <ButtonLink to={withLocale('/puzzle')}>
+      <ButtonLink to={withLocale('/puzzle')} style={{ margin: '2px' }}>
         <ToolButton w={1}>
           <FormattedMessage {...puzzlepageMessages.header} />
         </ToolButton>
       </ButtonLink>
-      <ButtonLink to={withLocale('/puzzle/add')}>
+      <ButtonLink to={withLocale('/puzzle/add')} style={{ margin: '2px' }}>
         <ToolButton w={1}>
           <FormattedMessage {...puzzlepageMessages.newPuzzle} />
         </ToolButton>
       </ButtonLink>
-      <ButtonLink to={withLocale('/dashboard')}>
+      <ButtonLink to={withLocale('/dashboard')} style={{ margin: '2px' }}>
         <ToolButton w={1}>
           <FormattedMessage {...dashboardMessages.heading} />
         </ToolButton>

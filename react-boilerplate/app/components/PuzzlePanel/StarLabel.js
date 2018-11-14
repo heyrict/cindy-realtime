@@ -10,7 +10,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const PuzzleScore = styled.button`
+const PuzzleScore = styled.span`
   background-color: darkorchid;
   border-radius: 10px;
   border: 2px solid darkorchid;
