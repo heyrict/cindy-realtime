@@ -196,7 +196,15 @@ export function text2md(string, safe = true) {
     return sanitizeHtml(md.render(PreNorm(string)), {
       allowedTags: false,
       allowedAttributes: false,
-      allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'chat', 'javascript'],
+      allowedSchemes: [
+        'http',
+        'https',
+        'ftp',
+        'mailto',
+        'chat',
+        'javascript',
+        'data',
+      ],
       textFilter: _norm_countdown,
       transformTags: {
         '*': (tagName, attribs) => ({
@@ -319,7 +327,7 @@ export function text2md(string, safe = true) {
           float: [/(left|right)/],
         },
       },
-      allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'chat'],
+      allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'chat', 'data'],
       nonTextTags: ['style', 'script'],
       textFilter: _norm_countdown,
       transformTags: {

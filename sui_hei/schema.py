@@ -1097,7 +1097,7 @@ class UpdatePuzzle(graphene.ClientIDMutation):
             puzzle.memo = memo
 
         if status:
-            if status == 1 and puzzle.status == 0:
+            if status != 0 and puzzle.status == 0:
                 puzzle.modified = timezone.now()
             puzzle.status = status
 
