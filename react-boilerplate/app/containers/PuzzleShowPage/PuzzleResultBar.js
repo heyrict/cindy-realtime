@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Flex } from 'rebass';
+import { Flex, Box } from 'rebass';
 import { Button, ImgXs as Img } from 'style-store';
 import { Tooltip } from 'react-tippy';
 
+import HelpPopper from 'components/HelpPopper';
 import RewardingModal from 'components/RewardingModal/Loadable';
 import InnerStarLabel from 'components/PuzzlePanel/InnerStarLabel';
 
@@ -27,65 +28,85 @@ class PuzzleResultBar extends React.PureComponent {
 
   render() {
     return (
-      <Flex justifyContent="center" alignItems="center" my={2}>
-        <FormattedMessage {...messages.starCount}>
-          {(msg) =>
-            this.props.starCount > 0 ? (
-              <Tooltip
-                position="top"
-                theme="cindy"
-                html={<InnerStarLabel puzzleId={this.props.puzzleId} />}
-                style={{
-                  width: '100%',
-                  borderRadius: '10px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                useContext
-              >
+      <div>
+        <Flex justifyContent="center" alignItems="center" mt={2} mb={1}>
+          <FormattedMessage {...messages.starCount}>
+            {(msg) =>
+              this.props.starCount > 0 ? (
+                <Tooltip
+                  position="top"
+                  theme="cindy"
+                  html={<InnerStarLabel puzzleId={this.props.puzzleId} />}
+                  style={{
+                    width: '100%',
+                    borderRadius: '10px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  useContext
+                >
+                  <Button w={1} bg="purple" mx={1}>
+                    <Img src={star} alt="star" />
+                    <span>
+                      {msg}: {this.props.starCount}({this.props.starSum || 0})
+                    </span>
+                  </Button>
+                </Tooltip>
+              ) : (
                 <Button w={1} bg="purple" mx={1}>
                   <Img src={star} alt="star" />
                   <span>
                     {msg}: {this.props.starCount}({this.props.starSum || 0})
                   </span>
                 </Button>
-              </Tooltip>
-            ) : (
-              <Button w={1} bg="purple" mx={1}>
-                <Img src={star} alt="star" />
+              )
+            }
+          </FormattedMessage>
+          <FormattedMessage {...messages.commentCount}>
+            {(msg) => (
+              <Button
+                w={1}
+                mx={1}
+                onClick={() =>
+                  this.props.commentCount && this.toggleCommentModal()
+                }
+              >
+                <Img src={comment} alt="comment" />
                 <span>
-                  {msg}: {this.props.starCount}({this.props.starSum || 0})
+                  {msg}: {this.props.commentCount}
                 </span>
               </Button>
-            )
-          }
-        </FormattedMessage>
-        <FormattedMessage {...messages.commentCount}>
-          {(msg) => (
-            <Button
-              w={1}
-              mx={1}
-              onClick={() =>
-                this.props.commentCount && this.toggleCommentModal()
-              }
-            >
-              <Img src={comment} alt="comment" />
-              <span>
-                {msg}: {this.props.commentCount}
-              </span>
-            </Button>
+            )}
+          </FormattedMessage>
+          {this.props.commentCount > 0 && (
+            <RewardingModal
+              id={this.props.puzzleId}
+              show={this.state.commentModalShown}
+              onHide={() => this.toggleCommentModal(false)}
+              showContent={false}
+            />
           )}
-        </FormattedMessage>
-        {this.props.commentCount > 0 && (
-          <RewardingModal
-            id={this.props.puzzleId}
-            show={this.state.commentModalShown}
-            onHide={() => this.toggleCommentModal(false)}
-            showContent={false}
-          />
-        )}
-      </Flex>
+        </Flex>
+        <Flex
+          justifyContent="center"
+          alignItems="center"
+          mt={1}
+          mb={2}
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          <Box w={1}>
+            <FormattedMessage {...messages.starDef} />
+            <HelpPopper messageId="puzzle_starDef" />
+          </Box>
+          <Box w={1}>
+            <FormattedMessage {...messages.commentDef} />
+            <HelpPopper messageId="puzzle_commentDef" />
+          </Box>
+        </Flex>
+      </div>
     );
   }
 }

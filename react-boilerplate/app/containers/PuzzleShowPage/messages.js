@@ -128,4 +128,12 @@ export default defineMessages({
     id: 'app.containers.PuzzleShowPage.commentCount',
     defaultMessage: 'Comment Count',
   },
+  starDef: {
+    id: 'app.containers.PuzzleShowPage.starDef',
+    defaultMessage: "What's star",
+  },
+  commentDef: {
+    id: 'app.containers.PuzzleShowPage.commentDef',
+    defaultMessage: "What's comment",
+  },
 });

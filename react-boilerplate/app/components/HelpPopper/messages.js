@@ -45,4 +45,13 @@ export default defineMessages({
     defaultMessage:
       'Post up to 3 messages for finding Soup Partners, broadcasting information, announcing events in advance and so on.',
   },
+  puzzle_starDef: {
+    id: `${scope}.puzzle_starDef`,
+    defaultMessage:
+      'The user-voted quality of puzzle.\n★ number of voted users (total stars)',
+  },
+  puzzle_commentDef: {
+    id: `${scope}.puzzle_commentDef`,
+    defaultMessage: 'How other users evaluate this puzzle.',
+  },
 });

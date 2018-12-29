@@ -16,6 +16,7 @@ import { withLocale } from 'common';
 
 import dashboardMessages from 'containers/DashBoardPage/messages';
 import puzzlepageMessages from 'containers/PuzzlePage/messages';
+import usernavbarMessages from 'containers/UserNavbar/messages';
 
 const ToolButton = styled(Button)`
   padding: 5px;
@@ -27,25 +28,48 @@ const ToolButton = styled(Button)`
 
 const ButtonLink = styled(Link)`
   color: #fcf4dc;
-  width: 100%;
+  margin: 2px;
+  width: calc(33.3% - 4px);
 `;
 
 function PuzzleNavbar() {
   return (
-    <Flex alignItems="center" justifyContent="center" w={1} mb={3}>
-      <ButtonLink to={withLocale('/puzzle')} style={{ margin: '2px' }}>
+    <Flex
+      alignItems="center"
+      justifyContent="center"
+      flexWrap="wrap"
+      w={1}
+      mb={3}
+    >
+      <ButtonLink to={withLocale('/puzzle')}>
         <ToolButton w={1}>
           <FormattedMessage {...puzzlepageMessages.header} />
         </ToolButton>
       </ButtonLink>
-      <ButtonLink to={withLocale('/puzzle/add')} style={{ margin: '2px' }}>
+      <ButtonLink to={withLocale('/puzzle/add')}>
         <ToolButton w={1}>
           <FormattedMessage {...puzzlepageMessages.newPuzzle} />
         </ToolButton>
       </ButtonLink>
-      <ButtonLink to={withLocale('/dashboard')} style={{ margin: '2px' }}>
+      <ButtonLink to={withLocale('/dashboard')}>
         <ToolButton w={1}>
           <FormattedMessage {...dashboardMessages.heading} />
+        </ToolButton>
+      </ButtonLink>
+      <ToolButton
+        is="a"
+        target="_blank"
+        href="https://wiki3.jp/cindy-lat"
+        style={{
+          width: 'calc(33.3% - 4px)',
+          margin: '2px',
+        }}
+      >
+        Cindy + Wiki
+      </ToolButton>
+      <ButtonLink to={withLocale('/profile/award')}>
+        <ToolButton w={1}>
+          <FormattedMessage {...usernavbarMessages.awardApplication} />
         </ToolButton>
       </ButtonLink>
     </Flex>
