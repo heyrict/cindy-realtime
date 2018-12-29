@@ -383,6 +383,7 @@ export class PuzzleShowPage extends React.Component {
               puzzleId={puzzleId}
               existingComment={this.props.allComments.edges}
               existingStar={this.props.allStars.edges}
+              userId={U}
             />
           )}
         {U === P.user.id && <PuzzleModifyBox puzzle={P} puzzleId={puzzleId} />}

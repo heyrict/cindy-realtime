@@ -7,9 +7,11 @@ import { nAlert } from 'containers/Notifier/actions';
 import { Flex } from 'rebass';
 import Constrained from 'components/Constrained';
 import FiveStars from 'components/FiveStars';
+import LoadingDots from 'components/LoadingDots';
 import { PuzzleFrame, ButtonOutline, Input, Switch } from 'style-store';
 
 import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import UpdateStarMutation from 'graphql/UpdateStarMutation';
 import UpdateCommentMutation from 'graphql/UpdateCommentMutation';
 
@@ -97,6 +99,18 @@ class RewardingBox extends React.PureComponent {
       });
   }
   render() {
+    if (this.props.loading) {
+      return <LoadingDots />;
+    }
+    if (!this.props.currentUser.canVote) {
+      return (
+        <Constrained>
+          <PuzzleFrame>
+            <FormattedMessage {...messages.voteRestrict} />
+          </PuzzleFrame>
+        </Constrained>
+      );
+    }
     return (
       <Constrained>
         <PuzzleFrame>
@@ -142,9 +156,13 @@ class RewardingBox extends React.PureComponent {
 }
 
 RewardingBox.propTypes = {
+  currentUser: PropTypes.shape({
+    canVote: PropTypes.bool.isRequired,
+  }),
   puzzleId: PropTypes.number.isRequired,
   existingStar: PropTypes.array.isRequired,
   existingComment: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
   mutateStarUpdate: PropTypes.func.isRequired,
   mutateCommentUpdate: PropTypes.func.isRequired,
   alert: PropTypes.func.isRequired,
@@ -167,8 +185,32 @@ const withCommentUpdateMutation = graphql(UpdateCommentMutation, {
   name: 'mutateCommentUpdate',
 });
 
+const withUser = graphql(
+  gql`
+    query puzzleVotePermQuery($userId: ID!) {
+      user(id: $userId) {
+        id
+        canVote
+      }
+    }
+  `,
+  {
+    options: ({ userId }) => ({
+      variables: {
+        userId,
+      },
+    }),
+    props({ data }) {
+      if (data.loading) return { loading: true };
+      const { user } = data;
+      return { currentUser: user, loading: false };
+    },
+  },
+);
+
 export default compose(
   withStarUpdateMutation,
   withCommentUpdateMutation,
+  withUser,
   withConnect,
 )(RewardingBox);

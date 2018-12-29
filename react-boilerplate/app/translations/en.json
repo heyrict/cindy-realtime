@@ -230,6 +230,7 @@
   "app.containers.PuzzleShowPage.title": "Come and play lateral thinking puzzles at Cindy!",
   "app.containers.PuzzleShowPage.toggleHidden": "Hidden",
   "app.containers.PuzzleShowPage.toggleYami": "Yami",
+  "app.containers.PuzzleShowPage.voteRestrict": "You are not able to vote now.",
   "app.containers.PuzzleShowPage.zeroStarAlert": "Please Choose at least one star!",
   "app.containers.RegisterForm.nicknameHelp": "Your nickname will be shown in public. Take care not to use some offensive words.",
   "app.containers.RegisterForm.nicknameLabel": "Nickname",

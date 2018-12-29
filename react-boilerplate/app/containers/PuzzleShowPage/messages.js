@@ -136,4 +136,8 @@ export default defineMessages({
     id: 'app.containers.PuzzleShowPage.commentDef',
     defaultMessage: "What's comment",
   },
+  voteRestrict: {
+    id: 'app.containers.PuzzleShowPage.voteRestrict',
+    defaultMessage: 'You are not able to vote now.',
+  },
 });

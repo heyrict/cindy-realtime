@@ -121,6 +121,7 @@ class UserNode(DjangoObjectType):
 
     can_review_award_application = graphene.Boolean()
     can_send_global_notification = graphene.Boolean()
+    can_vote = graphene.Boolean()
 
     def resolve_rowid(self, info):
         return self.id
@@ -144,6 +145,9 @@ class UserNode(DjangoObjectType):
         return self.puzzle_set.annotate(Count('comment__id'))\
                 .aggregate(rcommentCount=Sum('comment__id__count'))\
                 .get('rcommentCount', 0)
+
+    def resolve_dmCount(self, info):
+        return self.dm_count
 
     def resolve_starCount(self, info):
         return self.star_set.aggregate(Count('star__value'))\
@@ -169,8 +173,10 @@ class UserNode(DjangoObjectType):
     def resolve_can_send_global_notification(self, info):
         return self.has_perm("sui_hei.can_send_global_notification")
 
-    def resolve_dmCount(self, info):
-        return self.dm_count
+    def resolve_can_vote(self, info):
+        return timezone.now() - self.date_joined > timezone.timedelta(days=14)\
+            or self.puzzle_set.count() > 5\
+            or self.dialogue_set.count() > 50
 
 
 # {{{2 AwardNode

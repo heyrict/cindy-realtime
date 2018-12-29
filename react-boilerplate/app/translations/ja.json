@@ -230,6 +230,7 @@
   "app.containers.PuzzleShowPage.title": "Cindy でリアルタイムの水平思考パズルを味わいましょう",
   "app.containers.PuzzleShowPage.toggleHidden": "非公開",
   "app.containers.PuzzleShowPage.toggleYami": "闇スープ",
+  "app.containers.PuzzleShowPage.voteRestrict": "あなたは現在まだ投票することができません。\n投票するにはもっと質問数と出題数を増やしましょう！",
   "app.containers.PuzzleShowPage.zeroStarAlert": "１つ以上の星で投票してください",
   "app.containers.RegisterForm.nicknameHelp": "あなたのニックネームは公開されます。他人に不快をもたらす言葉はお控えめにしましょう。",
   "app.containers.RegisterForm.nicknameLabel": "ニックネーム",

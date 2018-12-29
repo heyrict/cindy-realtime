@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -61,8 +63,8 @@ class AwardApplicationPanel extends React.Component {
     }
   }
   handleReview(status) {
-    const id = this.props.node.id;
-    const currentUser = this.props.currentUser;
+    const { id } = this.props.node;
+    const { currentUser } = this.props;
     const reason = this.reasonInput.getContent().trim();
     const now = new Date();
     this.props
@@ -105,7 +107,7 @@ class AwardApplicationPanel extends React.Component {
       });
   }
   render() {
-    const node = this.props.node;
+    const { node } = this.props;
     const statusText = (
       <span>
         {node.status === this.STATUS.WAITING && (
@@ -194,7 +196,9 @@ class AwardApplicationPanel extends React.Component {
                     <Flex flexWrap="wrap" w={1}>
                       <Box w={1}>
                         <UnhandledTextarea
-                          ref={(ins) => (this.reasonInput = ins)}
+                          ref={(ins) => {
+                            this.reasonInput = ins;
+                          }}
                           component={Textarea}
                           minRows={3}
                           maxRows={5}
