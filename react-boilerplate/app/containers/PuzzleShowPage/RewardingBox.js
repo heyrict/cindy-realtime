@@ -99,6 +99,9 @@ class RewardingBox extends React.PureComponent {
       });
   }
   render() {
+    if (!this.props.currentUser) {
+      return null;
+    }
     if (this.props.loading) {
       return <LoadingDots />;
     }
