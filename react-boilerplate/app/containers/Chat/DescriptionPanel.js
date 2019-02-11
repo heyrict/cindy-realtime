@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
@@ -130,6 +130,16 @@ class DescriptionPanel extends React.Component {
     if (!this.props.channel) {
       return <DescriptionWrapper height={this.props.height} />;
     }
+
+    let inFavorite = false;
+    if (this.props.favChannels) {
+      this.props.favChannels.edges.forEach((edge) => {
+        if (edge.node.chatroom.name === this.props.name) {
+          inFavorite = true;
+        }
+      });
+    }
+
     if (this.props.name.match(/^puzzle-\d+$/)) {
       return (
         <DescriptionWrapper height={this.props.height}>
@@ -158,15 +168,6 @@ class DescriptionPanel extends React.Component {
           </Flex>
         </DescriptionWrapper>
       );
-    }
-
-    let inFavorite = false;
-    if (this.props.favChannels) {
-      this.props.favChannels.edges.forEach((edge) => {
-        if (edge.node.chatroom.name === this.props.name) {
-          inFavorite = true;
-        }
-      });
     }
 
     return (

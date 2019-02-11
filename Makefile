@@ -31,7 +31,7 @@ push:
 	echo 'rm -rf $(CINDY_ROOTPATH)/collected_static && mkdir $(CINDY_ROOTPATH)/collected_static'\
 		| ssh $(CINDY_USERNAME)@$(CINDY_SERVER) 'bash -s'
 	rsync -rz ./collected_static/* $(CINDY_USERNAME)@$(CINDY_SERVER):$(CINDY_ROOTPATH)/collected_static
-	ssh $(CINDY_USERNAME)@$(CINDY_SERVER) 'echo "$(CINDY_PASSWORD)" | sudo -S service daphne restart'
+	@ssh $(CINDY_USERNAME)@$(CINDY_SERVER) 'echo "$(CINDY_PASSWORD)" | sudo -S service daphne restart'
 
 push_with_migrate:
 	# Run webpack locally, then push built assets to remote server.
@@ -43,7 +43,7 @@ push_with_migrate:
 	echo 'rm -rf $(CINDY_ROOTPATH)/collected_static && mkdir $(CINDY_ROOTPATH)/collected_static'\
 		| ssh $(CINDY_USERNAME)@$(CINDY_SERVER) 'bash -s'
 	rsync -rz ./collected_static/* $(CINDY_USERNAME)@$(CINDY_SERVER):$(CINDY_ROOTPATH)/collected_static
-	ssh $(CINDY_USERNAME)@$(CINDY_SERVER) 'echo "$(CINDY_PASSWORD)" | sudo -S service daphne restart'
+	@ssh $(CINDY_USERNAME)@$(CINDY_SERVER) 'echo "$(CINDY_PASSWORD)" | sudo -S service daphne restart'
 
 initdb:
 	###### Create an admin user ######
