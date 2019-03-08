@@ -66,8 +66,24 @@ export default defineMessages({
     id: 'app.containers.FilterableList.puzzle__created',
     defaultMessage: 'Puzzle Created Time',
   },
+  genre__exact: {
+    id: 'app.containers.FilterableList.genre__exact',
+    defaultMessage: 'Genre',
+  },
+  yami__exact: {
+    id: 'app.containers.FilterableList.yami__exact',
+    defaultMessage: 'Yami',
+  },
   search: {
     id: 'app.containers.FilterableList.search',
     defaultMessage: 'Search',
+  },
+  goToAdvanced: {
+    id: 'app.containers.FilterableList.goToAdvanced',
+    defaultMessage: 'Go to Advanced Search >>',
+  },
+  backToSimple: {
+    id: 'app.containers.FilterableList.backToSimple',
+    defaultMessage: '<< Back to Simple Search',
   },
 });

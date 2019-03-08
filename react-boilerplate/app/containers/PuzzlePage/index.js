@@ -23,7 +23,7 @@ import EventList from 'components/EventList';
 import PuzzleActiveList from 'containers/PuzzleActiveList';
 import { googleAdInfo, DEFAULT_TIMEZONE } from 'settings';
 
-import saga from './saga';
+import titleMessages from 'components/TitleLabel/messages';
 import messages from './messages';
 
 const now = moment();
@@ -59,6 +59,50 @@ function PuzzlePage(props, context) {
           'title__contains',
           'content__contains',
           'solution__contains',
+          {
+            name: 'genre__exact',
+            options: [
+              {
+                value: '0',
+                label: <FormattedMessage {...titleMessages.classic} />,
+              },
+              {
+                value: '1',
+                label: <FormattedMessage {...titleMessages.twentyQuestions} />,
+              },
+              {
+                value: '2',
+                label: <FormattedMessage {...titleMessages.littleAlbat} />,
+              },
+              {
+                value: '3',
+                label: <FormattedMessage {...titleMessages.others} />,
+              },
+              {
+                label: <FormattedMessage {...messages.all} />,
+              },
+            ],
+          },
+          {
+            name: 'yami__exact',
+            options: [
+              {
+                value: '0',
+                label: <FormattedMessage {...titleMessages.none} />,
+              },
+              {
+                value: '1',
+                label: <FormattedMessage {...titleMessages.yami} />,
+              },
+              {
+                value: '2',
+                label: <FormattedMessage {...titleMessages.longtermYami} />,
+              },
+              {
+                label: <FormattedMessage {...messages.all} />,
+              },
+            ],
+          },
         ]}
         fetchPolicy="cache-and-network"
       />
@@ -85,9 +129,4 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withSaga = injectSaga({ key: 'puzzlePage', saga });
-
-export default compose(
-  withSaga,
-  withConnect,
-)(PuzzlePage);
+export default compose(withConnect)(PuzzlePage);

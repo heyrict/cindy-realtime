@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 export function ButtonSelect(props) {
   const { onChange, buttonProps } = props;
   return (
-    <Flex flexWrap="wrap">
+    <Flex style={props.style} flexWrap="wrap">
       {props.options.map(
         (option) =>
           option.value === props.value ? (
@@ -46,6 +46,7 @@ export function ButtonSelect(props) {
 
 ButtonSelect.propTypes = {
   value: PropTypes.any,
+  style: PropTypes.object,
   onChange: PropTypes.func,
   options: PropTypes.arrayOf(
     PropTypes.shape({
@@ -58,6 +59,7 @@ ButtonSelect.propTypes = {
 
 ButtonSelect.defaultProps = {
   buttonProps: {},
+  style: {},
 };
 
 export default ButtonSelect;

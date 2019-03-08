@@ -1570,6 +1570,8 @@ class Query(object):
         title__contains=graphene.String(),
         content__contains=graphene.String(),
         solution__contains=graphene.String(),
+        genre__exact=graphene.String(),
+        yami__exact=graphene.String(),
         created__year=graphene.Int(),
         created__month=graphene.Int(),
         limit=graphene.Int(),
@@ -1685,6 +1687,8 @@ class Query(object):
                 "title__contains",
                 "content__contains",
                 "solution__contains",
+                "genre__exact",
+                "yami__exact",
             ],
             filter_fields={"user": User})
         total_count = qs.count()

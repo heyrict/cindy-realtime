@@ -23,4 +23,8 @@ export default defineMessages({
     id: 'app.containers.PuzzlePage.newPuzzle',
     defaultMessage: 'New puzzle',
   },
+  all: {
+    id: 'app.containers.PuzzlePage.all',
+    defaultMessage: 'All',
+  },
 });

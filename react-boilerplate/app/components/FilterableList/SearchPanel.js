@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 
 import messages from './messages';
 
-const SearchBtn = styled(Button)`
+export const SearchBtn = styled(Button)`
   border-radius: 10px;
   padding: 5px;
   min-width: 50px;
@@ -29,7 +29,7 @@ const SearchSelect = styled(Select)`
   }
 `;
 
-const SearchInput = styled(Input)`
+export const SearchInput = styled(Input)`
   min-height: 36px;
   margin-top: 5px;
   margin-bottom: 5px;
@@ -57,6 +57,27 @@ class SearchPanel extends React.PureComponent {
       this.setState({ filterValue: e.target.value.slice(0, 64) });
   }
 
+  renderFilterOptions(filter) {
+    if (typeof filter === 'object' && filter.options) {
+      return null;
+    }
+
+    const filterKey = typeof filter === 'string' ? filter : filter.name;
+
+    if (filterKey in messages) {
+      return (
+        <FormattedMessage {...messages[filterKey]} key={filterKey}>
+          {(msg) => <option value={filterKey}>{msg}</option>}
+        </FormattedMessage>
+      );
+    }
+    return (
+      <option value={filterKey} key={filterKey}>
+        {filterKey}
+      </option>
+    );
+  }
+
   render() {
     return (
       <Flex
@@ -72,18 +93,7 @@ class SearchPanel extends React.PureComponent {
             value={this.state.filterKey}
             onChange={this.handleFilterChange}
           >
-            {this.props.filterList.map(
-              (f) =>
-                f in messages ? (
-                  <FormattedMessage {...messages[f]} key={f}>
-                    {(msg) => <option value={f}>{msg}</option>}
-                  </FormattedMessage>
-                ) : (
-                  <option value={f} key={f}>
-                    {f}
-                  </option>
-                ),
-            )}
+            {this.props.filterList.map(this.renderFilterOptions)}
           </SearchSelect>
         </Box>
         <Box w={[2 / 3, 3 / 4]}>

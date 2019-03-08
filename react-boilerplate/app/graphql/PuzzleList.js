@@ -11,6 +11,8 @@ export const PuzzleList = gql`
     $title__contains: String
     $content__contains: String
     $solution__contains: String
+    $genre__exact: String
+    $yami__exact: String
     $user: ID
   ) {
     allPuzzles(
@@ -22,6 +24,8 @@ export const PuzzleList = gql`
       title_Contains: $title__contains
       content_Contains: $content__contains
       solution_Contains: $solution__contains
+      genre_Exact: $genre__exact
+      yami_Exact: $yami__exact
       user: $user
     )
       @connection(
@@ -33,6 +37,8 @@ export const PuzzleList = gql`
           "title_Contains"
           "content_Contains"
           "solution_Contains"
+          "genre__exact"
+          "yami_Exact"
         ]
       ) {
       edges {

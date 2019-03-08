@@ -1,12 +1,22 @@
 import React from 'react';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { RoundedPanel, Button, ButtonOutline } from 'style-store';
 import { FormattedMessage } from 'react-intl';
-import { Flex, Box } from 'rebass';
+import { Flex, Box, ButtonTransparent as RebassBT } from 'rebass';
 
 import FilterButton from './FilterButton';
 import SearchPanel from './SearchPanel';
+import AdvancedSearchPanel from './AdvancedSearchPanel';
 import messages from './messages';
+
+const ButtonTransparent = styled(RebassBT)`
+  padding: 2px;
+  overflow: hidden;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+`;
 
 const ToggleBtn = (props) => {
   const { on, ...others } = props;
@@ -31,6 +41,7 @@ class FilterVarSetPanel extends React.Component {
     this.MODE = {
       SORT: 'SORT',
       SEARCH: 'SEARCH',
+      ADVSEARCH: 'ADVSEARCH',
     };
     this.state = {
       display: this.MODE.SORT,
@@ -82,14 +93,17 @@ class FilterVarSetPanel extends React.Component {
               <FormattedMessage {...messages.sort} />
             </ToggleBtn>
             <ToggleBtn
-              on={this.state.display === this.MODE.SEARCH}
+              on={
+                this.state.display === this.MODE.SEARCH ||
+                this.state.display === this.MODE.ADVSEARCH
+              }
               onClick={() => this.handleToggleButtonClick(this.MODE.SEARCH)}
             >
               <FormattedMessage {...messages.search} />
             </ToggleBtn>
           </Flex>
         )}
-        <Flex justifyContent="center">
+        <Flex justifyContent="center" flexWrap="wrap">
           {this.state.display === this.MODE.SORT && (
             <Flex
               w={1}
@@ -112,8 +126,35 @@ class FilterVarSetPanel extends React.Component {
             </Flex>
           )}
           {this.state.display === this.MODE.SEARCH && (
+            <Box w={1} mx={2} style={{ textAlign: 'right' }}>
+              <ButtonTransparent
+                onClick={() =>
+                  this.handleToggleButtonClick(this.MODE.ADVSEARCH)
+                }
+              >
+                <FormattedMessage {...messages.goToAdvanced} />
+              </ButtonTransparent>
+            </Box>
+          )}
+          {this.state.display === this.MODE.ADVSEARCH && (
+            <Box w={1} mx={2}>
+              <ButtonTransparent
+                onClick={() => this.handleToggleButtonClick(this.MODE.SEARCH)}
+              >
+                <FormattedMessage {...messages.backToSimple} />
+              </ButtonTransparent>
+            </Box>
+          )}
+          {this.state.display === this.MODE.SEARCH && (
             <SearchPanel
               filterList={this.props.filterList}
+              handleSearchButtonClick={this.props.onFilterChange}
+            />
+          )}
+          {this.state.display === this.MODE.ADVSEARCH && (
+            <AdvancedSearchPanel
+              filterList={this.props.filterList}
+              currentFilter={this.props.currentFilter}
               handleSearchButtonClick={this.props.onFilterChange}
             />
           )}
@@ -127,6 +168,7 @@ FilterVarSetPanel.propTypes = {
   filterList: PropTypes.array.isRequired,
   orderList: PropTypes.array.isRequired,
   order: PropTypes.string.isRequired,
+  currentFilter: PropTypes.object.isRequired,
   onOrderChange: PropTypes.func.isRequired,
   onFilterChange: PropTypes.func.isRequired,
 };

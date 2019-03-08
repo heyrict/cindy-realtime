@@ -16,11 +16,17 @@ import { push } from 'react-router-redux';
 import FilterVarSetPanel from './FilterVarSetPanel';
 import { makeSelectQuery } from './selectors';
 
+function isAvailParam(p) {
+  return p !== '' && p !== undefined && p !== null;
+}
+
 function filterQuery(filterList, query) {
-  let filtered = {};
+  const filtered = {};
   filterList.forEach((filter) => {
-    if (query[filter]) {
+    if (typeof filter === 'string' && isAvailParam(query[filter])) {
       filtered[filter] = query[filter];
+    } else if (typeof filter === 'object' && isAvailParam(query[filter.name])) {
+      filtered[filter.name] = query[filter.name];
     }
   });
   return filtered;
@@ -59,6 +65,7 @@ export const FilterableList = (props) => {
         order={curOrder}
         onOrderChange={setOrder}
         onFilterChange={setFilter}
+        currentFilter={curFilter || filter}
       />
       <QueryList
         variables={{
@@ -74,7 +81,6 @@ export const FilterableList = (props) => {
 
 FilterableList.defaultProps = {
   variables: {},
-  order: '',
   orderList: ['id', 'created'],
   filter: {},
   filterList: [],
@@ -87,7 +93,20 @@ FilterableList.propTypes = {
   order: PropTypes.string.isRequired,
   orderList: PropTypes.array,
   filter: PropTypes.object,
-  filterList: PropTypes.array,
+  filterList: PropTypes.arrayOf(
+    PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        options: PropTypes.arrayOf(
+          PropTypes.shape({
+            value: PropTypes.any,
+            label: PropTypes.any,
+          }),
+        ),
+      }),
+    ]),
+  ),
   query: PropTypes.object,
   goto: PropTypes.func.isRequired,
 };

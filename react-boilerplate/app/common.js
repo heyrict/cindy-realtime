@@ -418,6 +418,10 @@ export function getQueryStr(qs) {
   return qObj;
 }
 
+export function isAvailParam(p) {
+  return p !== '' && p !== undefined && p !== null;
+}
+
 export function setQueryStr(qObj) {
   const query = [];
   Object.entries(qObj).forEach(
