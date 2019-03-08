@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from "styled-components";
+import styled from 'styled-components';
 import { Flex, Box } from 'rebass';
 import { Button, Input, Select } from 'style-store';
 import { FormattedMessage } from 'react-intl';
@@ -41,6 +41,7 @@ const SearchInput = styled(Input)`
     border: 2px solid #ccc;
   }
 `;
+
 class SearchPanel extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -95,10 +96,9 @@ class SearchPanel extends React.PureComponent {
           <SearchBtn
             w={1}
             onClick={() =>
-              this.props.handleSearchButtonClick(
-                this.state.filterKey,
-                this.state.filterValue,
-              )
+              this.props.handleSearchButtonClick({
+                [this.state.filterKey]: this.state.filterValue,
+              })
             }
             style={{ borderRadius: '10px' }}
           >

@@ -9,12 +9,22 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { updateQueryStr } from 'common';
+import { updateQueryStr, setQueryStr } from 'common';
 
 import { push } from 'react-router-redux';
 
 import FilterVarSetPanel from './FilterVarSetPanel';
 import { makeSelectQuery } from './selectors';
+
+function filterQuery(filterList, query) {
+  let filtered = {};
+  filterList.forEach((filter) => {
+    if (query[filter]) {
+      filtered[filter] = query[filter];
+    }
+  });
+  return filtered;
+}
 
 export const FilterableList = (props) => {
   const {
@@ -27,17 +37,14 @@ export const FilterableList = (props) => {
     query,
     ...others
   } = props;
-  const curOrder = query.orderBy || order;
-  const curFilter = query.filterValue
-    ? { [query.filterKey]: query.filterValue }
-    : filter || {};
+  const curOrder = query.order || order;
+  const curFilter = filterQuery(filterList, query);
 
-  const setFilter = (filterKey, filterValue) =>
+  const setFilter = (filters) =>
     props.goto(
-      updateQueryStr({
-        filterKey,
-        filterValue,
-        page: 1,
+      setQueryStr({
+        ...filters,
+        order: curOrder,
       }),
     );
   const setOrder = (nextOrder) => {
