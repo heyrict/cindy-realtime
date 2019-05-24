@@ -210,4 +210,4 @@ BOM_RANKING_MESSAGE = '第 %(no)d 位：%(star__count)2d 人から %(star__sum)3
 SCHED_TWEET_MESSAGE = '%(user_nickname)sさんが新しいスケジュールを追加しました。詳しくは→\n'\
         'https://www.cindythink.com/dashboard\n#ウミガメのスープ'
 
-SCHED_TITLE_MESSAGE = '新しいスケジュール（%(year)%4d年%(month)2d月%(day)2dまで）'
+SCHED_TITLE_MESSAGE = '新しいスケジュール（%(year)4d年%(month)2d月%(day)2dまで）'
