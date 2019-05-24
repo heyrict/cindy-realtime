@@ -193,3 +193,21 @@ CHANNELS_WS_PROTOCOLS = [
 ]
 
 ASGI_APPLICATION = "sui_hei.routing.application"
+
+# Twitter related stuff
+TWEET_MESSAGE = '%(user_nickname)sさんがCindyにて新しい問題『%(title)s』を出題しました。\n'\
+                'https://www.cindythink.com/puzzle/show/%(id)d\n#ウミガメのスープ'
+
+BOM_TWEET_MESSAGE = '%(year)4d年%(month)2d月にCindyで最も評価された問題を発表しまーす！\n\n%(ranking)s\n\n'\
+                    'そして、第一位を獲得した %(user_nickname)s さんに、 %(month)2d 月の称号「%(award_name)s」'\
+                    'を付与します！おめでとうございます！\n'\
+                    '#ウミガメのスープ'
+
+BOM_RANKING_MESSAGE = '第 %(no)d 位：%(star__count)2d 人から %(star__sum)3d のスターを獲得した'\
+                  '%(user_nickname)s さんの問題「%(title)s」'\
+                  'https://www.cindythink.com/puzzle/show/%(id)d\n'
+
+SCHED_TWEET_MESSAGE = '%(user_nickname)sさんが新しいスケジュールを追加しました。詳しくは→\n'\
+        'https://www.cindythink.com/dashboard\n#ウミガメのスープ'
+
+SCHED_TITLE_MESSAGE = '新しいスケジュール（%(year)%4d年%(month)2d月%(day)2dまで）'

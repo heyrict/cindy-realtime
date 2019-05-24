@@ -15,6 +15,8 @@ TWEET_MESSAGE = settings.TWEET_MESSAGE
 TWEET_WITH_PICTURE = settings.TWEET_WITH_PICTURE
 BOM_TWEET_MESSAGE = settings.BOM_TWEET_MESSAGE
 BOM_RANKING_MESSAGE = settings.BOM_RANKING_MESSAGE
+SCHED_TITLE_MESSAGE = settings.SCHED_TITLE_MESSAGE
+SCHED_TWEET_MESSAGE = settings.SCHED_TWEET_MESSAGE
 
 logger = logging.Logger(__name__)
 
@@ -85,3 +87,32 @@ def add_twitter_on_best_of_month_determined(puzzle_list, useraward):
 
     except Exception as e:
         logger.warning("Error update twitter status: %s" % e)
+
+
+def add_twitter_on_schedule_created(sender, instance, created, **kwargs):
+    if created and ENABLE_TWITTERBOT:
+        try:
+            from imaging import render
+            auth = OAuth(TOKEN, TOKEN_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
+            t = Twitter(auth=auth)
+
+            params = {
+                'status': SCHED_TWEET_MESSAGE % {
+                    'user_nickname': _('Anonymous User') if instance.anonymous else instance.user.nickname,
+                },
+            } # yapf: disable
+
+            title = SCHED_TITLE_MESSAGE % {
+                'year': instance.scheduled.year,
+                'month': instance.scheduled.month,
+                'day': instance.scheduled.day,
+            }
+
+            imgpath = render(title, instance.content)
+            with open(imgpath, 'rb') as f:
+                imgdata = f.read()
+            params['media[]'] = imgdata
+            t.statuses.update_with_media(**params)
+
+        except Exception as e:
+            logger.warning("Error update twitter status: %s" % e)
