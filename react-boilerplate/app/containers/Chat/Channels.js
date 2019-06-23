@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -24,7 +24,7 @@ class Channels extends React.PureComponent {
 
     this.state = {
       content: '',
-      publicShown: false,
+      publicShown: true,
       favShown: false,
       createModalShown: false,
     };
