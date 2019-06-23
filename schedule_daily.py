@@ -11,6 +11,9 @@ from django.utils.timezone import timedelta
 
 from sui_hei.models import Award, ChatMessage, ChatRoom, Puzzle, User, DirectMessage
 
+BASE_DIR = os.path.split(os.path.abspath(__file__))[0]
+SCHEDULE_SETTING_PATH = os.path.join(BASE_DIR, './schedule_settings.yml')
+
 logger = logging.getLogger(name=__file__)
 logging.basicConfig(datefmt="%Y/%m/%d %H:%M:%S", level=logging.DEBUG)
 
@@ -65,8 +68,8 @@ def mark_puzzle_as_dazed():
 
 if __name__ == "__main__":
     settings = {}
-    if os.path.exists('./schedule_settings.yml'):
-        with open("./schedule_settings.yml") as f:
+    if os.path.exists(SCHEDULE_SETTING_PATH):
+        with open(SCHEDULE_SETTING_PATH) as f:
             settings = yaml.load(f)
 
     # delete old minichat chat messages

@@ -37,7 +37,7 @@ export const PuzzleList = gql`
           "title_Contains"
           "content_Contains"
           "solution_Contains"
-          "genre__exact"
+          "genre_Exact"
           "yami_Exact"
         ]
       ) {

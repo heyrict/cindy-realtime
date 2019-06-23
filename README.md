@@ -34,16 +34,11 @@ For these reasons, I decide to separate this repository out from Cindy.
 
 Requisitories
 -----------
-- [Python3.5](http://www.python.org)
-
-    ```bash
-    pip install -r requirements.txt
-    ```
 - Postgresql (you can opt to use mysql server using mysql.cnf)
 
     ```bash
     # Debian-based systems
-    apt-get install postgresql
+    apt-get install postgresql-10 postgresql-server-dev-10
     ```
 
 - Redis DB
@@ -51,6 +46,12 @@ Requisitories
     ```bash
     # Debian-based systems
     apt-get install redis-server
+    ```
+
+- [Python3.5](http://www.python.org)
+
+    ```bash
+    pip install -r requirements.txt
     ```
 
 - nodejs manager (latest npm or bower, optional if you would like to use `assets.7z`)
