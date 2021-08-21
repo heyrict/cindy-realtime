@@ -4,6 +4,8 @@ Cindy-Realtime
 
 日本語バーションは[こちら](README_ja.md)
 
+**THIS PROJECT IS IN MAINTAINENCE MODE.** Latest website is partially rewritten with a rust-lang based [backend](https://github.com/heyrict/cindy-next-rust) and react [frontend](https://github.com/heyrict/cindy-next), in separate repositories.
+
 This is a project started in homage to [latethin](http://sui-hei.net) created by [kamisugi(上杉)](http://sui-hei.net/mondai/profile/1).
 
 Cindy is a website specially designed for playing lateral thinking games, with python django as the backend, and nodejs as the frontend.
@@ -30,7 +32,6 @@ Though it has some drawbacks:
 - Unable to deploy on a single-thread PaaS.
 
 For these reasons, I decide to separate this repository out from Cindy.
-*Both repos are under support at now*.
 
 Requisitories
 -----------
