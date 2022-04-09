@@ -267,7 +267,7 @@
     "markdown-it": "^12.3.2",
     "markdown-it-emoji": "^1.4.0",
     "minimist": "1.2.3",
-    "moment": "^2.22.2",
+    "moment": "^2.29.2",
     "prop-types": "15.6.1",
     "react": "16.4.1",
     "react-apollo": "^2.1.3",
