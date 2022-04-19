@@ -266,7 +266,7 @@
     "lodash": "4.17.21",
     "markdown-it": "^12.3.2",
     "markdown-it-emoji": "^1.4.0",
-    "minimist": "1.2.3",
+    "minimist": "1.2.6",
     "moment": "^2.22.2",
     "prop-types": "15.6.1",
     "react": "16.4.1",
