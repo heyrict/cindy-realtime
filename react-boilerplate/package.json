@@ -252,7 +252,7 @@
     "compression": "1.7.2",
     "cross-env": "5.2.0",
     "django-channels": "^1.1.8",
-    "express": "4.16.3",
+    "express": "4.17.3",
     "fontfaceobserver": "2.0.13",
     "formik": "^1.0.1",
     "graphql": "^0.12.3",
